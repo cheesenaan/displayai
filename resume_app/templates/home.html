@@ -1,0 +1,569 @@
+
+{% extends 'index.html' %}
+
+{% block content %}
+
+    <head>
+      <title> home </title>
+    </head>
+
+    <body>
+
+      <!-- ======= Main Section ======= -->
+      <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+        <div class="container text-center text-md-left" data-aos="fade-up">
+          <h1> build your CS resume in 3 minutes </h1>
+          <h2> To learn more scroll down or click <a href="#about"> here </a> </h2>
+          <a href="{% url 'data'%}" class="btn-get-started scrollto">Get Started</a>
+          <br> <br>
+          <a href="{}" class="btn-get-started scrollto">Affiliate member login</a>
+        </div>
+      </section>
+      <!-- Main Hero -->
+
+    
+    
+      <main id="main">
+        
+        <!-- ======= About Section ======= -->
+        <section id="about" class="about">
+          <div class="container">
+    
+            <div class="row">
+              <div class="col-xl-6 col-lg-7" data-aos="fade-right">
+                <img src="static/img/brain.png" class="img-fluid" alt="">
+              </div>
+              <div class="col-xl-6 col-lg-5 pt-5 pt-lg-0">
+                <h3 data-aos="fade-up">About the survey</h3>
+                <p data-aos="fade-up">
+                    Have you ever asked yourself what makes you different from other people? Perhaps you are outgoing and talkative, but others are quiet. This survey will allow you to determine your personaility type.
+                </p>
+                <div class="icon-box" data-aos="fade-up">
+                  <i class="bx bx-receipt"></i>
+                  <h4>60 Questions</h4>
+                  <p> 
+                    There are four groups and 15 questions each for Affinity, Collection of Information, Time spending, and Make Decision. 
+                    After you take the 60 question survey, you will get your personaility code that detmerines your personality.
+                  </p>
+                </div>
+
+                <div class="icon-box" data-aos="fade-up">
+                  <i class="bx bx-receipt"></i>
+                  <h4>Results and coupons</h4>
+                  <p> After you complete the survey you can download the free standard edition or the paid full premium version. You can also use coupons.</p>
+                </div>
+    
+                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
+                  <i class="bx bx-cube-alt"></i>
+                  <h4>The four groups</h4>
+                  <p>For the Affinity group, you can either be an Introvert or Extrovert</p>
+                  <p>For the Collection of Information group, you can either be Sensing or Intuition</p>
+                  <p>For the Make Decision group, you can either be Thinking or Feeling</p>
+                  <p>For the Time Spending group, you can either be Perceiving or Judging</p>
+                </div>
+                  <p> To learn more about what these terms mean, please click <a href="#steps"> here </a> </p>
+              </div>
+            </div>
+          </div>
+        </section>
+        <!-- End About Section -->
+    
+        <!-- ======= Steps Section ======= -->
+        <section id="steps" class="steps section-bg">
+          <div class="container">
+    
+            <div class="row no-gutters">
+    
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in">
+                <span></span>
+                <h4>60 Questions</h4>
+                <p>There are 4 groups with 15 questions each. Affinity, Collection of Information,Make Decision, and Time Spending</p>
+              </div>
+  
+    
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="200">
+                <span>01 Affinity </span>
+                <h4>  Extrovert</h4>
+                <p> An extrovert is an outgoing, overtly expressive person</p>
+              </div>
+    
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="300">
+                <span>01 Affinity </span>
+                <h4>  Introvert</h4>
+                <p>An introvert is a shy, reticent person</p>
+              </div>
+    
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="400">
+                <span>02 Collection</span>
+                <h4> Sensing</h4>
+                <p>Sensing focuses on what can be detected through the five senses. If you can see, hear, smell, taste, or touch something, then it is a fact. </p>
+              </div>
+    
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
+                <span>02 Collection </span>
+                <h4> Intuition</h4>
+                <p>The ability to understand something immediately, without the need for conscious reasoning</p>
+              </div>
+
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
+                <span>03 make decision </span>
+                <h4> Feeling</h4>
+                <p>Feelings are mental associations. They can be our reactions to emotions, sensations, or other things around us</p>
+              </div>
+
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
+                <span>03 make decision </span>
+                <h4> Thinking</h4>
+                <p>Thoughts are ideas, perceptions, or opinions produced by thinking, or occurring suddenly in the mind</p>
+              </div>
+
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
+                <span>04 Time Spending </span>
+                <h4> Judging</h4>
+                <p>Form and express judgments</p>
+              </div>
+
+              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
+                <span>04 Time Spending </span>
+                <h4> Perceiving</h4>
+                <p>Decide what to do as we do it, rather than forming a plan ahead of time </p>
+              </div>
+
+
+    
+            </div>
+    
+          </div>
+        </section><!-- End Steps Section -->
+    
+        <!-- ======= Features Section ======= -->
+        <!-- <section id="features" class="features">
+          <div class="container">
+    
+            <div class="row">
+              <div class="col-lg-4 mb-5 mb-lg-0" data-aos="fade-right">
+                <ul class="nav nav-tabs flex-column">
+                  <li class="nav-item">
+                    <a class="nav-link active show" data-bs-toggle="tab" href="#tab-1">
+                      <h4>Affinity</h4>
+                      <p>Extraversion and Introversion</p>
+                    </a>
+                  </li>
+                  <li class="nav-item mt-2">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-2">
+                      <h4>      Collection Of Information               </h4>
+                      <p>Sensing and Intuition.</p>
+                    </a>
+                  </li>
+                  <li class="nav-item mt-2">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-3">
+                      <h4>Make Decision</h4>
+                      <p>Thinking and Feeling.</p>
+                    </a>
+                  </li>
+                  <li class="nav-item mt-2">
+                    <a class="nav-link" data-bs-toggle="tab" href="#tab-4">
+                      <h4>Time Spending</h4>
+                      <p>Judging and Perceiving</p>
+                    </a>
+                  </li>
+                </ul>
+              </div>
+              <div class="col-lg-7 ml-auto" data-aos="fade-left">
+                <div class="tab-content">
+                  <div class="tab-pane active show" id="tab-1">
+                    <figure>
+                      <img src="static/img/brain2.jpeg" alt="" class="img-fluid">
+                    </figure>
+                  </div>
+                  <div class="tab-pane" id="tab-2">
+                    <figure>
+                      <img src="static/img/features-2.png" alt="" class="img-fluid">
+                    </figure>
+                  </div>
+                  <div class="tab-pane" id="tab-3">
+                    <figure>
+                      <img src="static/img/features-3.png" alt="" class="img-fluid">
+                    </figure>
+                  </div>
+                  <div class="tab-pane" id="tab-4">
+                    <figure>
+                      <img src="static/img/features-4.png" alt="" class="img-fluid">
+                    </figure>
+                  </div>
+                </div>
+              </div>
+            </div>
+    
+          </div>
+        </section> -->
+        <!-- End Features Section -->
+    
+        <!-- ======= Services Section ======= -->
+        <section id="services" class="services section-bg">
+            <div class="container">
+    
+                <div class="section-title" data-aos="fade-up">
+                <h2>Differences</h2>
+                <p> This will help you learn more about the difference in personaility types in each group</p>
+                </div>
+    
+                <div class="row">
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="fade-up">
+                    <div class="icon-box icon-box-pink">
+                    <div class="icon"><i class="bx bxl-dribbble"></i></div>
+                    <h4 class="title"><a href="">Affinity</a></h4>
+                    <p class="description"> <b> Extroversion and introversion </b> refer to where someone gets their energy from. The difference between an extrovert and an introvert is extroverts are energized through socialization and collaboration, whereas introverts receive energy from alone time or in social settings with much smaller groups.
+                    </p>
+                    </div>
+                </div>
+    
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="100">
+                    <div class="icon-box icon-box-cyan">
+                    <div class="icon"><i class="bx bx-file"></i></div>
+                    <h4 class="title"><a href="">Collection of information</a></h4>
+                    <p class="description">The main difference between <b> sensing and intuition </b> is that the sensing focuses on what can be detected through the five senses while intuition focuses on the impressions and patterns created from the gathered information</p>
+                    </div>
+                </div>
+    
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
+                    <div class="icon-box icon-box-green">
+                    <div class="icon"><i class="bx bx-tachometer"></i></div>
+                    <h4 class="title"><a href="">Make Decision</a></h4>
+                    <p class="description"> The primary difference between <b> thinking and feeling</b>  is the nature of their evaluative criteria. As we will see, thinkers tend to use impersonal, logic-based criteria, while feelers consider tastes and feelings—both their own and others’—in making decisions.
+                    </p>
+                    </div>
+                </div>
+    
+                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="300">
+                    <div class="icon-box icon-box-blue">
+                    <div class="icon"><i class="bx bx-world"></i></div>
+                    <h4 class="title"><a href="">Time Spending</a></h4>
+                    <p class="description"> <b> Judging </b> is a dimension of human behavior where a person prefers to arrive at a conclusion before making a final decision. <b> Perceiving </b> is another extreme of the dimension of behavior that is in contrast to judging. These types of people are flexible in nature and keep their options open until they are forced to make decisions</p>
+                    </div>
+                </div>
+    
+                </div>
+    
+            </div>
+            </section><!-- End Services Section -->
+    
+        <!-- ======= Testimonials Section ======= -->
+        <section id="testimonials" class="testimonials">
+          <div class="container">
+    
+            <div class="section-title" data-aos="fade-up">
+              <h2>Examples</h2>
+              <p> Here is an example for each group</p>
+            </div>
+    
+            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+              <div class="swiper-wrapper">
+    
+                <div class="swiper-slide">
+                  <div class="testimonial-item">
+                    <p>
+                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                        I like to talk to people and do not like to stay indoors. I am an extrovert.
+                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+                    <h3>Sulemaan Farooq</h3>
+                    <h4> Survey taker </h4>
+                  </div>
+                </div><!-- End affinity example -->
+    
+                <div class="swiper-slide">
+                  <div class="testimonial-item">
+                    <p>
+                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      I can only collect information when I detect or sense something through the 5 senses. I cannot collect information intuitively, ie without seeing, hearing, tasting, feeling or touching something. Therefore, my collection of information group is Sensing and is not Intuition. 
+                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
+                    <h3>Sara Wilsson</h3>
+                    <h4>Survey taker</h4>
+                  </div>
+                </div><!-- End collection of information item -->
+    
+                <div class="swiper-slide">
+                  <div class="testimonial-item">
+                    <p>
+                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                       When I need to make decisions, I take time and think logically about the problem and do not let my feelings and emotions take too much control. I make decisions by thinking and not feeling.
+                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
+                    <h3>Jena Karlis</h3>
+                    <h4>Survey taker</h4>
+                  </div>
+                </div><!-- End make decision item -->
+    
+                <div class="swiper-slide">
+                  <div class="testimonial-item">
+                    <p>
+                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      I do not have a thought about someone or something unless I have been open with them. I engage in time spending through perceiving and not judgement.
+                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                    </p>
+                    <img src="static/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
+                    <h3>Matt Brandon</h3>
+                    <h4>Survey taker</h4>
+                  </div>
+                </div><!-- End time spending item -->
+    
+              </div>
+              <div class="swiper-pagination"></div>
+            </div>
+    
+          </div>
+        </section><!-- End Testimonials Section -->
+    
+    
+        <!-- ======= F.A.Q Section ======= -->
+        <section id="faq" class="faq section-bg">
+          <div class="container">
+    
+            <div class="section-title" data-aos="fade-up">
+              <h2>F.A.Q</h2>
+              <p> Here are some frequently asked questions </p>
+            </div>
+    
+            <div class="faq-list">
+              <ul>
+                <li data-aos="fade-up">
+                  <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1"> How many questions are there on the survey <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
+                    <p>
+                      There are 60 questions. For each group, that is, 15 for each of Affinity, Collection of Information,Make Decision, and Time Spending
+                    </p>
+                  </div>
+                </li>
+    
+                <li data-aos="fade-up" data-aos-delay="100">
+                  <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-2" class="collapsed"> How do I see my results <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="faq-list-2" class="collapse" data-bs-parent=".faq-list">
+                    <p>
+                      You can download our free standard edition and/or the premium full version for $9.99
+                      Every free standard edition and/or the premium full version is personal to you. Moreover, the standard edition contains a special personalized link for you to purchase the premium edition at any time.
+                    </p>
+                  </div>
+                </li>
+    
+                <li data-aos="fade-up" data-aos-delay="200">
+                  <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-3" class="collapsed"> Difference between standard edition and premium full version  <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="faq-list-3" class="collapse" data-bs-parent=".faq-list">
+                    <p>
+                      The standard edition is free but contains limited data about your personaility. To see the premium data, you would need to purchase the premium full version.
+                    </p>
+                  </div>
+                </li>
+    
+                <li data-aos="fade-up" data-aos-delay="300">
+                  <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-4" class="collapsed"> How to pay, and are there discount coupons? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="faq-list-4" class="collapse" data-bs-parent=".faq-list">
+                    <p>
+                      You can pay via PayPal, and yes you can use coupons
+                    </p>
+                  </div>
+                </li>
+
+                <li data-aos="fade-up" data-aos-delay="400">
+                  <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed"> How do coupons work? <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
+                    <p>
+                      Each coupon has a unique value. This value is deducted from the price resulting in a discount.
+                      <br>
+                      Each coupon has an usage limit. This means that if the coupon is used for a certain number of times, it cannot be used any more.
+                      <br>
+                      Each coupon also has an expiry date. After this date, the  coupon will not be valid despite its remaining usage limit
+                      <br>
+                      You can check the value, limit, and expiry of a coupon over here : <a href=""#> TODO </a>
+                    </p>
+                  </div>
+                </li>
+    
+                <li data-aos="fade-up" data-aos-delay="400">
+                  <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed"> How do I get a coupon <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
+                    <p>
+                      You can get a coupon by .... TODO
+                      You an request a coupon by emaling ... 
+                    </p>
+                  </div>
+                </li>
+
+                <li data-aos="fade-up" data-aos-delay="400">
+                  <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" data-bs-target="#faq-list-5" class="collapsed"> Contact Us <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
+                  <div id="faq-list-5" class="collapse" data-bs-parent=".faq-list">
+                    <p>
+                      Our phone is ... and email is .... 
+                    </p>
+                  </div>
+                </li>
+    
+              </ul>
+            </div>
+    
+          </div>
+        </section><!-- End F.A.Q Section -->
+    
+        <!-- ======= Contact Section ======= -->
+        <section id="contact" class="contact">
+          <div class="container">
+    
+            <div class="section-title" data-aos="fade-up">
+              <h2>Contact</h2>
+              <p> Please reach out to us</p>
+            </div>
+    
+            <div class="row no-gutters justify-content-center" data-aos="fade-up">
+    
+              <div class="col-lg-5 d-flex align-items-stretch">
+                <div class="info">
+                  <div class="address">
+                    <i class="bi bi-geo-alt"></i>
+                    <h4>Location:</h4>
+                    <p> Dar Al Salam, Abu Hamour Doha, Qatar</p>
+                  </div>
+    
+                  <div class="email mt-4">
+                    <i class="bi bi-envelope"></i>
+                    <h4>Email:</h4>
+                    <p>info@example.com</p>
+                  </div>
+    
+                  <div class="phone mt-4">
+                    <i class="bi bi-phone"></i>
+                    <h4>Call:</h4>
+                    <p>+974 66666666</p>
+                  </div>
+    
+                </div>
+    
+              </div>
+              
+              <div class="col-lg-5 d-flex align-items-stretch">
+                <iframe style="border:0; width: 100%; height: 270px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d115443.0954194186!2d51.44195735034938!3d25.284147787326862!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x3e45c534ffdce87f%3A0x44d9319f78cfd4b1!2sDoha%2C%20Qatar!5e0!3m2!1sen!2sus!4v1669581111919!5m2!1sen!2sus" frameborder="0" allowfullscreen></iframe>
+              </div>
+    
+            </div>
+    
+            <div class="row mt-5 justify-content-center" data-aos="fade-up">
+              <div class="col-lg-10">
+                <form action="forms/contact.php" method="post" role="form" class="php-email-form">
+                  <div class="row">
+                    <div class="col-md-6 form-group">
+                      <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
+                    </div>
+                    <div class="col-md-6 form-group mt-3 mt-md-0">
+                      <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
+                    </div>
+                  </div>
+                  <div class="form-group mt-3">
+                    <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
+                  </div>
+                  <div class="form-group mt-3">
+                    <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
+                  </div>
+                  <div class="my-3">
+                    <div class="loading">Loading</div>
+                    <div class="error-message"></div>
+                    <div class="sent-message">Your message has been sent. Thank you!</div>
+                  </div>
+                  <div class="text-center"><button type="submit">Send Message</button></div>
+                </form>
+              </div>
+    
+            </div>
+    
+          </div>
+        </section><!-- End Contact Section -->
+    
+      </main><!-- End #main -->
+    
+      <!-- ======= Footer ======= -->
+      <footer id="footer">
+        <div class="footer-top">
+          <div class="container">
+            <div class="row">
+    
+              <div class="col-lg-3 col-md-6">
+                <div class="footer-info">
+                  <h3>Maxim</h3>
+                  <p>
+                    Doha Qatar <br>
+                    <strong>Phone:</strong> +974 66666666<br>
+                    <strong>Email:</strong> info@example.com<br>
+                  </p>
+                  <div class="social-links mt-3">
+                    <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
+                    <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
+                    <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
+                    <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
+                    <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
+                  </div>
+                </div>
+              </div>
+    
+              <div class="col-lg-2 col-md-6 footer-links">
+                <h4>Useful Links</h4>
+                <ul>
+                  <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
+                </ul>
+              </div>
+    
+              <div class="col-lg-3 col-md-6 footer-links">
+                <h4>Our Services</h4>
+                <ul>
+                  <li><i class="bx bx-chevron-right"></i> <a href="#">Web Design</a></li>
+                  <li><i class="bx bx-chevron-right"></i> <a href="#">Web Development</a></li>
+                  <li><i class="bx bx-chevron-right"></i> <a href="#">Product Management</a></li>
+                  <li><i class="bx bx-chevron-right"></i> <a href="#">Marketing</a></li>
+                  <li><i class="bx bx-chevron-right"></i> <a href="#">Graphic Design</a></li>
+                </ul>
+              </div>
+    
+              <div class="col-lg-4 col-md-6 footer-newsletter">
+                <h4>Our Newsletter</h4>
+                <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
+                <form action="" method="post">
+                  <input type="email" name="email"><input type="submit" value="Subscribe">
+                </form>
+    
+              </div>
+    
+            </div>
+          </div>
+        </div>
+    
+        <div class="container">
+          <div class="copyright">
+            &copy; Copyright <strong><span>Maxim</span></strong>. All Rights Reserved
+          </div>
+          <div class="credits">
+            <!-- All the links in the footer should remain intact. -->
+            <!-- You can delete the links only if you purchased the pro version. -->
+            <!-- Licensing information: https://bootstrapmade.com/license/ -->
+            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/maxim-free-onepage-bootstrap-theme/ -->
+            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
+          </div>
+        </div>
+      </footer>End Footer -->
+    
+      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
+    
+      <!-- Vendor JS Files -->
+      <script src="static/vendor/aos/aos.js"></script>
+      <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+      <script src="static/vendor/glightbox/js/glightbox.min.js"></script>
+      <script src="static/vendor/isotope-layout/isotope.pkgd.min.js"></script>
+      <script src="static/vendor/swiper/swiper-bundle.min.js"></script>
+      <script src="static/vendor/php-email-form/validate.js"></script>
+    
+      <!-- Template Main JS File -->
+      <script src="static/js/main.js"></script>
+    
+    </body>
+    
+{% endblock %}

@@ -1,0 +1,596 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+
+
+<!DOCTYPE html>
+<html>
+    
+    <title>Enter  Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-section {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-section label {
+            font-weight: bold;
+        }
+
+        .form-section input,
+        .form-section select,
+        .form-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .form-section .error {
+            border-color: red;
+        }
+
+        .form-section button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+                /* Toggle button styles */
+        .toggle-btn {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-bottom: 10px;
+        }
+
+        .toggle-btn:hover {
+        background-color: #45a049; /* Slightly darker shade on hover */
+        }
+
+        /* Toggle button icon */
+        .toggle-btn::after {
+        content: '\25BE'; /* Unicode down-arrow character ▾ */
+        font-size: 12px;
+        margin-left: 5px;
+        }
+
+        /* Toggle button when active (open) */
+        .toggle-btn.active {
+        background-color: #2e8b57; /* Dark green when active */
+        }
+
+        /* Optional: Add box shadow for a raised effect when active */
+        .toggle-btn.active {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+
+</head>
+</head>
+
+
+<body>
+    <br><br><br>
+
+<h1>Enter Data</h1>
+
+<form id="myForm" method="post" action="">
+    {% csrf_token %}
+
+    <!-- personal info -->
+    <h2>Personal Information</h2>
+    <div class="form-section">
+        
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+
+            <div class="form-side">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+        </div>
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="phone">Phone *</label>
+                <input type="tel" id="phone" name="phone" required pattern="[0-9]+" title="Please enter a valid phone number">
+            </div>
+
+            <div class="form-side">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+        </div>
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="city">City *</label>
+                <input type="text" id="city" name="city" required pattern="[A-Za-z\s\-]+" title="Please enter a valid city name">
+            </div>
+
+            <div class="form-side">
+                <label for="stateCountry">State *</label>
+                <input type="text" id="stateCountry" name="stateCountry" required pattern="[A-Za-z]{2}" title="Please enter a valid two-letter state abbreviation">
+            </div>
+        </div>
+
+        <label for="link">Link *</label><br>
+        <small>Check out my portfolio app that earned me intern offers from <strong>Ford Motor</strong> and <strong>Verizon</strong> at just 19 years old. Explore our portfolio services <a href="http://sulemaanfaooq.com" target="_blank" rel="noopener noreferrer">here</a>.</small>
+        <input type="text" id="link" name="link" required pattern="^(?=.*[.]).+$" title="Please enter a valid link" placeholder="(Portfolio or LinkedIn or GitHub)">
+    </div>
+
+    <!-- Education -->
+    <h2>Education</h2>
+    <div class="form-section">
+        
+    
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="university">University *</label>
+                <input type="text" id="university" name="university" required>
+            </div>
+
+            <div class="form-side">
+                <label for="degreeType">Degree Type *</label>
+                <select id="degreeType" name="degreeType" required>
+                    <option value="">Select Degree Type</option>
+                    <option value="Science">Science</option>
+                    <option value="Art">Art</option>
+                </select>
+    
+            </div>
+        </div>
+            
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="city-education">City *</label>
+                <input type="text" id="city-education" name="city-education" required>
+            </div>
+        
+            <div class="form-side">
+                <label for="gpa">GPA</label>
+                <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="4", placeholder="only if > 3.4">
+                
+            </div>
+        </div>
+
+    
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="major">Major *</label>
+                <input type="text" id="major" name="major" required>
+            </div>
+    
+            <div class="form-side">
+                <label for="minor">Minor</label>
+                <input type="text" id="minor" name="minor">
+            </div>
+        </div>
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="university-start-date"> Start Date *</label>
+                <input type="date" id="university-start-date" name="university-start-date" required value="2021-09-01">
+            </div>
+            
+    
+            <div class="form-side">
+                <label for="university-end-date"> End Date *</label>
+                <input type="date" id="university-end-date" name="university-end-date" required>
+            </div>
+        </div>
+    
+        <label for="coursework">Coursework (96 characters limit)</label>
+        <small>You can leave blank and our AI model will do it.</small>
+        <textarea id="coursework" name="coursework" maxlength="96"></textarea>
+    </div>
+
+    <style>
+        .form-side-by-side {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+    
+        .form-side {
+            flex-basis: 45%;
+        }
+    </style>
+
+     <!-- work experince -->
+
+     <h2>Work experience</h2>
+     <div class="toggle-container">
+        <button class="toggle-btn" data-target="experience1">Toggle Experience 1</button>
+        <div class="form-section" id="experience1">
+            <!-- Your work experience form content here -->
+            <h6>Work Experience 1</h6>
+            
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="company1">Company *</label>
+                    <input type="text" id="company1" name="company1" required>
+                </div>
+                <div class="form-side">
+                    <label for="title1">Job Title *</label>
+                    <input type="text" id="title1" name="title1" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="city1">City *</label>
+                    <input type="text" id="city1" name="city1" required>
+                </div>
+                <div class="form-side">
+                    <label for="state1">State *</label>
+                    <input type="text" id="state1" name="state1" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="experience1-start-date">Start Date *</label>
+                    <input type="date" id="experience1-start-date" name="experience1-start-date" required>
+                </div>
+                <div class="form-side">
+                    <label for="experience1-end-date">End Date *</label>
+                    <input type="date" id="experience1-end-date" name="experience1-end-date" required>
+                </div>
+            </div>
+            <label for="work-description1">Work Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences. Use bullet points if possible.</small>
+            <textarea id="work-description1" name="work-description1" required></textarea>
+        </div>
+    
+        <button class="toggle-btn" data-target="experience2">Toggle Experience 2</button>
+        <div class="form-section" id="experience2">
+            <!-- Your work experience form content here -->
+            <h6>Work Experience 2</h6>
+            
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="company2">Company *</label>
+                    <input type="text" id="company2" name="company2" required>
+                </div>
+                <div class="form-side">
+                    <label for="title2">Job Title *</label>
+                    <input type="text" id="title2" name="title2" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="city2">City *</label>
+                    <input type="text" id="city2" name="city2" required>
+                </div>
+                <div class="form-side">
+                    <label for="state2">State *</label>
+                    <input type="text" id="state2" name="state2" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="experience2-start-date">Start Date *</label>
+                    <input type="date" id="experience2-start-date" name="experience2-start-date" required>
+                </div>
+                <div class="form-side">
+                    <label for="experience2-end-date">End Date *</label>
+                    <input type="date" id="experience2-end-date" name="experience2-end-date" required>
+                </div>
+            </div>
+            <label for="work-description2">Work Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences. Use bullet points if possible.</small>
+            <textarea id="work-description2" name="work-description2" required></textarea>
+        </div>
+    
+        <button class="toggle-btn" data-target="experience3">Toggle Experience 3</button>
+        <div class="form-section" id="experience3">
+            <!-- Your work experience form content here -->
+            <h6>Work Experience 3</h6>
+            
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="company3">Company *</label>
+                    <input type="text" id="company3" name="company3" required>
+                </div>
+                <div class="form-side">
+                    <label for="title3">Job Title *</label>
+                    <input type="text" id="title3" name="title3" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="city3">City *</label>
+                    <input type="text" id="city3" name="city3" required>
+                </div>
+                <div class="form-side">
+                    <label for="state3">State *</label>
+                    <input type="text" id="state3" name="state3" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="experience3-start-date">Start Date *</label>
+                    <input type="date" id="experience3-start-date" name="experience3-start-date" required>
+                </div>
+                <div class="form-side">
+                    <label for="experience3-end-date">End Date *</label>
+                    <input type="date" id="experience3-end-date" name="experience3-end-date" required>
+                </div>
+            </div>
+            <label for="work-description3">Work Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences. Use bullet points if possible.</small>
+            <textarea id="work-description3" name="work-description3" required></textarea>
+        </div>
+    
+        <button class="toggle-btn" data-target="experience4">Toggle Experience 4</button>
+        <div class="form-section" id="experience4">
+            <!-- Your work experience form content here -->
+            <h6>Work Experience 4</h6>
+            
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="company4">Company *</label>
+                    <input type="text" id="company4" name="company4" required>
+                </div>
+                <div class="form-side">
+                    <label for="title4">Job Title *</label>
+                    <input type="text" id="title4" name="title4" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="city4">City *</label>
+                    <input type="text" id="city4" name="city4" required>
+                </div>
+                <div class="form-side">
+                    <label for="state4">State *</label>
+                    <input type="text" id="state4" name="state4" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="experience4-start-date">Start Date *</label>
+                    <input type="date" id="experience4-start-date" name="experience4-start-date" required>
+                </div>
+                <div class="form-side">
+                    <label for="experience4-end-date">End Date *</label>
+                    <input type="date" id="experience4-end-date" name="experience4-end-date" required>
+                </div>
+            </div>
+            <label for="work-description4">Work Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences. Use bullet points if possible.</small>
+            <textarea id="work-description4" name="work-description4" required></textarea>
+        </div>
+    
+        <button class="toggle-btn" data-target="experience5">Toggle Experience 5</button>
+        <div class="form-section" id="experience5">
+            <!-- Your work experience form content here -->
+            <h6>Work Experience 5</h6>
+            
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="company5">Company *</label>
+                    <input type="text" id="company5" name="company5" required>
+                </div>
+                <div class="form-side">
+                    <label for="title5">Job Title *</label>
+                    <input type="text" id="title5" name="title5" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="city5">City *</label>
+                    <input type="text" id="city5" name="city5" required>
+                </div>
+                <div class="form-side">
+                    <label for="state5">State *</label>
+                    <input type="text" id="state5" name="state5" required>
+                </div>
+            </div>
+            <div class="form-side-by-side">
+                <div class="form-side">
+                    <label for="experience5-start-date">Start Date *</label>
+                    <input type="date" id="experience5-start-date" name="experience5-start-date" required>
+                </div>
+                <div class="form-side">
+                    <label for="experience5-end-date">End Date *</label>
+                    <input type="date" id="experience5-end-date" name="experience5-end-date" required>
+                </div>
+            </div>
+            <label for="work-description5">Work Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences. Use bullet points if possible.</small>
+            <textarea id="work-description5" name="work-description5" required></textarea>
+        </div>
+    </div>
+
+    <script>
+        // Function to toggle the visibility of a section
+        function toggleSection(sectionId) {
+            var section = document.getElementById(sectionId);
+            if (section.style.display === "none") {
+                section.style.display = "block";
+            } else {
+                section.style.display = "none";
+            }
+        }
+    
+        // Attach click event listeners to each toggle button
+        document.addEventListener("DOMContentLoaded", function () {
+            var toggleButtons = document.querySelectorAll(".toggle-btn");
+            for (var i = 0; i < toggleButtons.length; i++) {
+                toggleButtons[i].addEventListener("click", function (event) {
+                    event.preventDefault();
+                    var targetId = this.getAttribute("data-target");
+                    toggleSection(targetId);
+                });
+            }
+    
+            // Hide all work experience and project sections on page load
+            var experienceSections = document.querySelectorAll(".form-section[id^='experience']");
+            for (var j = 0; j < experienceSections.length; j++) {
+                experienceSections[j].style.display = "none";
+            }
+    
+            var projectSections = document.querySelectorAll(".project[id^='project']");
+            for (var k = 0; k < projectSections.length; k++) {
+                projectSections[k].style.display = "none";
+            }
+        });
+    </script>
+    
+
+
+    <!-- projects-->
+    <!-- Project experience -->
+    <h2>Projects</h2>
+    <div class="toggle-container">
+        <button class="toggle-btn" data-target="project1">Toggle Project 1</button>
+        <div class="project form-section" id="project1">
+            <div class="form-side">
+                <label for="project1-title">Project 1 *</label>
+                <input type="text" id="project1-title" name="project1-title" required>
+            </div>
+
+            <label for="project1-description">Project 1 Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences.</small>
+            <textarea id="project1-description" name="project1-description" required></textarea>
+        </div>
+
+        <button class="toggle-btn" data-target="project2">Toggle Project 2</button>
+        <div class="project form-section" id="project2">
+            <div class="form-side">
+                <label for="project2-title">Project 2 *</label>
+                <input type="text" id="project2-title" name="project2-title" required>
+            </div>
+
+            <label for="project2-description">Project 2 Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences.</small>
+            <textarea id="project2-description" name="project2-description" required></textarea>
+        </div>
+
+        <button class="toggle-btn" data-target="project3">Toggle Project 3</button>
+        <div class="project form-section" id="project3">
+            <div class="form-side">
+                <label for="project3-title">Project 3 *</label>
+                <input type="text" id="project3-title" name="project3-title" required>
+            </div>
+
+            <label for="project3-description">Project 3 Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences.</small>
+            <textarea id="project3-description" name="project3-description" required></textarea>
+        </div>
+
+        <button class="toggle-btn" data-target="project4">Toggle Project 4</button>
+        <div class="project form-section" id="project4">
+            <div class="form-side">
+                <label for="project4-title">Project 4 *</label>
+                <input type="text" id="project4-title" name="project4-title" required>
+            </div>
+
+            <label for="project4-description">Project 4 Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences.</small>
+            <textarea id="project4-description" name="project4-description" required></textarea>
+        </div>
+
+        <button class="toggle-btn" data-target="project5">Toggle Project 5</button>
+        <div class="project form-section" id="project5">
+            <div class="form-side">
+                <label for="project5-title">Project 5 *</label>
+                <input type="text" id="project5-title" name="project5-title" required>
+            </div>
+
+            <label for="project5-description">Project 5 Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences.</small>
+            <textarea id="project5-description" name="project5-description" required></textarea>
+        </div>
+
+        <!-- Add more project sections as needed -->
+    </div>
+
+
+    <!-- skills -->
+    <br> <br> <br> 
+    <h2>Skills</h2>
+    <div class="form-section" id="skills">
+       
+        <small>Do not worry, just add what you can, and the AI will do the rest. Your skills will be analyzed and incorporated into your resume to highlight your strengths and qualifications.</small>
+
+        <div class="form-side">
+            <label for="languages">Languages *</label>
+            <input type="text" id="languages" name="languages" placeholder="Python, Java, C ... " required>
+        </div>
+
+        <div class="form-side">
+            <label for="technologies">Technologies and frameworks *</label>
+            <input type="text" id="technologies" name="technologies" placeholder="SQL, Chat GBT, AWS, GCP, Django, Flask, Springboot ... " required>
+        </div>
+
+        <div class="form-side">
+            <label for="leadership">Leadership *</label>
+            <input type="text" id="leadership" name="leadership" placeholder="Orientation leader, Tutor, Sports club .. " required>
+        </div>
+    </div>
+
+        <!-- Submit button -->
+        <input type="submit" value="Submit">
+</form>
+
+<!-- check -->
+<script>
+    const form = document.getElementById('myForm');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent form submission
+
+        const requiredFields = ['firstName', 'lastName', 'phone', 'email', 'city', 'stateCountry', 'link'];
+        let valid = true;
+
+        requiredFields.forEach(function (field) {
+            const input = document.getElementById(field);
+            if (input.value.trim() === '') {
+                input.classList.add('error');
+                valid = false;
+            } else {
+                input.classList.remove('error');
+            }
+        });
+
+        if (valid) {
+            // Submit the form if all required fields are filled
+            form.submit();
+        }
+    });
+</script>
+
+
+</body>
+</html>
+
+{% endblock %}

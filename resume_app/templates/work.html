@@ -1,0 +1,589 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Enter personal Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-section {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-section label {
+            font-weight: bold;
+        }
+
+        .form-section input,
+        .form-section select,
+        .form-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .form-section .error {
+            border-color: red;
+        }
+
+        .form-section button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+
+<body>
+
+<h1>Enter Data</h1>
+
+<form id="myForm" method="post" action="">
+    {% csrf_token %}
+
+    <!-- personal info -->
+    <div class="form-section">
+        <h2>Personal Information</h2>
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="firstName">First Name *</label>
+                <input type="text" id="firstName" name="firstName" required>
+            </div>
+
+            <div class="form-side">
+                <label for="lastName">Last Name *</label>
+                <input type="text" id="lastName" name="lastName" required>
+            </div>
+        </div>
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="phone">Phone *</label>
+                <input type="tel" id="phone" name="phone" required pattern="[0-9]+" title="Please enter a valid phone number">
+            </div>
+
+            <div class="form-side">
+                <label for="email">Email *</label>
+                <input type="email" id="email" name="email" required>
+            </div>
+        </div>
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="city">City *</label>
+                <input type="text" id="city" name="city" required pattern="[A-Za-z\s\-]+" title="Please enter a valid city name">
+            </div>
+
+            <div class="form-side">
+                <label for="stateCountry">State *</label>
+                <input type="text" id="stateCountry" name="stateCountry" required pattern="[A-Za-z]{2}" title="Please enter a valid two-letter state abbreviation">
+            </div>
+        </div>
+
+        <label for="link">Link *</label><br>
+        <small>Check out my portfolio app that earned me intern offers from <strong>Ford Motor</strong> and <strong>Verizon</strong> at just 19 years old. Explore our portfolio services <a href="http://sulemaanfaooq.com" target="_blank" rel="noopener noreferrer">here</a>.</small>
+        <input type="text" id="link" name="link" required pattern="^(?=.*[.]).+$" title="Please enter a valid link" placeholder="(Portfolio or LinkedIn or GitHub)">
+    </div>
+
+    <!-- Education -->
+    <div class="form-section">
+        <h2>Education</h2>
+    
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="university">University *</label>
+                <input type="text" id="university" name="university" required>
+            </div>
+
+            <div class="form-side">
+                <label for="degreeType">Degree Type *</label>
+                <select id="degreeType" name="degreeType" required>
+                    <option value="">Select Degree Type</option>
+                    <option value="Science">Science</option>
+                    <option value="Art">Art</option>
+                </select>
+    
+            </div>
+        </div>
+            
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="city-education">City *</label>
+                <input type="text" id="city-education" name="city-education" required>
+            </div>
+        
+            <div class="form-side">
+                <label for="gpa">GPA</label>
+                <input type="number" id="gpa" name="gpa" step="0.01" min="0" max="4", placeholder="only if > 3.4">
+                
+            </div>
+        </div>
+
+    
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="major">Major *</label>
+                <input type="text" id="major" name="major" required>
+            </div>
+    
+            <div class="form-side">
+                <label for="minor">Minor</label>
+                <input type="text" id="minor" name="minor">
+            </div>
+        </div>
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="university-start-date"> Start Date *</label>
+                <input type="date" id="university-start-date" name="university-start-date" required value="2021-09-01">
+            </div>
+            
+    
+            <div class="form-side">
+                <label for="university-end-date"> End Date *</label>
+                <input type="date" id="university-end-date" name="university-end-date" required>
+            </div>
+        </div>
+    
+        <label for="coursework">Coursework (96 characters limit)</label>
+        <small>You can leave blank and our AI model will do it.</small>
+        <textarea id="coursework" name="coursework" maxlength="96"></textarea>
+    </div>
+
+    <style>
+        .form-side-by-side {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+        }
+    
+        .form-side {
+            flex-basis: 45%;
+        }
+    </style>
+
+     <!-- work experince -->
+     <div class="form-section" id="experience1">
+        <h2>Work Experience</h2>
+    
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="company1">Company 1 *</label>
+                <input type="text" id="company1" name="company1" required>
+            </div>
+    
+            <div class="form-side">
+                <label for="title1">Job Title *</label>
+                <input type="text" id="title1" name="title1" required>
+            </div>
+        </div>
+
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="city1">City *</label>
+                <input type="text" id="city1" name="city1" required>
+            </div>
+    
+            <div class="form-side">
+                <label for="state1">State *</label>
+                <input type="text" id="state1" name="state1" required>
+            </div>
+        </div>
+        
+        
+    
+        <div class="form-side-by-side">
+            <div class="form-side">
+                <label for="experience1-start-date">Start Date *</label>
+                <input type="date" id="experience1-start-date" name="experience1-start-date" required>
+            </div>
+    
+            <div class="form-side">
+                <label for="experience1-end-date">End Date *</label>
+                <input type="date" id="experience1-end-date" name="experience1-end-date" required>
+            </div>
+        </div>
+    
+        <label for="work-description1">Work Description *</label>
+        <small>Enter key technologies and briefly describe your responsibilities in one or two sentences. Use bullet points if possible.</small>
+        <textarea id="work-description1" name="work-description1" required></textarea>
+    
+        <div id="additional-experience"></div>
+    
+        <button type="button" onclick="addAdditionalExperience()">Add Additional Experience</button>
+    </div>
+    
+    <style>
+        .form-section {
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+    
+        .form-section .delete-experience {
+            margin-top: 10px;
+            text-align: right;
+        }
+    
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f1f1f1;
+            border: 2px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            max-width: 500px;
+            text-align: center;
+        }
+    </style>
+    
+    <script>
+        let experienceCount = 1;
+        let experienceData = {};
+    
+        function addAdditionalExperience() {
+            if (experienceCount >= 5) {
+                alert("You have reached the maximum limit of work experiences (5).");
+                return;
+            }
+            experienceCount++;
+
+            const additionalExperienceDiv = document.getElementById('additional-experience');
+
+            const experienceHTML = `
+                <div class="form-section" id="experience${experienceCount}">
+                    <h2>Experience ${experienceCount}</h2>
+
+                    <div class="form-side-by-side">
+                        <div class="form-side">
+                            <label for="company${experienceCount}">Company ${experienceCount} *</label>
+                            <input type="text" id="company${experienceCount}" name="company${experienceCount}" required>
+                        </div>
+
+                        <div class="form-side">
+                            <label for="title${experienceCount}">Job Title *</label>
+                            <input type="text" id="title${experienceCount}" name="title${experienceCount}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-side-by-side">
+                        <div class="form-side">
+                            <label for="city${experienceCount}">City *</label>
+                            <input type="text" id="city${experienceCount}" name="city${experienceCount}" required>
+                        </div>
+
+                        <div class="form-side">
+                            <label for="state${experienceCount}">State *</label>
+                            <input type="text" id="state${experienceCount}" name="state${experienceCount}" required>
+                        </div>
+                    </div>
+
+                    <div class="form-side-by-side">
+                        <div class="form-side">
+                            <label for="experience${experienceCount}-start-date">Start Date *</label>
+                            <input type="date" id="experience${experienceCount}-start-date" name="experience${experienceCount}-start-date" required>
+                        </div>
+
+                        <div class="form-side">
+                            <label for="experience${experienceCount}-end-date">End Date *</label>
+                            <input type="date" id="experience${experienceCount}-end-date" name="experience${experienceCount}-end-date" required>
+                        </div>
+                    </div>
+
+                    <label for="work-description${experienceCount}">Work Description *</label>
+                    <small>Enter key technologies and briefly describe your responsibilities in one or two sentences. Use bullet points if possible.</small>
+                    <textarea id="work-description${experienceCount}" name="work-description${experienceCount}" required></textarea>
+
+                    <div class="delete-experience">
+                        <button type="button" onclick="deleteExperience(${experienceCount})">Delete Experience</button>
+                    </div>
+                </div>
+            `;
+
+            additionalExperienceDiv.innerHTML += experienceHTML;
+
+            showExperiencePopup(experienceCount);
+        }
+
+        
+        function deleteExperience(experienceNumber) {
+            const experienceDiv = document.getElementById(`experience${experienceNumber}`);
+            if (experienceDiv) {
+                // Create the confirmation popup
+                const confirmationPopup = document.createElement('div');
+                confirmationPopup.classList.add('popup');
+    
+                const confirmationText = document.createElement('p');
+                confirmationText.textContent = "Are you sure you want to delete this work experience?";
+    
+                const confirmationButtons = document.createElement('div');
+                confirmationButtons.classList.add('popup-buttons');
+    
+                const cancelButton = document.createElement('button');
+                cancelButton.textContent = "Cancel";
+                cancelButton.addEventListener('click', function () {
+                    confirmationPopup.remove();
+                });
+    
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = "Delete";
+                deleteButton.addEventListener('click', function () {
+                    experienceDiv.remove();
+                    delete experienceData[experienceNumber];
+    
+                    // Update experienceCount if necessary
+                    if (experienceNumber === experienceCount) {
+                        experienceCount--;
+                    }
+    
+                    confirmationPopup.remove();
+                });
+    
+                confirmationButtons.appendChild(cancelButton);
+                confirmationButtons.appendChild(deleteButton);
+    
+                confirmationPopup.appendChild(confirmationText);
+                confirmationPopup.appendChild(confirmationButtons);
+    
+                document.body.appendChild(confirmationPopup);
+            }
+        }
+    
+            
+    </script>
+    
+    <!-- Projects section -->
+    <div class="form-section" id="projects">
+        <h2>Projects</h2>
+
+        <div class="project" id="project1">
+            <div class="form-side">
+                <label for="project1-title">Project 1 *</label>
+                <input type="text" id="project1-title" name="project1-title" required>
+            </div>
+
+            <label for="project1-description">Project 1 Description *</label>
+            <small>Enter key technologies and briefly describe your responsibilities in one or two sentences.</small>
+            <textarea id="project1-description" name="project1-description" required></textarea>
+
+            <div class="delete-project">
+                <button type="button" onclick="deleteProject(1)">Delete Project</button>
+            </div>
+        </div>
+
+        <div id="additional-projects"></div>
+
+        <button type="button" onclick="addAdditionalProject()">Add Additional Project</button>
+    </div>
+
+    <style>
+        .form-section {
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-section .delete-project {
+            margin-top: 10px;
+            text-align: right;
+        }
+
+        .popup {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f1f1f1;
+            border: 2px solid #333;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+            padding: 20px;
+            max-width: 500px;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        let projectCount = 1;
+
+        function addAdditionalProject() {
+            
+            if (projectCount >= 5) {
+                alert("You have reached the maximum limit of work experiences (5).");
+                return;
+            }
+
+            projectCount++;
+
+            const additionalProjectsDiv = document.getElementById('additional-projects');
+
+            const projectHTML = `
+                <div class="project" id="project${projectCount}">
+                    <div class="form-side">
+                        <label for="project${projectCount}-title">Project ${projectCount} *</label>
+                        <input type="text" id="project${projectCount}-title" name="project${projectCount}-title" required>
+                    </div>
+
+                    <label for="project${projectCount}-description">Project ${projectCount} Description *</label>
+                    <small>Enter key technologies and briefly describe your responsibilities in one or two sentences.</small>
+                    <textarea id="project${projectCount}-description" name="project${projectCount}-description" required></textarea>
+
+                    <div class="delete-project">
+                        <button type="button" onclick="deleteProject(${projectCount})">Delete Project</button>
+                    </div>
+                </div>
+            `;
+
+            additionalProjectsDiv.innerHTML += projectHTML;
+
+            showProjectPopup(projectCount);
+        }
+
+        function deleteProject(projectNumber) {
+            const projectDiv = document.getElementById(`project${projectNumber}`);
+            if (projectDiv) {
+                // Create the confirmation popup
+                const confirmationPopup = document.createElement('div');
+                confirmationPopup.classList.add('popup');
+
+                const confirmationText = document.createElement('p');
+                confirmationText.textContent = "Are you sure you want to delete this project?";
+
+                const confirmationButtons = document.createElement('div');
+                confirmationButtons.classList.add('popup-buttons');
+
+                const cancelButton = document.createElement('button');
+                cancelButton.textContent = "Cancel";
+                cancelButton.addEventListener('click', function () {
+                    confirmationPopup.remove();
+                });
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = "Delete";
+                deleteButton.addEventListener('click', function () {
+                    projectDiv.remove();
+
+                    // Update projectCount if necessary
+                    if (projectNumber === projectCount) {
+                        projectCount--;
+                    }
+
+                    confirmationPopup.remove();
+                });
+
+                confirmationButtons.appendChild(cancelButton);
+                confirmationButtons.appendChild(deleteButton);
+
+                confirmationPopup.appendChild(confirmationText);
+                confirmationPopup.appendChild(confirmationButtons);
+
+                document.body.appendChild(confirmationPopup);
+            }
+        }
+
+        function showProjectPopup(count) {
+            const message = `You have ${count > 1 ? count - 1 : count} project(s).\n\nHighlighting your relevant projects can impress potential employers. We recommend showcasing 2-5 projects. If you don't have that many projects, no worries! In the next step, you can enter your skills, and our AI model will assist in creating a compelling resume for you. You'll stand out to potential employers.\n\nRemember, quality matters more than quantity. Tell us about your coolest projects, and our AI will help craft impactful content for you.`;
+            const popup = document.createElement('div');
+            popup.classList.add('popup');
+            popup.textContent = message;
+
+            const okButton = document.createElement('button');
+            okButton.textContent = "OK";
+            okButton.addEventListener('click', function () {
+                popup.remove();
+            });
+
+            popup.appendChild(document.createElement('br'));
+            popup.appendChild(okButton);
+
+            document.body.appendChild(popup);
+        }
+    </script>
+
+
+    <!-- Skills section -->
+    <div class="form-section" id="skills">
+        <h2>Skills</h2>
+        <small>Do not worry, just add what you can, and the AI will do the rest. Your skills will be analyzed and incorporated into your resume to highlight your strengths and qualifications.</small>
+
+        <div class="form-side">
+            <label for="languages">Languages *</label>
+            <input type="text" id="languages" name="languages" placeholder="Enter languages you are proficient in" required>
+        </div>
+
+        <div class="form-side">
+            <label for="technologies">Technologies *</label>
+            <input type="text" id="technologies" name="technologies" placeholder="Enter technologies you have experience with" required>
+        </div>
+
+        <div class="form-side">
+            <label for="leadership">Leadership *</label>
+            <input type="text" id="leadership" name="leadership" placeholder="Enter leadership skills or positions held" required>
+        </div>
+    </div>
+    
+        <!-- Submit button -->
+        <input type="submit" value="Submit">
+</form>
+
+<!-- check -->
+<script>
+    const form = document.getElementById('myForm');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault(); // Prevent form submission
+
+        const requiredFields = ['firstName', 'lastName', 'phone', 'email', 'city', 'stateCountry', 'link'];
+        let valid = true;
+
+        requiredFields.forEach(function (field) {
+            const input = document.getElementById(field);
+            if (input.value.trim() === '') {
+                input.classList.add('error');
+                valid = false;
+            } else {
+                input.classList.remove('error');
+            }
+        });
+
+        if (valid) {
+            // Submit the form if all required fields are filled
+            form.submit();
+        }
+    });
+</script>
+
+
+</body>
+</html>
+
+{% endblock %}

@@ -1,0 +1,23 @@
+{% extends 'index.html' %}
+
+{% block content %}
+
+<style>
+.resume-link {
+  color: blue;
+  text-decoration: underline;
+  cursor: pointer;
+}
+</style>
+
+<br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
+
+<h1> {{first_name}} , Welcome to the resume page</h1>
+
+<h3> 
+    <a href="{{ link }}" class="resume-link" target="_blank">{{ link }}</a>
+</h3>
+
+<p>Thank you for creating your resume page!</p>
+
+{% endblock %}
