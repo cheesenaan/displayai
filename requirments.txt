@@ -1,1 +1,5 @@
 pip install gspread
+./manage.py migrate
+./manage.py makemigrations
+pip install whitenoise
+python manage.py collectstatic
