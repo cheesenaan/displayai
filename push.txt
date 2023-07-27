@@ -1,5 +1,5 @@
 push code from vscode django to github repo
 git add .                   
 git commit -m 'First commit'
-git remote add origin https://github.com/cheesenaan/resume_app.git
+git remote add origin https://github.com/cheesenaan/resume_app/tree/main/resume_app/project/.ipynb_checkpoints/resume_App/resume_app.git
 git push -u origin main
