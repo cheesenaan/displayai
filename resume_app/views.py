@@ -567,7 +567,8 @@ def data(request):
 
 
             # Path to your service account credentials JSON file
-            SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
+            #SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
+            SERVICE_ACCOUNT_FILE = '/home/resumeai/resume_app/resume_app/doc.json'
 
             # ID of the Google Doc you want to modify
             DOCUMENT_ID = '1LlDs00ayatWBgsmHzyYSk0d-yeJVbt33bC4dP34NHXk'
