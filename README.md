@@ -1,6 +1,5 @@
 # resume_app
 
-
 ## About Us
 
 At ResumeAI, we help you create a professional resume in just 5 minutes. Our platform leverages the Google Cloud Platform (GCP) Google Doc API and advanced artificial intelligence and data science models to ensure your resume stands out. With a resume score of 95+/100, you can confidently apply for internships and kickstart your career.
@@ -37,19 +36,26 @@ Follow these steps to set up the ResumeAI web app locally:
    cd resume_app
    ```
 
-3. Install Python dependencies:
+3. Create a virtual environment and activate it:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
+
+4. Install Python dependencies:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Migrate the database:
+5. Migrate the database:
 
    ```bash
    python manage.py migrate
    ```
 
-5. Create a GCP Service Account and configure the credentials.
+6. Create a GCP Service Account and configure the credentials.
 
    - Go to the Google Cloud Console and create a new Service Account.
 
@@ -57,19 +63,19 @@ Follow these steps to set up the ResumeAI web app locally:
 
    - Save the JSON key file as `gcp-credentials.json` in the project directory.
 
-6. Collect static files:
+7. Collect static files:
 
    ```bash
    python manage.py collectstatic
    ```
 
-7. Run the development server:
+8. Run the development server:
 
    ```bash
    python manage.py runserver
    ```
 
-8. Access the web app at `http://localhost:8000/`.
+9. Access the web app at `http://localhost:8000/`.
 
 ## Pushing Code to GitHub
 
@@ -107,19 +113,26 @@ To pull code from GitHub to PythonAnywhere, follow these steps:
 
 2. Open a terminal within PythonAnywhere.
 
-3. Install the project requirements:
+3. Create a virtual environment and activate it:
+
+   ```bash
+   python -m venv venv
+   source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
+   ```
+
+4. Install the project requirements:
 
    ```bash
    pip install -r requirements.txt
    ```
 
-4. Commit any local changes:
+5. Commit any local changes:
 
    ```bash
    git commit -m 'Committing local changes'
    ```
 
-5. Pull the latest code from GitHub:
+6. Pull the latest code from GitHub:
 
    ```bash
    git pull origin main
@@ -127,4 +140,3 @@ To pull code from GitHub to PythonAnywhere, follow these steps:
 
 ---
 
-Feel free to customize this README further to suit your project's specific details and instructions.
