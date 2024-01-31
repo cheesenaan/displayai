@@ -1,0 +1,205 @@
+{% extends 'index.html' %}
+{% load static %}
+
+{% block content %}
+
+
+<!DOCTYPE html>
+<html>
+    <title>Enter  Data</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f7f7f7;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        .form-section {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .form-section label {
+            font-weight: bold;
+        }
+
+        .form-section input,
+        .form-section select,
+        .form-section textarea {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+
+        .form-section .error {
+            border-color: red;
+        }
+
+        .form-section button {
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+
+                /* Toggle button styles */
+        .toggle-btn {
+        background-color: #4CAF50;
+        color: #fff;
+        border: none;
+        border-radius: 5px;
+        padding: 10px 20px;
+        cursor: pointer;
+        transition: background-color 0.3s ease;
+        margin-bottom: 10px;
+        }
+
+        .toggle-btn:hover {
+        background-color: #45a049; /* Slightly darker shade on hover */
+        }
+
+        /* Toggle button icon */
+        .toggle-btn::after {
+        content: '\25BE'; /* Unicode down-arrow character ▾ */
+        font-size: 12px;
+        margin-left: 5px;
+        }
+
+        /* Toggle button when active (open) */
+        .toggle-btn.active {
+        background-color: #2e8b57; /* Dark green when active */
+        }
+
+        /* Optional: Add box shadow for a raised effect when active */
+        .toggle-btn.active {
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+    </style>
+</head>
+</head>
+
+
+<body>
+    <br><br><br>
+
+    <form method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{ form.as_p }}
+    
+        <h3>Work Experiences</h3>
+        {% csrf_token %}
+        {{ work_experience_formset.management_form }}
+        <div id="work_form">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Company</th>
+                        <th>Position</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for work_form in work_experience_formset %}
+                        {{ work_form.as_table }}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button id="add-work-form" type="button">Add Another Work Experience</button>
+    
+        <h3>Projects</h3>
+        {% csrf_token %}
+        {{ projects_formset.management_form }}
+        <div id="projects_form">
+            <table>
+                <thead>
+                    <tr>
+                        <th>Project Name</th>
+                        <th>Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for project_form in projects_formset %}
+                        {{ project_form.as_table }}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button id="add-project-form" type="button">Add Another Project</button>
+    
+        <button type="submit">Submit</button>
+    </form>
+
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+    <script>
+        window.addEventListener('load', function() {
+            let workForm = document.querySelector("#work_form");
+            let addButton = document.querySelector("#add-work-form");
+    
+            let formNum = workForm.children.length;  
+            addButton.addEventListener('click', addForm);
+    
+            function addForm(e) {
+                e.preventDefault();
+    
+                console.log("Button clicked!");
+    
+                let newForm = workForm.children[0].cloneNode(true);
+                let formRegex = RegExp(`work_experiences-(\\d+)-`, 'g');
+                
+    
+                newForm.innerHTML = newForm.innerHTML.replace(formRegex, `work_experiences-${formNum}-`);
+                workForm.appendChild(newForm);
+                formNum++;
+
+                let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
+                totalFormsField.value = formNum;
+                
+                console.log(`Form added. Total forms: ${totalFormsField.value}`);
+            }
+        });
+    </script>
+
+    <script>
+        window.addEventListener('load', function() {
+            let projectForm = document.querySelector("#projects_form");
+            let addProjectButton = document.querySelector("#add-project-form");
+
+            let projectFormNum = projectForm.children.length;
+            addProjectButton.addEventListener('click', addProjectForm);
+
+            function addProjectForm(e) {
+                e.preventDefault();
+                console.log("addProjectButton clicked!");
+                
+                let newProjectForm = projectForm.children[0].cloneNode(true);
+                let formRegex = RegExp(`projects-(\\d+)-`, 'g');
+
+                newProjectForm.innerHTML = newProjectForm.innerHTML.replace(formRegex, `projects-${projectFormNum}-`);
+                projectForm.appendChild(newProjectForm);
+                projectFormNum++;
+
+                let totalProjectsFormsField = document.querySelector("input[name='projects-TOTAL_FORMS']");
+                totalProjectsFormsField.value = projectFormNum;
+
+                console.log(`Project form added added. Total project forms: ${totalProjectsFormsField.value}`);
+
+            }
+        });
+    </script>
+
+{% endblock %}
