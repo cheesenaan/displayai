@@ -1,5 +1,7 @@
+{% extends 'index.html' %}
 {% block content %}
-    <style>
+<br><br><br><br><br>
+    <!-- <style>
         form {
             max-width: 600px;
             margin: 0 auto;
@@ -29,15 +31,84 @@
             display: block;
             margin-bottom: 10px;
         }
-    </style>
+    </style> -->
 
-    <h1>Enter Data</h1>
+<style>
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        color: #333;
+        margin: 0;
+        padding: 0;
+    }
 
-    <h2>Enter Profile</h2>
+    form {
+        max-width: 800px;
+        margin: 0 auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    h1 {
+        color: #3498db;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
+
+    th, td {
+        border: 1px solid #ddd;
+        padding: 12px;
+        text-align: left;
+    }
+
+    th {
+        background-color: #3498db;
+        color: #fff;
+    }
+
+    #work_form, #projects_form {
+        margin-bottom: 20px;
+    }
+
+    button {
+        background-color: #3498db;
+        color: #fff;
+        padding: 10px 20px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #2a80b9;
+    }
+
+    #add-work-form, #add-project-form {
+        display: block;
+        margin-bottom: 10px;
+        background-color: #2ecc71;
+    }
+
+    #add-work-form:hover, #add-project-form:hover {
+        background-color: #29b765;
+    }
+</style>
+
+
+
+
     <form method="post" enctype="multipart/form-data">
+        <h1>Enter Data</h1>
+        <br>
         {% csrf_token %}
         {{ form.as_p }}
-    
+
         <h3>Work Experiences</h3>
         {% csrf_token %}
         {{ work_experience_formset.management_form }}
@@ -57,7 +128,7 @@
             </table>
         </div>
         <button id="add-work-form" type="button">Add Another Work Experience</button>
-    
+
         <h3>Projects</h3>
         {% csrf_token %}
         {{ projects_formset.management_form }}
@@ -77,7 +148,7 @@
             </table>
         </div>
         <button id="add-project-form" type="button">Add Another Project</button>
-    
+
         <button type="submit">Submit</button>
     </form>
 
@@ -88,26 +159,26 @@
         window.addEventListener('load', function() {
             let workForm = document.querySelector("#work_form");
             let addButton = document.querySelector("#add-work-form");
-    
-            let formNum = workForm.children.length;  
+
+            let formNum = workForm.children.length;
             addButton.addEventListener('click', addForm);
-    
+
             function addForm(e) {
                 e.preventDefault();
-    
+
                 console.log("Button clicked!");
-    
+
                 let newForm = workForm.children[0].cloneNode(true);
                 let formRegex = RegExp(`work_experiences-(\\d+)-`, 'g');
-                
-    
+
+
                 newForm.innerHTML = newForm.innerHTML.replace(formRegex, `work_experiences-${formNum}-`);
                 workForm.appendChild(newForm);
                 formNum++;
 
                 let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
                 totalFormsField.value = formNum;
-                
+
                 console.log(`Form added. Total forms: ${totalFormsField.value}`);
             }
         });
@@ -124,7 +195,7 @@
             function addProjectForm(e) {
                 e.preventDefault();
                 console.log("addProjectButton clicked!");
-                
+
                 let newProjectForm = projectForm.children[0].cloneNode(true);
                 let formRegex = RegExp(`projects-(\\d+)-`, 'g');
 

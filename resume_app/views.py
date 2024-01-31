@@ -35,7 +35,7 @@ def website_form(request):
                 user_profile.profile_image = f"profile_pics/{str(user_profile.id)}.jpg"
                 user_profile.save()
             delete_jpeg_files()
-            
+
         total_forms = request.POST.get('work_experiences-TOTAL_FORMS')
         total_forms = int(total_forms) if total_forms else 0
         print("total forms is ", total_forms)
@@ -46,7 +46,8 @@ def website_form(request):
             start_date = request.POST.get(f'work_experiences-{i}-start_date')
             end_date = request.POST.get(f'work_experiences-{i}-end_date')
             description = request.POST.get(f'work_experiences-{i}-description')
-            bullet1, bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
+            bullet1, bullet2, bullet3 = description , description, description
+            #bullet1, bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
 
             if company_name:  # Check if company_name is present to avoid empty forms
                 WorkExperience.objects.create(
@@ -62,16 +63,17 @@ def website_form(request):
                 )
 
 
-        total_project_forms = request.POST.get('projects-TOTAL_FORMS') 
+        total_project_forms = request.POST.get('projects-TOTAL_FORMS')
         total_project_forms = int(total_project_forms) if total_project_forms else 0
         print("total_project_forms is ", total_project_forms)
         for i in range(total_project_forms+1):
             project_name = request.POST.get(f'projects-{i}-project_name')
             project_skills = request.POST.get(f'projects-{i}-project_skills')
             description = request.POST.get(f'projects-{i}-description')
-            bullet1, bullet2 = openai_project(project_name , description)
+            bullet1, bullet2 = description , description
+            #bullet1, bullet2 = openai_project(project_name , description)
 
-            if project_name: 
+            if project_name:
                 Project.objects.create(
                     user_profile=user_profile,
                     project_name=project_name,
@@ -83,9 +85,9 @@ def website_form(request):
 
         user_profile.resume_link = create_resume(user_profile)
         user_profile.save()
-        
+
         return redirect('website', url_name=user_profile.url_name)
-    
+
     else:
         form = UserProfileForm()
         work_experience_formset = WorkExperienceFormSet(instance=UserProfile())
@@ -117,8 +119,8 @@ def edit_website(request, url_name):
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
             new_url_name = form.cleaned_data['url_name']
-            if new_url_name != user_profile.url_name:  
-                validate_unique_url_name(new_url_name)  
+            if new_url_name != user_profile.url_name:
+                validate_unique_url_name(new_url_name)
 
             if 'profile_image' in request.FILES:
                 profile_image = request.FILES['profile_image']
@@ -132,7 +134,7 @@ def edit_website(request, url_name):
             form.save()
 
             # Handle work experiences and projects similarly to website_form
-            total_project_forms = request.POST.get('projects-TOTAL_FORMS') 
+            total_project_forms = request.POST.get('projects-TOTAL_FORMS')
             total_project_forms = int(total_project_forms) if total_project_forms else 0
             print("total_project_forms is ", total_project_forms)
             for i in range(total_project_forms+1):
@@ -140,7 +142,7 @@ def edit_website(request, url_name):
                 project_skills = request.POST.get(f'projects-{i}-project_skills')
                 description = request.POST.get(f'projects-{i}-description')
 
-                if project_name: 
+                if project_name:
                     Project.objects.create(
                         user_profile=user_profile,
                         project_name=project_name,
@@ -224,8 +226,8 @@ def create_resume(user_profile):
         })
 
     # Path to your service account credentials JSON file
-    SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
-    #SERVICE_ACCOUNT_FILE = '/home/resumeai/resume_app/resume_app/doc.json'
+    #SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
+    SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 
     # ID of the Google Doc you want to modify
     DOCUMENT_ID = '1PVKqAkOTjdorBmlJOIGHYhIjYuBPxuPZzKeN4TUQZNE'
@@ -337,8 +339,8 @@ def create_resume(user_profile):
 #     return render(request, 'resume.html', context)
 
 def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
-    
-    openai.api_key = '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'
+
+    openai.api_key = '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'
 
     prompt = f"""
     give me exactly 3 very short, concise, and numerically quantified one sentence resume points for experience
@@ -372,8 +374,8 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
     return one, two, three
 
 def openai_project(PROJECT, DESCRIPTION):
-    
-    openai.api_key = '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'
+
+    openai.api_key = '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'
 
     prompt = f"""
     give me exactly 2 very short, concise, and numerically quantified one sentence resume points
