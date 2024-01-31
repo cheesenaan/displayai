@@ -83,7 +83,7 @@ def website_form(request):
                     bullet2 = bullet2,
                 )
 
-        user_profile.resume_link = create_resume(user_profile)
+        #user_profile.resume_link = create_resume(user_profile)
         user_profile.save()
 
         return redirect('website', url_name=user_profile.url_name)
