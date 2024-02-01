@@ -3,15 +3,17 @@ from PIL import Image
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ValidationError
 from django.conf import settings
-from .models import UserProfile, validate_unique_url_name
+from django.urls import reverse
+from .models import UserProfile
 from .forms import *
 import datetime
 from django.shortcuts import get_object_or_404, render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 import gspread
 from google.oauth2.service_account import Credentials
 from django.shortcuts import redirect
 import openai
+import httplib2
 
 
 def home(request):
@@ -23,7 +25,7 @@ def website_form(request):
         print(request.POST)
 
         if form.is_valid():
-            user_profile = form.save()
+            user_profile = form.save(commit=False) 
             if 'profile_image' in request.FILES:
                 profile_image = request.FILES['profile_image']
                 destination_path = os.path.join(settings.STATIC_ROOT_PROFILE_PICS, f"{str(user_profile.id)}.jpg")
@@ -34,7 +36,14 @@ def website_form(request):
                 # Update the UserProfile instance with the correct profile_image path
                 user_profile.profile_image = f"profile_pics/{str(user_profile.id)}.jpg"
                 user_profile.save()
-            delete_jpeg_files()
+                delete_jpeg_files()
+
+        if not form.is_valid():
+            print("Form is not valid!")
+            print("Errors:", form.errors)
+            print("Cleaned data:", form.cleaned_data)
+            print("Non-form errors:", form.non_field_errors())
+
 
         total_forms = request.POST.get('work_experiences-TOTAL_FORMS')
         total_forms = int(total_forms) if total_forms else 0
@@ -45,17 +54,20 @@ def website_form(request):
             job_title = request.POST.get(f'work_experiences-{i}-job_title')
             start_date = request.POST.get(f'work_experiences-{i}-start_date')
             end_date = request.POST.get(f'work_experiences-{i}-end_date')
+            city = request.POST.get(f'work_experiences-{i}-city')
+            state = request.POST.get(f'work_experiences-{i}-state')
             description = request.POST.get(f'work_experiences-{i}-description')
-            bullet1, bullet2, bullet3 = description , description, description
-            #bullet1, bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
 
             if company_name:  # Check if company_name is present to avoid empty forms
+                bullet1, bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
                 WorkExperience.objects.create(
                     user_profile=user_profile,
                     company_name=company_name,
                     job_title=job_title,
                     start_date=start_date,
                     end_date=end_date,
+                    city=city,
+                    state=state,
                     description=description,
                     bullet1 = bullet1,
                     bullet2 = bullet2,
@@ -70,10 +82,9 @@ def website_form(request):
             project_name = request.POST.get(f'projects-{i}-project_name')
             project_skills = request.POST.get(f'projects-{i}-project_skills')
             description = request.POST.get(f'projects-{i}-description')
-            bullet1, bullet2 = description , description
-            #bullet1, bullet2 = openai_project(project_name , description)
 
             if project_name:
+                bullet1, bullet2 = openai_project(project_name , description)
                 Project.objects.create(
                     user_profile=user_profile,
                     project_name=project_name,
@@ -83,9 +94,7 @@ def website_form(request):
                     bullet2 = bullet2,
                 )
 
-        #user_profile.resume_link = create_resume(user_profile)
         user_profile.save()
-
         return redirect('website', url_name=user_profile.url_name)
 
     else:
@@ -98,6 +107,7 @@ def website_form(request):
         'work_experience_formset': work_experience_formset,
         'projects_formset': projects_formset,
     }
+    
     return render(request, 'website_form.html', context)
 
 def website(request, url_name):
@@ -119,8 +129,8 @@ def edit_website(request, url_name):
         form = UserProfileForm(request.POST, request.FILES, instance=user_profile)
         if form.is_valid():
             new_url_name = form.cleaned_data['url_name']
-            if new_url_name != user_profile.url_name:
-                validate_unique_url_name(new_url_name)
+            # if new_url_name != user_profile.url_name:
+                # validate_unique_url_name(new_url_name)
 
             if 'profile_image' in request.FILES:
                 profile_image = request.FILES['profile_image']
@@ -186,48 +196,51 @@ def create_resume(user_profile):
     from google.oauth2 import service_account
     # Dictionary to store the placeholder replacements
     placeholder_replacements = {
-            'name': f"{user_profile.first_name} {user_profile.last_name}",
+            'name': f"{user_profile.first_name.upper()} {user_profile.last_name.upper()}",
             'email': user_profile.email,
             'phone': user_profile.phone,
             'city': user_profile.city,
-            'state': user_profile.state,
+            'state': user_profile.state.upper(),
             'linkedin_link': user_profile.linkedin_link,
             'resume_link': user_profile.resume_link,
             'github_link': user_profile.github_link,
-            'institution': user_profile.institution,
+            'university': user_profile.institution,
+            'university start date': user_profile.start_date.strftime('%b %Y'),
+            'university end date' : user_profile.end_date.strftime('%b %Y'),
             'major': user_profile.major,
             'minor': user_profile.minor,
-            'start_date': user_profile.start_date.strftime('%Y-%m-%d'),
-            'end_date': user_profile.end_date.strftime('%Y-%m-%d'),
             'spoken_languages': user_profile.spoken_languages,
-            'programming_languages': user_profile.programming_languages,
-            'technical_skills': user_profile.technical_skills,
+            'languages': user_profile.programming_languages,
+            'technologies': user_profile.technical_skills,
             'leadership': user_profile.leadership,
+            'degree_type' : user_profile.degree_type,
         }
 
         # Work experiences
     for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
         placeholder_replacements.update({
-            f'experience{i}': work_experience.company_name,
-            f'title{i}': work_experience.job_title,
-            f'experience{i} start date': work_experience.start_date.strftime('%Y-%m-%d'),
-            f'experience{i} end date': work_experience.end_date.strftime('%Y-%m-%d'),
-            f'experience{i} location': work_experience.company_name,  # You may need to modify this
+            f'experience{i}': work_experience.company_name.title(),
+            f'title{i}': work_experience.job_title.title(),
+            f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
+            f'experience{i} end date': work_experience.end_date.strftime('%b %Y'),
+            f'experience{i} location': work_experience.city.strip().title() + ' , ' + work_experience.state.strip().upper(),
             f'experience{i} bullet1': work_experience.bullet1,
             f'experience{i} bullet2': work_experience.bullet2,
             f'experience{i} bullet3': work_experience.bullet3,
         })
+
     # Projects
     for i, project in enumerate(user_profile.projects.all(), start=1):
         placeholder_replacements.update({
-            f'project{i}': project.project_name,
+            f'project{i}': project.project_name.title(),
+            f'skills{i}': project.project_skills.title(),
             f'project{i} bullet1': project.bullet1,
             f'project{i} bullet2': project.bullet2,
         })
 
     # Path to your service account credentials JSON file
-    #SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
-    SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
+    SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
+    #SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 
     # ID of the Google Doc you want to modify
     DOCUMENT_ID = '1PVKqAkOTjdorBmlJOIGHYhIjYuBPxuPZzKeN4TUQZNE'
@@ -326,21 +339,9 @@ def create_resume(user_profile):
     print("Link to the Google Doc:", resume_link)
     return resume_link
 
-# def resume(request , user_id, first_name):
-#     from resume_app.models import user_resume_data
-#     # Retrieve the user_resume_data instance with the provided user_id
-#     resume_instance = get_object_or_404(user_resume_data, ID=user_id)
-
-#     # Access the RESUME_LINK attribute of the retrieved instance
-#     resume_link = resume_instance.RESUME_LINK
-
-#     # Pass the resume_link to the template and render the response
-#     context = {'link': resume_link, 'first_name': first_name}
-#     return render(request, 'resume.html', context)
-
 def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
-    openai.api_key = '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'
+    openai.api_key = ''
 
     prompt = f"""
     give me exactly 3 very short, concise, and numerically quantified one sentence resume points for experience
@@ -375,7 +376,7 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
 def openai_project(PROJECT, DESCRIPTION):
 
-    openai.api_key = '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'
+    openai.api_key = ''
 
     prompt = f"""
     give me exactly 2 very short, concise, and numerically quantified one sentence resume points
@@ -405,3 +406,15 @@ def openai_project(PROJECT, DESCRIPTION):
     two = lines[1].split('. ')[1]
 
     return one, two
+
+from django.http import JsonResponse
+from django.views import View
+from .models import UserProfile
+
+class CheckUrlNameView(View):
+    def get(self, request, *args, **kwargs):
+        url_name = request.GET.get('url_name', None)
+        data = {'is_taken': UserProfile.objects.filter(url_name=url_name).exists()}
+        return JsonResponse(data)
+
+

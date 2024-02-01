@@ -1,37 +1,6 @@
 {% extends 'index.html' %}
 {% block content %}
-<br><br><br><br><br>
-    <!-- <style>
-        form {
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 10px;
-        }
-
-        th, td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: left;
-        }
-
-        th {
-            background-color: #f2f2f2;
-        }
-
-        #work_form {
-            margin-bottom: 20px;
-        }
-
-        #add-form {
-            display: block;
-            margin-bottom: 10px;
-        }
-    </style> -->
+<br><br><br><br><br><br><br>
 
 <style>
     body {
@@ -46,13 +15,14 @@
         max-width: 800px;
         margin: 0 auto;
         background-color: #fff;
-        padding: 20px;
+        padding: 30px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
 
-    h1 {
-        color: #3498db;
+    h1, h3 {
+        color: black;
+        font-weight: bold;  /* Add bold font for consistency */
     }
 
     table {
@@ -65,12 +35,13 @@
         border: 1px solid #ddd;
         padding: 12px;
         text-align: left;
+        font-weight: bold;  /* Add bold font for consistency */
     }
 
-    th {
+    /* th {
         background-color: #3498db;
         color: #fff;
-    }
+    } */
 
     #work_form, #projects_form {
         margin-bottom: 20px;
@@ -83,6 +54,8 @@
         border: none;
         border-radius: 4px;
         cursor: pointer;
+        margin-top: 10px; /* Add margin to the top of the buttons */
+        font-weight: bold;  /* Add bold font for consistency */
     }
 
     button:hover {
@@ -93,67 +66,151 @@
         display: block;
         margin-bottom: 10px;
         background-color: #2ecc71;
+        padding: 10px; /* Add padding to the buttons for better visibility */
+        font-weight: bold;  /* Add bold font for consistency */
     }
 
     #add-work-form:hover, #add-project-form:hover {
         background-color: #29b765;
     }
+
+    input, textarea {
+        width: 100%;
+        padding: 10px; /* Adjust padding for better appearance */
+        box-sizing: border-box;
+        margin-bottom: 10px; /* Add margin to the bottom of the input fields */
+    }
+
+    .form-container input,
+    .form-container select,
+    .form-container textarea {
+        width: 100%; /* Make the form fields take the full width of the column */
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        padding: 10px;
+    }
+
 </style>
 
+<!-- Add this to the head section of your HTML file -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
 
-    <form method="post" enctype="multipart/form-data">
-        <h1>Enter Data</h1>
-        <br>
-        {% csrf_token %}
-        {{ form.as_p }}
+<form method="post" enctype="multipart/form-data" id="userProfileForm">
+    <h1>Enter Data</h1>
+    <br>
+    {% csrf_token %}
+    {{ form.as_p }}
 
-        <h3>Work Experiences</h3>
-        {% csrf_token %}
-        {{ work_experience_formset.management_form }}
-        <div id="work_form">
-            <table>
-                <thead>
-                    <tr>
-                        <th>Company</th>
-                        <th>Position</th>
+    <!-- Add a span element to display the validation message -->
+    <span id="urlNameValidation"></span>
+    <script>
+        $(document).ready(function () {
+            // Add an event listener to the url_name input field
+            console.log("JavaScript loaded!");
+            $('#id_url_name').on('input', function () {
+                var urlName = $(this).val();
+        
+                // Send an AJAX request to check if the url_name is taken
+                $.ajax({
+                    url: '/website_form/check_url_name/',  // Fix the URL here
+                    type: 'GET',
+                    data: { 'url_name': urlName },
+                    success: function (data) {
+                        if (data.is_taken) {
+                            // Display a message if the url_name is taken as a red alert bubble
+                            $('#urlNameValidation').html('<div class="alert alert-danger" role="alert">URL TAKEN, PLEASE TRY ANOTHER URL</div>');
+                        } else {
+                            // Display a message if the url_name is available as a green alert bubble
+                            $('#urlNameValidation').html('<div class="alert alert-success" role="alert">URL available</div>');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+    <br>  
+    <h3>Work Experiences</h3>
+    {% csrf_token %}
+    {{ work_experience_formset.management_form }}
+    <div id="work_form">
+        <table>
+            <tbody>
+                <tr>
+                    <th>Company Name</th>
+                    <th>Job Title</th>
+                </tr>
+                {% for work_form in work_experience_formset %}
+                    <tr class="form-row">
+                        <td>{{ work_form.company_name }}</td>
+                        <td>{{ work_form.job_title }}</td>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for work_form in work_experience_formset %}
-                        {{ work_form.as_table }}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <button id="add-work-form" type="button">Add Another Work Experience</button>
+                    <tr class="form-row">
+                        <td>Start Date</td>
+                        <td>End Date</td>
+                    </tr>
+                    <tr class="form-row">
+                        <td>{{ work_form.start_date }}</td>
+                        <td>{{ work_form.end_date }}</td>
+                    </tr>
+                    <tr class="form-row">
+                        <td>City</td>
+                        <td>State</td>
+                    </tr>
+                    <tr class="form-row">
+                        <td>{{ work_form.city }}</td>
+                        <td>{{ work_form.state }}</td>
+                    </tr>
+                    <tr class="form-row">
+                        <td colspan="2">Description</td>
+                    </tr>
+                    <tr class="form-row">
+                        <td colspan="2">{{ work_form.description }}</td>
+                    </tr>
+                    
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button id="add-work-form" type="button">Add Another Work Experience</button>
 
-        <h3>Projects</h3>
-        {% csrf_token %}
-        {{ projects_formset.management_form }}
-        <div id="projects_form">
-            <table>
-                <thead>
+    <h3>Projects</h3>
+    {% csrf_token %}
+    {{ projects_formset.management_form }}
+    <div id="projects_form">
+        <table>
+            <tbody>
+                {% for project_form in projects_formset %}
                     <tr>
                         <th>Project Name</th>
+                    </tr>
+                    <td>{{ project_form.project_name.errors }} {{ project_form.project_name }}</td>
+
+                    <tr>
+                        <th>Project Skills</th>
+                    </tr>
+                    <td>{{ project_form.project_skills.errors }} {{ project_form.project_skills }}</td>
+
+                    <tr>
                         <th>Description</th>
                     </tr>
-                </thead>
-                <tbody>
-                    {% for project_form in projects_formset %}
-                        {{ project_form.as_table }}
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        <button id="add-project-form" type="button">Add Another Project</button>
+                    <td>{{ project_form.description.errors }} {{ project_form.description }}</td>
 
-        <button type="submit">Submit</button>
-    </form>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <button id="add-project-form" type="button">Add Another Project</button>
+    
 
+    <button type="submit">Submit</button>
+    <br>  <br>  <br>  <br> 
+</form>
+
+    <br>  <br>  <br>  <br>  <br>  
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
+   
 
     <script>
         window.addEventListener('load', function() {
@@ -211,5 +268,7 @@
             }
         });
     </script>
+
+   
 
 {% endblock %}

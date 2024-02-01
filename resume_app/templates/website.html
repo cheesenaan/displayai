@@ -115,7 +115,6 @@
                         <div class="flex-grow-1">
                             <h3 class="mb-0">{{ work_experience.company_name }}</h3>
                             <div class="subheading mb-3">{{ work_experience.job_title }}</div>
-                            <p>{{ work_experience.description }}</p>
                             <p>{{ work_experience.bullet1 }}</p>
                             <p>{{ work_experience.bullet2 }}</p>
                             <p>{{ work_experience.bullet3 }}</p>
@@ -134,7 +133,6 @@
                         <h3 class="mb-0">PROJECTS</h3>
                         {% for project in user_profile.projects.all %}
                         <div class="subheading mb-3">{{ project.project_name }} | ({{ project.project_skills }})</div>
-                        <p> {{ project.description }} </p>
                         <p> {{ project.bullet1 }} </p>
                         <p> {{ project.bullet2 }} </p>
                         {% endfor %}

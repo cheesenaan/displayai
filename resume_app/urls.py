@@ -16,12 +16,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .views import *
+from .views import CheckUrlNameView
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
-    # path('data', data, name='data'),
     path('website_form/', website_form, name='website_form'),
     path('<str:url_name>/', website, name='website'),  
     path('edit/<str:url_name>/', edit_website, name='edit_website'),
+    path('website_form/check_url_name/', CheckUrlNameView.as_view(), name='check_url_name'),
 ]
