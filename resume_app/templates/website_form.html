@@ -90,6 +90,27 @@
         padding: 10px;
     }
 
+    #work_experience_question, #projects_question {
+    text-align: center;
+    font-size: 18px;
+    margin-bottom: 20px;
+    }
+
+    #work_experience_options, #projects_options {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #work_experience_options, #projects_options label {
+        margin: 0 10px;
+        font-size: 16px;
+    }
+
+    #work_experience_options, #projects_options input {
+        margin-right: 5px;
+    }
+
 </style>
 
 <!-- Add this to the head section of your HTML file -->
@@ -98,84 +119,187 @@
 
 
 <form method="post" enctype="multipart/form-data" id="userProfileForm">
-    <h1>Enter Data</h1>
-    <br>
-    {% csrf_token %}
-    {{ form.as_p }}
 
-    <!-- Add a span element to display the validation message -->
-    <span id="urlNameValidation"></span>
-    <script>
-        $(document).ready(function () {
-            // Add an event listener to the url_name input field
-            console.log("JavaScript loaded!");
-            $('#id_url_name').on('input', function () {
-                var urlName = $(this).val();
-        
-                // Send an AJAX request to check if the url_name is taken
-                $.ajax({
-                    url: '/website_form/check_url_name/',  // Fix the URL here
-                    type: 'GET',
-                    data: { 'url_name': urlName },
-                    success: function (data) {
-                        if (data.is_taken) {
-                            // Display a message if the url_name is taken as a red alert bubble
-                            $('#urlNameValidation').html('<div class="alert alert-danger" role="alert">URL TAKEN, PLEASE TRY ANOTHER URL</div>');
-                        } else {
-                            // Display a message if the url_name is available as a green alert bubble
-                            $('#urlNameValidation').html('<div class="alert alert-success" role="alert">URL available</div>');
+    <div>
+
+        <h1>Enter Data</h1>
+        <br>
+        {% csrf_token %}
+        {{ form.as_p }}
+
+        <span id="urlNameValidation"></span>
+        <script>
+            $(document).ready(function () {
+                // Add an event listener to the url_name input field
+                console.log("JavaScript loaded!");
+                $('#id_url_name').on('input', function () {
+                    var urlName = $(this).val();
+            
+                    // Send an AJAX request to check if the url_name is taken
+                    $.ajax({
+                        url: '/website_form/check_url_name/',  // Fix the URL here
+                        type: 'GET',
+                        data: { 'url_name': urlName },
+                        success: function (data) {
+                            if (data.is_taken) {
+                                // Display a message if the url_name is taken as a red alert bubble
+                                $('#urlNameValidation').html('<div class="alert alert-danger" role="alert">URL TAKEN, PLEASE TRY ANOTHER URL</div>');
+                            } else {
+                                // Display a message if the url_name is available as a green alert bubble
+                                $('#urlNameValidation').html('<div class="alert alert-success" role="alert">URL available</div>');
+                            }
                         }
+                    });
+                });
+            });
+        </script>
+        <br>  
+    </div>
+
+    <script>
+        function toggleWorkExperienceForm() {
+            var workForm = document.getElementById('work_form');
+            var yesRadio = document.getElementById('yesRadio');
+            var addWorkFormButton = document.getElementById('add-work-form');
+    
+            workForm.style.display = yesRadio.checked ? 'block' : 'none';
+            addWorkFormButton.style.display = yesRadio.checked ? 'block' : 'none';
+        }
+    </script>
+    
+    <h3>Work Experiences</h3>
+
+
+    <script>
+        window.addEventListener('load', function() {
+            let workForm = document.querySelector("#work_form");
+            let addButton = document.querySelector("#add-work-form");
+            
+            addButton.addEventListener('click', addForm);
+
+            function addForm(e) {
+                e.preventDefault();
+
+                console.log("Button clicked!");
+
+                let newForm = workForm.children[0].cloneNode(true);
+                let formNum = workForm.children.length - 1;
+
+                newForm.innerHTML = newForm.innerHTML.replace(/work_experiences-(\d+)-/g, `work_experiences-${formNum}-`);
+                workForm.appendChild(newForm);
+
+                let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
+
+                let deleteButton = document.querySelector("#delete-work-form-0");
+                let newDeleteButton = deleteButton.cloneNode(true);
+                newDeleteButton.id = `delete-work-form-${formNum}`;
+                newForm.appendChild(newDeleteButton);
+                
+
+                newDeleteButton.addEventListener('click', function() {
+                    deleteForm(newForm, formNum);
+                });
+                
+                formNum++;
+                totalFormsField.value = formNum;
+                console.log(`Form added. Total forms: ${totalFormsField.value}`);
+            }
+
+            function deleteForm(form, formNum) {
+                form.remove();
+
+                let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
+                totalFormsField.value--;
+
+                console.log("work form number " + formNum + " is being deleted");
+                console.log(`Form deleted. Total forms: ${totalFormsField.value}`);
+
+                if (formNum < workForm.children.length) {
+                    console.log("formNum < workForm.children.length");
+                    for (let i = formNum - 1; i < workForm.children.length; i++) {
+                        let elements = workForm.children[i].querySelectorAll("[name*='-']");
+                        let elements_ids = workForm.children[i].querySelectorAll("[id*='-']");
+                        elements.forEach(element => {
+                            element.name = element.name.replace(new RegExp(`work_experiences-${i}-`, 'g'), `work_experiences-${i - 1}-`);
+                        });
+                        elements_ids.forEach(element_id => {
+                            element_id.id = element_id.id.replace(new RegExp(`id_work_experiences-${i}-`, 'g'), `id_work_experiences-${i - 1}-`);
+                        });
                     }
+                }
+            }
+
+            let deleteButtons = document.querySelectorAll("[id^='delete-work-form-']");
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    let formNum = parseInt(button.id.split('-').pop());
+                    console.log("work form number " + formNum + " is being deleted");
+                    deleteForm(workForm.children[formNum], formNum);
                 });
             });
         });
     </script>
-    <br>  
-    <h3>Work Experiences</h3>
+    
+    <p id="work_experience_question">Do you have relevant work experience?</p>
+    <div id="work_experience_options">
+        <label>
+            <input type="radio" name="hasWorkExperience" id="yesRadio" value="yes" onclick="toggleWorkExperienceForm()"> Yes
+        </label>
+        <label>
+            <input type="radio" name="hasWorkExperience" id="noRadio" value="no" onclick="toggleWorkExperienceForm()" checked> No
+        </label>
+    </div>
+
+
+    <br> <br> <br> 
+
     {% csrf_token %}
     {{ work_experience_formset.management_form }}
-    <div id="work_form">
-        <table>
-            <tbody>
-                <tr>
-                    <th>Company Name</th>
-                    <th>Job Title</th>
-                </tr>
-                {% for work_form in work_experience_formset %}
-                    <tr class="form-row">
-                        <td>{{ work_form.company_name }}</td>
-                        <td>{{ work_form.job_title }}</td>
+    <div id="work_form" style="display: none;">
+        <div id="work_experiences_container">
+            <table>
+                <tbody>
+                    <tr>
+                        <th>Company Name</th>
+                        <th>Job Title</th>
                     </tr>
-                    <tr class="form-row">
-                        <td>Start Date</td>
-                        <td>End Date</td>
-                    </tr>
-                    <tr class="form-row">
-                        <td>{{ work_form.start_date }}</td>
-                        <td>{{ work_form.end_date }}</td>
-                    </tr>
-                    <tr class="form-row">
-                        <td>City</td>
-                        <td>State</td>
-                    </tr>
-                    <tr class="form-row">
-                        <td>{{ work_form.city }}</td>
-                        <td>{{ work_form.state }}</td>
-                    </tr>
-                    <tr class="form-row">
-                        <td colspan="2">Description</td>
-                    </tr>
-                    <tr class="form-row">
-                        <td colspan="2">{{ work_form.description }}</td>
-                    </tr>
-                    
-                {% endfor %}
-            </tbody>
-        </table>
+                    {% for work_form in work_experience_formset %}
+                        <tr class="form-row">
+                            <td>{{ work_form.company_name }}</td>
+                            <td>{{ work_form.job_title }}</td>
+                        </tr>
+                        <tr class="form-row">
+                            <td>Start Date</td>
+                            <td>End Date</td>
+                        </tr>
+                        <tr class="form-row">
+                            <td>{{ work_form.start_date }}</td>
+                            <td>{{ work_form.end_date }}</td>
+                        </tr>
+                        <tr class="form-row">
+                            <td>City</td>
+                            <td>State</td>
+                        </tr>
+                        <tr class="form-row">
+                            <td>{{ work_form.city }}</td>
+                            <td>{{ work_form.state }}</td>
+                        </tr>
+                        <tr class="form-row">
+                            <td colspan="2">Description</td>
+                        </tr>
+                        <tr class="form-row">
+                            <td colspan="2">{{ work_form.description }}</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+        <button id="delete-work-form-0" type="button"">Delete Work Experience</button>
     </div>
-    <button id="add-work-form" type="button">Add Another Work Experience</button>
+    <button id="add-work-form" type="button" style="display: none;">Add Another Work Experience</button> 
 
     <h3>Projects</h3>
+
     {% csrf_token %}
     {{ projects_formset.management_form }}
     <div id="projects_form">
@@ -201,48 +325,12 @@
             </tbody>
         </table>
     </div>
-    <button id="add-project-form" type="button">Add Another Project</button>
-    
+    <button id="add-project-form" type="button"">Add Another Project</button> 
 
-    <button type="submit">Submit</button>
-    <br>  <br>  <br>  <br> 
-</form>
-
-    <br>  <br>  <br>  <br>  <br>  
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-   
 
     <script>
-        window.addEventListener('load', function() {
-            let workForm = document.querySelector("#work_form");
-            let addButton = document.querySelector("#add-work-form");
 
-            let formNum = workForm.children.length;
-            addButton.addEventListener('click', addForm);
-
-            function addForm(e) {
-                e.preventDefault();
-
-                console.log("Button clicked!");
-
-                let newForm = workForm.children[0].cloneNode(true);
-                let formRegex = RegExp(`work_experiences-(\\d+)-`, 'g');
-
-
-                newForm.innerHTML = newForm.innerHTML.replace(formRegex, `work_experiences-${formNum}-`);
-                workForm.appendChild(newForm);
-                formNum++;
-
-                let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
-                totalFormsField.value = formNum;
-
-                console.log(`Form added. Total forms: ${totalFormsField.value}`);
-            }
-        });
-    </script>
-
-    <script>
-        window.addEventListener('load', function() {
+        window.addEventListener('load', function () {
             let projectForm = document.querySelector("#projects_form");
             let addProjectButton = document.querySelector("#add-project-form");
 
@@ -265,9 +353,80 @@
 
                 console.log(`Project form added added. Total project forms: ${totalProjectsFormsField.value}`);
 
+                // Add delete functionality for the new project form
+                let deleteProjectButton = document.createElement('button');
+                deleteProjectButton.textContent = "Delete Project";
+                deleteProjectButton.type = "button";
+                newProjectForm.appendChild(deleteProjectButton);
+
+                deleteProjectButton.addEventListener('click', function () {
+                    deleteProjectForm(newProjectForm, projectFormNum);
+                });
             }
         });
     </script>
+
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var submitButton = document.querySelector('button[type="submit"]');
+            submitButton.addEventListener('click', function (event) {
+                // Prevent form submission
+                event.preventDefault();
+
+                // Check if work experience form is displayed
+                var workForm = document.getElementById('work_form');
+                if (workForm.style.display !== 'none') {
+                    // Validate each field in the work experience form
+                    var workForms = document.getElementsByClassName('form-row');
+                    for (var i = 0; i < workForms.length; i++) {
+                        var inputs = workForms[i].getElementsByTagName('input');
+                        var textareas = workForms[i].getElementsByTagName('textarea');
+
+                        // Validate input fields
+                        for (var j = 0; j < inputs.length; j++) {
+                            if (inputs[j].value.trim() === '') {
+                                inputs[j].style.borderColor = 'red';
+                                alert('Please fill in the "' + inputs[j].getAttribute('name') + '" field in the work experience form.');
+                                scrollToElement(inputs[j]);
+                                return;
+                            } else {
+                                inputs[j].style.borderColor = ''; // Reset border color
+                            }
+                        }
+
+                        // Validate textarea fields
+                        for (var k = 0; k < textareas.length; k++) {
+                            if (textareas[k].value.trim() === '') {
+                                textareas[k].style.borderColor = 'red';
+                                alert('Please fill in the "' + textareas[k].getAttribute('name') + '" field in the work experience form.');
+                                scrollToElement(textareas[k]);
+                                return;
+                            } else {
+                                textareas[k].style.borderColor = ''; // Reset border color
+                            }
+                        }
+                    }
+                }
+
+                // If validation passes, submit the form
+                document.querySelector('form').submit();
+            });
+
+            function scrollToElement(element) {
+                // Scroll to the element
+                element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+            }
+        });
+    </script>
+
+
+    <button type="submit">Submit</button>
+    <br>  <br>  <br>  <br> 
+</form>
+
+    <br>  <br>  <br>  <br>  <br>  
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
    
 

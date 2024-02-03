@@ -13,6 +13,21 @@ class WorkExperienceForm(forms.ModelForm):
             'end_date': forms.DateInput(attrs={'type': 'date'}),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+
+        required_fields = [
+            'company_name', 'job_title', 'start_date', 'end_date', 'city', 'state', 'description'
+        ]
+
+        for field_name in required_fields:
+            if not cleaned_data.get(field_name):
+                raise ValidationError(f"Please fill in the '{field_name.replace('_', ' ')}' field.")
+
+        if cleaned_data.get('start_date') > cleaned_data.get('end_date'):
+            raise ValidationError("End date must be greater than start date.")
+
+
 WorkExperienceFormSet = forms.inlineformset_factory(UserProfile, WorkExperience, form=WorkExperienceForm, extra=1, can_delete=True)
 
 class ProjectsForm(forms.ModelForm):

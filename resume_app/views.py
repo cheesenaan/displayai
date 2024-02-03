@@ -14,6 +14,9 @@ from google.oauth2.service_account import Credentials
 from django.shortcuts import redirect
 import openai
 import httplib2
+from django.http import JsonResponse
+from django.views import View
+from .models import UserProfile
 
 
 def home(request):
@@ -22,10 +25,12 @@ def home(request):
 def website_form(request):
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES)
-        print(request.POST)
+        for key, value in request.POST.items():
+            print(f"{key}: {value}")
 
         if form.is_valid():
             user_profile = form.save(commit=False) 
+            user_profile.save()
             if 'profile_image' in request.FILES:
                 profile_image = request.FILES['profile_image']
                 destination_path = os.path.join(settings.STATIC_ROOT_PROFILE_PICS, f"{str(user_profile.id)}.jpg")
@@ -37,78 +42,64 @@ def website_form(request):
                 user_profile.profile_image = f"profile_pics/{str(user_profile.id)}.jpg"
                 user_profile.save()
                 delete_jpeg_files()
-
-        if not form.is_valid():
+        else:
             print("Form is not valid!")
             print("Errors:", form.errors)
             print("Cleaned data:", form.cleaned_data)
             print("Non-form errors:", form.non_field_errors())
 
+        work_experience_formset = WorkExperienceFormSet(request.POST, instance=user_profile)
+        if request.POST["hasWorkExperience"] == "on":
+            for workForm in work_experience_formset:
+                company_name = workForm.cleaned_data.get('company_name')
+                job_title = workForm.cleaned_data.get('job_title')
+                description = workForm.cleaned_data.get('description')
 
-        total_forms = request.POST.get('work_experiences-TOTAL_FORMS')
-        total_forms = int(total_forms) if total_forms else 0
-        print("total forms is ", total_forms)
-        for i in range(total_forms):
-            company_name = request.POST.get(f'work_experiences-{i}-company_name')
-            print(i , company_name)
-            job_title = request.POST.get(f'work_experiences-{i}-job_title')
-            start_date = request.POST.get(f'work_experiences-{i}-start_date')
-            end_date = request.POST.get(f'work_experiences-{i}-end_date')
-            city = request.POST.get(f'work_experiences-{i}-city')
-            state = request.POST.get(f'work_experiences-{i}-state')
-            description = request.POST.get(f'work_experiences-{i}-description')
+                #bullet1, bullet2, bullet3 = openai_work_experience(company_name, job_title, description)
+                bullet1, bullet2, bullet3 = "bullet1", "bullet2", "bullet3"
 
-            if company_name:  # Check if company_name is present to avoid empty forms
-                bullet1, bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
-                WorkExperience.objects.create(
-                    user_profile=user_profile,
-                    company_name=company_name,
-                    job_title=job_title,
-                    start_date=start_date,
-                    end_date=end_date,
-                    city=city,
-                    state=state,
-                    description=description,
-                    bullet1 = bullet1,
-                    bullet2 = bullet2,
-                    bullet3 = bullet3
-                )
+                work_experience_instance = workForm.save(commit=False)
+                work_experience_instance.bullet1 = bullet1
+                work_experience_instance.bullet2 = bullet2
+                work_experience_instance.bullet3 = bullet3
+                work_experience_instance.save()
+    
+            work_experience_formset.save()
+        else:
+            print("there is no work experiences")
 
-
-        total_project_forms = request.POST.get('projects-TOTAL_FORMS')
-        total_project_forms = int(total_project_forms) if total_project_forms else 0
-        print("total_project_forms is ", total_project_forms)
-        for i in range(total_project_forms+1):
-            project_name = request.POST.get(f'projects-{i}-project_name')
-            project_skills = request.POST.get(f'projects-{i}-project_skills')
-            description = request.POST.get(f'projects-{i}-description')
-
-            if project_name:
-                bullet1, bullet2 = openai_project(project_name , description)
-                Project.objects.create(
-                    user_profile=user_profile,
-                    project_name=project_name,
-                    project_skills=project_skills,
-                    description=description,
-                    bullet1 = bullet1,
-                    bullet2 = bullet2,
-                )
+        project_formset = ProjectsFormSet(request.POST, instance=user_profile)
+        if project_formset.is_valid():
+            for projectForm in project_formset:
+                project_name = projectForm.cleaned_data.get('project_name')
+                description = projectForm.cleaned_data.get('description')
+                #bullet1, bullet2 = openai_project(project_name , description)
+                bullet1, bullet2 = "bullet1", "bullet2"
+                project_instance = projectForm.save(commit=False)
+                project_instance.bullet1 = bullet1
+                project_instance.bullet2 = bullet2
+                project_instance.save()
+        else:
+            print("project_formset is not valid!")
+            print("Errors:", form.errors)
+            print("Cleaned data:", form.cleaned_data)
+            print("Non-form errors:", form.non_field_errors())
 
         user_profile.save()
         return redirect('website', url_name=user_profile.url_name)
 
-    else:
+    if request.method == 'GET':
         form = UserProfileForm()
         work_experience_formset = WorkExperienceFormSet(instance=UserProfile())
         projects_formset = ProjectsFormSet(instance=UserProfile())
 
-    context = {
-        'form': form,
-        'work_experience_formset': work_experience_formset,
-        'projects_formset': projects_formset,
-    }
-    
-    return render(request, 'website_form.html', context)
+        context = {
+            'form': form,
+            'work_experience_formset': work_experience_formset,
+            'projects_formset': projects_formset,
+        }
+        
+        return render(request, 'website_form.html', context)
 
 def website(request, url_name):
     # Retrieve the user profile using url_name
@@ -341,7 +332,7 @@ def create_resume(user_profile):
 
 def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
-    openai.api_key = ''
+    openai.api_key = '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'
 
     prompt = f"""
     give me exactly 3 very short, concise, and numerically quantified one sentence resume points for experience
@@ -376,7 +367,7 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
 def openai_project(PROJECT, DESCRIPTION):
 
-    openai.api_key = ''
+    openai.api_key = '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'
 
     prompt = f"""
     give me exactly 2 very short, concise, and numerically quantified one sentence resume points
@@ -407,9 +398,7 @@ def openai_project(PROJECT, DESCRIPTION):
 
     return one, two
 
-from django.http import JsonResponse
-from django.views import View
-from .models import UserProfile
+
 
 class CheckUrlNameView(View):
     def get(self, request, *args, **kwargs):

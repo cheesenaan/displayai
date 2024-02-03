@@ -11,27 +11,27 @@ def validate_unique_url_name(value):
 class UserProfile(models.Model):
     id = models.AutoField(primary_key=True)
     url_name = models.CharField(max_length=255, unique=True)
-    first_name = models.CharField(max_length=255)
-    last_name = models.CharField(max_length=255)
-    phone = models.CharField(max_length=15)
-    email = models.EmailField()
-    city = models.CharField(max_length=255)
-    state = models.CharField(max_length=255)
-    linkedin_link = models.URLField()
-    resume_link = models.URLField()
-    github_link = models.URLField()
+    first_name = models.CharField(max_length=255, default='Sulemaan')
+    last_name = models.CharField(max_length=255, default='Farooq')
+    phone = models.CharField(max_length=15, default='9174565697')
+    email = models.EmailField(default='shf46@rutgers.edu')
+    city = models.CharField(max_length=255, default='Edison')
+    state = models.CharField(max_length=255, default='NJ')
+    linkedin_link = models.URLField(default='https://www.linkedin.com/in/sulemaan-farooq/')
+    resume_link = models.URLField(default='https://www.linkedin.com/in/sulemaan-farooq/')
+    github_link = models.URLField(default='https://www.linkedin.com/in/sulemaan-farooq/')
     profile_image = models.ImageField()
-    institution = models.CharField(max_length=255, blank=True, null=True)
-    major = models.CharField(max_length=255, blank=True, null=True)
-    minor = models.CharField(max_length=255, blank=True, null=True)
+    institution = models.CharField(max_length=255, blank=True, null=True, default='Rutgers')
+    major = models.CharField(max_length=255, blank=True, null=True, default='computer science')
+    minor = models.CharField(max_length=255, blank=True, null=True, default='data science')
     start_date = models.DateField(default='2023-12-31')  
     end_date = models.DateField(default='2023-12-31')
 
-    spoken_languages = models.CharField(max_length=255, blank=True, null=True)
-    programming_languages = models.CharField(max_length=255, blank=True, null=True)
-    technical_skills = models.CharField(max_length=255, blank=True, null=True)
+    spoken_languages = models.CharField(max_length=255, blank=True, null=True, default='English, Arabic, Urdu')
+    programming_languages = models.CharField(max_length=255, blank=True, null=True, default=' R, Java, , Spring Boot Pythonanywhere, React, Ruby')
+    technical_skills = models.CharField(max_length=255, blank=True, null=True, default='GCP, Springboot, DataDog')
 
-    leadership = models.CharField(max_length=255, blank=True, null=True)
+    leadership = models.CharField(max_length=255, blank=True, null=True, default='rutgers sports club')
 
     DEGREE_CHOICES = [
         ('Science', 'Science'),
@@ -60,10 +60,6 @@ class WorkExperience(models.Model):
     bullet1 = models.CharField(max_length=255, validators=[MinLengthValidator(1)])
     bullet2 = models.CharField(max_length=255, validators=[MinLengthValidator(1)])
     bullet3 = models.CharField(max_length=255, validators=[MinLengthValidator(1)])
-
-    def clean(self):
-        if self.start_date > self.end_date:
-            raise ValidationError("End date must be greater than start date.")
 
     def __str__(self):
         return f"{self.id}: {self.user_profile}"
