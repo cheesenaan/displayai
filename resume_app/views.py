@@ -60,6 +60,7 @@ def website_form(request):
                 city = post_data.get(prefix + "city")
                 state = post_data.get(prefix + "state")
                 description = post_data.get(prefix + "description")
+                bullet1 , bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
 
                 if company_name and job_title and start_date and end_date and city and state and description:
                     work_experience = WorkExperience.objects.create(
@@ -71,9 +72,9 @@ def website_form(request):
                         city=city,
                         state=state,
                         description=description,
-                        bullet1="bullet1",  
-                        bullet2="bullet2",  
-                        bullet3="bullet3",  
+                        bullet1= bullet1,
+                        bullet2= bullet2,
+                        bullet3= bullet3
                     )
                     work_experience.save()
         else:
@@ -87,7 +88,7 @@ def website_form(request):
                 project_name = request.POST.get(prefix + "project_name")
                 description = request.POST.get(prefix + "description")
                 project_skills = request.POST.get(prefix + "project_skills")
-                bullet1, bullet2 = "bullet1", "bullet2"
+                bullet1, bullet2 = openai_project(project_name + project_skills, description)
 
                 if project_name and description:
                     project = Project.objects.create(
@@ -101,7 +102,7 @@ def website_form(request):
         else:
             print("There are no projects")
 
-
+        user_profile.resume_link = create_resume(user_profile)
 
         user_profile.save()
         return redirect('website', url_name=user_profile.url_name)
@@ -350,7 +351,7 @@ def create_resume(user_profile):
 
 def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
-    openai.api_key = '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'
+    openai.api_key = ''
 
     prompt = f"""
     give me exactly 3 very short, concise, and numerically quantified one sentence resume points for experience
@@ -385,7 +386,7 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
 def openai_project(PROJECT, DESCRIPTION):
 
-    openai.api_key = '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'
+    openai.api_key = ''
 
     prompt = f"""
     give me exactly 2 very short, concise, and numerically quantified one sentence resume points
@@ -421,5 +422,3 @@ class CheckUrlNameView(View):
         url_name = request.GET.get('url_name', None)
         data = {'is_taken': UserProfile.objects.filter(url_name=url_name).exists()}
         return JsonResponse(data)
-
-
