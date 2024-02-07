@@ -48,42 +48,60 @@ def website_form(request):
             print("Cleaned data:", form.cleaned_data)
             print("Non-form errors:", form.non_field_errors())
 
-        work_experience_formset = WorkExperienceFormSet(request.POST, instance=user_profile)
-        if request.POST["hasWorkExperience"] == "on":
-            for workForm in work_experience_formset:
-                company_name = workForm.cleaned_data.get('company_name')
-                job_title = workForm.cleaned_data.get('job_title')
-                description = workForm.cleaned_data.get('description')
+        post_data = request.POST.dict()
+        total_work_forms = int(post_data.get("work_experiences-TOTAL_FORMS", 0))
+        if request.POST["hasWorkExperience"] == "yes":
+            for i in range(total_work_forms):
+                prefix = f"work_experiences-{i}-"
+                company_name = post_data.get(prefix + "company_name")
+                job_title = post_data.get(prefix + "job_title")
+                start_date = post_data.get(prefix + "start_date")
+                end_date = post_data.get(prefix + "end_date")
+                city = post_data.get(prefix + "city")
+                state = post_data.get(prefix + "state")
+                description = post_data.get(prefix + "description")
 
-                #bullet1, bullet2, bullet3 = openai_work_experience(company_name, job_title, description)
-                bullet1, bullet2, bullet3 = "bullet1", "bullet2", "bullet3"
-
-                work_experience_instance = workForm.save(commit=False)
-                work_experience_instance.bullet1 = bullet1
-                work_experience_instance.bullet2 = bullet2
-                work_experience_instance.bullet3 = bullet3
-                work_experience_instance.save()
-    
-            work_experience_formset.save()
+                if company_name and job_title and start_date and end_date and city and state and description:
+                    work_experience = WorkExperience.objects.create(
+                        user_profile=user_profile,
+                        company_name=company_name,
+                        job_title=job_title,
+                        start_date=start_date,
+                        end_date=end_date,
+                        city=city,
+                        state=state,
+                        description=description,
+                        bullet1="bullet1",  
+                        bullet2="bullet2",  
+                        bullet3="bullet3",  
+                    )
+                    work_experience.save()
         else:
             print("there is no work experiences")
 
-        project_formset = ProjectsFormSet(request.POST, instance=user_profile)
-        if project_formset.is_valid():
-            for projectForm in project_formset:
-                project_name = projectForm.cleaned_data.get('project_name')
-                description = projectForm.cleaned_data.get('description')
-                #bullet1, bullet2 = openai_project(project_name , description)
+        # project_formset = ProjectsFormSet(request.POST, instance=user_profile)
+        total_project_forms = int(request.POST.get("projects-TOTAL_FORMS", 0))
+        if request.POST.get("hasProjectExperience") == "yes":
+            for i in range(total_project_forms):    
+                prefix = f"projects-{i}-"
+                project_name = request.POST.get(prefix + "project_name")
+                description = request.POST.get(prefix + "description")
+                project_skills = request.POST.get(prefix + "project_skills")
                 bullet1, bullet2 = "bullet1", "bullet2"
-                project_instance = projectForm.save(commit=False)
-                project_instance.bullet1 = bullet1
-                project_instance.bullet2 = bullet2
-                project_instance.save()
+
+                if project_name and description:
+                    project = Project.objects.create(
+                        user_profile=user_profile,
+                        project_name=project_name,
+                        description=description,
+                        project_skills=project_skills,
+                        bullet1=bullet1,
+                        bullet2=bullet2,
+                    )
         else:
-            print("project_formset is not valid!")
-            print("Errors:", form.errors)
-            print("Cleaned data:", form.cleaned_data)
-            print("Non-form errors:", form.non_field_errors())
+            print("There are no projects")
+
+
 
         user_profile.save()
         return redirect('website', url_name=user_profile.url_name)
@@ -397,8 +415,6 @@ def openai_project(PROJECT, DESCRIPTION):
     two = lines[1].split('. ')[1]
 
     return one, two
-
-
 
 class CheckUrlNameView(View):
     def get(self, request, *args, **kwargs):

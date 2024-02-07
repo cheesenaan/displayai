@@ -39,6 +39,17 @@ class ProjectsForm(forms.ModelForm):
             'project_skills': forms.TextInput(attrs={'placeholder': 'Python, HTML, CSS, Javascript'}),
         }
 
+    def clean(self):
+        cleaned_data = super().clean()
+        required_fields = ['project_name', 'description', 'project_skills']
+
+        for field_name in required_fields:
+            if not cleaned_data.get(field_name):
+                raise ValidationError(f"This field is required: {field_name.replace('_', ' ')}")
+
+        return cleaned_data
+
+
 ProjectsFormSet = forms.inlineformset_factory(UserProfile, Project, form=ProjectsForm, extra=1, can_delete=True)
 
 class UserProfileForm(forms.ModelForm):

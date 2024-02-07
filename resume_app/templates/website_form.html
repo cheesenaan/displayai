@@ -90,24 +90,24 @@
         padding: 10px;
     }
 
-    #work_experience_question, #projects_question {
+    #work_experience_question, #project_experience_question {
     text-align: center;
     font-size: 18px;
     margin-bottom: 20px;
     }
 
-    #work_experience_options, #projects_options {
+    #work_experience_options, #project_experience_options {
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    #work_experience_options, #projects_options label {
+    #work_experience_options, #project_experience_options label {
         margin: 0 10px;
         font-size: 16px;
     }
 
-    #work_experience_options, #projects_options input {
+    #work_experience_options, #project_experience_options input {
         margin-right: 5px;
     }
 
@@ -117,15 +117,19 @@
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
-
 <form method="post" enctype="multipart/form-data" id="userProfileForm">
 
+    <!-- personal form -->
     <div>
 
         <h1>Enter Data</h1>
         <br>
-        {% csrf_token %}
-        {{ form.as_p }}
+
+        <div id="dataForm" method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+        </div>
+    
 
         <span id="urlNameValidation"></span>
         <script>
@@ -155,224 +159,378 @@
         </script>
         <br>  
     </div>
+   
+    <!-- work experince form -->
+    <div>
 
-    <script>
-        function toggleWorkExperienceForm() {
-            var workForm = document.getElementById('work_form');
-            var yesRadio = document.getElementById('yesRadio');
-            var addWorkFormButton = document.getElementById('add-work-form');
-    
-            workForm.style.display = yesRadio.checked ? 'block' : 'none';
-            addWorkFormButton.style.display = yesRadio.checked ? 'block' : 'none';
-        }
-    </script>
-    
-    <h3>Work Experiences</h3>
-
-
-    <script>
-        window.addEventListener('load', function() {
-            let workForm = document.querySelector("#work_form");
-            let addButton = document.querySelector("#add-work-form");
-            
-            addButton.addEventListener('click', addForm);
-
-            function addForm(e) {
-                e.preventDefault();
-
-                console.log("Button clicked!");
-
-                let newForm = workForm.children[0].cloneNode(true);
-                let formNum = workForm.children.length - 1;
-
-                newForm.innerHTML = newForm.innerHTML.replace(/work_experiences-(\d+)-/g, `work_experiences-${formNum}-`);
-                workForm.appendChild(newForm);
-
-                let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
-
-                let deleteButton = document.querySelector("#delete-work-form-0");
-                let newDeleteButton = deleteButton.cloneNode(true);
-                newDeleteButton.id = `delete-work-form-${formNum}`;
-                newForm.appendChild(newDeleteButton);
-                
-
-                newDeleteButton.addEventListener('click', function() {
-                    deleteForm(newForm, formNum);
-                });
-                
-                formNum++;
-                totalFormsField.value = formNum;
-                console.log(`Form added. Total forms: ${totalFormsField.value}`);
+        <script>
+            function toggleWorkExperienceForm() {
+                var workForm = document.getElementById('work_form');
+                var yesRadio = document.getElementById('yesRadio');
+                var addWorkFormButton = document.getElementById('add-work-form');
+        
+                workForm.style.display = yesRadio.checked ? 'block' : 'none';
+                addWorkFormButton.style.display = yesRadio.checked ? 'block' : 'none';
             }
+        </script>
 
-            function deleteForm(form, formNum) {
-                form.remove();
+        <h3>Work Experiences</h3>
 
+        <script>
+            window.addEventListener('load', function() {
+                let workForm = document.querySelector("#work_form");
+                let addButton = document.querySelector("#add-work-form");
+                let totalformNumber = workForm.children.length;
+                let totalformNumberAdder = totalformNumber;
+                let totalformNumberAdderHelper = totalformNumber;
                 let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
-                totalFormsField.value--;
+                
+                addButton.addEventListener('click', addForm);
 
-                console.log("work form number " + formNum + " is being deleted");
-                console.log(`Form deleted. Total forms: ${totalFormsField.value}`);
+                function addForm(e) {
+                    e.preventDefault();
 
-                if (formNum < workForm.children.length) {
-                    console.log("formNum < workForm.children.length");
-                    for (let i = formNum - 1; i < workForm.children.length; i++) {
-                        let elements = workForm.children[i].querySelectorAll("[name*='-']");
-                        let elements_ids = workForm.children[i].querySelectorAll("[id*='-']");
-                        elements.forEach(element => {
-                            element.name = element.name.replace(new RegExp(`work_experiences-${i}-`, 'g'), `work_experiences-${i - 1}-`);
-                        });
-                        elements_ids.forEach(element_id => {
-                            element_id.id = element_id.id.replace(new RegExp(`id_work_experiences-${i}-`, 'g'), `id_work_experiences-${i - 1}-`);
-                        });
+                    console.log("Add button clicked!");
+
+                    let formNum = workForm.children.length; // Get the current number of forms
+
+                    let newForm = `
+                        <div id="work_experiences_container-${totalformNumberAdder}">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Company Name</th>
+                                        <th>Job Title</th>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-company_name"></td>
+                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-job_title"></td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td>Start Date</td>
+                                        <td>End Date</td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-start_date"></td>
+                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-end_date"></td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td>City</td>
+                                        <td>State</td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-city"></td>
+                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-state"></td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td colspan="2">Description</td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td colspan="2"><textarea name="work_experiences-${totalformNumberAdder}-description"></textarea></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button id="delete-work-form-${totalformNumberAdder}" type="button"">Delete Work Experience</button>
+                        </div>
+                    `;
+
+                    let container = document.createElement('div');
+                    container.innerHTML = newForm;
+
+                    workForm.appendChild(container);
+
+                    // Add delete button for the newly added form
+                    let deleteButton = document.querySelector(`#delete-work-form-${totalformNumberAdder}`);
+
+                    deleteButton.addEventListener('click', function() {
+                        deleteForm(container, formNum);
+                    });
+                    container.appendChild(deleteButton);
+
+                    formNum++;
+                    totalformNumber++;
+                    totalformNumberAdder++;
+                    totalFormsField.value = formNum;
+                    totalformNumberAdderHelper = totalFormsField.value;
+                    console.log(`formNum after add: ${formNum}`);
+                    console.log(`Form added. Total forms: ${totalFormsField.value}`);
+                }
+
+
+                function deleteForm(form, formNum) {
+                    let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
+                    console.log(`before deleting, totalFormsField value is: ${totalFormsField.value}`);
+                    console.log(`this form is being deleted: ${formNum}`);
+                    console.log(`workForm.children.length: ${workForm.children.length}`);
+
+                    if (totalformNumberAdderHelper == 1) {
+                        // If deleting the first form, just hide the work_form and set hasWorkExperience to 'no'
+                        console.log("there is only 1 form so the radio button should become closed");
+                        workForm.style.display = 'none';
+                        addButton.style.display = 'none';
+                        yesRadio.checked = false;
+                        document.getElementById('noRadio').checked = true;
+                    } else {
+                        form.remove();
+                        totalformNumberAdderHelper--;
+                        console.log(`after deleting, there are this number of forms: ${totalFormsField.value}`);
                     }
                 }
-            }
 
-            let deleteButtons = document.querySelectorAll("[id^='delete-work-form-']");
-            deleteButtons.forEach(button => {
-                button.addEventListener('click', function() {
-                    let formNum = parseInt(button.id.split('-').pop());
-                    console.log("work form number " + formNum + " is being deleted");
-                    deleteForm(workForm.children[formNum], formNum);
+                let deleteButtons = document.querySelectorAll("[id^='delete-work-form-']");
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        let formNum = parseInt(button.id.split('-').pop());
+                        console.log("work form number " + formNum + " is being deleted");
+                        deleteForm(workForm.children[formNum], formNum);
+                    });
                 });
             });
-        });
-    </script>
-    
-    <p id="work_experience_question">Do you have relevant work experience?</p>
-    <div id="work_experience_options">
-        <label>
-            <input type="radio" name="hasWorkExperience" id="yesRadio" value="yes" onclick="toggleWorkExperienceForm()"> Yes
-        </label>
-        <label>
-            <input type="radio" name="hasWorkExperience" id="noRadio" value="no" onclick="toggleWorkExperienceForm()" checked> No
-        </label>
-    </div>
-
-
-    <br> <br> <br> 
-
-    {% csrf_token %}
-    {{ work_experience_formset.management_form }}
-    <div id="work_form" style="display: none;">
-        <div id="work_experiences_container">
-            <table>
-                <tbody>
-                    <tr>
-                        <th>Company Name</th>
-                        <th>Job Title</th>
-                    </tr>
-                    {% for work_form in work_experience_formset %}
-                        <tr class="form-row">
-                            <td>{{ work_form.company_name }}</td>
-                            <td>{{ work_form.job_title }}</td>
-                        </tr>
-                        <tr class="form-row">
-                            <td>Start Date</td>
-                            <td>End Date</td>
-                        </tr>
-                        <tr class="form-row">
-                            <td>{{ work_form.start_date }}</td>
-                            <td>{{ work_form.end_date }}</td>
-                        </tr>
-                        <tr class="form-row">
-                            <td>City</td>
-                            <td>State</td>
-                        </tr>
-                        <tr class="form-row">
-                            <td>{{ work_form.city }}</td>
-                            <td>{{ work_form.state }}</td>
-                        </tr>
-                        <tr class="form-row">
-                            <td colspan="2">Description</td>
-                        </tr>
-                        <tr class="form-row">
-                            <td colspan="2">{{ work_form.description }}</td>
-                        </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
+        </script>
+        
+        <p id="work_experience_question">Do you have relevant work experience?</p>
+        <div id="work_experience_options">
+            <label>
+                <input type="radio" name="hasWorkExperience" id="yesRadio" value="yes" onclick="toggleWorkExperienceForm()"> Yes
+            </label>
+            <label>
+                <input type="radio" name="hasWorkExperience" id="noRadio" value="no" onclick="toggleWorkExperienceForm()" checked> No
+            </label>
         </div>
-        <button id="delete-work-form-0" type="button"">Delete Work Experience</button>
+
+        <br> <br> <br> 
+
+        {% csrf_token %}
+        {{ work_experience_formset.management_form }}
+        <div id="work_form" style="display: none;">
+            <div id="work_experiences_container-0">
+                <table>
+                    <tbody>
+                        <tr>
+                            <th>Company Name</th>
+                            <th>Job Title</th>
+                        </tr>
+                        {% for work_form in work_experience_formset %}
+                            <tr class="form-row">
+                                <td>{{ work_form.company_name }}</td>
+                                <td>{{ work_form.job_title }}</td>
+                            </tr>
+                            <tr class="form-row">
+                                <td>Start Date</td>
+                                <td>End Date</td>
+                            </tr>
+                            <tr class="form-row">
+                                <td>{{ work_form.start_date }}</td>
+                                <td>{{ work_form.end_date }}</td>
+                            </tr>
+                            <tr class="form-row">
+                                <td>City</td>
+                                <td>State</td>
+                            </tr>
+                            <tr class="form-row">
+                                <td>{{ work_form.city }}</td>
+                                <td>{{ work_form.state }}</td>
+                            </tr>
+                            <tr class="form-row">
+                                <td colspan="2">Description</td>
+                            </tr>
+                            <tr class="form-row">
+                                <td colspan="2">{{ work_form.description }}</td>
+                            </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button id="delete-work-form-0" type="button"">Delete Work Experience</button>
+            </div>
+        </div>
+        <button id="add-work-form" type="button" style="display: none;">Add Another Work Experience</button> 
+
     </div>
-    <button id="add-work-form" type="button" style="display: none;">Add Another Work Experience</button> 
 
-    <h3>Projects</h3>
+    <!-- project form -->
+    <div> 
+        <!-- projects form -->
+        <h3>Projects</h3>
 
-    {% csrf_token %}
-    {{ projects_formset.management_form }}
-    <div id="projects_form">
-        <table>
-            <tbody>
-                {% for project_form in projects_formset %}
-                    <tr>
-                        <th>Project Name</th>
-                    </tr>
-                    <td>{{ project_form.project_name.errors }} {{ project_form.project_name }}</td>
+        <script>
+            function toggleProjectExperienceForm() {
+                    var projectForm = document.getElementById('projects_form');
+                    var yesRadioProject = document.getElementById('yesProjectRadio');
+                    var addProjectFormButton = document.getElementById('add-project-form');
+            
+                    projectForm.style.display = yesRadioProject.checked ? 'block' : 'none';
+                    addProjectFormButton.style.display = yesRadioProject.checked ? 'block' : 'none';
+                }
+        </script>
 
-                    <tr>
-                        <th>Project Skills</th>
-                    </tr>
-                    <td>{{ project_form.project_skills.errors }} {{ project_form.project_skills }}</td>
+        <p id="project_experience_question">Do you have project experience?</p>
+        <div id="project_experience_options">
+            <label>
+                <input type="radio" name="hasProjectExperience" id="yesProjectRadio" value="yes" onclick="toggleProjectExperienceForm()"> Yes
+            </label>
+            <label>
+                <input type="radio" name="hasProjectExperience" id="noProjectRadio" value="no" onclick="toggleProjectExperienceForm()" checked> No
+            </label>
+        </div>
 
-                    <tr>
-                        <th>Description</th>
-                    </tr>
-                    <td>{{ project_form.description.errors }} {{ project_form.description }}</td>
+        {% csrf_token %}
+        {{ projects_formset.management_form }}
+        <div id="projects_form" style="display: none;">
+            <div id="projects_container-0">
+                <table>
+                    <tbody>
+                        {% for project_form in projects_formset %}
+                            <tr>
+                                <th>Project Name</th>
+                            </tr>
+                            <td>{{ project_form.project_name.errors }} {{ project_form.project_name }}</td>
 
-                {% endfor %}
-            </tbody>
-        </table>
-    </div>
-    <button id="add-project-form" type="button"">Add Another Project</button> 
+                            <tr>
+                                <th>Project Skills</th>
+                            </tr>
+                            <td>{{ project_form.project_skills.errors }} {{ project_form.project_skills }}</td>
 
+                            <tr>
+                                <th>Description</th>
+                            </tr>
+                            <td>{{ project_form.description.errors }} {{ project_form.description }}</td>
 
-    <script>
+                        {% endfor %}
+                    </tbody>
+                </table>
+                <button id="delete-project-form-0" type="button">Delete Project</button> <br>
+            </div>
+        </div>
+        <button id="add-project-form" type="button" style="display: none;">Add Another Project</button> 
 
-        window.addEventListener('load', function () {
-            let projectForm = document.querySelector("#projects_form");
-            let addProjectButton = document.querySelector("#add-project-form");
-
-            let projectFormNum = projectForm.children.length;
-            addProjectButton.addEventListener('click', addProjectForm);
-
-            function addProjectForm(e) {
-                e.preventDefault();
-                console.log("addProjectButton clicked!");
-
-                let newProjectForm = projectForm.children[0].cloneNode(true);
-                let formRegex = RegExp(`projects-(\\d+)-`, 'g');
-
-                newProjectForm.innerHTML = newProjectForm.innerHTML.replace(formRegex, `projects-${projectFormNum}-`);
-                projectForm.appendChild(newProjectForm);
-                projectFormNum++;
-
-                let totalProjectsFormsField = document.querySelector("input[name='projects-TOTAL_FORMS']");
-                totalProjectsFormsField.value = projectFormNum;
-
-                console.log(`Project form added added. Total project forms: ${totalProjectsFormsField.value}`);
-
-                // Add delete functionality for the new project form
-                let deleteProjectButton = document.createElement('button');
-                deleteProjectButton.textContent = "Delete Project";
-                deleteProjectButton.type = "button";
-                newProjectForm.appendChild(deleteProjectButton);
-
-                deleteProjectButton.addEventListener('click', function () {
-                    deleteProjectForm(newProjectForm, projectFormNum);
+        <script>
+            window.addEventListener('load', function() {
+                let project_projectForm = document.querySelector("#projects_form");
+                let project_addButton = document.querySelector("#add-project-form");
+                let project_totalFormsField = document.querySelector("input[name='projects-TOTAL_FORMS']");
+                let project_formNum = project_projectForm.children.length; 
+                project_totalformNumberAdderHelper = project_formNum;
+                
+                project_addButton.addEventListener('click', addProjectForm);
+        
+                function addProjectForm(e) {
+                    e.preventDefault();
+        
+                    console.log("Add button clicked!");
+        
+        
+                    let project_newForm = `
+                        <div id="projects_container-${project_totalFormsField.value}">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Project Name</th>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td><input type="text" name="projects-${project_totalFormsField.value}-project_name"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Project Skills</th>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td><input type="text" name="projects-${project_totalFormsField.value}-project_skills"></td>
+                                    </tr>
+                                    <tr>
+                                        <th>Description</th>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td><textarea name="projects-${project_totalFormsField.value}-description"></textarea></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button id="delete-project-form-${project_totalFormsField.value}" type="button">Delete Project</button>
+                        </div>
+                    `;
+        
+                    let project_container = document.createElement('div');
+                    project_container.innerHTML = project_newForm;
+        
+                    project_projectForm.appendChild(project_container);
+        
+                    // Add delete button for the newly added form
+                    let project_deleteButton = document.querySelector(`#delete-project-form-${project_totalFormsField.value}`);
+        
+                    project_deleteButton.addEventListener('click', function() {
+                        project_deleteForm(project_container, project_formNum);
+                    });
+                    project_container.appendChild(project_deleteButton);
+        
+                    project_formNum++;
+                    project_totalFormsField.value++;
+                    project_totalformNumberAdderHelper++;
+                    console.log(`Form added. project_totalformNumberAdderHelper: ${project_totalformNumberAdderHelper}`);
+                    console.log(`Form added. projects-TOTAL_FORMS: ${project_totalFormsField.value}`);
+                }
+        
+        
+                function project_deleteForm(form, formNum) {
+        
+                    if (project_totalformNumberAdderHelper == 1) {
+                        // If deleting the first form, just hide the project_form and set hasProjectExperience to 'no'
+                        console.log("there is only 1 form so the radio button should become closed");
+                        yesProjectRadio.checked = false;
+                        noProjectRadio.checked = true;
+                        project_projectForm.style.display = 'none';
+                        project_addButton.style.display = 'none';
+                        document.getElementById('noRadio').checked = true;
+                    } 
+                    else {
+                        form.remove();
+                        project_totalformNumberAdderHelper--;
+                        console.log(`after deleting, project_totalformNumberAdderHelper is : ${project_totalformNumberAdderHelper}`);
+                        console.log(`after deleting, projects-TOTAL_FORMS is : ${project_totalFormsField.value}`);
+                    }
+                }
+        
+                let project_deleteButtons = document.querySelectorAll("[id^='delete-project-form-']");
+                project_deleteButtons.forEach(button => {
+                    button.addEventListener('click', function() {
+                        let project_formNum = parseInt(button.id.split('-').pop());
+                        console.log("project form number " + project_formNum + " is being deleted");
+                        project_deleteForm(project_projectForm.children[project_formNum], project_formNum);
+                    });
                 });
-            }
-        });
-    </script>
 
+                document.getElementById("add-project-form").addEventListener('click', function() {
+                let invalidInput = project_projectForm.querySelector('input:invalid, textarea:invalid');
+                if (invalidInput) {
+                    invalidInput.style.borderColor = 'red';
+                    alert("Please fill out all fields in the project. The missing field has been highlighted in red.");
+                    invalidInput.focus();
+                    // Scroll to the position of the invalid input field
+                    invalidInput.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+                });
 
-    <script>
+            });
+        </script>
+        
+        
+       
+    </div>  
+    
+<script>
         document.addEventListener('DOMContentLoaded', function () {
             var submitButton = document.querySelector('button[type="submit"]');
             submitButton.addEventListener('click', function (event) {
                 // Prevent form submission
                 event.preventDefault();
+
+                
+                var inputs = document.querySelectorAll('#dataForm input, #dataForm textarea');
+                for (var i = 0; i < inputs.length; i++) {
+                    if (inputs[i].value.trim() === '') {
+                        alert('Please fill in all fields before submitting the form. Missing field: ' + inputs[i].getAttribute('name'));
+                        inputs[i].style.borderColor = 'red';
+                        scrollToElement(inputs[i]);
+                        return;
+                    }
+                }
 
                 // Check if work experience form is displayed
                 var workForm = document.getElementById('work_form');
@@ -409,6 +567,22 @@
                     }
                 }
 
+                var projectForm = document.getElementById('projects_form');
+                if (projectForm.style.display !== 'none') {
+                    // Validate each field in the projects form
+                    var projectForms = document.querySelectorAll('#projects_form input, #projects_form textarea');
+                    for (var i = 0; i < projectForms.length; i++) {
+                        if (projectForms[i].value.trim() === '') {
+                            projectForms[i].style.borderColor = 'red';
+                            alert('Please fill in the "' + projectForms[i].getAttribute('name') + '" field in the projects form.');
+                            scrollToElement(projectForms[i]);
+                            return;
+                        } else {
+                            projectForms[i].style.borderColor = ''; // Reset border color
+                        }
+                    }
+                }
+
                 // If validation passes, submit the form
                 document.querySelector('form').submit();
             });
@@ -418,7 +592,7 @@
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
-    </script>
+</script>
 
 
     <button type="submit">Submit</button>
