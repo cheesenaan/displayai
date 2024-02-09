@@ -17,6 +17,8 @@ import httplib2
 from django.http import JsonResponse
 from django.views import View
 from .models import UserProfile
+from googleapiclient.discovery import build
+from google.oauth2 import service_account
 
 
 def home(request):
@@ -60,7 +62,8 @@ def website_form(request):
                 city = post_data.get(prefix + "city")
                 state = post_data.get(prefix + "state")
                 description = post_data.get(prefix + "description")
-                bullet1 , bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
+                bullet1 , bullet2, bullet3 = "bullet1" , "bullet2", "bullet3"
+                # bullet1 , bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
 
                 if company_name and job_title and start_date and end_date and city and state and description:
                     work_experience = WorkExperience.objects.create(
@@ -88,7 +91,7 @@ def website_form(request):
                 project_name = request.POST.get(prefix + "project_name")
                 description = request.POST.get(prefix + "description")
                 project_skills = request.POST.get(prefix + "project_skills")
-                bullet1, bullet2 = openai_project(project_name + project_skills, description)
+                bullet1, bullet2 = openai_project(project_name, description)
 
                 if project_name and description:
                     project = Project.objects.create(
@@ -102,7 +105,7 @@ def website_form(request):
         else:
             print("There are no projects")
 
-        user_profile.resume_link = create_resume(user_profile)
+        # user_profile.resume_link = create_resume(user_profile)
 
         user_profile.save()
         return redirect('website', url_name=user_profile.url_name)
@@ -202,8 +205,7 @@ def delete_jpeg_files():
                 print(f"Error deleting {file_path}: {e}")
 
 def create_resume(user_profile):
-    from googleapiclient.discovery import build
-    from google.oauth2 import service_account
+    
     # Dictionary to store the placeholder replacements
     placeholder_replacements = {
             'name': f"{user_profile.first_name.upper()} {user_profile.last_name.upper()}",
@@ -351,7 +353,7 @@ def create_resume(user_profile):
 
 def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
-    openai.api_key = ''
+    openai.api_key = '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'
 
     prompt = f"""
     give me exactly 3 very short, concise, and numerically quantified one sentence resume points for experience
@@ -386,7 +388,7 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
 def openai_project(PROJECT, DESCRIPTION):
 
-    openai.api_key = ''
+    openai.api_key = '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'
 
     prompt = f"""
     give me exactly 2 very short, concise, and numerically quantified one sentence resume points
@@ -422,3 +424,4 @@ class CheckUrlNameView(View):
         url_name = request.GET.get('url_name', None)
         data = {'is_taken': UserProfile.objects.filter(url_name=url_name).exists()}
         return JsonResponse(data)
+
