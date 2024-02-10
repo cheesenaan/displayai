@@ -436,7 +436,7 @@ def create_resume(user_profile):
 
 def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
-    openai.api_key = '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'
+    openai.api_key = ''
 
     prompt = f"""
     give me exactly 3 very short, concise, and numerically quantified one sentence resume points for experience
@@ -471,7 +471,7 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
 def openai_project(PROJECT, DESCRIPTION):
 
-    openai.api_key = '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'
+    openai.api_key = ''
 
     prompt = f"""
     give me exactly 2 very short, concise, and numerically quantified one sentence resume points
