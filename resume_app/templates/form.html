@@ -120,13 +120,21 @@
 <!-- Add this to the head section of your HTML file -->
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-
 <form method="post" enctype="multipart/form-data" id="userProfileForm">
 
     <!-- personal form -->
     <div>
 
-        <h1>Enter Data</h1>
+        <h1>Welcome {{account.name}}</h1>
+        {% if account.user_profile is None %}
+            <p> you do not have any user profiles, please fill in the below form </p>
+        {% else %}
+        <p> We have found a userprofile, it has been filled in for you to save time </p>
+        {% endif %}
+        <p> you are on the {{account.tier}} version </p>
+        <p> you can try {{user_plan.forms_remaining}} resumes and personal websites for free  </p>
+        <p> you have filled in this form {{user_plan.forms_filled}} times </p>
+
         <br>
 
         <div id="dataForm" method="post">
@@ -144,7 +152,7 @@
             
                     // Send an AJAX request to check if the url_name is taken
                     $.ajax({
-                        url: '/website_form/check_url_name/',  // Fix the URL here
+                        url: '/form/check_url_name/',  // Fix the URL here
                         type: 'GET',
                         data: { 'url_name': urlName },
                         success: function (data) {

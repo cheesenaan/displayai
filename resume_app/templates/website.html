@@ -61,7 +61,7 @@
             <!-- About-->
             <section class="resume-section" id="about">
                 <div class="resume-section-content">
-                    <a href="{% url 'edit_website' user_profile.url_name %}" class="btn btn-primary mb-3">Edit</a>
+                    <a href="{% url 'edit_form' user_profile.url_name %}" class="btn btn-primary mb-3">Edit</a>
                     <h1 class="mb-0">
                         {{user_profile.first_name}}
                         <span class="text-primary">{{user_profile.last_name}}</span>

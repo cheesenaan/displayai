@@ -22,8 +22,11 @@ from .views import CheckUrlNameView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
-    path('website_form/', website_form, name='website_form'),
+    path('login', login, name='login'),
+    path('<int:account_id>/form/', form, name='form'),
+    path('confirmation/<int:account_id>/', confirmation, name='confirmation'),
     path('<str:url_name>/', website, name='website'),  
-    path('edit/<str:url_name>/', edit_website, name='edit_website'),
-    path('website_form/check_url_name/', CheckUrlNameView.as_view(), name='check_url_name'),
+    path('edit/<str:url_name>/', edit_form, name='edit_form'),
+    path('form/check_url_name/', CheckUrlNameView.as_view(), name='check_url_name'),
+    path('login/check_account_name/', CheckAccountNameView.as_view(), name='CheckAccountNameView'),
 ]

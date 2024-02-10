@@ -1,0 +1,26 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<br> <br> <br> <br> <br> <br> 
+
+    <h1>{{user_profile.first_name}}, thank you for submitting the form</h1>
+    <br> <br> 
+
+    <h1>Website</h1>
+    <p> <a href="http://127.0.0.1:8000/{{user_profile.url_name}}" target="_blank">displayai/{{user_profile.url_name}}</a></p>
+    <p> Free 1 hour, after that upgrade to our plans</p>
+
+    <p> you are on the {{account.tier}} version </p>
+    <p> you can try {{user_plan.forms_remaining}} resumes and personal websites for free  </p>
+    <p> you have filled the form {{user_plan.forms_filled}} times </p>
+    
+
+    <br> 
+
+    <h1>Resume</h1>
+    <p>Your resume is: <a href="{{user_profile.resume_link}}" target="_blank">{{user_profile.resume_link}}</a></p>
+    <p>Here is a preview of your resume. To view the hidden bullets and get the full Google Docs link to your resume, please upgrade to our plans.</p>
+    <p>Want to see sample resumes? <a href="#">Click here</a></p>
+    <p>Will this help me get an internship? Yes! <a href="#">Click here</a> to see testimonials</p>
+    
+{% endblock %}

@@ -19,12 +19,64 @@ from django.views import View
 from .models import UserProfile
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+import qrcode
+from PIL import Image
+from io import BytesIO
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .models import Account
+
+from django.contrib.auth.hashers import make_password, check_password
+from django.contrib.auth.models import User
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import LoginForm  # Import your LoginForm
+from django.contrib import messages
+from django.shortcuts import render, redirect
+from django.contrib.auth.hashers import check_password
+from .models import Account
+from .forms import LoginForm  # Make sure to adjust this import based on your project structure
 
 
 def home(request):
     return render(request, "home.html")
 
-def website_form(request):
+def login(request):
+    if request.method == 'POST':
+        login_form = LoginForm(request.POST)
+
+        if request.POST['action'] == 'log_in':
+                print("logging in user")
+
+                try:
+                    account = Account.objects.get(name=request.POST['name'], password=request.POST['password'])
+                    return redirect('form', account.id)
+                except Account.DoesNotExist:
+                    messages.error(request, 'Invalid login credentials.')
+
+        elif request.POST['action'] == 'create_account':
+                if Account.objects.filter(name=request.POST['name']).exists():
+                    messages.error(request, 'Username already taken. Please choose another.')
+                else:
+                    new_account = Account()
+                    new_account.name = request.POST['name']
+                    new_account.password = request.POST['password']
+                    new_account.save()
+                    # create a new FreePlan instance and set FreePlan.account to be new_account
+                    free_plan = FreePlan(account=new_account)
+                    free_plan.save()
+
+                    return redirect('form' , account_id = new_account.id)
+    else:
+        login_form = LoginForm()
+
+    context = {'login_form': login_form}
+    return render(request, 'login.html', context)
+
+def form(request , account_id):
+    account = Account.objects.get(id=account_id)
+    user_plan = FreePlan.objects.get(account = account)
+
     if request.method == 'POST':
         form = UserProfileForm(request.POST, request.FILES)
         for key, value in request.POST.items():
@@ -42,7 +94,9 @@ def website_form(request):
 
                 # Update the UserProfile instance with the correct profile_image path
                 user_profile.profile_image = f"profile_pics/{str(user_profile.id)}.jpg"
+                user_profile.account = account
                 user_profile.save()
+                account.user_profile = user_profile
                 delete_jpeg_files()
         else:
             print("Form is not valid!")
@@ -62,8 +116,8 @@ def website_form(request):
                 city = post_data.get(prefix + "city")
                 state = post_data.get(prefix + "state")
                 description = post_data.get(prefix + "description")
-                bullet1 , bullet2, bullet3 = "bullet1" , "bullet2", "bullet3"
-                # bullet1 , bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
+                # bullet1 , bullet2, bullet3 = "bullet1" , "bullet2", "bullet3"
+                bullet1 , bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
 
                 if company_name and job_title and start_date and end_date and city and state and description:
                     work_experience = WorkExperience.objects.create(
@@ -79,7 +133,10 @@ def website_form(request):
                         bullet2= bullet2,
                         bullet3= bullet3
                     )
+                    work_experience.account = account
+                    account.work_experience = work_experience
                     work_experience.save()
+
         else:
             print("there is no work experiences")
 
@@ -102,16 +159,26 @@ def website_form(request):
                         bullet1=bullet1,
                         bullet2=bullet2,
                     )
+                    project.account = account
+                    account.projects = project
+                    project.save()
         else:
             print("There are no projects")
 
         # user_profile.resume_link = create_resume(user_profile)
 
         user_profile.save()
-        return redirect('website', url_name=user_profile.url_name)
+        user_plan.forms_remaining = user_plan.forms_remaining - 1
+        user_plan.forms_filled = user_plan.forms_filled + 1
+        account.save()
+        user_plan.save()
+        # return redirect('website', url_name=user_profile.url_name)
+        return redirect('confirmation', account_id=account_id)
 
     if request.method == 'GET':
         form = UserProfileForm()
+        form = UserProfileForm(instance=account.user_profile)
+
         work_experience_formset = WorkExperienceFormSet(instance=UserProfile())
         projects_formset = ProjectsFormSet(instance=UserProfile())
 
@@ -119,9 +186,11 @@ def website_form(request):
             'form': form,
             'work_experience_formset': work_experience_formset,
             'projects_formset': projects_formset,
+            'account' : account,
+            'user_plan' : user_plan,
         }
         
-        return render(request, 'website_form.html', context)
+        return render(request, 'form.html', context)
 
 def website(request, url_name):
     # Retrieve the user profile using url_name
@@ -135,7 +204,7 @@ def website(request, url_name):
     # Render the template with the context
     return render(request, 'website.html', context)
 
-def edit_website(request, url_name):
+def edit_form(request, url_name):
     user_profile = get_object_or_404(UserProfile, url_name=url_name)
 
     if request.method == 'POST':
@@ -156,7 +225,7 @@ def edit_website(request, url_name):
 
             form.save()
 
-            # Handle work experiences and projects similarly to website_form
+            # Handle work experiences and projects similarly to form
             total_project_forms = request.POST.get('projects-TOTAL_FORMS')
             total_project_forms = int(total_project_forms) if total_project_forms else 0
             print("total_project_forms is ", total_project_forms)
@@ -178,14 +247,26 @@ def edit_website(request, url_name):
     else:
         form = UserProfileForm(instance=user_profile)
 
-    # Similar to website_form, retrieve and pass project forms to the template
+    # Similar to form, retrieve and pass project forms to the template
     projects_formset = ProjectsFormSet(instance=user_profile)
     context = {
         'form': form,
         'user_profile': user_profile,
         'projects_formset': projects_formset,
     }
-    return render(request, 'edit_website_form.html', context)
+    return render(request, 'edit_form.html', context)
+
+def confirmation(request, account_id):
+    account = Account.objects.get(id=account_id)
+    user_plan = FreePlan.objects.get(account = account)
+
+    context = {
+            'account' : account,
+            'user_plan' : user_plan,
+            'user_profile': account.user_profile,
+        }
+
+    return render(request, 'confirmation.html', context)
 
 def delete_jpeg_files():
     # Get the current directory
@@ -256,6 +337,8 @@ def create_resume(user_profile):
 
     # ID of the Google Doc you want to modify
     DOCUMENT_ID = '1PVKqAkOTjdorBmlJOIGHYhIjYuBPxuPZzKeN4TUQZNE'
+
+
 
     # Folder ID where the copy will be placed
     FOLDER_ID = '1aGcF78a65Nus-K9kCv8P7NzMBSZjJnNY'
@@ -353,7 +436,7 @@ def create_resume(user_profile):
 
 def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
-    openai.api_key = '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'
+    openai.api_key = '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'
 
     prompt = f"""
     give me exactly 3 very short, concise, and numerically quantified one sentence resume points for experience
@@ -388,7 +471,7 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
 def openai_project(PROJECT, DESCRIPTION):
 
-    openai.api_key = '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'
+    openai.api_key = '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'
 
     prompt = f"""
     give me exactly 2 very short, concise, and numerically quantified one sentence resume points
@@ -425,3 +508,8 @@ class CheckUrlNameView(View):
         data = {'is_taken': UserProfile.objects.filter(url_name=url_name).exists()}
         return JsonResponse(data)
 
+class CheckAccountNameView(View):
+    def get(self, request, *args, **kwargs):
+        name = request.GET.get('name', None)
+        data = {'is_taken': Account.objects.filter(name=name).exists()}
+        return JsonResponse(data)

@@ -6,3 +6,5 @@ from resume_app.models import *
 admin.site.register(UserProfile)
 admin.site.register(WorkExperience)
 admin.site.register(Project)
+admin.site.register(Account)
+admin.site.register(FreePlan)

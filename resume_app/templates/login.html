@@ -1,0 +1,265 @@
+{% extends 'index.html' %}
+{% block content %}
+
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        background-color: #f4f4f4;
+        background-image: url('static/img/2.png');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        text-align: center;
+        margin: 0;
+        padding: 0;
+    }
+
+    form {
+        max-width: 400px;
+        margin: 200px auto;
+        background-color: #fff;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    }
+
+    label {
+        display: block;
+        margin-bottom: 8px;
+    }
+
+    input[type="text"],
+    input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    button {
+        background-color: #4caf50;
+        color: #fff;
+        padding: 10px 15px;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #45a049;
+    }
+
+    /* Tabs styling */
+    input[type="radio"] {
+        display: none;
+    }
+
+    label[for="create_account"],
+    label[for="log_in"] {
+        display: inline-block;
+        padding: 10px;
+        margin: 5px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 4px 4px 0 0;
+        background-color: #f4f4f4;
+    }
+
+    input[type="radio"]:checked + label {
+        background-color: #fff;
+        border-bottom: 1px solid #fff;
+    }
+
+    /* Additional styling for messages */
+    p {
+        color: black;
+        margin-top: 10px;
+    }
+
+    /* Additional styling for dynamic messages */
+    .dynamic-message {
+        font-style: italic;
+        margin-top: 10px;
+        color: #333;
+    }
+
+    .hidden {
+        display: none;
+    }
+
+    #back-label {
+        display: none;
+        color: #3498db;
+        cursor: pointer;
+        font-weight: bold;
+    }
+
+    #back-label:hover {
+        color: #2980b9;
+    }
+
+    #initial-options {
+        text-align: center;
+        margin-top: 250px;
+    }
+
+    input[type="radio"] {
+        display: none;
+    }
+
+    label[for="create_account_option"],
+    label[for="log_in_option"],
+    label[for="back-label"] {
+        display: inline-block;
+        padding: 10px;
+        margin: 10px;
+        cursor: pointer;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+        background-color: #f4f4f4;
+        width: 200px; /* Fixed width for consistency */
+        text-align: center; /* Center the text within the button */
+    }
+
+    label[for="create_account_option"]:hover,
+    label[for="log_in_option"]:hover,
+    label[for="back-label"]:hover {
+        background-color: #e0e0e0;
+    }
+
+    input[type="radio"]:checked + label {
+        background-color: #fff;
+        border-bottom: 1px solid #fff;
+    }
+
+    #back-form-label {
+        display: inline-block;
+        padding: 10px;
+        margin-top: 20px;
+        cursor: pointer;
+        border: none;
+        border-radius: 4px;
+        background-color: #3498db; /* Blue color */
+        color: #fff; /* White text color */
+        width: 100px; /* Adjust the width as needed */
+        text-align: center;
+    }
+
+    #back-form-label:hover {
+        background-color: #2980b9; /* Darker blue on hover */
+    }
+
+    .error-message {
+        color: white;
+        background-color: #ff3333;  /* Red background color */
+        border: 1px solid #cc0000;  /* Darker red border color */
+        padding: 10px;  /* Adjust the padding as needed */
+        border-radius: 5px;  /* Rounded corners */
+        font-weight: bold;  /* Bold text */
+    }
+
+</style>
+
+<br> <br> <br> <br> <br> <br>
+
+<!-- Add this in the head section of your HTML file -->
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+<div id="initial-options">
+    <input type="radio" name="action" value="create_account" id="create_account_option" required onclick="showForm('create_account')">
+    <label for="create_account_option">Create an account</label>
+
+    <input type="radio" name="action" value="log_in" id="log_in_option" required  onclick="showForm('log_in')">
+    <label for="log_in_option">Log in</label>
+
+    <label for="back-label" id="back-label" onclick="goBack()">Back</label>
+</div>
+
+<form method="post" id="login-form" class="hidden">
+    {% csrf_token %}
+
+    <!-- Include a hidden input for the selected action -->
+    <input type="hidden" name="action" id="selected_action" value="">
+
+    <div id="form-text"></div>
+
+    <h1 id="loginHeading" style="display: none;">Log In</h1>
+    <h1 id="createAccountHeading" style="display: none;">Create Account</h1>
+
+    {{ login_form.as_p }}
+
+    <span id="nameValidation" style="display: none;""></span>
+        <script>
+            $(document).ready(function () {
+                // Add an event listener to the url_name input field
+                console.log("JavaScript loaded!");
+                $('#id_name').on('input', function () {
+                    var name = $(this).val();
+            
+                    // Send an AJAX request to check if the url_name is taken
+                    $.ajax({
+                        url: '/login/check_account_name/',  // Fix the URL here
+                        type: 'GET',
+                        data: { 'name': name },
+                        success: function (data) {
+                            if (data.is_taken) {
+                                // Display a message if the url_name is taken as a red alert bubble
+                                $('#nameValidation').html('<div class="alert alert-danger" role="alert"> PLEASE TRY ANOTHER NAME</div>');
+                            } else {
+                                // Display a message if the url_name is available as a green alert bubble
+                                $('#nameValidation').html('<div class="alert alert-success" role="alert">NAME available</div>');
+                            }
+                        }
+                    });
+                });
+            });
+        </script>
+
+
+    <button type="submit">Submit</button>
+
+    <p id="back-form-label" onclick="goBack()">Back</p>
+</form>
+
+<script>
+    function showForm(formType) {
+        document.getElementById("initial-options").style.display = "none";
+        document.getElementById("login-form").style.display = "block";
+        document.getElementById("back-label").style.display = "block";
+        
+        // Set the selected action in the hidden input
+        document.getElementById("selected_action").value = formType;
+
+        if (formType === 'log_in') {
+            // Unhide login heading
+            document.getElementById('loginHeading').style.display = 'block';
+            document.getElementById('createAccountHeading').style.display = "none";
+        } else if (formType === 'create_account') {
+            // Unhide create account heading
+            document.getElementById('createAccountHeading').style.display = 'block';
+            document.getElementById('loginHeading').style.display = "none";
+            document.getElementById('nameValidation').style.display = 'block';
+        }
+    }
+
+    function goBack() {
+        document.getElementById("initial-options").style.display = "block";
+        document.getElementById("login-form").style.display = "none";
+        document.getElementById("back-label").style.display = "none";
+
+        document.getElementById("createAccountHeading").style.display = "none";
+        document.getElementById("loginHeading").style.display = "none";
+
+        document.getElementById('nameValidation').style.display = 'none';
+
+    }
+</script>
+
+{% for message in messages %}
+    <p class="error-message">{{ message }}</p>
+{% endfor %}
+
+
+{% endblock %}

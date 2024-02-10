@@ -2,7 +2,7 @@ from django import forms
 from .models import *
 from django import forms
 from django import forms
-from .models import UserProfile
+from .models import *
 
 class WorkExperienceForm(forms.ModelForm):
     class Meta:
@@ -123,3 +123,13 @@ class UserProfileForm(forms.ModelForm):
 
         return url_name
 
+from django import forms
+from .models import Account
+
+class LoginForm(forms.ModelForm):
+    name = forms.CharField(max_length=255)
+    password = forms.CharField(widget=forms.PasswordInput)
+
+    class Meta:
+        model = Account
+        fields = ['name', 'password']
