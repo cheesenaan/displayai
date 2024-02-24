@@ -1039,32 +1039,32 @@ class CheckAccountNameView(View):
         data = {'is_taken': Account.objects.filter(name=name).exists()}
         return JsonResponse(data)
 
-def stripe_webhook(request):
-    stripe.api_key = settings.STRIPE_API_KEY
+# def stripe_webhook(request):
+#     stripe.api_key = settings.STRIPE_API_KEY
 
-    time.sleep(10)
-    payload = request.body
-    signature_header = request.META['HTTP_STRIPE_SIGNATURE']
-    event = None
-    print("inside stripe_webhook")
-    try:
-        print("event 1")
-        event = stripe.Webhook.construct_event(
-            payload, signature_header, 'whsec_225411bfa0199497eabcad4a58cfc6cd5007421edbc018658d5ab000eeeeccdc'
-        )
-    except ValueError as e:
-        print("event 2")
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
-        print("event 3")
-        return HttpResponse(status=400)
+#     time.sleep(10)
+#     payload = request.body
+#     signature_header = request.META['HTTP_STRIPE_SIGNATURE']
+#     event = None
+#     print("inside stripe_webhook")
+#     try:
+#         print("event 1")
+#         event = stripe.Webhook.construct_event(
+#             payload, signature_header, 'whsec_225411bfa0199497eabcad4a58cfc6cd5007421edbc018658d5ab000eeeeccdc'
+#         )
+#     except ValueError as e:
+#         print("event 2")
+#         return HttpResponse(status=400)
+#     except stripe.error.SignatureVerificationError as e:
+#         print("event 3")
+#         return HttpResponse(status=400)
     
-    if event['type'] == 'checkout.session.completed':
-        print("checkout.session.completed !!!!")
+#     if event['type'] == 'checkout.session.completed':
+#         print("checkout.session.completed !!!!")
 
-        session = event['data']['object']
-        session_id = session.get('id', None)
-        time.sleep(15)
+#         session = event['data']['object']
+#         session_id = session.get('id', None)
+#         time.sleep(15)
     
-    return HttpResponse(status=200)
+#     return HttpResponse(status=200)
 
