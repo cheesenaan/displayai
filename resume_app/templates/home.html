@@ -3,8 +3,76 @@
 
 {% block content %}
 
+<style>
+
+
+/* Pricing Card Styles */
+.pricing-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+h2 {
+    color: #4285f4;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.price {
+    font-size: 24px;
+    color: #333;
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+/* Button Styles */
+.get-now-button {
+    background-color: #4285f4;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.get-now-button:hover {
+    background-color: #0066cc;
+}
+
+
+</style>
+
     <head>
-      <title> home </title>
+      <title> Home </title>
+
     </head>
 
     <body>
@@ -126,9 +194,103 @@
         </section>End Steps Section -->
 
 
+        <section id="pricing">
+          <h1>Pricing</h1>
+          
+          <form method="post" action"">
+              {% csrf_token %}
+              <div class="pricing-cards">
+                  <div class="card">
+                      <h2>Free</h2>
+                      <ul>
+                          <li>2 ATS friendly and optimized resumes</li>
+                          <li>Bullet points for only one work experience or one project for testing</li>
+                          <li>2 personal websites valid for 1 hour</li>
+                      </ul>
+                      <p class="price">Free</p>
+                      <button class="get-now-button">Current</button>
+                  </div>
+  
+                  <div class="card">
+                      <h2>Basic</h2>
+                      <ul>
+                          <li>5 ATS friendly and optimized resumes</li>
+                          <li>5 personal websites valid for 6 months</li>
+                      </ul>
+                      <p class="price">$9.99</p>
+                      <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
+  
+                  </div>
+  
+                  <div class="card">
+                      <h2>Economy</h2>
+                      <ul>
+                          <li>10 ATS friendly and optimized resumes</li>
+                          <li>10 personal websites valid for 6 months</li>
+                      </ul>
+                      <p class="price">$14.99</p>
+                      <button class="get-now-button" name="selected_plan" value="economy">Get Now</button>
+  
+                  </div>
+  
+                  <div class="card">
+                      <h2>Business</h2>
+                      <ul>
+                          <li>20 ATS friendly and optimized resumes</li>
+                          <li>20 personal websites valid for 6 months</li>
+                      </ul>
+                      <p class="price">$19.99</p>
+                      <button class="get-now-button" name="selected_plan" value="business">Get Now</button>
+                  </div>
+  
+                  <div class="card">
+                      <h2>First Class</h2>
+                      <ul>
+                          <li>50 ATS friendly and optimized resumes</li>
+                          <li>50 personal  websites valid for 1 year</li>
+                      </ul>
+                      <p class="price">$39.99</p>
+                      <button class="get-now-button" name="selected_plan" value="first_class">Get Now</button>
+                  </div>
+  
+                  <div class="card">
+                      <h2>Pilot</h2>
+                      <ul>
+                          <li>100 ATS friendly and optimized resumes</li>
+                          <li>100 personal websites valid for 1 year</li>
+                      </ul>
+                      <p class="price">$99.99</p>
+                      <button class="get-now-button" name="selected_plan" value="pilot">Get Now</button>
+                  </div>
+  
+  
+                  <div class="card">
+                      <h2>Pilot 2</h2>
+                      <ul>
+                          <li>300 ATS friendly and optimized resumes</li>
+                          <li>300 personal websites valid for 6 months</li>
+                      </ul>
+                      <p class="price">$199.99</p>
+                      <button class="get-now-button" name="selected_plan" value="pilot2">Get Now</button>
+                  </div>
+  
+                  <div class="card">
+                      <h2>Custom</h2>
+                      <ul>
+                          <li>Contact sales</li>
+                          <li>shf46@rutgers.edu</li>
+                      </ul>
+                      <p class="price">Custom</p>
+                      <button class="get-now-button">Get Now</button>
+                  </div>
+  
+              </div>
+  
+          </form>
+        </section>
 
         <!-- ======= Services Section ======= -->
-        <section id="services" class="services section-bg">
+        <!-- <section id="services" class="services section-bg">
             <div class="container">
 
                 <div class="section-title" data-aos="fade-up">
@@ -174,7 +336,7 @@
                 </div>
 
             </div>
-            </section><!-- End Services Section -->
+            </section>End Services Section -->
 
         <!-- ======= Testimonials Section ======= -->
         <section id="testimonials" class="testimonials">
@@ -421,7 +583,7 @@
             Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
           </div>
         </div>
-      </footer>End Footer -->
+      </footer>
 
       <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 

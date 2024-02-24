@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 
 import os
 from pathlib import Path
+from decouple import config
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -127,3 +128,7 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REDIRECT_DOMAIN = 'http://127.0.0.1:8000'
+
+STRIPE_API_KEY = 'sk_test_51OibSIBFOKaICuMNwUyc27HPurXFcLQqowTzFRqr7RUcw0tbGu4WR4XkFRY3qEqN4a5bb5qX93ApQzmvjT7Ew6o200MbPOzO5i'
+OPENAI_API_KEY = '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'

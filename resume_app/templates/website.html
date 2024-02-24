@@ -20,8 +20,57 @@
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
     </head>
 
+    
+    <body>
+    
+    <!-- Your existing body content -->
+    
+    
 
     <body id="page-top">
+
+        {% if account.tier == "free" %}
+            <!-- Banner for free version expiration message -->
+            <div id="expiration-banner" style="background-color: yellow; text-align: center; padding: 10px; width: 100%;">
+                This website is on the free version, and it will expire in <span id="expiration-time"></span>.
+            </div>
+
+            <script>
+                // Retrieve the expiration time from local storage
+                var storedExpirationTime = localStorage.getItem('expirationTime');
+
+                // Set the expiration time if not already set
+                var expirationTime = storedExpirationTime ? new Date(storedExpirationTime) : new Date();
+                expirationTime.setHours(expirationTime.getHours() + 1);
+
+                // Update the expiration time every second
+                var timer = setInterval(function() {
+                    var now = new Date();
+                    var timeLeft = expirationTime - now;
+
+                    // Check if the time has expired
+                    if (timeLeft <= 0) {
+                        clearInterval(timer); // Stop the timer if expired
+                        document.getElementById("expiration-banner").style.display = "none";
+                        localStorage.removeItem('expirationTime'); // Remove expiration time from local storage
+                    } else {
+                        // Format and display the time remaining
+                        // var hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                        var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        
+                        var expirationTimeElement = document.getElementById("expiration-time");
+                        expirationTimeElement.innerHTML =  "<strong>" + minutes + "m " + seconds + "s</strong>";
+                    }
+                }, 1000); // Update every second
+
+                // Store the expiration time in local storage
+                localStorage.setItem('expirationTime', expirationTime);
+            </script>
+        {% endif %}
+
+
+
 
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
@@ -61,7 +110,7 @@
             <!-- About-->
             <section class="resume-section" id="about">
                 <div class="resume-section-content">
-                    <a href="{% url 'edit_form' user_profile.url_name %}" class="btn btn-primary mb-3">Edit</a>
+                    <a href"" class="btn btn-primary mb-3">Edit</a>
                     <h1 class="mb-0">
                         {{user_profile.first_name}}
                         <span class="text-primary">{{user_profile.last_name}}</span>

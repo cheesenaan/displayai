@@ -1,26 +1,748 @@
 {% extends 'index.html' %}
 {% block content %}
 
-<br> <br> <br> <br> <br> <br> 
+<br>  <br> 
 
+
+
+
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
+
+      <div class="logo">
+        <h1><a href="/">display.ai</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+            <li><a class="nav-link scrollto active" href="{% url 'home'  %}">Home</a></li>
+          <li><a class="nav-link scrollto active" href=" {% url 'account_details' account_id=account.id %} ">   Account</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'logout'  %}">Log Out</a></li>
+
+          
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+      
+    </div>
+</header>
+
+
+<style>
+
+body {
+    font-family: 'Arial', sans-serif;
+    background-color: #f4f4f4;
+    margin: auto;
+    padding: 60px 0 0 0; /* Add top padding to create space */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: auto;
+}
+
+
+.content {
+    text-align: center;
+}
+
+h1, h2 {
+    color: #333;
+}
+
+p {
+    color: #666;
+}
+
+/* Header Styles */
+.header {
+    float: right;
+    width: 50%;
+}
+
+/* Pricing Card Styles */
+.pricing-cards {
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 10px;
+}
+
+.card {
+    background-color: #fff;
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    margin: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 250px;
+    text-align: center;
+    transition: transform 0.3s;
+}
+
+.card:hover {
+    transform: scale(1.05);
+}
+
+h2 {
+    color: #4285f4;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    margin-bottom: 8px;
+    color: #666;
+}
+
+.price {
+    font-size: 24px;
+    color: #333;
+    margin: 15px 0;
+    font-weight: bold;
+}
+
+/* Button Styles */
+.get-now-button {
+    background-color: #4285f4;
+    color: #fff;
+    padding: 12px 20px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
+    transition: background-color 0.3s;
+}
+
+.get-now-button:hover {
+    background-color: #0066cc;
+}
+
+/* Media Query for Responsive Design */
+@media (max-width: 768px) {
+    /* Adjust styles for smaller screens if needed */
+}
+
+.reload_resume_and_website-button, button {
+    background-color: #3498db; /* Attractive blue color */
+    color: white;
+    border: none;
+    padding: 3px; /* Slightly increased padding for a consistent size */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+.reload_resume_and_website-button:hover, button:hover {
+    background-color: orange; /* Darker shade on hover */
+}
+
+
+.resume-container {
+    float: right;
+    width: 50%;
+}
+
+@media (max-width: 768px) {
+    /* Adjust styles for smaller screens if needed */
+    .resume-container {
+        display: none;
+    }
+
+}
+.user-info-table {
+    width: auto;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Optional: Adjust spacing between tables */
+}
+
+.user-info-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.user-info-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.user-info-table tr:hover {
+    background-color: #ddd;
+}
+
+.user-info-table b {
+    color: #0066cc; /* Optional: Change the color of the bold text */
+
+}
+
+
+</style>
+
+<style>
+.action-section {
+    text-align: left;
+    margin-bottom: 10px; /* Adjust as needed */
+}
+
+.action-section p {
+    margin-bottom: 5px;
+}
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: 0;
+        padding: 60px 0; /* Add top padding to create space */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+    
+    .content {
+        text-align: center;
+    }
+    
+    h1, h2, p {
+        margin: 0;
+    }
+    
+    h1, h2 {
+        color: #333;
+    }
+    
+    p {
+        color: #666;
+        margin-bottom: 10px;
+    }
+    
+    /* Header Styles */
+    .header {
+        width: 50%;
+    }
+    
+    /* Pricing Card Styles */
+    .pricing-cards {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: 10px;
+    }
+    
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+    
+    .card:hover {
+        transform: scale(1.05);
+    }
+    
+    h2 {
+        color: #4285f4;
+        margin-bottom: 10px;
+    }
+    
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    li {
+        margin-bottom: 8px;
+        color: #666;
+    }
+    
+    .price {
+        font-size: 24px;
+        color: #333;
+        margin: 15px 0;
+        font-weight: bold;
+    }
+    
+    /* Button Styles */
+    .reload_resume_and_website-button, button {
+        background-color: #3498db;
+        color: white;
+        padding: 8px;
+        border: none;
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    
+    .reload_resume_and_website-button:hover, button:hover {
+        background-color: orange;
+    }
+    
+    /* Modal Styles */
+    .modal-body {
+        padding: 20px;
+    }
+    
+    .modal-title {
+        margin: 0;
+    }
+    
+ </style>
+    
+    
+
+    {% if remaining == 0 %}
+    <h1>{{user_profile.first_name}}, {{ account.tier }} version limit reached, you must upgrade your <a href="#pricing"> plan </a> </h1>
+    {% endif %}
+
+
+    {% if remaining != 0 %}
     <h1>{{user_profile.first_name}}, thank you for submitting the form</h1>
-    <br> <br> 
+    {% endif %}
 
-    <h1>Website</h1>
-    <p> <a href="http://127.0.0.1:8000/{{user_profile.url_name}}" target="_blank">displayai/{{user_profile.url_name}}</a></p>
-    <p> Free 1 hour, after that upgrade to our plans</p>
+    90% of employers, including Fortune 500 companies, use Applicant Tracking Systems (ATS) to manage candidate applications.<br>
+    DisplayAI resumes are ATS friendly. 
 
-    <p> you are on the {{account.tier}} version </p>
-    <p> you can try {{user_plan.forms_remaining}} resumes and personal websites for free  </p>
-    <p> you have filled the form {{user_plan.forms_filled}} times </p>
+    <br>  <br>
+
+  
+    <!-- embed google docs -->
+   <div> 
+        
+        <style>
+            .nav-link {
+                transition: filter 0.3s ease-in-out;
+                filter: brightness(0.8); /* Default dim state */
+            }
+        
+            .nav-link.active {
+                filter: brightness(1.2); /* Bright state for the active tab */
+            }
+        </style>
+        
+        <script>
+            function updateIframeSrc(link, tabId, event) {
+                // Prevent the default behavior of the link
+                event.preventDefault();
+        
+                // Remove 'active' class from all tabs
+                document.querySelectorAll('.nav-link').forEach(function(tab) {
+                    tab.classList.remove('active');
+                });
+        
+                // Add 'active' class to the clicked tab
+                document.getElementById(tabId).classList.add('active');
+        
+                // Update iframe src
+                document.getElementById('resumeIframe').src = link;
+            }
+        
+            // Set initial state when the page loads
+            window.onload = function() {
+                document.querySelectorAll('.nav-link').forEach(function(tab) {
+                    tab.classList.remove('active');
+                });
+                // Get the last link from the list
+                var lastLink = '{{ account.get_resume_links|last }}';
+                
+                // Get the corresponding tab ID
+                var lastTabId = 'tab{{ account.get_resume_links|length }}';
+        
+                // Set initial active state
+                document.getElementById(lastTabId).classList.add('active');
+        
+                // Update iframe src with the last link
+                document.getElementById('resumeIframe').src = lastLink;
+            };
+        </script>
+        
+        <div class="resume-container">
+            {% if account.resume_links %}
+                <ul class="nav nav-tabs" id="resumeTabs">
+                    {% for link in account.get_resume_links %}
+                        <li class="nav-item">
+                            <a class="nav-link {% if forloop.first %}active{% endif %}" data-toggle="tab" href="#resume{{ forloop.counter }}" id="tab{{ forloop.counter }}" onclick="updateIframeSrc('{{ link }}', 'tab{{ forloop.counter }}', event)">
+                                Resume {{ forloop.counter }}
+                            </a>
+                        </li>
+                    {% endfor %}
+                </ul>
+                <div class="tab-content">
+                    {% for link in account.get_resume_links %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="resume{{ forloop.counter }}">
+                            <iframe id="resumeIframe" width="160%" height="1250px"></iframe>
+                        </div>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p>No resume links available.</p>
+            {% endif %}
+        </div>
+    
+    </div>
+
+    
+    <table class="user-info-table">
+        <tr>
+            <td>Your Tier:</td>
+            <td>{{account.tier}}</td>
+        </tr>
+        <tr>
+            <td>Total Created on {{account.tier}}:</td>
+            <td>{{user_plan.forms_filled_on_current_plan}}</td>
+        </tr>
+        <tr>
+            <td>Total Tailored Resumes:</td>
+            <td>{{user_plan.total_tailored_resumes}} </td>
+        </tr>
+        <tr>
+            <td>Total Cover Letters:</td>
+            <td>{{user_plan.total_cover_letters}} </td>
+        </tr>
+        <tr>
+            <td>Total Created on all tiers:</td>
+            <td>{{user_plan.total_forms_filled}} </td>
+        </tr>
+        <tr>
+            <td>Remaining:</td>
+            <td> <b> {{remaining}} </b> </td>
+        </tr>
+
+
+    </table>
     
 
+    {% if remaining == 0 %}
+            <span style="color: red; font-weight: bold;">
+                {{ account.tier }} version limit reached, view our <a href="#pricing"> pricing plans </a>
+            </span> <br> 
+    {% endif %}
     <br> 
-
-    <h1>Resume</h1>
-    <p>Your resume is: <a href="{{user_profile.resume_link}}" target="_blank">{{user_profile.resume_link}}</a></p>
-    <p>Here is a preview of your resume. To view the hidden bullets and get the full Google Docs link to your resume, please upgrade to our plans.</p>
-    <p>Want to see sample resumes? <a href="#">Click here</a></p>
-    <p>Will this help me get an internship? Yes! <a href="#">Click here</a> to see testimonials</p>
     
-{% endblock %}
+    <!-- WEBSITE -->
+    <div>
+
+        <h1>Website</h1>
+        <p><a id="link" href="http://127.0.0.1:8000/{{account.name}}" target="_blank"><b>displayai/{{account.name}}</b></a></p>
+        <p id="expiry">Time to expiry: <span id="timer"></span></p>
+
+        <script>
+            // Function to update the timer display
+            function updateTimer(expiryTime) {
+                // Update the timer display every second
+                let timer = setInterval(function() {
+                    // Calculate the time remaining
+                    let now = new Date().getTime();
+                    let distance = expiryTime - now;
+
+                    // Calculate hours, minutes, and seconds
+                    let hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+                    let minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+                    let seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+                    // Display the remaining time with bold and red styling
+                    let timerElement = document.getElementById("timer");
+                    timerElement.innerHTML = "<b style='color:red;'>" + hours + " : " + minutes + " : " + seconds + "</b>";
+
+                    // If the countdown is over, clear the timer
+                    if (distance < 0) {
+                        clearInterval(timer);
+                        timerElement.innerHTML = "<b style='color:red;'>00 : 00 : 00</b>";
+                    }
+                }, 1000);
+            }
+
+            // Retrieve expiry time from local storage if available
+            let expiryTime = localStorage.getItem('expiryTime');
+
+            // If expiry time is not stored, calculate and store it
+            if (!expiryTime) {
+                if ("{{ account.tier }}" == "free") {
+                    // Set expiry time to 1 hour from now
+                    expiryTime = new Date().getTime() + (1 * 60 * 60 * 1000);
+                } else {
+                    // Set expiry time to 6 months from now
+                    expiryTime = new Date().getTime() + (6 * 30 * 24 * 60 * 60 * 1000);
+                }
+                // Store expiry time in local storage
+                localStorage.setItem('expiryTime', expiryTime);
+            } else {
+                // Convert expiry time from string to number
+                expiryTime = parseInt(expiryTime);
+            }
+
+            // Update the timer display
+            updateTimer(expiryTime);
+        </script>
+    
+    </div>
+
+    <!-- RESUME -->
+    <div> 
+        <h1>Resume</h1>
+        <p><a href="{{user_profile.resume_link}}" target="_blank"> <b> RESUME LINK </b> </a></p>
+        <p> All of the resumes you created can be found here :  <a href="http://127.0.0.1:8000/{{account.id}}/account_details">Click here</a> </p>
+    </div>
+
+    <!-- Re-Build  with same data -->
+    <div class="action-section">
+        <h1>Re-Build displayai</h1>
+        <p>Our AI and Data Science model might need multiple builds for perfect bullets</p>
+        {% if remaining != 0 %}
+            <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button">
+                <button type="button">Re-Build  with same data</button>
+            </a>
+        {% else %}
+            <a href="http://127.0.0.1:8000/{{account.id}}/confirmation#pricing" class="reload_resume_and_website-button" onclick="redirect()"> 
+                <button type="button">Re-Build  with same data</button>
+            </a>
+            
+            <script>
+                function redirect() {
+                    window.location.href = "http://127.0.0.1:8000/{{account.id}}/confirmation#pricing";
+                }
+            </script>
+        {% endif %}
+
+    </div>
+
+    <!-- Edit data & Re-Build -->
+    <div class="action-section"> 
+        <p>Want to edit your data ? </p>
+        <a href="http://127.0.0.1:8000/{{ account.id }}/form/" class="reload_resume_and_website-button">
+            <button type="button">Edit data & Re-Build</button>
+        </a>
+    </div>
+
+    <!-- job description feature -->
+    <div class="action-section"> 
+        <!-- Add this in your HTML head section -->
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+        <p> Tailored resumes increase response chances by 70% </p>
+
+        {% if remaining != 0 and account.tier != 'free' %}
+        <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#jobDescriptionModal">
+            <button type="button">Build a resume tailored for a job description</button>
+        </a>
+        {% else %}
+            <script>
+                function redirectToPricing() {
+                    alert("To access this feature, please view our plans.");
+                    window.location.href = "http://127.0.0.1:8000/{{account.id}}/confirmation#pricing";
+                }
+            </script>
+
+            <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build a resume tailored for a job description</button>
+        {% endif %}
+
+        <!-- Modal -->
+        <div class="modal fade" id="jobDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="jobDescriptionModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="jobDescriptionModalLabel">  </h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="jobDescriptionInput">Input Job Description</label>
+                        <textarea class="form-control" id="jobDescriptionInput" style="height: 500px;"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="submitJobDescription()">Build tailored resume</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function submitJobDescription() {
+                var jobDescription = document.getElementById('jobDescriptionInput').value;
+                // Call the API with the entered job description
+                window.location.href = "{% url 'reload_resume_and_website_with_job_description' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
+            }
+        </script>
+    </div>
+
+    <!-- cover letter feature -->
+    <div class="action-section">
+        <p>78% of recruiters & hiring managers want a cover letter</p>
+
+        {% if remaining != 0 and account.tier != 'free' %}
+        <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#coverLetterModal">
+            <button type="button">Build Cover Letter for a job description</button>
+        </a>
+        {% else %}
+        <script>
+            function redirectToPricing() {
+                alert("To access this feature, please view our plans.");
+                window.location.href = "http://127.0.0.1:8000/{{account.id}}/confirmation#pricing";
+            }
+        </script>
+
+        <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build Cover Letter for a job description</button>
+        {% endif %}
+
+        <!-- Cover Letter Modal -->
+        <div class="modal fade" id="coverLetterModal" tabindex="-1" role="dialog" aria-labelledby="coverLetterModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="coverLetterModalLabel"></h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <label for="coverLetterDescriptionInput">Input Job Description</label>
+                        <textarea class="form-control" id="coverLetterDescriptionInput" style="height: 500px;"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" onclick="submitCoverLetter()">Build Cover Letter</button>
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <script>
+            function submitCoverLetter() {
+                var jobDescription = document.getElementById('coverLetterDescriptionInput').value;
+                // Call the API with the entered job description
+                window.location.href = "{% url 'build_cover_letter' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
+            }
+        </script>
+
+    </div>
+
+
+    <!-- projects -->
+    <div class="action-section">
+        <h1>Projects</h1>
+        <p> Do not know what projects to put? You do not have any projects? You need help with projects? <a href="#">Click here</a> </p> </p>
+    </div>
+
+    <h1>View Pricing</h1>
+    <p> <a href="#pricing">Click here</a> </p>
+
+
+    <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> <br> 
+
+    <section id="pricing" class="pricing">
+        <h1>Pricing</h1>
+
+        Research finds that around 68% of candidates who use a professional resume writing service get a job within 90 days of sending out their resume
+        
+        <form method="post" action="{% url 'confirmation' account_id=account.id %}">
+            {% csrf_token %}
+            <div class="pricing-cards">
+                <div class="card">
+                    <h2>Free</h2>
+                    <ul>
+                        <li>2 ATS friendly and optimized resumes</li>
+                        <li>Bullet points for only one work experience or one project for testing</li>
+                        <li>2 personal websites valid for 1 hour</li>
+                    </ul>
+                    <p class="price">Free</p>
+                    <button class="get-now-button">Current</button>
+                </div>
+
+                <div class="card">
+                    <h2>Basic</h2>
+                    <ul>
+                        <li>5 ATS friendly and optimized resumes</li>
+                        <li>5 personal websites valid for 6 months</li>
+                    </ul>
+                    <p class="price">$9.99</p>
+                    <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
+
+                </div>
+
+                <div class="card">
+                    <h2>Economy</h2>
+                    <ul>
+                        <li>10 ATS friendly and optimized resumes</li>
+                        <li>10 personal websites valid for 6 months</li>
+                    </ul>
+                    <p class="price">$14.99</p>
+                    <button class="get-now-button" name="selected_plan" value="economy">Get Now</button>
+
+                </div>
+
+                <div class="card">
+                    <h2>Business</h2>
+                    <ul>
+                        <li>20 ATS friendly and optimized resumes</li>
+                        <li>20 personal websites valid for 6 months</li>
+                    </ul>
+                    <p class="price">$19.99</p>
+                    <button class="get-now-button" name="selected_plan" value="business">Get Now</button>
+                </div>
+
+                <div class="card">
+                    <h2>First Class</h2>
+                    <ul>
+                        <li>50 ATS friendly and optimized resumes</li>
+                        <li>50 personal  websites valid for 1 year</li>
+                    </ul>
+                    <p class="price">$39.99</p>
+                    <button class="get-now-button" name="selected_plan" value="first_class">Get Now</button>
+                </div>
+
+                <div class="card">
+                    <h2>Pilot</h2>
+                    <ul>
+                        <li>100 ATS friendly and optimized resumes</li>
+                        <li>100 personal websites valid for 1 year</li>
+                    </ul>
+                    <p class="price">$99.99</p>
+                    <button class="get-now-button" name="selected_plan" value="pilot">Get Now</button>
+                </div>
+
+
+                <div class="card">
+                    <h2>Pilot 2</h2>
+                    <ul>
+                        <li>300 ATS friendly and optimized resumes</li>
+                        <li>300 personal websites valid for 6 months</li>
+                    </ul>
+                    <p class="price">$199.99</p>
+                    <button class="get-now-button" name="selected_plan" value="pilot2">Get Now</button>
+                </div>
+
+                <div class="card">
+                    <h2>Custom</h2>
+                    <ul>
+                        <li>Contact sales</li>
+                        <li>shf46@rutgers.edu</li>
+                    </ul>
+                    <p class="price">Custom</p>
+                    <button class="get-now-button">Get Now</button>
+                </div>
+
+            </div>
+
+        </form>
+    </section>
+
+
+  {% endblock %}

@@ -22,11 +22,23 @@ from .views import CheckUrlNameView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path('checkout/', checkout, name='checkout'),
     path('login', login, name='login'),
+    path('logout/', logout, name='logout'),
+    path('<int:account_id>/account_details/', account_details, name='account_details'),
     path('<int:account_id>/form/', form, name='form'),
-    path('confirmation/<int:account_id>/', confirmation, name='confirmation'),
+    path('<int:account_id>/confirmation', confirmation, name='confirmation'),
+    path('<int:account_id>/reload_resume_and_website', reload_resume_and_website, name='reload_resume_and_website'),
+    path('<int:account_id>/reload_resume_and_website_with_job_description', reload_resume_and_website_with_job_description, name='reload_resume_and_website_with_job_description'),
+    path('<int:account_id>/build_cover_letter', build_cover_letter, name='build_cover_letter'),
+    
+    # path('payment_basic', payment_basic, name='payment_basic'),
+    # path('product_page', product_page, name='product_page'),
+    path('payment_successful', payment_successful, name='payment_successful'),
+    path('payment_cancelled', payment_cancelled, name='payment_cancelled'),
+    path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
     path('<str:url_name>/', website, name='website'),  
-    path('edit/<str:url_name>/', edit_form, name='edit_form'),
-    path('form/check_url_name/', CheckUrlNameView.as_view(), name='check_url_name'),
+    path('form/CheckUrlNameView/', CheckUrlNameView.as_view(), name='CheckUrlNameView'),
     path('login/check_account_name/', CheckAccountNameView.as_view(), name='CheckAccountNameView'),
+
 ]

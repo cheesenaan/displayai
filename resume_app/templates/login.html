@@ -2,26 +2,28 @@
 {% block content %}
 
 <style>
-    body {
+body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
         background-image: url('static/img/2.png');
-        background-size: cover;
+        background-size: cover;  /* Cover the entire viewport */
         background-position: center;
         background-repeat: no-repeat;
         text-align: center;
         margin: 0;
         padding: 0;
+        height: 100vh; /* Set height to full viewport height */
     }
 
     form {
         max-width: 400px;
-        margin: 200px auto;
+        margin: 50px auto; /* Adjusted margin for better spacing */
         background-color: #fff;
         padding: 20px;
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     }
+
 
     label {
         display: block;
@@ -100,9 +102,16 @@
         color: #2980b9;
     }
 
+    #initial-options, #login-form {
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+    }
+
+
     #initial-options {
         text-align: center;
-        margin-top: 250px;
+        margin-top: 350px;
     }
 
     input[type="radio"] {
@@ -161,6 +170,8 @@
     }
 
 </style>
+
+
 
 <br> <br> <br> <br> <br> <br>
 

@@ -3,3 +3,4 @@ pip install gspread
 ./manage.py makemigrations
 pip install whitenoise
 python manage.py collectstatic
+pip install python-decouple

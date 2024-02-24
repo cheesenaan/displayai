@@ -1,0 +1,193 @@
+{% extends 'index.html' %}
+{% block content %}
+<br> <br> <br> <br> <br> 
+
+
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
+
+      <div class="logo">
+        <h1><a href="/">display.ai</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+            <li><a class="nav-link scrollto active" href="{% url 'home'  %}">Home</a></li>
+          <li><a class="nav-link scrollto active" href=" {% url 'confirmation' account_id=account.id %} ">   Build</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'logout'  %}">Log Out</a></li>
+
+          
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+      
+    </div>
+</header>
+
+
+<style>
+
+.user-info-table {
+    width: auto;
+    border-collapse: collapse;
+    margin-bottom: 20px; /* Optional: Adjust spacing between tables */
+}
+
+.user-info-table td {
+    padding: 8px;
+    border: 1px solid #ddd;
+    text-align: left;
+}
+
+.user-info-table tr:nth-child(even) {
+    background-color: #f2f2f2;
+}
+
+.user-info-table tr:hover {
+    background-color: #ddd;
+}
+
+.user-info-table b {
+    color: #0066cc; /* Optional: Change the color of the bold text */
+}
+.reload_resume_and_website-button, button {
+        background-color: #3498db; /* Attractive blue color */
+        color: white;
+        border: none;
+        padding: 3px; /* Slightly increased padding for a consistent size */
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    
+    .reload_resume_and_website-button:hover, button:hover {
+        background-color: orange; /* Darker shade on hover */
+    }
+
+
+</style>
+
+<div>
+
+<div class="user-info-container">
+
+    <h1>Account Details</h1>
+    <p><strong>Account ID:</strong> {{ account.id }}</p>
+    <p><strong>Account Name:</strong> {{ account.name }}</p>
+    <p><strong>Account Password:</strong> {{ account.password }}</p>
+    
+    <p><strong>All resume links:</strong> 
+    {% if account.resume_links %}
+    <ol>
+        {% for link in account.get_resume_links %}
+        <li><a href="{{ link }}" target="_blank">{{ link }}</a></li>
+        {% endfor %}
+    </ol>
+    {% else %}
+    <p>No resume links available.</p>
+    {% endif %}
+
+    <a href="{% url 'confirmation' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button"> Go back and build resume(s) and website(s) </button>
+    </a>
+
+    <a href="{% url 'form' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button"> Edit my profile data </button>
+    </a>
+
+    
+    <table class="user-info-table">
+        <tr>
+            <td>Your Tier:</td>
+            <td>{{account.tier}}</td>
+        </tr>
+        <tr>
+            <td>Total Created on {{account.tier}}:</td>
+            <td>{{user_plan.forms_filled_on_current_plan}}</td>
+        </tr>
+        <tr>
+            <td>Total Tailored Resumes:</td>
+            <td>{{user_plan.total_tailored_resumes}} </td>
+        </tr>
+        <tr>
+            <td>Total Cover Letters:</td>
+            <td>{{user_plan.total_cover_letters}} </td>
+        </tr>
+        <tr>
+            <td>Total Created on all tiers:</td>
+            <td>{{user_plan.total_forms_filled}} </td>
+        </tr>
+        <tr>
+            <td>Remaining:</td>
+            <td> <b> {{remaining}} </b> </td>
+        </tr>
+
+
+    </table>
+
+
+    <h2>User Profile</h2>
+    <p><strong>Work Experience:</strong></p>
+    <ul>
+        <li><strong>First Name:</strong> {{ user_profile.first_name }}</li>
+        <li><strong>Last Name:</strong> {{ user_profile.last_name }}</li>
+        <li><strong>Phone:</strong> {{ user_profile.phone }}</li>
+        <li><strong>Email:</strong> {{ user_profile.email }}</li>
+        <li><strong>City:</strong> {{ user_profile.city }}</li>
+        <li><strong>State:</strong> {{ user_profile.state }}</li>
+        <li><strong>LinkedIn Link:</strong> {{ user_profile.linkedin_link }}</li>
+        <li><strong>Resume Link:</strong> {{ user_profile.resume_link }}</li>
+        <li><strong>GitHub Link:</strong> {{ user_profile.github_link }}</li>
+        <li><strong>Profile Image:</strong> {{ user_profile.profile_image.url }}</li>
+        <li><strong>Institution:</strong> {{ user_profile.institution }}</li>
+        <li><strong>Major:</strong> {{ user_profile.major }}</li>
+        <li><strong>Minor:</strong> {{ user_profile.minor }}</li>
+        <li><strong>Start Date:</strong> {{ user_profile.start_date }}</li>
+        <li><strong>End Date:</strong> {{ user_profile.end_date }}</li>
+        <li><strong>Spoken Languages:</strong> {{ user_profile.spoken_languages }}</li>
+        <li><strong>Programming Languages:</strong> {{ user_profile.programming_languages }}</li>
+        <li><strong>Technical Skills:</strong> {{ user_profile.technical_skills }}</li>
+        <li><strong>Leadership:</strong> {{ user_profile.leadership }}</li>
+        <li><strong>Degree Type:</strong> {{ user_profile.get_degree_type_display }}</li>
+    </ul>
+
+
+    
+    <h2>Work Experiences</h2>
+    <ul>
+        {% for work_experience in user_profile.work_experiences.all %}
+            <li>
+                <strong>{{ work_experience.company_name }} - {{ work_experience.job_title }}</strong><br>
+                <strong>Start Date:</strong> {{ work_experience.start_date }}<br>
+                <strong>End Date:</strong> {{ work_experience.end_date }}<br>
+                <strong>City:</strong> {{ work_experience.city }}<br>
+                <strong>State:</strong> {{ work_experience.state }}<br>
+                <strong>Description:</strong> {{ work_experience.description }}<br>
+                <strong>Bullet 1:</strong> {{ work_experience.bullet1 }}<br>
+                <strong>Bullet 2:</strong> {{ work_experience.bullet2 }}<br>
+                <strong>Bullet 3:</strong> {{ work_experience.bullet3 }}
+            </li>
+        {% endfor %}
+    </ul>
+
+
+    <h2>Projects</h2>
+    <ul>
+        {% for project in user_profile.projects.all %}
+            <li>
+                <strong>{{ project.project_name }}</strong><br>
+                <strong>Project Skills:</strong> {{ project.project_skills }}<br>
+                <strong>Description:</strong> {{ project.description }}<br>
+                <strong>Bullet 1:</strong> {{ project.bullet1 }}<br>
+                <strong>Bullet 2:</strong> {{ project.bullet2 }}
+            </li>
+        {% endfor %}
+    </ul>
+    
+</div>
+
+{% endblock %}

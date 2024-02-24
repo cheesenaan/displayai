@@ -2,9 +2,31 @@
 {% block content %}
 <br><br><br><br><br><br><br>
 
-<!-- <div style="float: right; width: 50%;">
-    <iframe src="https://docs.google.com/document/d/1-OCAFrHb3JyPdzTTajSXagLLNIO63qxTzfTdS6Bva2k/edit" width="100%" height="600px" frameborder="0"></iframe>
-</div> -->
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
+
+      <div class="logo">
+        <h1><a href="/">display.ai</a></h1>
+      </div>
+
+      <nav id="navbar" class="navbar">
+        <ul>
+            <li><a class="nav-link scrollto active" href="{% url 'home'  %}">Home</a></li>
+          <li><a class="nav-link scrollto active" href=" {% url 'account_details' account_id=account.id %} ">   Account</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'logout'  %}">Log Out</a></li>
+
+          
+        </ul>
+        <i class="bi bi-list mobile-nav-toggle"></i>
+      </nav><!-- .navbar -->
+      
+    </div>
+</header>
+
 
 <style>
     body {
@@ -117,44 +139,90 @@
 
 </style>
 
-<!-- Add this to the head section of your HTML file -->
-<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-<form method="post" enctype="multipart/form-data" id="userProfileForm">
-
-    <!-- personal form -->
-    <div>
 
         <h1>Welcome {{account.name}}</h1>
+        <!-- <p> you are on the {{account.tier}} version </p> -->
+        <p> You can try <b> {{remaining}}</b> more resume(s) and personal website(s) on your current {{ account.tier }} version </p>
+        <p> you have built {{user_plan.total_forms_filled}} resume(s) and personal website(s) </p>
+
         {% if account.user_profile is None %}
             <p> you do not have any user profiles, please fill in the below form </p>
         {% else %}
-        <p> We have found a userprofile, it has been filled in for you to save time </p>
+                <p> an existing user profile has been found and loaded for you to save time </p>
+                <p id="user_profile_question"> <b> Do you want to update your user profile ? </b></p>
+                <div id="user_profile_question">
+                    <label>
+                        <input type="radio" name="user_profile_question" id="yes_user_profile_question" value="yes" onclick="toggle_form()"> Yes
+                    </label>
+                    <label>
+                        <input type="radio" name="user_profile_question" id="no_user_profile_question" value="no" onclick="toggle_form()" checked> No
+                    </label>
+                </div>
+
+                <br> <br>  <br>  <br> 
+                
+                <a href="{% url 'confirmation' account_id=account.id %}" class="confirmation-button" id="user_profile_question_button">
+                    <button type="button">NO UPDATE TO USER PROFILE AND BUILD WEBSITE AND RESUME</button>
+                </a>
+
         {% endif %}
-        <p> you are on the {{account.tier}} version </p>
-        <p> you can try {{user_plan.forms_remaining}} resumes and personal websites for free  </p>
-        <p> you have filled in this form {{user_plan.forms_filled}} times </p>
+        
 
-        <br>
+        {% if remaining == 0 %}
+            <span style="color: red; font-weight: bold;">
+                {{ account.tier }} version limit reached, <a href="http://127.0.0.1:8000/{{ account.id }}/confirmation">Upgrade Now</a>
+            </span> <br>
+            <script>
+                // Wait for 10 seconds
+                setTimeout(function() {
+                    alert("{{ account.tier }} version limit reached. Click OK to view pricing and upgrade ");
+                    window.location.href = "http://127.0.0.1:8000/{{ account.id }}/confirmation";
+                }, 500); // 10000 milliseconds = 10 seconds
+            </script>
+        {% endif %}
 
+
+<form method="post" enctype="multipart/form-data" id="userProfileForm">
+
+    {% if account.user_profile is not None %}
+        <script>
+            // Initially hide the form since "No" is checked by default
+            var form = document.getElementById('userProfileForm');
+            form.style.display = 'none';
+        
+            function toggle_form() {
+                var form = document.getElementById('userProfileForm');
+                var yes_user_profile_question = document.getElementById('yes_user_profile_question');
+                form.style.display = yes_user_profile_question.checked ? 'block' : 'none';
+
+                var update_form = document.getElementById('user_profile_question_button');
+                update_form.style.display = no_user_profile_question.checked ? 'block' : 'none';
+            }
+        </script>
+    {% endif %}
+
+    <!-- personal form -->
+    <div>
         <div id="dataForm" method="post">
             {% csrf_token %}
             {{ form.as_p }}
         </div>
 
-        <span id="urlNameValidation"></span>
+        <!-- <span id="urlNameValidation"></span>
         <script>
             $(document).ready(function () {
                 // Add an event listener to the url_name input field
                 console.log("JavaScript loaded!");
-                $('#id_url_name').on('input', function () {
-                    var urlName = $(this).val();
-            
+        
+                function checkUrlName() {
+                    var urlName = $('#id_url_name').val();
+        
                     // Send an AJAX request to check if the url_name is taken
                     $.ajax({
-                        url: '/form/check_url_name/',  // Fix the URL here
+                        url: '/form/CheckUrlNameView/',  // Fix the URL here
                         type: 'GET',
-                        data: { 'url_name': urlName },
+                        data: { 'url_name': urlName, 'account_id' : '{{account.id}}' },
                         success: function (data) {
                             if (data.is_taken) {
                                 // Display a message if the url_name is taken as a red alert bubble
@@ -163,15 +231,28 @@
                                 // Display a message if the url_name is available as a green alert bubble
                                 $('#urlNameValidation').html('<div class="alert alert-success" role="alert">URL available</div>');
                             }
+        
+                            if (data.is_taken_current_account) {
+                                // Display a message with yellow color for is_taken_current_account
+                                $('#urlNameValidation').html('<div class="alert alert-warning" role="alert">YOU HAVE USED URL BEFORE BUT IT IS OKAY. THIS WILL OVERRIDE YOUR PREVIOUS WEBSITE. CHANGE URL NAME IF YOU WANT TO KEEP YOUR PREVIOUS SITE(S)</div>');
+                            }
                         }
                     });
+                }
+        
+                // Trigger the checkUrlName function on page load
+                checkUrlName();
+        
+                // Add an event listener to the url_name input field
+                $('#id_url_name').on('input', function () {
+                    checkUrlName();
                 });
             });
-        </script>
-        
-        <br>  
+        </script> -->
+
+        <br>
     </div>
-   
+
     <!-- work experince form -->
     <div>
 
@@ -180,7 +261,7 @@
                 var workForm = document.getElementById('work_form');
                 var yesRadio = document.getElementById('yesRadio');
                 var addWorkFormButton = document.getElementById('add-work-form');
-        
+
                 workForm.style.display = yesRadio.checked ? 'block' : 'none';
                 addWorkFormButton.style.display = yesRadio.checked ? 'block' : 'none';
             }
@@ -196,7 +277,7 @@
                 let totalformNumberAdder = totalformNumber;
                 let totalformNumberAdderHelper = totalformNumber;
                 let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
-                
+
                 addButton.addEventListener('click', addForm);
 
                 function addForm(e) {
@@ -223,8 +304,11 @@
                                         <td>End Date</td>
                                     </tr>
                                     <tr class="form-row">
-                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-start_date"></td>
-                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-end_date"></td>
+                                        <td>Start Date <input type="date" name="work_experiences-${totalformNumberAdder}-start_date"></td>
+                                        <td>End Date <input type="date" name="work_experiences-${totalformNumberAdder}-end_date"></td>
+
+
+
                                     </tr>
                                     <tr class="form-row">
                                         <td>City</td>
@@ -232,7 +316,7 @@
                                     </tr>
                                     <tr class="form-row">
                                         <td><input type="text" name="work_experiences-${totalformNumberAdder}-city"></td>
-                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-state"></td>
+                                        <td><input type="text" maxlength="2" name="work_experiences-${totalformNumberAdder}-state"></td>
                                     </tr>
                                     <tr class="form-row">
                                         <td colspan="2">Description</td>
@@ -245,6 +329,8 @@
                             <button id="delete-work-form-${totalformNumberAdder}" type="button"">Delete Work Experience</button>
                         </div>
                     `;
+
+
 
                     let container = document.createElement('div');
                     container.innerHTML = newForm;
@@ -299,7 +385,7 @@
                 });
             });
         </script>
-        
+
         <p id="work_experience_question">Do you have relevant work experience?</p>
         <div id="work_experience_options">
             <label>
@@ -310,7 +396,7 @@
             </label>
         </div>
 
-        <br> <br> <br> 
+        <br> <br> <br>
 
         {% csrf_token %}
         {{ work_experience_formset.management_form }}
@@ -355,12 +441,12 @@
                 <button id="delete-work-form-0" type="button"">Delete Work Experience</button>
             </div>
         </div>
-        <button id="add-work-form" type="button" style="display: none;">Add Another Work Experience</button> 
+        <button id="add-work-form" type="button" style="display: none;">Add Another Work Experience</button>
 
     </div>
 
     <!-- project form -->
-    <div> 
+    <div>
         <!-- projects form -->
         <h3>Projects</h3>
 
@@ -369,7 +455,7 @@
                     var projectForm = document.getElementById('projects_form');
                     var yesRadioProject = document.getElementById('yesProjectRadio');
                     var addProjectFormButton = document.getElementById('add-project-form');
-            
+
                     projectForm.style.display = yesRadioProject.checked ? 'block' : 'none';
                     addProjectFormButton.style.display = yesRadioProject.checked ? 'block' : 'none';
                 }
@@ -413,24 +499,24 @@
                 <button id="delete-project-form-0" type="button">Delete Project</button> <br>
             </div>
         </div>
-        <button id="add-project-form" type="button" style="display: none;">Add Another Project</button> 
+        <button id="add-project-form" type="button" style="display: none;">Add Another Project</button>
 
         <script>
             window.addEventListener('load', function() {
                 let project_projectForm = document.querySelector("#projects_form");
                 let project_addButton = document.querySelector("#add-project-form");
                 let project_totalFormsField = document.querySelector("input[name='projects-TOTAL_FORMS']");
-                let project_formNum = project_projectForm.children.length; 
+                let project_formNum = project_projectForm.children.length;
                 project_totalformNumberAdderHelper = project_formNum;
-                
+
                 project_addButton.addEventListener('click', addProjectForm);
-        
+
                 function addProjectForm(e) {
                     e.preventDefault();
-        
+
                     console.log("Add button clicked!");
-        
-        
+
+
                     let project_newForm = `
                         <div id="projects_container-${project_totalFormsField.value}">
                             <table>
@@ -458,30 +544,30 @@
                             <button id="delete-project-form-${project_totalFormsField.value}" type="button">Delete Project</button>
                         </div>
                     `;
-        
+
                     let project_container = document.createElement('div');
                     project_container.innerHTML = project_newForm;
-        
+
                     project_projectForm.appendChild(project_container);
-        
+
                     // Add delete button for the newly added form
                     let project_deleteButton = document.querySelector(`#delete-project-form-${project_totalFormsField.value}`);
-        
+
                     project_deleteButton.addEventListener('click', function() {
                         project_deleteForm(project_container, project_formNum);
                     });
                     project_container.appendChild(project_deleteButton);
-        
+
                     project_formNum++;
                     project_totalFormsField.value++;
                     project_totalformNumberAdderHelper++;
                     console.log(`Form added. project_totalformNumberAdderHelper: ${project_totalformNumberAdderHelper}`);
                     console.log(`Form added. projects-TOTAL_FORMS: ${project_totalFormsField.value}`);
                 }
-        
-        
+
+
                 function project_deleteForm(form, formNum) {
-        
+
                     if (project_totalformNumberAdderHelper == 1) {
                         // If deleting the first form, just hide the project_form and set hasProjectExperience to 'no'
                         console.log("there is only 1 form so the radio button should become closed");
@@ -490,7 +576,7 @@
                         project_projectForm.style.display = 'none';
                         project_addButton.style.display = 'none';
                         document.getElementById('noRadio').checked = true;
-                    } 
+                    }
                     else {
                         form.remove();
                         project_totalformNumberAdderHelper--;
@@ -498,7 +584,7 @@
                         console.log(`after deleting, projects-TOTAL_FORMS is : ${project_totalFormsField.value}`);
                     }
                 }
-        
+
                 let project_deleteButtons = document.querySelectorAll("[id^='delete-project-form-']");
                 project_deleteButtons.forEach(button => {
                     button.addEventListener('click', function() {
@@ -521,19 +607,18 @@
 
             });
         </script>
-        
-        
-       
-    </div>  
-    
-<script>
+
+
+
+    </div>
+
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             var submitButton = document.querySelector('button[type="submit"]');
             submitButton.addEventListener('click', function (event) {
                 // Prevent form submission
                 event.preventDefault();
 
-                
                 var inputs = document.querySelectorAll('#dataForm input, #dataForm textarea');
                 for (var i = 0; i < inputs.length; i++) {
                     if (inputs[i].value.trim() === '') {
@@ -595,6 +680,27 @@
                     }
                 }
 
+                // Check email field for @ and .com
+                var emailField = document.querySelector('input[name="email"]');
+                var emailValue = emailField.value.trim();
+                if (
+                    !emailValue.includes('@') ||
+                    (!emailValue.endsWith('.com') &&
+                        !emailValue.endsWith('.edu') &&
+                        !emailValue.endsWith('.org') &&
+                        !emailValue.endsWith('.gov') &&
+                        !emailValue.endsWith('.biz') &&
+                        !emailValue.endsWith('.net'))
+                )
+                {
+                    emailField.style.borderColor = 'red';
+                    alert('Please enter a valid email address. Must contain @ and end with either .com, .edu, .org, .gov, .biz, .net');
+                    scrollToElement(emailField);
+                    return;
+                } else {
+                    emailField.style.borderColor = ''; // Reset border color
+                }
+
                 // If validation passes, submit the form
                 document.querySelector('form').submit();
             });
@@ -604,16 +710,21 @@
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
         });
-</script>
+    </script>
+
+    {% if account.user_profile is None %}
+    <button type="submit">BUILD WEBSITE AND RESUME </button>
+    {% else %}
+    <button type="submit">UPDATE USER PROFILE AND BUILD WEBSITE AND RESUME </button>
+    {% endif %}
 
 
-    <button type="submit">Submit</button>
-    <br>  <br>  <br>  <br> 
+    <br>  <br>  <br>  <br>
 </form>
 
-    <br>  <br>  <br>  <br>  <br>  
+    <br>  <br>  <br>  <br>  <br>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
-   
+
 
 {% endblock %}

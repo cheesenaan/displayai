@@ -74,7 +74,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['first_name', 'last_name', 'phone', 'email', 'city', 'state', 'linkedin_link', 'resume_link', 'github_link', 'profile_image', 'institution', 'degree_type', 'major', 'minor', 'start_date', 'end_date', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership', 'url_name']
+        fields = ['first_name', 'last_name', 'phone', 'email', 'city', 'state', 'linkedin_link', 'resume_link', 'github_link', 'profile_image', 'institution', 'degree_type', 'major', 'minor', 'start_date', 'end_date', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership']
         widgets = {
             'first_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
             'last_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
@@ -95,13 +95,12 @@ class UserProfileForm(forms.ModelForm):
             'programming_languages': forms.TextInput(attrs={'placeholder': 'Python, R, C, Java ... '}),
             'technical_skills': forms.TextInput(attrs={'placeholder': 'Excel, AWS, GCP, ... '}),
             'leadership': forms.TextInput(attrs={'placeholder': 'Soccer club, Hackathon ...'}),
-            'url_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
         }
 
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['leadership'].help_text = '<h6 style="color: maroon; font-weight: bold;">Your website will be hosted on displayai.pythonanywhere.com/url-name/</h6> </p>'
+        # self.fields['leadership'].help_text = '<h6 style="color: maroon; font-weight: bold;">Your website will be hosted on displayai.pythonanywhere.com/url-name/</h6> </p>'
         self.fields['linkedin_link'].help_text = '<h6 style="color: maroon; font-weight: bold;">Leave resume link blank and we will create one for you !</h6> </p>'
         
     def clean(self):
@@ -111,17 +110,7 @@ class UserProfileForm(forms.ModelForm):
                 cleaned_data[field_name] = cleaned_data[field_name].title()
         return cleaned_data
     
-    def clean_url_name(self):
-        url_name = self.cleaned_data['url_name']
-        existing_profiles = UserProfile.objects.filter(url_name=url_name)
 
-        if self.instance.pk:
-            existing_profiles = existing_profiles.exclude(pk=self.instance.pk)
-
-        if existing_profiles.exists():
-            raise ValidationError('This URL name is already in use. Please choose a different one.')
-
-        return url_name
 
 from django import forms
 from .models import Account
@@ -133,3 +122,8 @@ class LoginForm(forms.ModelForm):
     class Meta:
         model = Account
         fields = ['name', 'password']
+
+
+    def __init__(self, *args, **kwargs):
+        super(LoginForm, self).__init__(*args, **kwargs)
+        self.fields['password'].help_text = '<h6 style="color: maroon; font-weight: bold;">Your website will be hosted on display.ai/name/</h6> </p>'
