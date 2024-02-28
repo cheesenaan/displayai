@@ -124,11 +124,13 @@ STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATIC_ROOT_PROFILE_PICS = os.path.join(BASE_DIR, 'resume_app/static/profile_pictures')
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
+MEDIA_ROOT = os.path.join(BASE_DIR, 'resume_app/static')
+MEDIA_URL = '/profile_pictures/'
+
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 REDIRECT_DOMAIN = 'http://127.0.0.1:8000'
 
-STRIPE_API_KEY = ''
-OPENAI_API_KEY = ''

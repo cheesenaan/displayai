@@ -2,6 +2,7 @@ import os
 import datetime
 from io import BytesIO
 import time
+from unittest import loader
 from PIL import Image
 from django.shortcuts import render, redirect, get_object_or_404
 from django.core.exceptions import ValidationError
@@ -35,6 +36,23 @@ import stripe
 from django.http import JsonResponse
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
+import google.auth
+from google.auth.transport.requests import Request
+from google.auth.exceptions import RefreshError
+from googleapiclient.discovery import build
+from google.auth.transport.requests import AuthorizedSession
+from google.oauth2 import service_account
+from django.contrib import messages
+from django.shortcuts import redirect
+from requests.exceptions import Timeout
+import qrcode
+from io import BytesIO
+from django.http import HttpResponse
+from django.template import loader
+import base64
+from django.shortcuts import render, redirect
+from django.contrib import messages
+
 
 prices_dict = {
             'basic': 'price_1OibgCBFOKaICuMNShWHaBHo',
@@ -118,37 +136,16 @@ def form(request , account_id):
             UserProfile.objects.filter(account=account).delete()
 
         form = UserProfileForm(request.POST, request.FILES)
-
-
-        if form.is_valid():
-            # print("has_previous_user_profile is ", has_previous_user_profile)
-            user_profile = form.save(commit=False) 
-            user_profile.save()
-            if 'profile_image' in request.FILES:
-                profile_image = request.FILES['profile_image']
-                destination_path = os.path.join(settings.STATIC_ROOT_PROFILE_PICS, f"{str(user_profile.id)}.jpg")
-                with open(destination_path, 'wb+') as destination:
-                    for chunk in profile_image.chunks():
-                        destination.write(chunk)
-
-                # Update the UserProfile instance with the correct profile_image path
-                user_profile.profile_image = f"profile_pics/{str(user_profile.id)}.jpg"
-                #do below saves only if all data in form is entered by the user
-                # saves should only be done if all data is entered from the user
-                user_profile.account = account
-                user_profile.save()
-                account.user_profile = user_profile
-                delete_jpeg_files()
-        else:
-            print("Form is not valid!")
-            print("Errors:", form.errors)
-            print("Cleaned data:", form.cleaned_data)
-            print("Non-form errors:", form.non_field_errors())
+        user_profile = form.save(commit=False) 
+        user_profile.account = account
+        user_profile.website_link = settings.REDIRECT_DOMAIN + "/" + account.name
+        user_profile.website_link = user_profile.website_link.replace("http://", "")
+        user_profile.save()
 
         post_data = request.POST.dict()
         total_work_forms = int(post_data.get("work_experiences-TOTAL_FORMS", 0))
+        work_counter = 1
         if request.POST["hasWorkExperience"] == "yes":
-            work_counter = 1
             for i in range(total_work_forms):
                 prefix = f"work_experiences-{i}-"
                 company_name = post_data.get(prefix + "company_name")
@@ -165,7 +162,7 @@ def form(request , account_id):
                         bullet1 , bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
                         work_counter = work_counter + 1
                     else:
-                        bullet1 , bullet2, bullet3 = "upgrade plan to see optimized bullet" , "upgrade plan to see optimized bullet", "upgrade plan to see optimized bullet"
+                        bullet1 , bullet2, bullet3 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET", "UPGRADE PLAN FOR OPTIMIZED BULLET"
                     work_experience = WorkExperience.objects.create(
                         user_profile=user_profile,
                         company_name=company_name,
@@ -186,7 +183,6 @@ def form(request , account_id):
 
         total_project_forms = int(request.POST.get("projects-TOTAL_FORMS", 0))
         if request.POST.get("hasProjectExperience") == "yes":
-            project_counter = 1
             for i in range(total_project_forms):    
                 prefix = f"projects-{i}-"
                 project_name = request.POST.get(prefix + "project_name")
@@ -195,11 +191,11 @@ def form(request , account_id):
                 
 
                 if project_name and description and project_skills:
-                    if project_counter == 1 or account.tier != "free":
+                    if work_counter == 1 or account.tier != "free":
                         bullet1, bullet2 = openai_project(project_name, description)
-                        project_counter = project_counter + 1
+                        work_counter = work_counter + 1
                     else:
-                        bullet1, bullet2 = "upgrade plan to see optimized bullet" , "upgrade plan to see optimized bullet"
+                        bullet1, bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET"
                     project = Project.objects.create(
                         user_profile=user_profile,
                         project_name=project_name,
@@ -213,16 +209,25 @@ def form(request , account_id):
         else:
             print("There are no projects")
 
-        user_profile.resume_link = create_resume(user_profile)
-        print(user_profile.resume_link)
+        resume_link = create_resume(user_profile)
+        if resume_link == "TIME_OUT_ERROR_974":
+            messages.error(request, "TIME_OUT_ERROR_974. Your profile was created however your resume could not due to poor internet signal. Please click the Re-build with same data")
+            user_profile.save()
+            account.save()
+            user_plan.save()
+            return redirect('confirmation', account_id=account_id)
 
-        account.set_resume_link(user_profile.resume_link)
+        account.set_resume_link(resume_link)
+        account.user_profile = user_profile
+        user_profile.resume_link = resume_link
+        print(user_profile.resume_link)
         user_profile.save()
         user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
         user_plan.total_forms_filled = user_plan.total_forms_filled + 1
         account.save()
         user_plan.save()
         return redirect('confirmation', account_id=account_id)
+    
     if request.method == 'GET':
 
         form = UserProfileForm()
@@ -284,126 +289,262 @@ def confirmation(request, account_id):
                 'price_dictionary_value' : request.POST.get('selected_plan'),
             },
         )
-        print(checkout_session)
-        print()
-        print("stripe.checkout.Session.retrieve is ")
-        print(stripe.checkout.Session.retrieve(checkout_session.id))
+        # print(checkout_session)
+        # print()
+        # print("stripe.checkout.Session.retrieve is ")
+        # print(stripe.checkout.Session.retrieve(checkout_session.id))
         return redirect(checkout_session.url, code=303)
 
     if request.method == 'GET':
+        # Construct the URL
+        url = f"http://127.0.0.1:8000/{account.name}"
 
+        # Generate QR code
+        qr = qrcode.QRCode(
+            version=1,
+            error_correction=qrcode.constants.ERROR_CORRECT_L,
+            box_size=10,
+            border=4,
+        )
+        qr.add_data(url)
+        qr.make(fit=True)
+        qr_img = qr.make_image(fill_color="black", back_color="white")
+
+        # Save QR code image to BytesIO
+        qr_code_buffer = BytesIO()
+        qr_img.save(qr_code_buffer)
+        qr_code_buffer.seek(0)
+
+        # Encode the image as base64
+        qr_code_base64 = base64.b64encode(qr_code_buffer.getvalue()).decode("utf-8")
+
+        # Create context for rendering
         context = {
-                'account' : account,
-                'user_plan' : user_plan,
-                'user_profile': account.user_profile,
-                'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
-            }
+            'account': account,
+            'user_plan': user_plan,
+            'user_profile': account.user_profile,
+            'remaining': user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
+            'qr_code_image': qr_code_base64,
+        }
 
-        return render(request, 'confirmation.html', context)
+        # Render the template
+        template = loader.get_template('confirmation.html')
+        return HttpResponse(template.render(context, request))
+
+
+        
+
+    
+    # Render the template
+        template = loader.get_template('confirmation.html')
+        return HttpResponse(template.render(context, request))
 
 def payment_successful(request):
+    if request.method == 'GET':
+        stripe.api_key = settings.STRIPE_API_KEY
+        print("inside payment_successful")
+        session_id = request.GET.get('session_id', None)
+        session = stripe.checkout.Session.retrieve(session_id)
+        customer = stripe.Customer.retrieve(session.customer)
+        account_id = session.get('metadata', {}).get('account_id')
+        price_dictionary_value = session.get('metadata', {}).get('price_dictionary_value')
+        account = Account.objects.get(id=account_id)
+        user_plan = Plan.objects.get(account=account)
+        userprofile = UserProfile.objects.get(account=account)
+
+        stripe_payment_data = stripe.checkout.Session.retrieve(session_id)
+        subscription_value = stripe_payment_data["subscription"]
+
+        # Check if a Payment instance already exists
+        payment_instance, created = Payment.objects.get_or_create(
+            account=account,
+            subscription_id=subscription_value
+        )
+
+        if created:
+            # Payment instance already exists, update information
+            print("updating other fields in payment_instance")
+            payment_instance.update_subscription_info()
+            payment_instance.save()
+            account.tier = price_dictionary_value
+            user_plan.type = price_dictionary_value
+            user_plan.forms_filled_on_current_plan = 0
+            user_plan.set_subscription_ids(subscription_value)
+
+        account.save()
+        user_plan.save()
+        userprofile.save()
+
+        context = {
+            'account': account,
+            'user_profile': userprofile,
+            'user_plan': user_plan,
+            'remaining': user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
+        }
+
+        return render(request, 'payment_successful.html', context)
+    else:
+        # Redirect to prevent form resubmission
+        messages.error(request, "You cannot reload this page.")
+        return redirect('home')  # Redirect to your home page or any other appropriate
+
+def payment_cancelled(request):
+    print("payment_cancelled")
     stripe.api_key = settings.STRIPE_API_KEY
-    print("inside payment_successful")
-    session_id = request.GET.get('session_id', None)
-    session = stripe.checkout.Session.retrieve(session_id)
-    customer = stripe.Customer.retrieve(session.customer)
-    account_id = session.get('metadata', {}).get('account_id')
-    price_dictionary_value = session.get('metadata', {}).get('price_dictionary_value')
+    
+    return render(request, 'payment_cancelled.html')
+
+def account_payments(request, account_id):
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
     userprofile = UserProfile.objects.get(account = account)
 
-    account.tier = price_dictionary_value
-    user_plan.type = price_dictionary_value
-    user_plan.forms_filled_on_current_plan = 0
-    account.save()
-    user_plan.save()
+    payment_instances = Payment.objects.filter(account=account)
 
-    context = {
-                'account' : account,
-                'user_profile': userprofile,
-                'user_plan' : user_plan,
-                'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
-    }
+    # if request.method == 'POST':
 
-    return render(request, 'payment_successful.html' , context)
+    if request.method == 'GET':
+        context = {
+                    'account' : account,
+                    'user_profile': userprofile,
+                    'user_plan' : user_plan,
+                    'payment_instances' : payment_instances ,
+                    'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
+        }
 
-def payment_cancelled(request):
-    print("payment_cancelled")
-    stripe.api_key =settings.STRIPE_API_KEY
-    
-    return render(request, 'payment_cancelled.html')
+        return render(request, 'account_payments.html' , context)
+
+def cancel_subscription(request, account_id, subscription_id):
+    stripe.api_key = settings.STRIPE_API_KEY
+
+    try:
+        account = Account.objects.get(id=account_id)
+        payment_instance = Payment.objects.filter(account=account, subscription_id=subscription_id).get()
+        # if (account.password != password):
+        #     messages.error(request,"error : incorrect password")
+        #     return redirect('account_payments', account_id=account_id)
+    except Payment.DoesNotExist:
+        messages.error(request,"error : Payment instance not found")
+        return redirect('account_payments', account_id=account_id)
+
+    stripe.Subscription.modify(
+        subscription_id,
+        cancel_at_period_end=True,
+    )
+    payment_instance = Payment.objects.filter(account=account, subscription_id=subscription_id).get()
+
+    if payment_instance.subscription_status == "cancelled":
+        messages.error(
+            request,
+            f"Error: Subscription {subscription_id} for {payment_instance.product_name} "
+            f"with price {payment_instance.product_price} has already been cancelled."
+        )
+
+    else:
+        payment_instance.update_subscription_info()
+        payment_instance.subscription_status = "cancelled"
+        payment_instance.save()
+        messages.success(request, f"Subscription has been cancelled and your plan is still valid until {payment_instance.end_date}.")
+
+    return redirect('account_payments', account_id=account_id)
 
 def reload_resume_and_website_with_job_description(request: HttpRequest, account_id: int):
-    account = Account.objects.get(id=account_id)
-    user_plan = Plan.objects.get(account = account)
-    user_profile = UserProfile.objects.get(account = account)
-    job_description = request.GET.get('JOB_DESCRIPTION', '').strip()
+    try:
+        account = Account.objects.get(id=account_id)
+        user_plan = Plan.objects.get(account = account)
+        user_profile = UserProfile.objects.get(account = account)
+        job_description = request.GET.get('JOB_DESCRIPTION', '').strip()
 
-    for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
-        work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience_with_job_description(job_description , work_experience.company_name ,work_experience.job_title, work_experience.description)
-        work_experience.save()
+        work_counter = 1
+        for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
+            if work_counter == 1 or account.tier != "free":
+                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience(work_experience.company_name, work_experience.job_title, work_experience.description)
+                work_counter = work_counter + 1
+            else:
+                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET", "UPGRADE PLAN FOR OPTIMIZED BULLET"
+            work_experience.save()
 
+        for i, project in enumerate(user_profile.projects.all(), start=1):
+            if work_counter == 1 or account.tier != "free":
+                project.bullet1, project.bullet2 = openai_project(project.project_name, project.description)
+                work_counter = work_counter + 1
+            else:
+                project.bullet1, project.bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET"
+            project.save()
 
-    for i, project in enumerate(user_profile.projects.all(), start=1):
-        project.bullet1, project.bullet2 = openai_project_with_job_description(job_description, project.project_name, project.description)
-        project.save()
+        new_resume_link = create_resume(user_profile)
+        if new_resume_link == "TIME_OUT_ERROR_974":
+            messages.error(request, "TIME_OUT_ERROR_974. Could not build personal website and tailored resume due to poor internet. Please try again")
+            return redirect('confirmation', account_id=account_id)
 
-    new_resume_link = create_resume(user_profile)
-    user_profile.resume_link = new_resume_link
-    account.set_resume_link(new_resume_link)
-    print(user_profile.resume_link)
+        user_profile.resume_link = new_resume_link
+        account.set_resume_link(new_resume_link)
+        print(user_profile.resume_link)
 
-    user_profile.save()
-    user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
-    user_plan.total_forms_filled = user_plan.total_forms_filled + 1
-    user_plan.total_tailored_resumes = user_plan.total_tailored_resumes + 1
-    
-    account.save()
-    user_plan.save()
+        user_profile.save()
+        user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
+        user_plan.total_forms_filled = user_plan.total_forms_filled + 1
+        account.save()
+        user_plan.save()
+
+        messages.success(request, "personal website and tailored resume created")
+
+    except Timeout:
+        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+        return redirect('confirmation', account_id=account_id)
+    except RefreshError as e:
+        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+        return redirect('confirmation', account_id=account_id)
+    except Exception as e:
+        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+        return redirect('confirmation', account_id=account_id)
+
     return redirect('confirmation', account_id=account_id)
 
 def reload_resume_and_website(request, account_id):
-    account = Account.objects.get(id=account_id)
-    user_plan = Plan.objects.get(account = account)
-    user_profile = UserProfile.objects.get(account = account)
+    try:
+        account = Account.objects.get(id=account_id)
+        user_plan = Plan.objects.get(account=account)
+        user_profile = UserProfile.objects.get(account=account)
+        
+        work_counter = 1
+        for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
+            if work_counter == 1 or account.tier != "free":
+                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience(work_experience.company_name, work_experience.job_title, work_experience.description)
+                work_counter = work_counter + 1
+            else:
+                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = "upgrade plan to see optimized bullet" , "upgrade plan to see optimized bullet", "upgrade plan to see optimized bullet"
+            work_experience.save()
 
-    for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
-        work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience(work_experience.company_name ,work_experience.job_title, work_experience.description)
-        work_experience.save()
+        for i, project in enumerate(user_profile.projects.all(), start=1):
+            if work_counter == 1 or account.tier != "free":
+                project.bullet1, project.bullet2 = openai_project(project.project_name, project.description)
+                work_counter = work_counter + 1
+            else:
+                project.bullet1, project.bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET"
+            project.save()
 
-    for i, project in enumerate(user_profile.projects.all(), start=1):
-        project.bullet1, project.bullet2 = openai_project(project.project_name, project.description)
-        project.save()
+        new_resume_link = create_resume(user_profile)
+        if new_resume_link == "TIME_OUT_ERROR_974":
+            messages.error(request, "TIME_OUT_ERROR_974. Could not re-build personal website and reusme due to poor internet. Please try again")
+            return redirect('confirmation', account_id=account_id)
 
-    new_resume_link = create_resume(user_profile)
-    user_profile.resume_link = new_resume_link
-    account.set_resume_link(new_resume_link)
-    print(user_profile.resume_link)
+        user_profile.resume_link = new_resume_link
+        account.set_resume_link(new_resume_link)
+        print(user_profile.resume_link)
 
-    user_profile.save()
-    user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
-    user_plan.total_forms_filled = user_plan.total_forms_filled + 1
-    account.save()
-    user_plan.save()
+        user_profile.save()
+        user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
+        user_plan.total_forms_filled = user_plan.total_forms_filled + 1
+        account.save()
+        user_plan.save()
+
+        messages.success(request, "Using same profile data, resume and personal data has been re-built")
+
+    except Timeout:
+        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+
     return redirect('confirmation', account_id=account_id)
-
-def delete_jpeg_files():
-    # Get the current directory
-    current_directory = os.getcwd()
-
-    # List all files in the current directory
-    files = os.listdir(current_directory)
-
-    # Iterate through files and delete JPEG files
-    for file in files:
-        if file.lower().endswith(".jpg") or file.lower().endswith(".jpeg"):
-            file_path = os.path.join(current_directory, file)
-            try:
-                os.remove(file_path)
-                print(f"Deleted: {file_path}")
-            except OSError as e:
-                print(f"Error deleting {file_path}: {e}")
 
 def update_resume(user_profile, DOCUMENT_ID):
     
@@ -427,6 +568,7 @@ def update_resume(user_profile, DOCUMENT_ID):
             'technologies': user_profile.technical_skills,
             'leadership': user_profile.leadership,
             'degree_type' : user_profile.degree_type,
+            'website_link': user_profile.website_link ,
         }
 
         # Work experiences
@@ -581,298 +723,323 @@ def update_resume(user_profile, DOCUMENT_ID):
 
 def create_resume(user_profile):
     
-    # Dictionary to store the placeholder replacements
-    placeholder_replacements = {
-            'name': f"{user_profile.first_name.upper()} {user_profile.last_name.upper()}",
-            'email': user_profile.email,
-            'phone': user_profile.phone,
-            'city': user_profile.city,
-            'state': user_profile.state.upper(),
-            'linkedin_link': user_profile.linkedin_link,
-            'resume_link': user_profile.resume_link,
-            'github_link': user_profile.github_link,
-            'university': user_profile.institution,
-            'university start date': user_profile.start_date.strftime('%b %Y'),
-            'university end date' : user_profile.end_date.strftime('%b %Y'),
-            'major': user_profile.major,
-            'minor': user_profile.minor,
-            'spoken_languages': user_profile.spoken_languages,
-            'languages': user_profile.programming_languages,
-            'technologies': user_profile.technical_skills,
-            'leadership': user_profile.leadership,
-            'degree_type' : user_profile.degree_type,
-        }
-
-        # Work experiences
-    for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
-        placeholder_replacements.update({
-            f'experience{i}': work_experience.company_name.title(),
-            f'title{i}': work_experience.job_title.title(),
-            f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
-            f'experience{i} end date': work_experience.end_date.strftime('%b %Y'),
-            f'experience{i} location': work_experience.city.strip().title() + ' , ' + work_experience.state.strip().upper(),
-            f'experience{i} bullet1': work_experience.bullet1,
-            f'experience{i} bullet2': work_experience.bullet2,
-            f'experience{i} bullet3': work_experience.bullet3,
-        })
-    for i, project in enumerate(user_profile.projects.all(), start=1):
-        placeholder_replacements.update({
-            f'project{i}': project.project_name.title(),
-            f'skills{i}': project.project_skills,
-            f'project{i} bullet1': project.bullet1,
-            f'project{i} bullet2': project.bullet2,
-        })
-
-    # Path to your service account credentials JSON file
-    SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
-    #SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
-
-    # ID of the Google Doc you want to modify
-    DOCUMENT_ID = '1PVKqAkOTjdorBmlJOIGHYhIjYuBPxuPZzKeN4TUQZNE'
-    # Folder ID where the copy will be placed
-    FOLDER_ID = '1aGcF78a65Nus-K9kCv8P7NzMBSZjJnNY'
-
-    # Authenticate and create the Google Drive API service
-    credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/documents', 'https://www.googleapis.com/auth/drive'])
-    service = build('drive', 'v3', credentials=credentials)
-
-    # Create a copy of the document
-    copy_metadata = {
-        'name': user_profile.first_name + ' - Resume',
-        'parents': [FOLDER_ID]
-    }
-    copy_response = service.files().copy(fileId=DOCUMENT_ID,  body=copy_metadata).execute()
-    copy_id = copy_response['id']
-
-    print(f"Copy created with ID: {copy_id}")
-
-    DOCUMENT_ID = str(copy_id)
-
-    # Authenticate and create the Google Docs API service
-    credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/documents'])
-    service = build('docs', 'v1', credentials=credentials)
-
-    # Get the content of the Google Doc
-    doc = service.documents().get(documentId=DOCUMENT_ID).execute()
-
-    # Process each content element and replace placeholders
-    for content in doc['body']['content']:
-        if 'paragraph' in content:
-            elements = content['paragraph']['elements']
-            for element in elements:
-                if 'textRun' in element:
-                    text_run = element['textRun']
-                    if 'content' in text_run:
-                        content_text = text_run['content']
-                        for placeholder, replacement in placeholder_replacements.items():
-                            if placeholder in content_text:
-                                content_text = content_text.replace(placeholder, replacement)
-                                text_run['content'] = content_text
-
-    # Create the requests list for batch updating
-    requests = []
-    for placeholder, replacement in placeholder_replacements.items():
-        requests.append({
-            'replaceAllText': {
-                'containsText': {
-                    'text': '{{' + placeholder + '}}',
-                    'matchCase': False
-                },
-                'replaceText': replacement
+    try:
+        # Dictionary to store the placeholder replacements
+        placeholder_replacements = {
+                'name': f"{user_profile.first_name.upper()} {user_profile.last_name.upper()}",
+                'email': user_profile.email,
+                'phone': user_profile.phone,
+                'city': user_profile.city,
+                'state': user_profile.state.upper(),
+                'linkedin_link': user_profile.linkedin_link,
+                'resume_link': user_profile.resume_link,
+                'github_link': user_profile.github_link,
+                'university': user_profile.institution,
+                'university start date': user_profile.start_date.strftime('%b %Y'),
+                'university end date' : user_profile.end_date.strftime('%b %Y'),
+                'major': user_profile.major,
+                'minor': user_profile.minor,
+                'spoken_languages': user_profile.spoken_languages,
+                'languages': user_profile.programming_languages,
+                'technologies': user_profile.technical_skills,
+                'leadership': user_profile.leadership,
+                'degree_type' : user_profile.degree_type,
+                'website_link': user_profile.website_link ,
             }
-        })
 
-    # Execute the batch update requests
-    result = service.documents().batchUpdate(documentId=DOCUMENT_ID,  body={'requests': requests}).execute()
+            # Work experiences
+        for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
+            placeholder_replacements.update({
+                f'experience{i}': work_experience.company_name.title(),
+                f'title{i}': work_experience.job_title.title(),
+                f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
+                f'experience{i} end date': work_experience.end_date.strftime('%b %Y'),
+                f'experience{i} location': work_experience.city.strip().title() + ' , ' + work_experience.state.strip().upper(),
+                f'experience{i} bullet1': work_experience.bullet1,
+                f'experience{i} bullet2': work_experience.bullet2,
+                f'experience{i} bullet3': work_experience.bullet3,
+            })
+        for i, project in enumerate(user_profile.projects.all(), start=1):
+            placeholder_replacements.update({
+                f'project{i}': project.project_name.title(),
+                f'skills{i}': project.project_skills,
+                f'project{i} bullet1': project.bullet1,
+                f'project{i} bullet2': project.bullet2,
+            })
 
-    print('Placeholders replaced successfully in the Google Doc')
+        # Path to your service account credentials JSON file
+        SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
+        #SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 
-    # Get the content of the Google Doc
-    doc = service.documents().get(documentId=DOCUMENT_ID).execute()
-    body_content = doc['body']['content']
+        # ID of the Google Doc you want to modify
+        DOCUMENT_ID = '1PVKqAkOTjdorBmlJOIGHYhIjYuBPxuPZzKeN4TUQZNE'
+        # Folder ID where the copy will be placed
+        FOLDER_ID = '1aGcF78a65Nus-K9kCv8P7NzMBSZjJnNY'
 
-    # Iterate over the paragraphs in reverse order
-    requests = []
-    for i in range(len(body_content) - 1, -1, -1):
-        paragraph = body_content[i]
-        if 'paragraph' in paragraph:
-            elements = paragraph['paragraph']['elements']
-            contains_template_text = any('{{' in element['textRun']['content'] and '}}' in element['textRun']['content'] for element in elements)
-            if contains_template_text:
-                # Remove the paragraph if it contains {{}} template text
-                requests.append({
-                    'deleteContentRange': {
-                        'range': {
-                            'startIndex': paragraph['startIndex'],
-                            'endIndex': paragraph['endIndex']
-                        }
-                    }
-                })
+        # Authenticate and create the Google Drive API service
+        credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/documents', 'https://www.googleapis.com/auth/drive'])
+        service = build('drive', 'v3', credentials=credentials)
 
-    # Execute the batch update requests to remove paragraphs with unfilled {{}} template text
-    if requests:
-        service.documents().batchUpdate(documentId=DOCUMENT_ID, body={'requests': requests}).execute()
-        print("Lines with unfilled {{}} template text removed successfully!")
+        # Create a copy of the document
+        copy_metadata = {
+            'name': user_profile.first_name + ' - Resume',
+            'parents': [FOLDER_ID]
+        }
+        copy_response = service.files().copy(fileId=DOCUMENT_ID,  body=copy_metadata).execute()
+        copy_id = copy_response['id']
 
-    def remove_blank_lines(DOCUMENT_ID):
+        print(f"Copy created with ID: {copy_id}")
+
+        DOCUMENT_ID = str(copy_id)
+
+        # Authenticate and create the Google Docs API service
+        credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/documents'])
+        service = build('docs', 'v1', credentials=credentials)
+
         # Get the content of the Google Doc
         doc = service.documents().get(documentId=DOCUMENT_ID).execute()
-        body = doc['body']
 
-        # Lists to store delete requests
-        delete_start_indices = []
-        delete_end_indices = []
-        delete_rows = []
+        # Process each content element and replace placeholders
+        for content in doc['body']['content']:
+            if 'paragraph' in content:
+                elements = content['paragraph']['elements']
+                for element in elements:
+                    if 'textRun' in element:
+                        text_run = element['textRun']
+                        if 'content' in text_run:
+                            content_text = text_run['content']
+                            for placeholder, replacement in placeholder_replacements.items():
+                                if placeholder in content_text:
+                                    content_text = content_text.replace(placeholder, replacement)
+                                    text_run['content'] = content_text
 
-        # Iterate through all elements in reverse order
-        total_elements = len(body['content'])
-        i = total_elements - 1
-        while i >= 0:
-            element = body['content'][i]
+        # Create the requests list for batch updating
+        requests = []
+        for placeholder, replacement in placeholder_replacements.items():
+            requests.append({
+                'replaceAllText': {
+                    'containsText': {
+                        'text': '{{' + placeholder + '}}',
+                        'matchCase': False
+                    },
+                    'replaceText': replacement
+                }
+            })
 
-            # Check if the element is a paragraph
-            if 'paragraph' in element:
-                paragraph = element['paragraph']
-                text = paragraph['elements'][0]['textRun']['content'].strip()
+        # Execute the batch update requests
+        result = service.documents().batchUpdate(documentId=DOCUMENT_ID,  body={'requests': requests}).execute()
 
-                # Check if the current element is empty and the previous element exists and is also empty
-                if i != total_elements - 1 and len(text) == 0 and 'paragraph' in body['content'][i - 1] and \
-                        body['content'][i - 1]['paragraph']['elements'][0]['textRun']['content'].strip() == '':
-                    # Store the character index where the row starts
-                    start_index = paragraph['elements'][0]['startIndex']
-                    end_index = paragraph['elements'][0]['endIndex']
-                    delete_start_indices.append(start_index)
-                    delete_end_indices.append(end_index)
-                    delete_rows.append(i)
+        print('Placeholders replaced successfully in the Google Doc')
 
-            i -= 1
+        # Get the content of the Google Doc
+        doc = service.documents().get(documentId=DOCUMENT_ID).execute()
+        body_content = doc['body']['content']
 
-        # Create a list of delete requests based on the stored start and end indices
-        requests = [
-            {
-                'deleteContentRange': {
-                    'range': {
-                        'startIndex': start_index,
-                        'endIndex': end_index,
+        # Iterate over the paragraphs in reverse order
+        requests = []
+        for i in range(len(body_content) - 1, -1, -1):
+            paragraph = body_content[i]
+            if 'paragraph' in paragraph:
+                elements = paragraph['paragraph']['elements']
+                contains_template_text = any('{{' in element['textRun']['content'] and '}}' in element['textRun']['content'] for element in elements)
+                if contains_template_text:
+                    # Remove the paragraph if it contains {{}} template text
+                    requests.append({
+                        'deleteContentRange': {
+                            'range': {
+                                'startIndex': paragraph['startIndex'],
+                                'endIndex': paragraph['endIndex']
+                            }
+                        }
+                    })
+
+        # Execute the batch update requests to remove paragraphs with unfilled {{}} template text
+        if requests:
+            service.documents().batchUpdate(documentId=DOCUMENT_ID, body={'requests': requests}).execute()
+            print("Lines with unfilled {{}} template text removed successfully!")
+
+        def remove_blank_lines(DOCUMENT_ID):
+            # Get the content of the Google Doc
+            doc = service.documents().get(documentId=DOCUMENT_ID).execute()
+            body = doc['body']
+
+            # Lists to store delete requests
+            delete_start_indices = []
+            delete_end_indices = []
+            delete_rows = []
+
+            # Iterate through all elements in reverse order
+            total_elements = len(body['content'])
+            i = total_elements - 1
+            while i >= 0:
+                element = body['content'][i]
+
+                # Check if the element is a paragraph
+                if 'paragraph' in element:
+                    paragraph = element['paragraph']
+                    text = paragraph['elements'][0]['textRun']['content'].strip()
+
+                    # Check if the current element is empty and the previous element exists and is also empty
+                    if i != total_elements - 1 and len(text) == 0 and 'paragraph' in body['content'][i - 1] and \
+                            body['content'][i - 1]['paragraph']['elements'][0]['textRun']['content'].strip() == '':
+                        # Store the character index where the row starts
+                        start_index = paragraph['elements'][0]['startIndex']
+                        end_index = paragraph['elements'][0]['endIndex']
+                        delete_start_indices.append(start_index)
+                        delete_end_indices.append(end_index)
+                        delete_rows.append(i)
+
+                i -= 1
+
+            # Create a list of delete requests based on the stored start and end indices
+            requests = [
+                {
+                    'deleteContentRange': {
+                        'range': {
+                            'startIndex': start_index,
+                            'endIndex': end_index,
+                        }
                     }
                 }
-            }
-            for start_index, end_index in zip(delete_start_indices, delete_end_indices)
-        ]
+                for start_index, end_index in zip(delete_start_indices, delete_end_indices)
+            ]
 
-        # Execute the batch update with delete requests
-        result = service.documents().batchUpdate(documentId=DOCUMENT_ID, body={'requests': requests}).execute()
-        return
-    remove_blank_lines(DOCUMENT_ID)
+            # Execute the batch update with delete requests
+            result = service.documents().batchUpdate(documentId=DOCUMENT_ID, body={'requests': requests}).execute()
+            return
+        remove_blank_lines(DOCUMENT_ID)
 
-    # Get the link of the Google Doc
-    resume_link = f"https://docs.google.com/document/d/{DOCUMENT_ID}"
-    print("Link to the Google Doc:", resume_link)
-    return resume_link
+        # Get the link of the Google Doc
+        resume_link = f"https://docs.google.com/document/d/{DOCUMENT_ID}"
+        print("Link to the Google Doc:", resume_link)
+        return resume_link
+    except RefreshError as e:
+        print(f"RefreshError: {e}")
+        return "TIME_OUT_ERROR_974"
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return "TIME_OUT_ERROR_974"
 
 def create_cover_letter_google_doc(data):
-    # Path to your service account credentials JSON file
-    SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
-    FOLDER_ID = '1aGcF78a65Nus-K9kCv8P7NzMBSZjJnNY'
 
-    # Authenticate and create the Google Drive API service
-    credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/drive.file'])
-    drive_service = build('drive', 'v3', credentials=credentials)
+    try:
+        # Path to your service account credentials JSON file
+        SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
+        FOLDER_ID = '1aGcF78a65Nus-K9kCv8P7NzMBSZjJnNY'
 
-    # Create a new Google Doc
-    doc_service = build('docs', 'v1', credentials=credentials)
-    document = doc_service.documents().create().execute()
-    document_id = document['documentId']
+        # Authenticate and create the Google Drive API service
+        credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/drive.file'])
+        drive_service = build('drive', 'v3', credentials=credentials)
 
-    # Insert text into the Google Doc
-    requests = [
-        {
-            'insertText': {
-                'text': data,
-                'location': {
-                    'index': 1,
+        # Create a new Google Doc
+        doc_service = build('docs', 'v1', credentials=credentials)
+        document = doc_service.documents().create().execute()
+        document_id = document['documentId']
+
+        # Insert text into the Google Doc
+        requests = [
+            {
+                'insertText': {
+                    'text': data,
+                    'location': {
+                        'index': 1,
+                    },
                 },
             },
-        },
-    ]
-    doc_service.documents().batchUpdate(documentId=document_id, body={'requests': requests}).execute()
+        ]
+        doc_service.documents().batchUpdate(documentId=document_id, body={'requests': requests}).execute()
 
-    # Share the Google Doc
-    drive_service.permissions().create(
-        fileId=document_id,
-        body={
-            'type': 'anyone',
-            'role': 'writer',
-        }
-    ).execute()
+        # Share the Google Doc
+        drive_service.permissions().create(
+            fileId=document_id,
+            body={
+                'type': 'anyone',
+                'role': 'writer',
+            }
+        ).execute()
 
-    # Get the link to the shared Google Doc
-    document_url = f'https://docs.google.com/document/d/{document_id}/edit'
+        # Get the link to the shared Google Doc
+        document_url = f'https://docs.google.com/document/d/{document_id}/edit'
 
-    return document_url
+        return document_url
+    except RefreshError as e:
+        print(f"RefreshError: {e}")
+        return "TIME_OUT_ERROR_974"
+    except Exception as e:
+        print(f"An unexpected error occurred: {e}")
+        return "TIME_OUT_ERROR_974"
 
 def build_cover_letter(request: HttpRequest, account_id: int):
 
-    account = Account.objects.get(id=account_id)
-    user_plan = Plan.objects.get(account = account)
-    user_profile = UserProfile.objects.get(account = account)
-    job_description = request.GET.get('JOB_DESCRIPTION', '').strip()
-    work_experiences = []
-    projects = []
+    try:
+        account = Account.objects.get(id=account_id)
+        user_plan = Plan.objects.get(account = account)
+        user_profile = UserProfile.objects.get(account = account)
+        job_description = request.GET.get('JOB_DESCRIPTION', '').strip()
+        work_experiences = []
+        projects = []
 
-    for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
-        work_experiences.append(work_experience)
+        for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
+            work_experiences.append(work_experience)
 
-    for i, project in enumerate(user_profile.projects.all(), start=1):
-        projects.append(project)
+        for i, project in enumerate(user_profile.projects.all(), start=1):
+            projects.append(project)
 
 
-    openai.api_key = settings.OPENAI_API_KEY
-    current_date = time.strftime("%Y-%m-%d")
+        openai.api_key = settings.OPENAI_API_KEY
+        current_date = time.strftime("%Y-%m-%d")
 
-    prompt = f"""
-    Using my work experinces and projects, build a cover letter. Do not add any placeholders
-    name : {user_profile.first_name} + {user_profile.last_name}
-    phone : {user_profile.phone}
-    email : {user_profile.email}
-    address : {user_profile.city} + {user_profile.state}
-    institution : {user_profile.institution}
-    education : {user_profile.major} + {user_profile.minor}
-    skills : {user_profile.programming_languages}  + {user_profile.technical_skills}
-    date : {current_date}
-    work_experiences : {work_experiences}
-    projects ; {projects}
-    job description : {job_description}
-    """
+        prompt = f"""
+        Using my work experinces and projects, build a cover letter. Do not add any placeholders
+        name : {user_profile.first_name} + {user_profile.last_name}
+        phone : {user_profile.phone}
+        email : {user_profile.email}
+        address : {user_profile.city} + {user_profile.state}
+        institution : {user_profile.institution}
+        education : {user_profile.major} + {user_profile.minor}
+        skills : {user_profile.programming_languages}  + {user_profile.technical_skills}
+        date : {current_date}
+        work_experiences : {work_experiences}
+        projects ; {projects}
+        job description : {job_description}
+        'website_link': {user_profile.website_link} ,
+        """
 
-    # Make a request to OpenAI API using the chat/completions endpoint
-    response = openai.ChatCompletion.create(
-        model="gpt-3.5-turbo",
-        messages=[
-            {"role": "system", "content": "You are a helpful assistant."},
-            {"role": "user", "content": prompt}
-        ],
-        max_tokens=900,  # Adjust as needed
-        temperature=0.7  # Adjust as needed
-    )
+        # Make a request to OpenAI API using the chat/completions endpoint
+        response = openai.ChatCompletion.create(
+            model="gpt-3.5-turbo",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": prompt}
+            ],
+            max_tokens=900,  # Adjust as needed
+            temperature=0.7  # Adjust as needed
+        )
 
-    # Extract and print the assistant's reply
-    reply = response['choices'][0]['message']['content']
-    print(reply)
+        # Extract and print the assistant's reply
+        reply = response['choices'][0]['message']['content']
+        print(reply)
 
-    cover_letter_link = create_cover_letter_google_doc(reply)
+        cover_letter_link = create_cover_letter_google_doc(reply)
+        if cover_letter_link == "TIME_OUT_ERROR_974":
+            messages.error(request, "TIME_OUT_ERROR_974. Could not build cover letter due to poor internet. Please try again")
+            return redirect('confirmation', account_id=account_id)
 
-    user_profile.resume_link = cover_letter_link
-    account.set_resume_link(cover_letter_link)
-    print(user_profile.resume_link)
+        user_profile.resume_link = cover_letter_link
+        account.set_resume_link(cover_letter_link)
+        print(user_profile.resume_link)
 
-    user_profile.save()
-    user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
-    user_plan.total_forms_filled = user_plan.total_forms_filled + 1
-    user_plan.total_cover_letters = user_plan.total_cover_letters + 1
-    
-    account.save()
-    user_plan.save()
+        user_profile.save()
+        user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
+        user_plan.total_forms_filled = user_plan.total_forms_filled + 1
+        user_plan.total_cover_letters = user_plan.total_cover_letters + 1
+        
+        account.save()
+        user_plan.save()
+
+        messages.success(request, "cover letter built successfully")
+    except Timeout:
+        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
 
     return redirect('confirmation', account_id=account_id)
 

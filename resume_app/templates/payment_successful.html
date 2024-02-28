@@ -207,14 +207,13 @@
         </tr>
     </table>
 
-    <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button">
+    <a href="{% url 'confirmation' account_id=account.id %}" class="reload_resume_and_website-button">
         <button type="button"> Build your resume(s) and webite(s) </button>
     </a>
 
-    <a href="" class="reload_resume_and_website-button">
-        <button type="button"> Go to your account </button>
+    <a href="{% url 'account_payments' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button"> Go to your account subscription(s) </button>
     </a>
-
 
 
 {% endblock %}

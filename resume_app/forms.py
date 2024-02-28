@@ -74,7 +74,7 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['first_name', 'last_name', 'phone', 'email', 'city', 'state', 'linkedin_link', 'resume_link', 'github_link', 'profile_image', 'institution', 'degree_type', 'major', 'minor', 'start_date', 'end_date', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership']
+        fields = ['first_name', 'last_name', 'phone', 'email', 'city', 'state', 'linkedin_link', 'github_link', 'profile_image', 'institution', 'degree_type', 'major', 'minor', 'start_date', 'end_date', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership']
         widgets = {
             'first_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
             'last_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
@@ -101,7 +101,6 @@ class UserProfileForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
         # self.fields['leadership'].help_text = '<h6 style="color: maroon; font-weight: bold;">Your website will be hosted on displayai.pythonanywhere.com/url-name/</h6> </p>'
-        self.fields['linkedin_link'].help_text = '<h6 style="color: maroon; font-weight: bold;">Leave resume link blank and we will create one for you !</h6> </p>'
         
     def clean(self):
         cleaned_data = super().clean()
@@ -109,8 +108,6 @@ class UserProfileForm(forms.ModelForm):
             if field_name in cleaned_data:
                 cleaned_data[field_name] = cleaned_data[field_name].title()
         return cleaned_data
-    
-
 
 from django import forms
 from .models import Account

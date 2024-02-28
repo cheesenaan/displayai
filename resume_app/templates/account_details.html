@@ -1,9 +1,10 @@
 {% extends 'index.html' %}
 {% block content %}
+
 <br> <br> <br> <br> <br> 
 
 
-<header id="header" class="fixed-top d-flex align-items-center">
+<!-- <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex justify-content-between">
 
       <div class="logo">
@@ -12,17 +13,19 @@
 
       <nav id="navbar" class="navbar">
         <ul>
-            <li><a class="nav-link scrollto active" href="{% url 'home'  %}">Home</a></li>
-          <li><a class="nav-link scrollto active" href=" {% url 'confirmation' account_id=account.id %} ">   Build</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'home'  %}">Home</a></li>
+          <li><a class="nav-link scrollto active" href="{% url 'confirmation' account_id=account.id %}">Build</a></li>
           <li><a class="nav-link scrollto active" href="{% url 'logout'  %}">Log Out</a></li>
-
-          
         </ul>
         <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
+      </nav>
       
     </div>
-</header>
+</header> -->
+
+
+
+
 
 
 <style>
@@ -79,27 +82,18 @@
     <p><strong>Account ID:</strong> {{ account.id }}</p>
     <p><strong>Account Name:</strong> {{ account.name }}</p>
     <p><strong>Account Password:</strong> {{ account.password }}</p>
-    
-    <p><strong>All resume links:</strong> 
-    {% if account.resume_links %}
-    <ol>
-        {% for link in account.get_resume_links %}
-        <li><a href="{{ link }}" target="_blank">{{ link }}</a></li>
-        {% endfor %}
-    </ol>
-    {% else %}
-    <p>No resume links available.</p>
-    {% endif %}
 
     <a href="{% url 'confirmation' account_id=account.id %}" class="reload_resume_and_website-button">
-        <button type="button"> Go back and build resume(s) and website(s) </button>
-    </a>
-
-    <a href="{% url 'form' account_id=account.id %}" class="reload_resume_and_website-button">
-        <button type="button"> Edit my profile data </button>
+        <button type="button"> Build Page </button>
     </a>
 
     
+
+    <a href="{% url 'account_payments' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button">  SUBSCRIPTION(S) </button>
+    </a>
+
+
     <table class="user-info-table">
         <tr>
             <td>Your Tier:</td>
@@ -128,10 +122,27 @@
 
 
     </table>
+    
+    <p><strong>All resume links:</strong> 
+    {% if account.resume_links %}
+    <ol>
+        {% for link in account.get_resume_links %}
+        <li><a href="{{ link }}" target="_blank">{{ link }}</a></li>
+        {% endfor %}
+    </ol>
+    {% else %}
+    <p>No resume links available.</p>
+    {% endif %}
+
+    
+    
 
 
     <h2>User Profile</h2>
-    <p><strong>Work Experience:</strong></p>
+    <a href="{% url 'form' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button"> Edit my profile data </button>
+    </a>
+    
     <ul>
         <li><strong>First Name:</strong> {{ user_profile.first_name }}</li>
         <li><strong>Last Name:</strong> {{ user_profile.last_name }}</li>
@@ -142,7 +153,15 @@
         <li><strong>LinkedIn Link:</strong> {{ user_profile.linkedin_link }}</li>
         <li><strong>Resume Link:</strong> {{ user_profile.resume_link }}</li>
         <li><strong>GitHub Link:</strong> {{ user_profile.github_link }}</li>
-        <li><strong>Profile Image:</strong> {{ user_profile.profile_image.url }}</li>
+        
+        {% if user_profile.profile_image %}
+            <li><strong>Profile Image:</strong> <img src="{{ user_profile.profile_image.url }}" alt="Profile Image"></li>
+        {% else %}
+        <li><strong>Profile Image:</strong> No photo uploaded </li>
+        {% endif %}
+
+
+
         <li><strong>Institution:</strong> {{ user_profile.institution }}</li>
         <li><strong>Major:</strong> {{ user_profile.major }}</li>
         <li><strong>Minor:</strong> {{ user_profile.minor }}</li>
@@ -159,24 +178,29 @@
     
     <h2>Work Experiences</h2>
     <ul>
-        {% for work_experience in user_profile.work_experiences.all %}
-            <li>
-                <strong>{{ work_experience.company_name }} - {{ work_experience.job_title }}</strong><br>
-                <strong>Start Date:</strong> {{ work_experience.start_date }}<br>
-                <strong>End Date:</strong> {{ work_experience.end_date }}<br>
-                <strong>City:</strong> {{ work_experience.city }}<br>
-                <strong>State:</strong> {{ work_experience.state }}<br>
-                <strong>Description:</strong> {{ work_experience.description }}<br>
-                <strong>Bullet 1:</strong> {{ work_experience.bullet1 }}<br>
-                <strong>Bullet 2:</strong> {{ work_experience.bullet2 }}<br>
-                <strong>Bullet 3:</strong> {{ work_experience.bullet3 }}
-            </li>
-        {% endfor %}
+        {% if user_profile.work_experience %}
+            {% for work_experience in user_profile.work_experiences.all %}
+                <li>
+                    <strong>{{ work_experience.company_name }} - {{ work_experience.job_title }}</strong><br>
+                    <strong>Start Date:</strong> {{ work_experience.start_date }}<br>
+                    <strong>End Date:</strong> {{ work_experience.end_date }}<br>
+                    <strong>City:</strong> {{ work_experience.city }}<br>
+                    <strong>State:</strong> {{ work_experience.state }}<br>
+                    <strong>Description:</strong> {{ work_experience.description }}<br>
+                    <strong>Bullet 1:</strong> {{ work_experience.bullet1 }}<br>
+                    <strong>Bullet 2:</strong> {{ work_experience.bullet2 }}<br>
+                    <strong>Bullet 3:</strong> {{ work_experience.bullet3 }}
+                </li>
+            {% endfor %}
+            {% else %}
+            No work experiences added
+            {% endif %}
     </ul>
 
 
     <h2>Projects</h2>
     <ul>
+        {% if user_profile.project %}
         {% for project in user_profile.projects.all %}
             <li>
                 <strong>{{ project.project_name }}</strong><br>
@@ -186,6 +210,9 @@
                 <strong>Bullet 2:</strong> {{ project.bullet2 }}
             </li>
         {% endfor %}
+        {% else %}
+        No projects added
+        {% endif %}
     </ul>
     
 </div>

@@ -70,18 +70,16 @@
         {% endif %}
 
 
-
-
         <!-- Navigation-->
         <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
             <a class="navbar-brand js-scroll-trigger" href="#page-top">
                 <span class="d-block d-lg-none">{{user_profile.first_name}} {{user_profile.last_name}}</span>
                 <span class="d-none d-lg-block">
                     {% if user_profile.profile_image %}
-                        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'profile_pictures/' %}{{ user_profile.id }}.jpg" alt="Profile Image" />
+                        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'profile_pictures/' %}{{ account.id }}.jpg" alt="Profile Image" />
                     {% else %}
                         <!-- Provide a default image or alternative content if no image is uploaded -->
-                        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="" alt="No Image" />
+                        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'profile_pictures/0.jpg' %}" alt="Profile Image" />
                     {% endif %}
 
                 </span>
@@ -110,7 +108,7 @@
             <!-- About-->
             <section class="resume-section" id="about">
                 <div class="resume-section-content">
-                    <a href"" class="btn btn-primary mb-3">Edit</a>
+                    <!-- <a href"" class="btn btn-primary mb-3">Edit</a> -->
                     <h1 class="mb-0">
                         {{user_profile.first_name}}
                         <span class="text-primary">{{user_profile.last_name}}</span>
@@ -120,10 +118,10 @@
                         <a href="mailto:{{user_profile.EMAIL}}">{{user_profile.email}} </a>
                     </div>
 
-                    <span class="d-inline-block mr-3">
+                    <!-- <span class="d-inline-block mr-3">
                         <img class="img-fluid img-profile rounded-circle" src="{% static 'img/rutgers.jpeg' %}" alt="Rutgers University" style="width: 100px; height: 100px;" />
                     </span>
-                    
+                     -->
                     <p> {{ user_profile.major }} <b> @{{ user_profile.institution }} </b> <br> </p>
                       
 

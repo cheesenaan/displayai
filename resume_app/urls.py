@@ -31,6 +31,8 @@ urlpatterns = [
     path('<int:account_id>/reload_resume_and_website', reload_resume_and_website, name='reload_resume_and_website'),
     path('<int:account_id>/reload_resume_and_website_with_job_description', reload_resume_and_website_with_job_description, name='reload_resume_and_website_with_job_description'),
     path('<int:account_id>/build_cover_letter', build_cover_letter, name='build_cover_letter'),
+    path('<int:account_id>/account_payments', account_payments, name='account_payments'),
+    path('cancel_subscription/<int:account_id>/<str:subscription_id>/', cancel_subscription, name='cancel_subscription'),
     
     # path('payment_basic', payment_basic, name='payment_basic'),
     # path('product_page', product_page, name='product_page'),
@@ -42,3 +44,4 @@ urlpatterns = [
     path('login/check_account_name/', CheckAccountNameView.as_view(), name='CheckAccountNameView'),
 
 ]
+

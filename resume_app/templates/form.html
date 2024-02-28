@@ -29,6 +29,39 @@
 
 
 <style>
+
+#dataForm table {
+    width: 100%;
+    border-collapse: none;
+}
+
+#dataForm td {
+    padding: 10px;
+    border: 0px;
+}
+
+#dataForm .form-row td {
+    text-align: left;
+}
+
+#dataForm td:first-child,
+#dataForm td:nth-child(2) {
+    width: 10px; /* Set equal width for both columns */
+}
+
+#dataForm input, #dataForm select {
+    width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+}
+
+#dataForm br {
+    clear: both;
+}
+
+
+
     body {
         font-family: 'Arial', sans-serif;
         background-color: #f4f4f4;
@@ -137,39 +170,55 @@
         margin-right: 5px;
     }
 
+    .beginning {
+         margin: 10% auto;
+            background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 650px; /* Limit the maximum width for better readability */
+
+        }
+
+
 </style>
 
 
+        <div class = "beginning">
 
-        <h1>Welcome {{account.name}}</h1>
-        <!-- <p> you are on the {{account.tier}} version </p> -->
-        <p> You can try <b> {{remaining}}</b> more resume(s) and personal website(s) on your current {{ account.tier }} version </p>
-        <p> you have built {{user_plan.total_forms_filled}} resume(s) and personal website(s) </p>
+            <h1>Welcome {{account.name}}</h1>
 
-        {% if account.user_profile is None %}
-            <p> you do not have any user profiles, please fill in the below form </p>
-        {% else %}
-                <p> an existing user profile has been found and loaded for you to save time </p>
-                <p id="user_profile_question"> <b> Do you want to update your user profile ? </b></p>
-                <div id="user_profile_question">
-                    <label>
-                        <input type="radio" name="user_profile_question" id="yes_user_profile_question" value="yes" onclick="toggle_form()"> Yes
-                    </label>
-                    <label>
-                        <input type="radio" name="user_profile_question" id="no_user_profile_question" value="no" onclick="toggle_form()" checked> No
-                    </label>
-                </div>
 
-                <br> <br>  <br>  <br> 
-                
-                <a href="{% url 'confirmation' account_id=account.id %}" class="confirmation-button" id="user_profile_question_button">
-                    <button type="button">NO UPDATE TO USER PROFILE AND BUILD WEBSITE AND RESUME</button>
-                </a>
+            <!-- <p> you are on the {{account.tier}} version </p> -->
+            <p> You can try <b> {{remaining}}</b> more resume(s) and personal website(s) on your current {{ account.tier }} version </p>
 
-        {% endif %}
+            {% if account.user_profile is None %}
+                <p> you do not have any user profiles, please fill in the below form </p>
+            {% else %}
+            <p> an existing user profile has been found and loaded for you to save time </p>
+            <p id="user_profile_question"> <b> Do you want to update your user profile ? </b></p>
+            <div id="user_profile_question">
+                <label>
+                    <input type="radio" name="user_profile_question" id="yes_user_profile_question" value="yes" onclick="toggle_form()"> Yes
+                </label>
+                <label>
+                    <input type="radio" name="user_profile_question" id="no_user_profile_question" value="no" onclick="toggle_form()" checked> No
+                </label>
+            </div>
+
+            <br> <br>  <br>  <br> 
+            
+            <a href="{% url 'confirmation' account_id=account.id %}" class="confirmation-button" id="user_profile_question_button">
+                <button type="button">NO UPDATE TO USER PROFILE</button>
+            </a>
+
+            {% endif %}
+
+
+        </div>
         
 
-        {% if remaining == 0 %}
+        {% if remaining < 0 %}
             <span style="color: red; font-weight: bold;">
                 {{ account.tier }} version limit reached, <a href="http://127.0.0.1:8000/{{ account.id }}/confirmation">Upgrade Now</a>
             </span> <br>
@@ -207,49 +256,9 @@
         <div id="dataForm" method="post">
             {% csrf_token %}
             {{ form.as_p }}
+                
+                <br>
         </div>
-
-        <!-- <span id="urlNameValidation"></span>
-        <script>
-            $(document).ready(function () {
-                // Add an event listener to the url_name input field
-                console.log("JavaScript loaded!");
-        
-                function checkUrlName() {
-                    var urlName = $('#id_url_name').val();
-        
-                    // Send an AJAX request to check if the url_name is taken
-                    $.ajax({
-                        url: '/form/CheckUrlNameView/',  // Fix the URL here
-                        type: 'GET',
-                        data: { 'url_name': urlName, 'account_id' : '{{account.id}}' },
-                        success: function (data) {
-                            if (data.is_taken) {
-                                // Display a message if the url_name is taken as a red alert bubble
-                                $('#urlNameValidation').html('<div class="alert alert-danger" role="alert">URL TAKEN, PLEASE TRY ANOTHER URL</div>');
-                            } else {
-                                // Display a message if the url_name is available as a green alert bubble
-                                $('#urlNameValidation').html('<div class="alert alert-success" role="alert">URL available</div>');
-                            }
-        
-                            if (data.is_taken_current_account) {
-                                // Display a message with yellow color for is_taken_current_account
-                                $('#urlNameValidation').html('<div class="alert alert-warning" role="alert">YOU HAVE USED URL BEFORE BUT IT IS OKAY. THIS WILL OVERRIDE YOUR PREVIOUS WEBSITE. CHANGE URL NAME IF YOU WANT TO KEEP YOUR PREVIOUS SITE(S)</div>');
-                            }
-                        }
-                    });
-                }
-        
-                // Trigger the checkUrlName function on page load
-                checkUrlName();
-        
-                // Add an event listener to the url_name input field
-                $('#id_url_name').on('input', function () {
-                    checkUrlName();
-                });
-            });
-        </script> -->
-
         <br>
     </div>
 
@@ -270,18 +279,20 @@
         <h3>Work Experiences</h3>
 
         <script>
+            const myGlobalFunctions = {};
+            let totalformNumberAdderHelper = 0;
+
             window.addEventListener('load', function() {
                 let workForm = document.querySelector("#work_form");
                 let addButton = document.querySelector("#add-work-form");
                 let totalformNumber = workForm.children.length;
                 let totalformNumberAdder = totalformNumber;
-                let totalformNumberAdderHelper = totalformNumber;
+                totalformNumberAdderHelper = totalformNumber;
                 let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
 
                 addButton.addEventListener('click', addForm);
 
-                function addForm(e) {
-                    e.preventDefault();
+                function addForm() {
 
                     console.log("Add button clicked!");
 
@@ -383,8 +394,13 @@
                         deleteForm(workForm.children[formNum], formNum);
                     });
                 });
+
+                myGlobalFunctions.addForm = addForm;
+                myGlobalFunctions.deleteForm = deleteForm;
+
             });
         </script>
+        
 
         <p id="work_experience_question">Do you have relevant work experience?</p>
         <div id="work_experience_options">
@@ -430,7 +446,14 @@
                                 <td>{{ work_form.state }}</td>
                             </tr>
                             <tr class="form-row">
-                                <td colspan="2">Description</td>
+                                <td colspan="2">
+                                    <b style="color: palevioletred;"> 
+                                        Description of your work in simple English. What did you do? What technologies/skills did you use?
+                                        What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                        <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                    </b>
+                                </td>
+                                
                             </tr>
                             <tr class="form-row">
                                 <td colspan="2">{{ work_form.description }}</td>
@@ -442,6 +465,148 @@
             </div>
         </div>
         <button id="add-work-form" type="button" style="display: none;">Add Another Work Experience</button>
+
+
+            {% if  account.user_profile.work_experiences.exists %}
+
+                <script>
+                    var number_of_work_experiences = "{{account.user_profile.work_experiences.count}}"
+
+                    if (number_of_work_experiences > 0) {
+                        var workForm = document.getElementById('work_form');
+                        var yesRadio = document.getElementById('yesRadio');
+                        var addWorkFormButton = document.getElementById('add-work-form');
+                        yesRadio.checked = true;
+                        workForm.style.display = yesRadio.checked ? 'block' : 'none';
+                        addWorkFormButton.style.display = yesRadio.checked ? 'block' : 'none';
+                    }
+
+                    console.log(number_of_work_experiences)
+                    window.addEventListener('load', function() {
+                        for (let i = 1; i < number_of_work_experiences; i++) {
+                            // console.log("adding previous work experience number ", i)
+                            // console.log("workForm.children.length is" , workForm.children.length)
+                            myGlobalFunctions.addForm();
+                        }
+
+                        var workForm = document.getElementById('work_form');
+                        console.log(workForm.children.length)
+
+                    });
+                </script>
+
+
+                {% for work_experience in account.user_profile.work_experiences.all %}
+                <script>
+                    window.addEventListener('load', function() {
+                        var workForm = document.getElementById('work_form');
+                        
+
+                        {% with work_counter_index=forloop.counter0 %}
+                        var newFormInstance = `
+                            <div id="work_experiences_container-{{work_counter_index}}">
+                                <table>
+                                    <tbody>
+                                        <tr>
+                                            <th>Company Name</th>
+                                            <th>Job Title</th>
+                                        </tr>
+                                        <tr class="form-row">
+                                            <td><input type="text" name="work_experiences-{{work_counter_index}}-company_name" value="{{work_experience.company_name}}"></td>
+                                            <td><input type="text" name="work_experiences-{{work_counter_index}}-job_title" value="{{work_experience.job_title}}"></td>
+                                        </tr>
+                                        <tr class="form-row">
+                                            <td>Start Date</td>
+                                            <td>End Date</td>
+                                        </tr>
+                                        <tr class="form-row">
+                                            <td>Start Date <input type="date" name="work_experiences-{{work_counter_index}}-start_date" value="{{ work_experience.start_date|date:'Y-m-d' }}"></td>
+                                            <td>End Date <input type="date" name="work_experiences-{{work_counter_index}}-end_date" value="{{ work_experience.end_date|date:'Y-m-d' }}"></td>
+                                        </tr>
+
+                                        <tr class="form-row">
+                                            <td>City</td>
+                                            <td>State</td>
+                                        </tr>
+                                        <tr class="form-row">
+                                            <td><input type="text" name="work_experiences-{{work_counter_index}}-city" value="{{work_experience.city}}"></td>
+                                            <td><input type="text" maxlength="2" name="work_experiences-{{work_counter_index}}-state" value="{{work_experience.state}}"></td>
+                                        </tr>
+                                        <tr class="form-row">
+                                            <td colspan="2">Description</td>
+                                        </tr>
+                                        <tr class="form-row">
+                                            <td colspan="2"><textarea name="work_experiences-{{work_counter_index}}-description">{{work_experience.bullet1}}{{work_experience.bullet2}}{{work_experience.bullet3}}</textarea></td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                                <button id="delete-prev-work-form-{{work_counter_index}}" type="button" "="">Delete Work Experience</button>
+                            </div>
+                        `;
+
+                        {% endwith %}
+
+                        workForm.children[{{ forloop.counter0 }}].innerHTML = newFormInstance;
+                        // console.log(workForm.children[{{ forloop.counter0 }}].innerHTML)
+                    });
+                </script>
+                {% endfor %}
+
+                <script>
+                    window.addEventListener('load', function() {
+                        var workForm = document.getElementById('work_form'); 
+                        
+                
+                        if (workForm) {
+                            workForm.addEventListener('click', function(event) {
+                
+                                // Check if the clicked element is a delete button
+                                if (event.target.id.startsWith('delete-prev-work-form-')) {
+                                    // Extract the index from the button id
+                                    var index = parseInt(event.target.id.split('-').pop());
+                
+                                    // Check if the index is valid
+                                    if (!isNaN(index)) {
+                                        // Get the corresponding div with id "work_experiences_container-[index]"
+                                        var containerId = 'work_experiences_container-' + index;
+                                        var containerToRemove = document.getElementById(containerId);
+
+                                        var containers = document.querySelectorAll('[id^="' + containerId + '"]');
+                
+                                        // Check if the container element exists
+                                        if (containerToRemove) {
+                                            if (totalformNumberAdderHelper == 1) {
+                                                console.log("there is only 1 form so the radio button should become closed");
+                                                workForm.style.display = 'none';
+                                                yesRadio.checked = false;
+                                                document.getElementById('noRadio').checked = true;
+
+                                            } else {
+                                                console.log("deleting workform container number" , index, containerId)
+                                                console.log(containerToRemove)
+                                                containerToRemove.remove();
+                                                totalformNumberAdderHelper--;
+                                                console.log("workForm.children.length" , workForm.children.length)
+                                            }
+                                            
+                                        } else {
+                                            console.error('Container element does not exist.', containerId);
+                                        }
+                                    } else {
+                                        console.error('Invalid index or child element does not exist.', index);
+                                    }
+                                }
+                            });
+                        } else {
+                            console.error('workForm is not defined.');
+                        }
+                    });
+                </script>
+            
+            {% endif %}
+            
+            
+
 
     </div>
 
@@ -489,7 +654,14 @@
                             <td>{{ project_form.project_skills.errors }} {{ project_form.project_skills }}</td>
 
                             <tr>
-                                <th>Description</th>
+                                <th>
+                                <b style="color: palevioletred;"> 
+                                    Description of your project in simple English. What did you do? What technologies/skills did you use?
+                                    What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                    <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                </b>
+                                </th>
+
                             </tr>
                             <td>{{ project_form.description.errors }} {{ project_form.description }}</td>
 
@@ -502,6 +674,7 @@
         <button id="add-project-form" type="button" style="display: none;">Add Another Project</button>
 
         <script>
+            let project_totalformNumberAdderHelper = 0;
             window.addEventListener('load', function() {
                 let project_projectForm = document.querySelector("#projects_form");
                 let project_addButton = document.querySelector("#add-project-form");
@@ -511,8 +684,7 @@
 
                 project_addButton.addEventListener('click', addProjectForm);
 
-                function addProjectForm(e) {
-                    e.preventDefault();
+                function addProjectForm() {
 
                     console.log("Add button clicked!");
 
@@ -605,8 +777,142 @@
                 }
                 });
 
+                myGlobalFunctions.addProjectForm = addProjectForm;
+
             });
         </script>
+
+
+        {% if  account.user_profile.projects.exists %}
+
+        <script>
+            var number_of_projects = "{{account.user_profile.projects.count}}"
+            console.log("number_of_projects is ", number_of_projects)
+
+
+            if (number_of_projects > 0) {
+                console.log("pre-loading previous projects")
+                console.log("unhiding projects form and setting radio to yes")
+
+                var projectForm = document.getElementById('projects_form');
+                var yesRadioProject = document.getElementById('yesProjectRadio');
+                var addProjectFormButton = document.getElementById('add-project-form');
+                yesRadioProject.checked = true;
+
+                projectForm.style.display = yesRadioProject.checked ? 'block' : 'none';
+                addProjectFormButton.style.display = yesRadioProject.checked ? 'block' : 'none';
+
+
+            }
+
+            window.addEventListener('load', function() {
+                projectForm = document.getElementById('projects_form');
+                for (let i = 1; i < number_of_projects; i++) {
+                    console.log("adding previous project number ", i)
+                    console.log("workForm.children.length is" , projectForm.children.length)
+                    myGlobalFunctions.addProjectForm();
+                }
+
+            });
+        </script>
+
+
+        {% for project in account.user_profile.projects.all %}
+        <script>
+            window.addEventListener('load', function() {
+                var projectForm = document.getElementById('projects_form');
+                
+
+                {% with project_counter_index=forloop.counter0 %}
+                var newFormInstance = `
+                                <div id="projects_container-{{project_counter_index}}">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <th>Project Name</th>
+                                            </tr>
+                                            <tr class="form-row">
+                                                <td><input type="text" name="projects-{{project_counter_index}}-project_name" value="{{project.project_name}}" ></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Project Skills</th>
+                                            </tr>
+                                            <tr class="form-row">
+                                                <td><input type="text" name="projects-{{project_counter_index}}-project_skills" value="{{project.project_skills}}" ></td>
+                                            </tr>
+                                            <tr>
+                                                <th>Description</th>
+                                            </tr>
+                                            <tr class="form-row">
+                                                <td><textarea name="projects-{{project_counter_index}}-description">{{ project.bullet1 }}</textarea></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                    <button id="delete-project-form-{{project_counter_index}}" type="button">Delete Project</button>
+                                </div>
+                                `;
+
+                {% endwith %}
+
+                projectForm.children[{{ forloop.counter0 }}].innerHTML = newFormInstance;
+                // console.log(projectForm.children[{{ forloop.counter0 }}].innerHTML)
+            });
+        </script>
+        {% endfor %}
+
+        <script>
+            window.addEventListener('load', function() {
+                var projectForm = document.getElementById('projects_form');
+
+                if (projectForm) {
+                    projectForm.addEventListener('click', function(event) {
+
+                        // Check if the clicked element is a delete button
+                        if (event.target.id.startsWith('delete-project-form-')) {
+                            // Extract the index from the button id
+                            var index = parseInt(event.target.id.split('-').pop());
+
+                            // Check if the index is valid
+                            if (!isNaN(index)) {
+                                // Get the corresponding div with id "work_experiences_container-[index]"
+                                var containerId = 'projects_container-' + index;
+                                var containerToRemove = document.getElementById(containerId);
+
+                                var containers = document.querySelectorAll('[id^="' + containerId + '"]');
+                                var numberOfInstances = containers.length-1;
+                                console.log("numberOfInstances", numberOfInstances)
+
+                                // Check if the container element exists
+                                if (containerToRemove) {
+                                    if (project_totalformNumberAdderHelper == 1) {
+                                        console.log("there is only 1 project so the radio button should become closed");
+                                        projectForm.style.display = 'none';
+                                        yesRadioProject.checked = false;
+                                        document.getElementById('noProjectRadio').checked = true;
+
+                                    } else {
+                                        console.log("deleting workform container number" , index, containerId)
+                                        console.log(containerToRemove)
+                                        containerToRemove.remove();
+                                        project_totalformNumberAdderHelper--;
+                                        console.log("workForm.children.length" , workForm.children.length)
+                                    }
+                                    
+                                } else {
+                                    console.error('Container element does not exist.', containerId);
+                                }
+                            } else {
+                                console.error('Invalid index or child element does not exist.', index);
+                            }
+                        }
+                    });
+                } else {
+                    console.error('workForm is not defined.');
+                }
+            });
+        </script>
+
+        {% endif %}
 
 
 
@@ -621,7 +927,7 @@
 
                 var inputs = document.querySelectorAll('#dataForm input, #dataForm textarea');
                 for (var i = 0; i < inputs.length; i++) {
-                    if (inputs[i].value.trim() === '') {
+                    if (inputs[i].value.trim() === '' & inputs[i].getAttribute('name') != 'profile_image') {
                         alert('Please fill in all fields before submitting the form. Missing field: ' + inputs[i].getAttribute('name'));
                         inputs[i].style.borderColor = 'red';
                         scrollToElement(inputs[i]);
@@ -703,20 +1009,140 @@
 
                 // If validation passes, submit the form
                 document.querySelector('form').submit();
+
+                // Show the loading modal and overlay
+                document.getElementById("loadingModal").style.display = "block";
+                document.getElementById("loadingOverlay").style.display = "block";
+        
+                // Array of loading messages
+                var loadingMessages = [
+                    "{{account.name}}, welcome to displayai ! ",
+                    "Requesting displayai AI & data science model  ...",
+                    "Connecting to cloud environment & creating resume google doc ...",
+                    "Adding data to personal website & resume",
+                    "Artificial Intelligence to generate bullets...",
+                    "Prompt engineering ...",
+                    "Data Science model to select the optimal bullets ...",
+                    "Natural Language Processing to make resume ATS friendly...",
+                    "Model to ensure resume bullets are short, concise ...",
+                    "Artificial Intelligence to ensure bullets quantification ...",
+                    "Cleaning bullet data and pushing to profile environment  ...",
+                    "Personal website ready ! ",
+                    "Editing google doc permissions ... ",
+                    "Ensuring account security ... ",
+                    "Formatting work experiences",
+                    "Formatting projects",
+                    "Formatting dates",
+                    "Saving resume to cloud environment",
+                    "Saving resume to profile",
+                    "Updating your account information",
+                    "Model is running slow due to traffic please be patient ... ",
+                    "Your internet connection is slowing model please be patient ... ",
+                    "Checking for errors ... ",
+                    "Ensuring account security ... ",
+                    "Model is running slow due to traffic please be patient ... ",
+                    "Your internet connection is slowing model please be patient ... ",
+                    "Ensuring account security ... ",
+                    "Model is running slow due to traffic please be patient ... ",
+                    "Your internet connection is slowing model please be patient ... ",
+                    "Ensuring account security ... ",
+                    "Model is running slow due to traffic please be patient ... ",
+                    "Your internet connection is slowing model please be patient ... ",
+                    "Ensuring account security ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                ];
+        
+                // Function to display loading messages in a loop
+                function displayLoadingMessages(index) {
+                    // Set the loading text
+                    document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+        
+                    // Increment index or reset to 0 if at the end
+                    index = (index + 1) % loadingMessages.length;
+        
+                    // Set a timeout for the next message
+                    setTimeout(function () {
+                        displayLoadingMessages(index);
+                    }, 1700); // Adjust the time delay between messages (in milliseconds)
+                }
+        
+                // Start the loop
+                displayLoadingMessages(0);
+            
+
             });
 
             function scrollToElement(element) {
                 // Scroll to the element
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
+
+                
         });
     </script>
 
     {% if account.user_profile is None %}
-    <button type="submit">BUILD WEBSITE AND RESUME </button>
+    <button type="submit" onclick="showLoadingModal()">CREATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
     {% else %}
-    <button type="submit">UPDATE USER PROFILE AND BUILD WEBSITE AND RESUME </button>
+    <button type="submit" onclick="showLoadingModal()">UPDATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
     {% endif %}
+
+        <style>
+            /* Style for the modal */
+            #loadingModal {
+                display: none;
+                position: fixed;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: rgba(255, 255, 255, 0.9);
+                padding: 20px;
+                border-radius: 5px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                text-align: center;
+                animation: fadeIn 0.5s ease-in-out;
+                z-index: 1000; /* Ensure the modal appears above the rest of the content */
+            }
+        
+            /* Animation for the modal */
+            @keyframes fadeIn {
+                from {
+                    opacity: 0;
+                }
+                to {
+                    opacity: 1;
+                }
+            }
+        
+            /* Style for the background overlay */
+            #loadingOverlay {
+                position: fixed;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity as needed */
+                backdrop-filter: blur(3px); /* Add a blur effect to the background */
+                z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
+                display: none;
+            }
+        </style>
+        
+        <div id="loadingModal">
+            <p id="loadingText"><b>Loading...</b></p>
+        </div>
+        
+        <!-- The background overlay -->
+        <div id="loadingOverlay"></div>
+        
+        <script>
+            
+        </script>
 
 
     <br>  <br>  <br>  <br>
