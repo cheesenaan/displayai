@@ -368,14 +368,26 @@ h6 {
 /*--------------------------------------------------------------
 # Hero Section
 --------------------------------------------------------------*/
+
+/* .testimonials {
+  background: url("../img/0 copy.jpg") center center;
+  background-repeat: no-repeat;
+  background-size: cover; 
+  background-position: center center; 
+  position: relative;
+  
+} */
+
 #hero {
   width: 100%;
-  height: calc(100vh - 70px);
-  background: url("../img/1.jpg") center center;
-  background-size: cover;
+  height: 100vh;
+  background: url("../img/0 copy.jpg") center center;
+  background-repeat: no-repeat;
+  background-size: cover; 
+  background-position: center center; 
   position: relative;
-  margin-top: 70px;
   padding: 0;
+  transform: scale(1.4); 
 }
 
 #hero:before {
@@ -423,12 +435,6 @@ h6 {
 #hero .btn-get-started:hover {
   border-color: #1bac91;
   background: #1bac91;
-}
-
-@media (min-width: 1024px) {
-  #hero {
-    background-attachment: fixed;
-  }
 }
 
 @media (max-width: 992px) {

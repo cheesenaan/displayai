@@ -8,27 +8,67 @@
 <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex justify-content-between">
 
-      <div class="logo">
-        <h1><a href="/">display.ai</a></h1>
-      </div>
+        <div class="logo">
+            <h1><a href="/">display.ai</a></h1>
+        </div>
 
-      <nav id="navbar" class="navbar">
-        <ul>
-            <li><a class="nav-link scrollto active" href="{% url 'home'  %}">Home</a></li>
-            <li><a class="nav-link scrollto active" href=" {% url 'account_details' account_id=account.id %} ">   Account</a></li>
-          <li><a class="nav-link scrollto active" href=" {% url 'confirmation' account_id=account.id %} ">   Build</a></li>
-          <li><a class="nav-link scrollto active" href="{% url 'logout'  %}">Log Out</a></li>
+        <nav id="navbar-form" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="/">Home</a></li>
+                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
 
-          
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-      
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Mobile navigation toggle
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('mobile-nav-toggle')) {
+                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
+                e.target.classList.toggle('bi-list');
+                e.target.classList.toggle('bi-x');
+            }
+        });
+
+        // Mobile nav dropdowns activate
+        document.addEventListener('click', function (e) {
+            var navbar = document.querySelector('#navbar-form');
+            if (navbar.classList.contains('navbar-mobile')) {
+                var dropdownLink = e.target.closest('.navbar .dropdown > a');
+                if (dropdownLink) {
+                    e.preventDefault();
+                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
+                }
+            }
+        }, true);
+    });
+
+
+    </script>
+
 </header>
 
 
 <style>
+
+#loadingOverlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+        backdrop-filter: blur(5px); /* Add a blur effect to the background */
+        z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
+        display: none;
+    }
+
     body {
         font-family: 'Arial', sans-serif;
         background-color: #f4f4f4;
@@ -182,8 +222,341 @@
     
     
 </style>
-    
 
+<style>
+
+    body {
+        font-family: 'Arial', sans-serif;
+        background-color: #f4f4f4;
+        margin: auto;
+        padding: 60px 0 0 0; /* Add top padding to create space */
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: auto;
+    }
+    
+    
+    .content {
+        text-align: center;
+    }
+    
+    h1, h2 {
+        color: #333;
+    }
+    
+    p {
+        color: #666;
+    }
+    
+    /* Header Styles */
+    .header {
+        float: right;
+        width: 50%;
+    }
+    
+    /* Pricing Card Styles */
+    .pricing-cards {
+        display: flex;
+        justify-content: center;
+        flex-wrap: wrap;
+        margin-top: auto;
+    }
+    
+    .card {
+        background-color: #fff;
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        margin: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        width: 250px;
+        text-align: center;
+        transition: transform 0.3s;
+    }
+    
+    .card:hover {
+        transform: scale(1.05);
+    }
+    
+    h2 {
+        color: #4285f4;
+    }
+    
+    ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    li {
+        margin-bottom: 8px;
+        color: #666;
+    }
+    
+    .price {
+        font-size: 24px;
+        color: #333;
+        margin: 15px 0;
+        font-weight: bold;
+    }
+    
+    /* Button Styles */
+    .get-now-button {
+        background-color: #4285f4;
+        color: #fff;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+    
+    .get-now-button:hover {
+        background-color: #0066cc;
+    }
+    
+    /* Media Query for Responsive Design */
+    @media (max-width: 768px) {
+        /* Adjust styles for smaller screens if needed */
+    }
+    
+    .reload_resume_and_website-button, button {
+        background-color: #3498db; /* Attractive blue color */
+        color: white;
+        border: none;
+        padding: 3px; /* Slightly increased padding for a consistent size */
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    
+    .reload_resume_and_website-button:hover, button:hover {
+        background-color: orange; /* Darker shade on hover */
+    }
+    
+    
+    .resume-container {
+        float: right;
+        width: 50%;
+    }
+    
+    
+    @media (max-width: 768px) {
+        /* Adjust styles for smaller screens if needed */
+        .resume-container {
+            display: none;
+        }
+    
+    }
+    .user-info-table {
+        width: auto;
+        border-collapse: collapse;
+        margin-bottom: 20px; /* Optional: Adjust spacing between tables */
+    }
+    
+    .user-info-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+    
+    .user-info-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    
+    .user-info-table tr:hover {
+        background-color: #ddd;
+    }
+    
+    .user-info-table b {
+        color: #0066cc; /* Optional: Change the color of the bold text */
+    
+    }
+    
+    
+    
+    .action-section {
+        text-align: left;
+        margin-bottom: 10px; /* Adjust as needed */
+    }
+    
+    .action-section p {
+        margin-bottom: 5px;
+    }
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 60px 0; /* Add top padding to create space */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .content {
+            text-align: center;
+        }
+        
+        h1, h2, p {
+            margin: 0;
+        }
+        
+        h1, h2 {
+            color: #333;
+        }
+        
+        p {
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        /* Header Styles */
+        .header {
+            width: 50%;
+        }
+        
+        /* Pricing Card Styles */
+        .pricing-cards {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: auto;
+        }
+        
+        .card {
+            background-color: #fff;
+            border: 1px solid #ddd;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 250px;
+            text-align: center;
+            transition: transform 0.3s;
+        }
+        
+        .card:hover {
+            transform: scale(1.05);
+        }
+        
+        h2 {
+            color: #4285f4;
+            margin-bottom: 10px;
+        }
+        
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        
+        li {
+            margin-bottom: 8px;
+            color: #666;
+        }
+        
+        .price {
+            font-size: 24px;
+            color: #333;
+            margin: 15px 0;
+            font-weight: bold;
+        }
+        
+        /* Button Styles */
+        .reload_resume_and_website-button, button {
+            background-color: #3498db;
+            color: white;
+            padding: 8px;
+            border: none;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        
+        .reload_resume_and_website-button:hover, button:hover {
+            background-color: orange;
+        }
+        
+        /* Modal Styles */
+        .modal-body {
+            padding: 20px;
+        }
+        
+        .modal-title {
+            margin: 0;
+        }
+        
+        
+        .messages li {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+        
+        .messages li.success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            font-weight: bold;
+        }
+        
+        .messages li.error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            font-weight: bold;
+        }
+    
+    
+        /* Style for the modal */
+        #loadingModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff; /* White background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            z-index: 1000; /* Ensure the modal appears above the rest of the content */
+        }
+    
+        /* Animation for the modal */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    
+        /* Style for the background overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            backdrop-filter: blur(5px); /* Add a blur effect to the background */
+            z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
+            display: none;
+        }
+        
+    </style>
+    
 
 <h1>{{user_profile.first_name}}, thank you for your Payment</h1>
     <br> <br> 
@@ -206,13 +579,89 @@
             <td> <b> {{remaining}} </b> </td>
         </tr>
     </table>
-
-    <a href="{% url 'confirmation' account_id=account.id %}" class="reload_resume_and_website-button">
-        <button type="button"> Build your resume(s) and webite(s) </button>
+   
+    <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" onclick="showLoadingModal()">
+        <button type="button">Re-Build with same data</button>
     </a>
+    
+    <div id="loadingModal">
+        <p id="loadingText"><b>Loading...</b></p>
+    </div>
+    
+    <div id="loadingOverlay"></div>
+    
+    <script>
+        function showLoadingModal() {
+            // Show the loading modal and overlay
+            document.getElementById("loadingModal").style.display = "block";
+            document.getElementById("loadingOverlay").style.display = "block";
+    
+            // Array of loading messages
+            var loadingMessages = [
+                "{{account.name}}, welcome to displayai ! ",
+                "Requesting displayai AI & data science model  ...",
+                "Connecting to cloud environment & creating resume google doc ...",
+                "Adding data to personal website & resume",
+                "Artificial Intelligence to generate bullets...",
+                "Prompt engineering ...",
+                "Data Science model to select the optimal bullets ...",
+                "Natural Language Processing to make resume ATS friendly...",
+                "Model to ensure resume bullets are short, concise ...",
+                "Artificial Intelligence to ensure bullets quantification ...",
+                "Cleaning bullet data and pushing to profile environment  ...",
+                "Personal website ready ! ",
+                "Editing google doc permissions ... ",
+                "Ensuring account security ... ",
+                "Formatting work experiences",
+                "Formatting projects",
+                "Formatting dates",
+                "Saving resume to cloud environment",
+                "Saving resume to profile",
+                "Updating your account information",
+                "Model is running slow due to traffic please be patient ... ",
+                "Your internet connection is slowing model please be patient ... ",
+                "Checking for errors ... ",
+                "Ensuring account security ... ",
+                "Model is running slow due to traffic please be patient ... ",
+                "Your internet connection is slowing model please be patient ... ",
+                "Ensuring account security ... ",
+                "Model is running slow due to traffic please be patient ... ",
+                "Your internet connection is slowing model please be patient ... ",
+                "Ensuring account security ... ",
+                "Model is running slow due to traffic please be patient ... ",
+                "Your internet connection is slowing model please be patient ... ",
+                "Ensuring account security ... ",
+                "Your internet is too slow please try again ... ",
+                "Your internet is too slow please try again ... ",
+                "Your internet is too slow please try again ... ",
+                "Your internet is too slow please try again ... ",
+                "Your internet is too slow please try again ... ",
+                "Your internet is too slow please try again ... ",
+            ];
+    
+            // Function to display loading messages in a loop
+            function displayLoadingMessages(index) {
+                // Set the loading text
+                document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+    
+                // Increment index or reset to 0 if at the end
+                index = (index + 1) % loadingMessages.length;
+    
+                // Set a timeout for the next message
+                setTimeout(function () {
+                    displayLoadingMessages(index);
+                }, 1700); // Adjust the time delay between messages (in milliseconds)
+            }
+    
+            // Start the loop
+            displayLoadingMessages(0);
+    
+            // You can add additional logic or AJAX requests if needed here
+        }
+    </script>
 
-    <a href="{% url 'account_payments' account_id=account.id %}" class="reload_resume_and_website-button">
-        <button type="button"> Go to your account subscription(s) </button>
+    <a href="{% url 'subscriptions' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button">  Account subscriptions </button>
     </a>
 
 

@@ -15,6 +15,8 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from datetime import date
 import os
+from django.contrib.auth.backends import ModelBackend
+from django.contrib.auth import get_user_model
 
 
 def validate_unique_url_name(value):
@@ -22,13 +24,23 @@ def validate_unique_url_name(value):
     if existing_profiles.exists():
         raise ValidationError('This URL name is already taken. Please choose a different one.')
 
+from django.contrib.auth.models import AbstractUser
+from django.db import models
+
 class Account(models.Model):
     id = models.AutoField(primary_key=True)
     name = models.CharField(max_length=255, unique=True) # needs to be unique
     password = models.CharField(max_length=255)
+    email = models.EmailField()
     tier = models.CharField(max_length=255, default = "free")
     user_profile = models.ForeignKey('UserProfile', on_delete=models.SET_NULL, null=True, related_name='user_profile_account')
+    user_plan = models.ForeignKey('Plan', on_delete=models.SET_NULL, null=True, related_name='user_plan')
+    user_payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, related_name='user_payment')
     resume_links = models.CharField(max_length=100000, blank=True, null=True, help_text="Separate links with commas")
+    is_authenticated = models.BooleanField(default=True)
+    last_login = models.DateTimeField(auto_now=True)
+    unique_words = models.CharField(max_length=10000000, blank=True, null=True, help_text="Separate actions words with commas")
+    reset_password_code = models.CharField(max_length=255, null=True)
 
     def get_resume_links(self):
         return self.resume_links.split(',') if self.resume_links else []
@@ -38,9 +50,40 @@ class Account(models.Model):
         links.append(link)
         self.resume_links = ','.join(links)
 
+    def get_unique_words_list(self):
+        return self.unique_words.split(',') if self.unique_words else []
+
+    def add_unique_word(self, word):
+        words = self.get_unique_words_list()
+        words.append(word)
+        self.unique_words = ','.join(words)
+
+
     def __str__(self):
         return f"{self.id}: {self.name}"
     
+from django.contrib.auth.backends import BaseBackend
+from .models import Account
+
+class AccountBackend(BaseBackend):
+    def authenticate(self, request, name=None, password=None):
+        print("inside authenticate backend")
+        print("trying to get account  with name, password : ", name, password)
+        try:
+            account = Account.objects.get(name=name, password=password)
+            return account
+        except Account.DoesNotExist:
+            print("account does not exist")
+            return None
+
+    def get_user(self, user_id):
+        print("trying to get account  with user_id : ", user_id)
+        try:
+            return Account.objects.get(id=user_id)
+        except Account.DoesNotExist:
+            print("account does not exist with user_id")
+            return None
+
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length=None):
@@ -48,7 +91,6 @@ class OverwriteStorage(FileSystemStorage):
         if self.exists(name):
             os.remove(os.path.join(settings.MEDIA_ROOT, name))
         return name
-    
 
 class UserProfile(models.Model):
 
@@ -62,7 +104,7 @@ class UserProfile(models.Model):
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
-    email = models.EmailField()
+    # email = models.EmailField()
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
     linkedin_link = models.URLField(blank=True, null=True)
@@ -177,6 +219,7 @@ class Payment(models.Model):
     subscription_cancel_status_text = models.CharField(max_length=100, blank=True, null=True)
     customer_id = models.CharField(max_length=100, blank=True, null=True)
     customer_email = models.CharField(max_length=100000, blank=True, null=True)
+    customer_name = models.CharField(max_length=100000, blank=True, null=True)
     price_id = models.CharField(max_length=100, blank=True, null=True)
     product_name = models.CharField(max_length=255, blank=True, null=True)
     product_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
@@ -227,6 +270,7 @@ class Payment(models.Model):
 
             customer = stripe.Customer.retrieve(self.customer_id)
             self.customer_email = customer.email
+            self.customer_name = customer.name
 
             # Save the changes to the database
             self.save()
@@ -240,7 +284,8 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.account}, {self.product_name}"
-    
+
+
 # class UserProfile(models.Model):
 #     id = models.AutoField(primary_key=True)
 #     url_name = models.CharField(max_length=255, unique=True)

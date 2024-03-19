@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Order Confirmation</title>
+    <style>
+        .reload_resume_and_website-button, button {
+        background-color: #3498db; /* Attractive blue color */
+        color: white;
+        border: none;
+        padding: 3px; /* Slightly increased padding for a consistent size */
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+    
+    .reload_resume_and_website-button:hover, button:hover {
+        background-color: orange; /* Darker shade on hover */
+    }
+
+        body {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        .card {
+            background-color: #f5f5f5;
+            border-radius: 10px;
+            padding: 20px;
+            font-family: Arial, sans-serif;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+            text-align: left;
+        }
+
+        .info {
+            margin-bottom: 10px;
+        }
+
+        .more-info {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .more-info li {
+            display: inline-block;
+            margin-right: 10px;
+        }
+
+        .more-info a {
+            text-decoration: none;
+            color: #007BFF;
+        }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h3> DisplayAI Order Confirmation </h3>
+        <p style="text-align: left;">Thank you, {{ payment_instance.customer_name }} </p>
+        <div class="info">
+            <strong>Account Tier:</strong> {{ payment_instance.account_tier }}
+        </div>
+        <div class="info">
+            <strong>Product Name:</strong> {{ payment_instance.product_name }}
+        </div>
+        <div class="info">
+            <strong>Product Price:</strong> ${{ payment_instance.product_price }}
+        </div>
+        <div class="info">
+            <strong>Start Date:</strong> {{ payment_instance.start_date }}
+        </div>
+        <div class="info">
+            <strong>End Date:</strong> {{ payment_instance.end_date }}
+        </div>
+        <div class="info">
+            <strong>Subscription ID:</strong> {{ payment_instance.subscription_id }}
+        </div>
+
+        <p>You will be auto-charged every month until cancelled.</p>
+
+        
+        <a href="{% url 'subscriptions' account_id=account.id %}" class="reload_resume_and_website-button">
+            <button type="button">  More Info </button>
+        </a>
+
+    </div>
+</body>
+</html>

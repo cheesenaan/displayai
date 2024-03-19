@@ -28,7 +28,7 @@ SECRET_KEY = 'django-insecure-o1qybuv^c=%@c)xge6j6&@^7tqvxm^2zrgr62$hgvywo8%qttr
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-
+LOGIN_URL = 'login'
 
 # Application definition
 
@@ -41,6 +41,9 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 ]
+
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+
 
 MIDDLEWARE = [
     'whitenoise.middleware.WhiteNoiseMiddleware' ,
@@ -132,5 +135,9 @@ MEDIA_URL = '/profile_pictures/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-REDIRECT_DOMAIN = 'http://127.0.0.1:8000'
+#REDIRECT_DOMAIN = 'http://127.0.0.1:8000'
+REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
+
+#SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
+SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 

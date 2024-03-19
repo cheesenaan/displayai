@@ -11,7 +11,8 @@
     display: flex;
     justify-content: center;
     flex-wrap: wrap;
-    margin-top: 10px;
+    margin-top: -60px;
+    transform: scale(0.9); 
 }
 
 .card {
@@ -61,143 +62,373 @@ li {
     cursor: pointer;
     font-size: 16px;
     transition: background-color 0.3s;
+  margin-right: 10px; /* Adjust spacing between buttons if needed */
+
 }
 
 .get-now-button:hover {
     background-color: #0066cc;
 }
 
+.services-header {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.buttons-container {
+  margin-top: 10px;
+}
+
+
 
 </style>
 
+<style>
+  
+
+/* ======= About Section ======= */
+
+#footer, footer-top {
+  /* transform: scale(1.12);  */
+}
+.about {
+  /* background-image: url('static/img/3.png');  */
+  margin-top: 130px;
+  background-size: 100% 100%; 
+  background-position: center;  
+  padding: 80px 0;
+  text-align: center;
+  transform: scale(0.9); 
+}
+
+
+.about h5 {
+  font-size: 24px;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.about a {
+  text-decoration: none;
+}
+
+.about button {
+  background-color: #007bff; /* Add a primary color for buttons */
+  color: #fff; /* Text color for buttons */
+  padding: 10px 20px;
+  margin: 10px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Add a smooth transition effect */
+}
+
+.about button:hover {
+  background-color: #0056b3; /* Change color on hover */
+}
+
+.about .container {
+  max-width: 1200px; /* Set maximum width for better responsiveness */
+  margin: 0 auto; /* Center the container */
+}
+
+.about .row {
+  margin-top: 30px;
+}
+
+.about .icon-box {
+  background-color: #fff;
+  padding: 30px;
+  border-radius: 8px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  transition: transform 0.3s ease; /* Add a smooth transition effect */
+}
+
+.about .icon-box:hover {
+  transform: translateY(-5px); /* Add a slight hover effect */
+}
+
+.about i {
+  font-size: 36px;
+  color: #007bff;
+}
+
+.about h4 {
+  font-size: 24px;
+  font-weight: bold;
+  margin-bottom: 15px;
+}
+
+.about p {
+  font-size: 16px;
+  color: #6c757d;
+}
+
+
+</style>
+
+
     <head>
       <title> Home </title>
-
     </head>
 
     <body>
 
       <!-- ======= Main Section ======= -->
       <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+
         <div class="container text-center text-md-left" data-aos="fade-up">
-          <h1> Personal webiste </h1>
-          <h2> To learn more click <a href="#about"> here </a> </h2>
+          <h1> DisplayAI </h1>
+        <p style="color: aliceblue;">  
+           Build resume & website in 30 seconds
+        </p>
           <a href="{% url 'login'%}" class="btn-get-started scrollto">BUILD </a>
-          <br> <br>
-          <!-- <a href="{}" class="btn-get-started scrollto">Affiliate member login</a> -->
+          <a  class="btn-get-started scrollto">DEMO </a>
+          <br> <br> 
+          <a href="#about" class="btn-get-started scrollto">LEARN MORE </a>
         </div>
-
       </section>
-      <!-- Main Hero -->
-
-
 
       <main id="main">
 
         <!-- ======= About Section ======= -->
         <section id="about" class="about">
           <div class="container">
+            <h5> Fill in a form and we build you a resume and website in 30 seconds </h5>
+            <a href="https://www.sulemaanfarooq.com" target="_blank">
+              <button>Website Example</button>
+            </a>
+
+            <a href="#demo">
+              <button > Demo </button>
+            </a>
+
+            <a href="https://docs.google.com/document/d/1jCnu6g061EZTDTVq_e7zscP-xnQzyt4aKR0flOIis5Y/edit" target="_blank">
+                <button> Resume Example</button>
+            </a>
+          
 
             <div class="row">
               <div class="col-xl-6 col-lg-7" data-aos="fade-right">
-                <img src="static/img/2.png" class="img-fluid" alt="">
-              </div>
-              <div class="col-xl-6 col-lg-5 pt-5 pt-lg-0">
-                <h3 data-aos="fade-up">About us</h3>
-                <p data-aos="fade-up">
-                    At our resume web app, we help you create a professional resume in just 5 minutes. All you need to do is input your basic information, and we will provide you with a Google Doc link to your resume.
-                </p>
                 <div class="icon-box" data-aos="fade-up">
                   <i class="bx bx-receipt"></i>
-                  <h4>Resume Score of 95+/100</h4>
-                  <p> Companies use an ATS scanner to scan your resume. Our platform uses artificial intelligence and data science models to ensure that your resume score is 95+/100. This means that you can download your resume as a PDF from your Google Doc link and directly start applying to internships.</p>
+                  <h4> ATS optimization </h4>
+                  <p> Our models generate high-scoring bullets and adhere to a specific template, ensuring a 95+/100 ATS score </p>
                 </div>
 
                 <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
                   <i class="bx bx-cube-alt"></i>
-                  <h4>Designed for Internships</h4>
-                  <p>Our artificial intelligence and data science models are designed specifically for internships. This means that you will hear back quickly from potential employers, giving you a better chance of securing your dream internship.</p>
+                  <h4> Google Docs </h4>
+                  <p> DisplayAI resumes are built on google docs in under 30 seconds </p>
                 </div>
+
+                <div class="icon-box" data-aos="fade-up">
+                  <i class="bx bx-cube-alt"></i>
+                  <h4> Tailored Cover letter </h4>
+                  <p> Build job description cover letter in under 30 seconds </p>
+                </div>
+
+                
+
+              </div>
+            
+              <div class="col-xl-6 col-lg-5 pt-5 pt-lg-0">
+
+                  <div class="icon-box" data-aos="fade-up">
+                    <i class="bx bx-receipt"></i>
+                    <h4> DisplayAI Model </h4>
+                    <p> Our model leverages AI and data science to write resumes and cover letters in under 30 seconds to get you hired</p>
+                  </div>
+
+                  <div class="icon-box" data-aos="fade-up">
+                    <i class="bx bx-cube-alt"></i>
+                    <h4> Webiste with QR Code </h4>
+                    <p> Your webiste will be displayai/your_name </p>
+                  </div>
+
+                  <div class="icon-box" data-aos="fade-up">
+                    <i class="bx bx-receipt"></i>
+                    <h4> Tailored Resume </h4>
+                    <p> Build job description tailored resume in under 30 seconds </p>
+                  </div>
+
+                  
+
+                  
+
               </div>
             </div>
           </div>
         </section>
 
-        <!-- End About Section -->
+        <!-- ======= Demo Section ======= -->
+      <section id="demo" class="demo">
+        <div class="container">
+          <h1>Demo</h1>
+          <!-- Embed YouTube Video -->
+          <style>
+            .embed-responsive {
+              position: relative;
+              width: 100%;
+              height: 0;
+              padding-bottom: 56.25%; /* This is the aspect ratio (16:9) */
+              overflow: hidden;
+            }
+          
+            .embed-responsive iframe {
+              position: absolute;
+              width: 100%;
+              height: 100%;
+              top: 0;
+              left: 0;
+            }
+          </style>
+          
+          <div class="embed-responsive embed-responsive-16by9">
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/F-2NzXRxs7Y" allowfullscreen></iframe>
+          </div>
+          
+        </div>
+      </section>
 
-        <!-- ======= Steps Section ======= -->
-        <!-- <section id="steps" class="steps section-bg">
-          <div class="container">
+      <!-- ======= Steps Section ======= -->
+      <!-- <section id="steps" class="steps section-bg">
+        <div class="container">
+          <div class="services-header">
+            <h3>Our Services</h3>
+            <div class="buttons-container">
+              <button class="service-button"><a href="{% url 'login'%}" class="btn-get-started scrollto">BUILD</a></button>
+              <button class="service-button"><a href="{% url 'login'%}" class="btn-get-started scrollto">DEMO</a></button>
+            </div>
+          </div>
 
-            <div class="row no-gutters">
 
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in">
-                <span></span>
-                <h4>60 Questions</h4>
-                <p>There are 4 groups with 15 questions each. Affinity, Collection of Information,Make Decision, and Time Spending</p>
+          <div class="row no-gutters">
+
+            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in">
+              <span></span>
+              <h4>Create a Powerful Professional Presence</h4>
+              <p> Build a  personal website & resume in 30 seconds</p>
+            </div>
+
+            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="200">
+              <span>Resume</span>
+              <h4>AI-Generated Bullets</h4>
+              <p>Our DisplayAI model automatically generates and selects the best resume bullet points for you. Receive a Google Doc and a personalized website in just 30 seconds.</p>
+            </div>
+
+            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="200">
+              <span>Website</span>
+              <h4>Automated Website Creation</h4>
+              <p>As your resume is being built, our model simultaneously creates a personalized website for you.</p>
+            </div>
+
+            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="300">
+              <span>Rebuild</span>
+              <h4>Enhanced Resume and Website</h4>
+              <p> Rebuild your resume & website and DisplayAI's model generates better bullets </p>
+            </div>
+
+            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="400">
+              <span>Tailored Resume</span>
+              <h4>Customized for Job Descriptions</h4>
+              <p>Create a personalized resume tailored to match specific job descriptions in just 30 seconds.</p>
+            </div>
+
+            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
+              <span>Tailored Cover Letter</span>
+              <h4>Crafted for Job Descriptions</h4>
+              <p>Craft a targeted cover letter customized to align with job descriptions in just 30 seconds.</p>
+            </div>
+
+          </div>
+
+        </div>
+      </section> -->
+
+
+       <!-- ======= Testimonials Section ======= -->
+       <section id="testimonials" class="testimonials">
+        <div class="container">
+
+          <div class="section-title" data-aos="fade-up">
+            <h2>Testimonials</h2>
+          </div>
+
+          <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
+            <div class="swiper-wrapper">
+
+              <!-- testimony - sulemaan -->
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <p>
+                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      This service helped me get a software engineer internship at <b> Ford Motor </b>
+                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  </p>
+                  <img src="static/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
+                  <h3>Sulemaan Farooq</h3>
+                  <h4> Ford Motor Company </h4>
+                </div>
               </div>
 
-
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="200">
-                <span>01 Affinity </span>
-                <h4>  Extrovert</h4>
-                <p> An extrovert is an outgoing, overtly expressive person</p>
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <p>
+                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      This service helped me get a data analyst internship at <b> Deloitte </b>
+                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  </p>
+                  <img src="static/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
+                  <h3>TBT</h3>
+                  <h4> Deloitte </h4>
+                </div>
               </div>
 
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="300">
-                <span>01 Affinity </span>
-                <h4>  Introvert</h4>
-                <p>An introvert is a shy, reticent person</p>
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <p>
+                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      This service helped me get a data analyst internship at <b> Signify </b>
+                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  </p>
+                  <img src="static/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
+                  <h3>TBT</h3>
+                  <h4> Signify </h4>
+                </div>
               </div>
 
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="400">
-                <span>02 Collection</span>
-                <h4> Sensing</h4>
-                <p>Sensing focuses on what can be detected through the five senses. If you can see, hear, smell, taste, or touch something, then it is a fact. </p>
-              </div>
-
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
-                <span>02 Collection </span>
-                <h4> Intuition</h4>
-                <p>The ability to understand something immediately, without the need for conscious reasoning</p>
-              </div>
-
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
-                <span>03 make decision </span>
-                <h4> Feeling</h4>
-                <p>Feelings are mental associations. They can be our reactions to emotions, sensations, or other things around us</p>
-              </div>
-
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
-                <span>03 make decision </span>
-                <h4> Thinking</h4>
-                <p>Thoughts are ideas, perceptions, or opinions produced by thinking, or occurring suddenly in the mind</p>
-              </div>
-
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
-                <span>04 Time Spending </span>
-                <h4> Judging</h4>
-                <p>Form and express judgments</p>
-              </div>
-
-              <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
-                <span>04 Time Spending </span>
-                <h4> Perceiving</h4>
-                <p>Decide what to do as we do it, rather than forming a plan ahead of time </p>
+              <div class="swiper-slide">
+                <div class="testimonial-item">
+                  <p>
+                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
+                      This service helped me get a software engineer internship at <b> DataDog </b>
+                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
+                  </p>
+                  <img src="static/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
+                  <h3>TBT</h3>
+                  <h4> DataDog </h4>
+                </div>
               </div>
 
 
 
             </div>
-
+            <div class="swiper-pagination"></div>
           </div>
-        </section>End Steps Section -->
 
+        </div>
+      </section>
 
         <section id="pricing">
-          <h1>Pricing</h1>
           
           <form method="post" action"">
+            <div style="text-align: center;">
+              <h2>Pricing</h2>
+            </div>
+
               {% csrf_token %}
               <div class="pricing-cards">
                   <div class="card">
@@ -208,7 +439,7 @@ li {
                           <li>2 personal websites valid for 1 hour</li>
                       </ul>
                       <p class="price">Free</p>
-                      <button class="get-now-button">Current</button>
+                      <a href="{% url 'login' %}" class="get-now-button">Current</a>
                   </div>
   
                   <div class="card">
@@ -218,7 +449,7 @@ li {
                           <li>5 personal websites valid for 6 months</li>
                       </ul>
                       <p class="price">$9.99</p>
-                      <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
+                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
   
                   </div>
   
@@ -229,7 +460,7 @@ li {
                           <li>10 personal websites valid for 6 months</li>
                       </ul>
                       <p class="price">$14.99</p>
-                      <button class="get-now-button" name="selected_plan" value="economy">Get Now</button>
+                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
   
                   </div>
   
@@ -240,7 +471,7 @@ li {
                           <li>20 personal websites valid for 6 months</li>
                       </ul>
                       <p class="price">$19.99</p>
-                      <button class="get-now-button" name="selected_plan" value="business">Get Now</button>
+                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
                   </div>
   
                   <div class="card">
@@ -250,7 +481,7 @@ li {
                           <li>50 personal  websites valid for 1 year</li>
                       </ul>
                       <p class="price">$39.99</p>
-                      <button class="get-now-button" name="selected_plan" value="first_class">Get Now</button>
+                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
                   </div>
   
                   <div class="card">
@@ -260,7 +491,7 @@ li {
                           <li>100 personal websites valid for 1 year</li>
                       </ul>
                       <p class="price">$99.99</p>
-                      <button class="get-now-button" name="selected_plan" value="pilot">Get Now</button>
+                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
                   </div>
   
   
@@ -271,7 +502,7 @@ li {
                           <li>300 personal websites valid for 6 months</li>
                       </ul>
                       <p class="price">$199.99</p>
-                      <button class="get-now-button" name="selected_plan" value="pilot2">Get Now</button>
+                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
                   </div>
   
                   <div class="card">
@@ -281,7 +512,7 @@ li {
                           <li>shf46@rutgers.edu</li>
                       </ul>
                       <p class="price">Custom</p>
-                      <button class="get-now-button">Get Now</button>
+                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
                   </div>
   
               </div>
@@ -289,128 +520,8 @@ li {
           </form>
         </section>
 
-        <!-- ======= Services Section ======= -->
-        <!-- <section id="services" class="services section-bg">
-            <div class="container">
 
-                <div class="section-title" data-aos="fade-up">
-                <h2>Pricing</h2>
-
-                </div>
-
-                <div class="row">
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="fade-up">
-                    <div class="icon-box icon-box-pink">
-                    <div class="icon"><i class="bx bxl-dribbble"></i></div>
-                    <h4 class="title"><a href=""> Daily </a></h4>
-                    <p class="description"> all features for 24 hours
-                    </p>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="100">
-                    <div class="icon-box icon-box-cyan">
-                    <div class="icon"><i class="bx bx-file"></i></div>
-                    <h4 class="title"><a href="">Weekly</a></h4>
-                    <p class="description"> all features for one week </p>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="200">
-                    <div class="icon-box icon-box-green">
-                    <div class="icon"><i class="bx bx-tachometer"></i></div>
-                    <h4 class="title"><a href=""> Monthly </a></h4>
-                    <p class="description"> all features for one month
-                    </p>
-                    </div>
-                </div>
-
-                <div class="col-md-6 col-lg-3 d-flex align-items-stretch mb-5 mb-lg-0" data-aos="fade-up" data-aos-delay="300">
-                    <div class="icon-box icon-box-blue">
-                    <div class="icon"><i class="bx bx-world"></i></div>
-                    <h4 class="title"><a href="">One time </a></h4>
-                    <p class="description">  all features forever </p>
-                    </div>
-                </div>
-
-                </div>
-
-            </div>
-            </section>End Services Section -->
-
-        <!-- ======= Testimonials Section ======= -->
-        <section id="testimonials" class="testimonials">
-          <div class="container">
-
-            <div class="section-title" data-aos="fade-up">
-              <h2>Testimonials</h2>
-              <p> please check links of testimonials and feel free to contact them </p>
-            </div>
-
-            <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
-              <div class="swiper-wrapper">
-
-                <!-- testimony - sulemaan -->
-                <div class="swiper-slide">
-                  <div class="testimonial-item">
-                    <p>
-                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        This service helped me get a software engineer internship at <b> Ford Motor </b>
-                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
-                    <img src="static/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-                    <h3>Sulemaan Farooq</h3>
-                    <h4> Ford Motor Company </h4>
-                  </div>
-                </div>
-
-                <div class="swiper-slide">
-                  <div class="testimonial-item">
-                    <p>
-                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        This service helped me get a data analyst internship at <b> Deloitte </b>
-                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
-                    <img src="static/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-                    <h3>TBT</h3>
-                    <h4> Deloitte </h4>
-                  </div>
-                </div>
-
-                <div class="swiper-slide">
-                  <div class="testimonial-item">
-                    <p>
-                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        This service helped me get a data analyst internship at <b> Signify </b>
-                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
-                    <img src="static/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-                    <h3>TBT</h3>
-                    <h4> Signify </h4>
-                  </div>
-                </div>
-
-                <div class="swiper-slide">
-                  <div class="testimonial-item">
-                    <p>
-                      <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                        This service helped me get a software engineer internship at <b> DataDog </b>
-                      <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                    </p>
-                    <img src="static/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-                    <h3>TBT</h3>
-                    <h4> DataDog </h4>
-                  </div>
-                </div>
-
-
-
-              </div>
-              <div class="swiper-pagination"></div>
-            </div>
-
-          </div>
-        </section><!-- End Testimonials Section -->
+       
 
 
         <!-- ======= F.A.Q Section ======= -->
@@ -440,7 +551,7 @@ li {
             </div>
 
           </div>
-        </section><!-- End F.A.Q Section -->
+        </section>
 
         <!-- ======= Contact Section ======= -->
         <section id="contact" class="contact">
@@ -484,7 +595,7 @@ li {
 
             </div>
 
-            <div class="row mt-5 justify-content-center" data-aos="fade-up">
+            <!-- <div class="row mt-5 justify-content-center" data-aos="fade-up">
               <div class="col-lg-10">
                 <form action="forms/contact.php" method="post" role="form" class="php-email-form">
                   <div class="row">
@@ -510,12 +621,12 @@ li {
                 </form>
               </div>
 
-            </div>
+            </div> -->
 
           </div>
-        </section><!-- End Contact Section -->
+        </section>
 
-      </main><!-- End #main -->
+      </main>
 
       <!-- ======= Footer ======= -->
       <footer id="footer">
@@ -597,7 +708,11 @@ li {
 
       <!-- Template Main JS File -->
       <script src="static/js/main.js"></script>
+      
 
     </body>
+
+
+    
 
 {% endblock %}

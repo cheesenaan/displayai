@@ -1,57 +1,37 @@
 import os
-import datetime
-from io import BytesIO
 import time
-from unittest import loader
+import json
+import base64
+import secrets
+import string
+from io import BytesIO
 from PIL import Image
+import qrcode
+import stripe
+import httplib2
 from django.shortcuts import render, redirect, get_object_or_404
+from django.http import HttpRequest, HttpResponse, JsonResponse
 from django.core.exceptions import ValidationError
 from django.conf import settings
 from django.urls import reverse
-from django.http import HttpRequest, HttpResponse, JsonResponse
-from google.oauth2.service_account import Credentials
-import openai
-import httplib2
-from django.views import View
-from .models import UserProfile, Account
-from .forms import *
-from googleapiclient.discovery import build
-from google.oauth2 import service_account
-import qrcode
 from django.contrib import messages
 from django.contrib.auth.hashers import make_password, check_password
 from django.contrib.auth.models import User
-import json
-from django.http import JsonResponse, HttpResponse
-from django.shortcuts import render, redirect
 from django.views.decorators.csrf import csrf_exempt
 from django.views.decorators.http import require_POST
-import stripe
-from django.shortcuts import render
-import json
-from django.http import HttpResponse
-import time
-from django.shortcuts import render
-import stripe
-from django.http import JsonResponse
+from django.views import View
+from google.oauth2.service_account import Credentials
 from googleapiclient.discovery import build
 from google.oauth2 import service_account
-import google.auth
-from google.auth.transport.requests import Request
+from google.auth import transport
 from google.auth.exceptions import RefreshError
-from googleapiclient.discovery import build
-from google.auth.transport.requests import AuthorizedSession
-from google.oauth2 import service_account
-from django.contrib import messages
-from django.shortcuts import redirect
 from requests.exceptions import Timeout
-import qrcode
-from io import BytesIO
-from django.http import HttpResponse
 from django.template import loader
-import base64
-from django.shortcuts import render, redirect
-from django.contrib import messages
+from django.contrib.auth.decorators import login_required
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from .models import UserProfile, Account
+from .forms import *
 
 
 prices_dict = {
@@ -64,8 +44,10 @@ prices_dict = {
 }
 
 
-def checkout(request):
-    return render(request, "checkout.html")
+action_words_list = ["Streamlined", "Leveraged", "Developed", "Engineered", "Deployed", "Incorporated", 
+              "Accelerated", "Devised", "Evaluated", "Invented", "Integrated", "Orchestrated", 
+              "Revamped", "Aggregated", "Optimized", "Conceptualized", "Overhauled", "Spearheaded", 
+              "Reported", "Implemented", "Generated", "Forged", "Governed", "Experimented", "Centralized", "Deciphered", "Synthesized", "Troubleshot", "Collected"]
 
 def home(request):
     return render(request, "home.html")
@@ -73,42 +55,160 @@ def home(request):
 def login(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
+        user_name = request.POST['name']
+        user_email = request.POST['email']
+        user_password = request.POST['password']
 
         if request.POST['action'] == 'log_in':
-                print("logging in user")
+            print("logging in user")
 
-                try:
-                    account = Account.objects.get(name=request.POST['name'], password=request.POST['password'])
-                    return redirect('form', account.id)
-                except Account.DoesNotExist:
-                    messages.error(request, 'Invalid login credentials.')
+            try:
+                account = Account.objects.get(name = user_name, email = user_email, password = user_password)
+                # messages.success(request, 'Login successful !')
+                account.is_authenticated = True
+                account.save()
+                return redirect('form', account.id)
+            except Account.DoesNotExist:
+                messages.error(request, 'Invalid login credentials.')
 
         elif request.POST['action'] == 'create_account':
-                if Account.objects.filter(name=request.POST['name']).exists():
-                    messages.error(request, 'Username already taken. Please choose another.')
-                else:
-                    new_account = Account()
-                    new_account.name = request.POST['name']
-                    new_account.password = request.POST['password']
-                    new_account.save()
-                    # create a new Plan instance and set Plan.account to be new_account
-                    free_plan = Plan(account=new_account)
-                    free_plan.save()
+            if Account.objects.filter(name = user_name).exists():
+                messages.error(request, 'Username already taken. Please choose another.')
+            elif Account.objects.filter(email = user_email).exists():
+                messages.error(request, 'Email already taken. Please choose another.')
+            else:
 
-                    return redirect('form' , account_id = new_account.id)
+                new_account = Account()
+                new_account.name = user_name
+                new_account.email = user_email
+                new_account.password = user_password
+                new_account.save()
+                free_plan = Plan(account=new_account)
+                free_plan.save()
+                new_account.user_plan = free_plan
+                new_account.is_authenticated = True
+                new_account.save()
+
+                try:
+                    subject = 'Welcome to DisplayAI'
+                    from_email = settings.EMAIL_HOST_USER
+                    recipient_list = [new_account.email]    
+
+                    # Prepare context with payment details
+                    context_email = {
+                        'account': new_account,
+                    }
+
+                    email_html = render_to_string('new_account_email.html', context_email)
+                    send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
+
+                except Exception as e:
+                    new_account.delete()
+                    messages.error(request, 'Connection issue, please try again')
+
+                # messages.success(request, 'Account created !')
+
+                return redirect('form' , account_id = new_account.id)
     else:
         login_form = LoginForm()
 
     context = {'login_form': login_form}
     return render(request, 'login.html', context)
 
-def logout(request):
+
+def logout(request, account_id):
+    account = Account.objects.get(id=account_id)
+    account.is_authenticated = False
+    account.save()
+
     return redirect('home')
 
-def account_details(request , account_id):
-    
-    account = Account.objects.get(id=account_id)
 
+
+def forgot_password(request):
+    if request.method == 'POST':
+        # Extracting form data
+        name = request.POST.get('name')
+        email = request.POST.get('email')
+
+        try:
+            account = Account.objects.get(name=name, email=email)
+
+            def generate_reset_code():
+                alphabet = string.ascii_letters + string.digits
+                reset_code = ''.join(secrets.choice(alphabet) for _ in range(20)) 
+                return reset_code
+
+            # Generate a unique reset password code
+            reset_code = generate_reset_code()
+
+            # Check if the generated code already exists, generate again if it does
+            while Account.objects.filter(reset_password_code=reset_code).exists():
+                reset_code = generate_reset_code()
+
+            # Update the account with the new reset password code
+            account.reset_password_code = reset_code
+            account.save()
+
+            subject = 'Reset Password Instructions'
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [account.email]
+
+            # Prepare context with reset password code
+            context_email = {
+                'account': account,
+                'reset_code': reset_code,
+            }
+
+            # Render email template
+            email_html = render_to_string('forgot_password_email.html', context_email)
+
+            # Send email
+            send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
+
+            messages.success(request, "Email instructions sent to " + email)
+        except Account.DoesNotExist:
+            messages.error(request, "Invalid credentials.")
+
+        return redirect('forgot_password')
+
+    else:
+        return render(request, "forgot_password.html")
+
+
+def reset_password(request, account_id):
+
+    if request.method == 'POST':
+        account = Account.objects.get(id=account_id)
+        verification_code = request.POST.get('verification_code')
+        new_password = request.POST.get('new_password')
+        confirm_new_password = request.POST.get('confirm_new_password')
+
+        if verification_code == account.reset_password_code and new_password == confirm_new_password:
+                account.password = new_password
+                account.reset_password_code = ""
+                account.save()
+                messages.success(request, "Password has been reset. Log In ")
+                return redirect('login')
+        else:
+            if verification_code != account.reset_password_code:
+                messages.error(request, "verification code invalid")
+            if new_password != confirm_new_password:
+                messages.error(request, "Confirm password does not match")
+            
+        return redirect('reset_password', account_id)
+
+    else:
+        account = Account.objects.get(id = account_id)
+        context = {
+            'account' :account
+        }
+
+        return render(request, "reset_password.html", context)
+
+
+def account(request , account_id):
+    
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
     user_profile = UserProfile.objects.get(account = account)
@@ -120,7 +220,47 @@ def account_details(request , account_id):
         'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
     }
 
-    return render (request, "account_details.html", context)
+    return render (request, "account.html", context)
+
+
+def edit_account_name(request, account_id):
+    account = Account.objects.get(id=account_id)
+
+    password = request.POST.get('password')
+    name = request.POST.get('name')
+
+    if name != account.name and password == account.password:
+        account.name = name
+        account.save()
+        messages.success(request, "name has been changed to " + name)
+    else:
+        if password != account.password:
+            messages.error(request, "incorrect password")
+        if name == account.name:
+            messages.error(request, "already registered with name : " + name)
+
+    
+    return redirect('account', account_id)
+
+
+def edit_account_email(request, account_id):
+    account = Account.objects.get(id=account_id)
+
+    password = request.POST.get('password')
+    email = request.POST.get('email')
+
+    if email != account.email and password == account.password:
+        account.email = email
+        account.save()
+        messages.success(request, "email has been changed to " + email)
+    else:
+        if password != account.password:
+            messages.error(request, "incorrect password")
+        if email == account.email:
+            messages.error(request, "already registered with email : " + email)
+    
+    return redirect('account', account_id)
+
 
 def form(request , account_id):
     account = Account.objects.get(id=account_id)
@@ -209,18 +349,20 @@ def form(request , account_id):
         else:
             print("There are no projects")
 
-        resume_link = create_resume(user_profile)
+        resume_link = create_resume(user_profile, account)
         if resume_link == "TIME_OUT_ERROR_974":
             messages.error(request, "TIME_OUT_ERROR_974. Your profile was created however your resume could not due to poor internet signal. Please click the Re-build with same data")
             user_profile.save()
+            account.user_profile = user_profile
             account.save()
             user_plan.save()
             return redirect('confirmation', account_id=account_id)
 
         account.set_resume_link(resume_link)
         account.user_profile = user_profile
+        account.user_plan = user_plan
         user_profile.resume_link = resume_link
-        print(user_profile.resume_link)
+        messages.success(request, "User profile created. Website and resume built successfully !")
         user_profile.save()
         user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
         user_plan.total_forms_filled = user_plan.total_forms_filled + 1
@@ -262,6 +404,7 @@ def website(request, url_name):
 
     # Render the template with the context
     return render(request, 'website.html', context)
+
 
 def confirmation(request, account_id):
     account = Account.objects.get(id=account_id)
@@ -339,6 +482,7 @@ def confirmation(request, account_id):
         template = loader.get_template('confirmation.html')
         return HttpResponse(template.render(context, request))
 
+
 def payment_successful(request):
     if request.method == 'GET':
         stripe.api_key = settings.STRIPE_API_KEY
@@ -371,6 +515,7 @@ def payment_successful(request):
             user_plan.forms_filled_on_current_plan = 0
             user_plan.set_subscription_ids(subscription_value)
 
+        account.user_payment = payment_instance
         account.save()
         user_plan.save()
         userprofile.save()
@@ -382,11 +527,35 @@ def payment_successful(request):
             'remaining': user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
         }
 
+        
+
+        payment_instance = Payment.objects.get(account=account, subscription_id=subscription_value)
+
+        if payment_instance:
+            subject = 'DisplayAI Order Confirmation - ' + str(account.tier)
+            from_email = settings.EMAIL_HOST_USER
+            recipient_list = [account.email]
+
+            # Prepare context with payment details
+            context_email = {
+                'account': account,
+                'payment_instance' : payment_instance
+            }
+
+            # Render email template
+            email_html = render_to_string('order_confirmation_email.html', context_email)
+
+            # Send email
+            send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
+
+
+
         return render(request, 'payment_successful.html', context)
     else:
         # Redirect to prevent form resubmission
         messages.error(request, "You cannot reload this page.")
         return redirect('home')  # Redirect to your home page or any other appropriate
+
 
 def payment_cancelled(request):
     print("payment_cancelled")
@@ -394,7 +563,8 @@ def payment_cancelled(request):
     
     return render(request, 'payment_cancelled.html')
 
-def account_payments(request, account_id):
+
+def subscriptions(request, account_id):
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
     userprofile = UserProfile.objects.get(account = account)
@@ -412,7 +582,8 @@ def account_payments(request, account_id):
                     'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
         }
 
-        return render(request, 'account_payments.html' , context)
+        return render(request, 'subscriptions.html' , context)
+
 
 def cancel_subscription(request, account_id, subscription_id):
     stripe.api_key = settings.STRIPE_API_KEY
@@ -422,10 +593,10 @@ def cancel_subscription(request, account_id, subscription_id):
         payment_instance = Payment.objects.filter(account=account, subscription_id=subscription_id).get()
         # if (account.password != password):
         #     messages.error(request,"error : incorrect password")
-        #     return redirect('account_payments', account_id=account_id)
+        #     return redirect('subscriptions', account_id=account_id)
     except Payment.DoesNotExist:
         messages.error(request,"error : Payment instance not found")
-        return redirect('account_payments', account_id=account_id)
+        return redirect('subscriptions', account_id=account_id)
 
     stripe.Subscription.modify(
         subscription_id,
@@ -444,9 +615,28 @@ def cancel_subscription(request, account_id, subscription_id):
         payment_instance.update_subscription_info()
         payment_instance.subscription_status = "cancelled"
         payment_instance.save()
-        messages.success(request, f"Subscription has been cancelled and your plan is still valid until {payment_instance.end_date}.")
 
-    return redirect('account_payments', account_id=account_id)
+        # subject = 'DisplayAI' + str(account.tier) + 'Cancelled'
+        # from_email = settings.EMAIL_HOST_USER
+        # recipient_list = [account.user_profile.email]
+
+        # # Prepare context with payment details
+        # context_email = {
+        #     'account': account,
+        #     'payment_instance' : payment_instance
+        # }
+
+        # # Render email template
+        # email_html = render_to_string('cancel_confirmation_email.html', context_email)
+
+        # # Send email
+        # send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
+
+        messages.success(request, f"Your subscription has been cancelled and will no longer be charged. Plan is still active until {payment_instance.end_date}.")
+        return redirect('subscriptions', account_id=account_id)
+
+    return redirect('subscriptions', account_id=account_id)
+
 
 def reload_resume_and_website_with_job_description(request: HttpRequest, account_id: int):
     try:
@@ -472,7 +662,7 @@ def reload_resume_and_website_with_job_description(request: HttpRequest, account
                 project.bullet1, project.bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET"
             project.save()
 
-        new_resume_link = create_resume(user_profile)
+        new_resume_link = create_resume(user_profile, account)
         if new_resume_link == "TIME_OUT_ERROR_974":
             messages.error(request, "TIME_OUT_ERROR_974. Could not build personal website and tailored resume due to poor internet. Please try again")
             return redirect('confirmation', account_id=account_id)
@@ -501,6 +691,7 @@ def reload_resume_and_website_with_job_description(request: HttpRequest, account
 
     return redirect('confirmation', account_id=account_id)
 
+
 def reload_resume_and_website(request, account_id):
     try:
         account = Account.objects.get(id=account_id)
@@ -524,9 +715,9 @@ def reload_resume_and_website(request, account_id):
                 project.bullet1, project.bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET"
             project.save()
 
-        new_resume_link = create_resume(user_profile)
+        new_resume_link = create_resume(user_profile, account)
         if new_resume_link == "TIME_OUT_ERROR_974":
-            messages.error(request, "TIME_OUT_ERROR_974. Could not re-build personal website and reusme due to poor internet. Please try again")
+            messages.error(request, "TIME_OUT_ERROR_974. Could not re-build personal website and resume due to poor internet. Please try again")
             return redirect('confirmation', account_id=account_id)
 
         user_profile.resume_link = new_resume_link
@@ -543,15 +734,18 @@ def reload_resume_and_website(request, account_id):
 
     except Timeout:
         messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+    except Exception as e:
+        messages.error(request, "Unkown error. Please try again.")
 
     return redirect('confirmation', account_id=account_id)
 
-def update_resume(user_profile, DOCUMENT_ID):
+
+def update_resume(user_profile, account, DOCUMENT_ID):
     
     # Dictionary to store the placeholder replacements
     placeholder_replacements = {
             'name': f"{user_profile.first_name.upper()} {user_profile.last_name.upper()}",
-            'email': user_profile.email,
+            'email': account.email,
             'phone': user_profile.phone,
             'city': user_profile.city,
             'state': user_profile.state.upper(),
@@ -594,8 +788,7 @@ def update_resume(user_profile, DOCUMENT_ID):
         })
 
     # Path to your service account credentials JSON file
-    SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
-    #SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
+    SERVICE_ACCOUNT_FILE = settings.SERVICE_ACCOUNT_FILE
 
     # Authenticate and create the Google Docs API service
     credentials = service_account.Credentials.from_service_account_file(SERVICE_ACCOUNT_FILE, scopes=['https://www.googleapis.com/auth/documents'])
@@ -721,13 +914,14 @@ def update_resume(user_profile, DOCUMENT_ID):
     user_profile.save()
     return 
 
-def create_resume(user_profile):
+
+def create_resume(user_profile, account):
     
     try:
         # Dictionary to store the placeholder replacements
         placeholder_replacements = {
                 'name': f"{user_profile.first_name.upper()} {user_profile.last_name.upper()}",
-                'email': user_profile.email,
+                'email': account.email,
                 'phone': user_profile.phone,
                 'city': user_profile.city,
                 'state': user_profile.state.upper(),
@@ -768,8 +962,7 @@ def create_resume(user_profile):
             })
 
         # Path to your service account credentials JSON file
-        SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
-        #SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
+        SERVICE_ACCOUNT_FILE = settings.SERVICE_ACCOUNT_FILE
 
         # ID of the Google Doc you want to modify
         DOCUMENT_ID = '1PVKqAkOTjdorBmlJOIGHYhIjYuBPxuPZzKeN4TUQZNE'
@@ -920,11 +1113,13 @@ def create_resume(user_profile):
         print(f"An unexpected error occurred: {e}")
         return "TIME_OUT_ERROR_974"
 
+
 def create_cover_letter_google_doc(data):
 
     try:
         # Path to your service account credentials JSON file
-        SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
+        SERVICE_ACCOUNT_FILE = settings.SERVICE_ACCOUNT_FILE
+        
         FOLDER_ID = '1aGcF78a65Nus-K9kCv8P7NzMBSZjJnNY'
 
         # Authenticate and create the Google Drive API service
@@ -969,6 +1164,7 @@ def create_cover_letter_google_doc(data):
         print(f"An unexpected error occurred: {e}")
         return "TIME_OUT_ERROR_974"
 
+
 def build_cover_letter(request: HttpRequest, account_id: int):
 
     try:
@@ -993,7 +1189,7 @@ def build_cover_letter(request: HttpRequest, account_id: int):
         Using my work experinces and projects, build a cover letter. Do not add any placeholders
         name : {user_profile.first_name} + {user_profile.last_name}
         phone : {user_profile.phone}
-        email : {user_profile.email}
+        email : {account.email}
         address : {user_profile.city} + {user_profile.state}
         institution : {user_profile.institution}
         education : {user_profile.major} + {user_profile.minor}
@@ -1040,10 +1236,13 @@ def build_cover_letter(request: HttpRequest, account_id: int):
         messages.success(request, "cover letter built successfully")
     except Timeout:
         messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+    except Exception as e:
+        messages.error(request, "Unkown error. Please try again.")
 
     return redirect('confirmation', account_id=account_id)
 
-def openai_work_experience_with_job_description(JOB_DESCRIPTION, EXPERIENCE ,TITLE, DESCRIPTION):
+
+def openai_work_experience_with_job_description(JOB_DESCRIPTION, EXPERIENCE ,TITLE, DESCRIPTION ):
     openai.api_key = settings.OPENAI_API_KEY
 
     prompt = f"""
@@ -1077,6 +1276,7 @@ def openai_work_experience_with_job_description(JOB_DESCRIPTION, EXPERIENCE ,TIT
     three = lines[2].split('. ')[1]
 
     return one, two, three
+
 
 def openai_project_with_job_description(JOB_DESCRIPTION, PROJECT, DESCRIPTION):
     openai.api_key = settings.OPENAI_API_KEY
@@ -1114,12 +1314,13 @@ def openai_project_with_job_description(JOB_DESCRIPTION, PROJECT, DESCRIPTION):
 
     return one, two
 
-def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 
+def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
+    
     openai.api_key = settings.OPENAI_API_KEY
 
     prompt = f"""
-    give me exactly 3 very short, concise, and numerically quantified one sentence resume points for experience
+    give me exactly 3 very short, concise, and numerically quantified one sentence resume points for
     company : {EXPERIENCE}
     position : {TITLE}
     description : {DESCRIPTION}
@@ -1147,7 +1348,71 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
     two = lines[1].split('. ')[1]
     three = lines[2].split('. ')[1]
 
+    print(one, two, three)
+    print()
+
     return one, two, three
+
+# def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION, account):
+
+#     openai.api_key = settings.OPENAI_API_KEY
+
+#     import random
+
+#     account_action_words = account.get_unique_words_list()
+#     print("account_action_words: ", account_action_words)
+
+#     action_words_list
+
+#     list = []
+#     for word in action_words_list:
+#         if word not in account_action_words:
+#             list.append(word)
+
+#     random_action_words = random.sample(list, 3)
+#     for word in random_action_words:
+#         account.add_unique_word(word)
+
+#     account.save()
+
+#     print("random_action_words are : ", random_action_words)
+
+
+#     prompt = f"""
+#     give me exactly 3 very short, concise, and numerically quantified one sentence resume points using
+#     the actions words {random_action_words} for 
+#     company : {EXPERIENCE}
+#     position : {TITLE}
+#     description : {DESCRIPTION}
+#     """
+
+#     # Make a request to OpenAI API using the chat/completions endpoint
+#     response = openai.ChatCompletion.create(
+#         model="gpt-3.5-turbo",
+#         messages=[
+#             {"role": "system", "content": "You are a helpful assistant."},
+#             {"role": "user", "content": prompt}
+#         ],
+#         max_tokens=80,  # Adjust as needed
+#         temperature=0.7  # Adjust as needed
+#     )
+
+#     # Extract and print the assistant's reply
+#     reply = response['choices'][0]['message']['content']
+
+#     # Clean the text and extract bullet points
+#     lines = [line.strip().rstrip('.') for line in reply.split('\n') if line.strip()]
+
+#     # Assign each bullet point to a variable
+#     one = lines[0].split('. ')[1]
+#     two = lines[1].split('. ')[1]
+#     three = lines[2].split('. ')[1]
+
+#     print(one, two, three)
+#     print()
+
+#     return one, two, three
+
 
 def openai_project(PROJECT, DESCRIPTION):
 
@@ -1204,6 +1469,12 @@ class CheckAccountNameView(View):
     def get(self, request, *args, **kwargs):
         name = request.GET.get('name', None)
         data = {'is_taken': Account.objects.filter(name=name).exists()}
+        return JsonResponse(data)
+
+class CheckAccountEmailView(View):
+    def get(self, request, *args, **kwargs):
+        email = request.GET.get('email', None)
+        data = {'is_taken': Account.objects.filter(email=email).exists()}
         return JsonResponse(data)
 
 # def stripe_webhook(request):

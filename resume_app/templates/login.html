@@ -1,11 +1,59 @@
 {% extends 'index.html' %}
 {% block content %}
+{% load static %}
+
+
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
+
+        <div class="logo">
+            <h1><a href="/">display.ai</a></h1>
+        </div>
+
+        <nav id="navbar-form" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="/">Home</a></li>
+                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
+
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Mobile navigation toggle
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('mobile-nav-toggle')) {
+                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
+                e.target.classList.toggle('bi-list');
+                e.target.classList.toggle('bi-x');
+            }
+        });
+
+        // Mobile nav dropdowns activate
+        document.addEventListener('click', function (e) {
+            var navbar = document.querySelector('#navbar-form');
+            if (navbar.classList.contains('navbar-mobile')) {
+                var dropdownLink = e.target.closest('.navbar .dropdown > a');
+                if (dropdownLink) {
+                    e.preventDefault();
+                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
+                }
+            }
+        }, true);
+    });
+
+
+    </script>
+
+</header>
 
 <style>
 body {
         font-family: Arial, sans-serif;
         background-color: #f4f4f4;
-        background-image: url('static/img/2.png');
+        background-image: url('{% static "img/2.png" %}');
         background-size: cover;  /* Cover the entire viewport */
         background-position: center;
         background-repeat: no-repeat;
@@ -32,6 +80,16 @@ body {
 
     input[type="text"],
     input[type="password"] {
+        width: 100%;
+        padding: 10px;
+        margin-bottom: 10px;
+        box-sizing: border-box;
+        border: 1px solid #ccc;
+        border-radius: 4px;
+    }
+
+    input[type="text"],
+    input[type="email"] {
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
@@ -169,9 +227,54 @@ body {
         font-weight: bold;  /* Bold text */
     }
 
+    .success-message {
+    color: white;
+    background-color: green;  /* Green background color */
+    border: 1px solid green;  /* Darker green border color */
+    padding: 10px;  /* Adjust the padding as needed */
+    border-radius: 5px;  /* Rounded corners */
+    font-weight: bold;  /* Bold text */
+}
+
+#loadingModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #fff; /* White background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            z-index: 1000; /* Ensure the modal appears above the rest of the content */
+        }
+    
+        /* Animation for the modal */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+    
+        /* Style for the background overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+            backdrop-filter: blur(5px); /* Add a blur effect to the background */
+            z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
+            display: none;
+        }
+
 </style>
-
-
 
 <br> <br> <br> <br> <br> <br>
 
@@ -202,44 +305,100 @@ body {
     {{ login_form.as_p }}
 
     <span id="nameValidation" style="display: none;""></span>
-        <script>
-            $(document).ready(function () {
-                // Add an event listener to the url_name input field
-                console.log("JavaScript loaded!");
-                $('#id_name').on('input', function () {
-                    var name = $(this).val();
-            
-                    // Send an AJAX request to check if the url_name is taken
+    <script>
+        $(document).ready(function () {
+            // Add an event listener to the name input field
+            $('#id_name').on('input', function () {
+                var name = $(this).val();
+    
+                // Send an AJAX request to check if the name is taken
+                if ($('#selected_action').val() === 'create_account') {
                     $.ajax({
-                        url: '/login/check_account_name/',  // Fix the URL here
+                        url: '/login/CheckAccountNameView/',  // Fix the URL here
                         type: 'GET',
                         data: { 'name': name },
                         success: function (data) {
+                            // Remove existing validation message
+                            $('#nameValidation').remove();
+        
+                            // Append the validation message based on the availability
                             if (data.is_taken) {
-                                // Display a message if the url_name is taken as a red alert bubble
-                                $('#nameValidation').html('<div class="alert alert-danger" role="alert"> PLEASE TRY ANOTHER NAME</div>');
+                                // Display a red alert bubble if the name is taken
+                                $('#id_name').after('<div <span id="nameValidation" class="alert alert-danger" role="alert"> PLEASE TRY ANOTHER NAME</span> </div>');
                             } else {
-                                // Display a message if the url_name is available as a green alert bubble
-                                $('#nameValidation').html('<div class="alert alert-success" role="alert">NAME available</div>');
+                                // Display a green alert bubble if the name is available
+                                $('#id_name').after('<div <span id="nameValidation" class="alert alert-success" role="alert">NAME available</span> </div>');
                             }
                         }
                     });
-                });
+                }
             });
-        </script>
+        });
+    </script>
 
 
-    <button type="submit">Submit</button>
+    <!-- Include jQuery if not already included -->
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+    <span id="emailValidation" style="display: none;"></span>
+    <script>
+        $(document).ready(function () {
+            // Add an event listener to the email input field
+            $('#id_email').on('input', function () {
+                var email = $(this).val();
+    
+                // Send an AJAX request to check if the email is taken
+                if ($('#selected_action').val() === 'create_account') {
+                    $.ajax({
+                        url: '/login/CheckAccountEmailView/',  // Fix the URL here
+                        type: 'GET',
+                        data: { 'email': email },
+                        success: function (data) {
+                            // Remove existing validation message and icon
+                            $('#emailValidation').remove();
+        
+                            // Append the validation message and icon based on the availability
+                            if (data.is_taken) {
+                                // Display a red cross if the email is taken
+                                $('#id_email').after('<div id="emailValidation" class="alert alert-danger" role="alert"> PLEASE TRY ANOTHER EMAIL</div>');
+                            } else {
+                                // Display a green tick if the email is available
+                                $('#id_email').after('<div id="emailValidation" class="alert alert-success" role="alert">EMAIL available</div>');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+    
+
+    <button type="submit" onclick="showLoadingModal()">Submit</button>
+
 
     <p id="back-form-label" onclick="goBack()">Back</p>
+
+
+    <div id="loadingModal">
+        <p id="loadingText"><b>Loading...</b></p>
+    </div>
+    
+    <div id="loadingOverlay"></div>
+
+    
+
+    <a id="forgot_password" href="{% url 'forgot_password'%}" "display: none; color:#2980b9;">Forgot Password</a>
+
+
 </form>
+
 
 <script>
     function showForm(formType) {
         document.getElementById("initial-options").style.display = "none";
         document.getElementById("login-form").style.display = "block";
         document.getElementById("back-label").style.display = "block";
-        
+
         // Set the selected action in the hidden input
         document.getElementById("selected_action").value = formType;
 
@@ -247,11 +406,63 @@ body {
             // Unhide login heading
             document.getElementById('loginHeading').style.display = 'block';
             document.getElementById('createAccountHeading').style.display = "none";
+            document.getElementById('forgot_password').style.display = 'block';
+            document.getElementById('nameValidation').style.display = "none";
+            document.getElementById('emailValidation').style.display = "none";
+
+
         } else if (formType === 'create_account') {
             // Unhide create account heading
             document.getElementById('createAccountHeading').style.display = 'block';
             document.getElementById('loginHeading').style.display = "none";
             document.getElementById('nameValidation').style.display = 'block';
+            document.getElementById('emailValidation').style.display = 'block';
+            document.getElementById('forgot_password').style.display = "none";
+
+            
+            function showLoadingModal() {
+
+                document.getElementById("loadingModal").style.display = "block";
+                document.getElementById("loadingOverlay").style.display = "block";
+
+                document.getElementById("selected_action").value = formType;
+
+                if (formType === 'log_in') {
+                    // Array of loading messages
+                    var loadingMessages = [
+                        "Loggin In ",
+                    ];
+
+                }
+                else if (formType === 'create_account') {
+
+                    var loadingMessages = [
+                        "creating account",
+                        "please wait",
+                    ];
+
+                }
+
+                // Function to display loading messages in a loop
+                function displayLoadingMessages(index) {
+                    // Set the loading text
+                    document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+
+                    // Increment index or reset to 0 if at the end
+                    index = (index + 1) % loadingMessages.length;
+
+                    // Set a timeout for the next message
+                    setTimeout(function () {
+                        displayLoadingMessages(index);
+                    }, 1000); // Adjust the time delay between messages (in milliseconds)
+                }
+
+                // Start the loop
+                displayLoadingMessages(0);
+                // You can add additional logic or AJAX requests if needed here
+            }
+
+
         }
     }
 
@@ -264,13 +475,54 @@ body {
         document.getElementById("loginHeading").style.display = "none";
 
         document.getElementById('nameValidation').style.display = 'none';
+        document.getElementById('emailValidation').style.display = 'none';
 
+    }
+
+    function showLoadingModal() {
+        // Show the loading modal and overlay
+        document.getElementById("loadingModal").style.display = "block";
+        document.getElementById("loadingOverlay").style.display = "block";
+
+        // Array of loading messages
+        var loadingMessages = [
+            "Your user is being created. Please wait...",
+            "A confirmation email is being sent...",
+        ];
+
+        // Function to display loading messages in a loop
+        function displayLoadingMessages(index) {
+            // Set the loading text
+            document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+
+            // Increment index or reset to 0 if at the end
+            index = (index + 1) % loadingMessages.length;
+
+            // Set a timeout for the next message
+            setTimeout(function () {
+                displayLoadingMessages(index);
+            }, 3000); // Adjust the time delay between messages (in milliseconds)
+        }
+
+        // Start the loop
+        displayLoadingMessages(0);
+
+        // You can add additional logic or AJAX requests if needed here
     }
 </script>
 
-{% for message in messages %}
-    <p class="error-message">{{ message }}</p>
-{% endfor %}
+{% if messages %}
+  <ul>
+    {% for message in messages %}
+      {% if message.tags == 'error' %}
+        <li class="error-message">{{ message }}</li>
+      {% elif message.tags == 'success' %}
+        <li class="success-message">{{ message }}</li>
+      {% endif %}
+    {% endfor %}
+  </ul>
+{% endif %}
+
 
 
 {% endblock %}

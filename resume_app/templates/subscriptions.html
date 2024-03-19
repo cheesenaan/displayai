@@ -3,31 +3,66 @@
 
 <br>  <br> 
 
-
 <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex justify-content-between">
 
-      <div class="logo">
-        <h1><a href="/">display.ai</a></h1>
-      </div>
+        <div class="logo">
+            <h1><a href="/">display.ai</a></h1>
+        </div>
 
-      <nav id="navbar" class="navbar">
-        <ul>
-            <li><a class="nav-link scrollto active" href="{% url 'home'  %}">Home</a></li>
-            <li><a class="nav-link scrollto active" href=" {% url 'account_details' account_id=account.id %} ">   Account</a></li>
-          <li><a class="nav-link scrollto active" href=" {% url 'confirmation' account_id=account.id %} ">   Build</a></li>
-          <li><a class="nav-link scrollto active" href="{% url 'logout'  %}">Log Out</a></li>
-
-          
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-      
+        <nav id="navbar-form" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="/">Home</a></li>
+                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'confirmation' account_id=account.id %}"> Build </a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Mobile navigation toggle
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('mobile-nav-toggle')) {
+                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
+                e.target.classList.toggle('bi-list');
+                e.target.classList.toggle('bi-x');
+            }
+        });
+
+        // Mobile nav dropdowns activate
+        document.addEventListener('click', function (e) {
+            var navbar = document.querySelector('#navbar-form');
+            if (navbar.classList.contains('navbar-mobile')) {
+                var dropdownLink = e.target.closest('.navbar .dropdown > a');
+                if (dropdownLink) {
+                    e.preventDefault();
+                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
+                }
+            }
+        }, true);
+    });
+
+
+    </script>
+
 </header>
 
 
 <style>
+
+.cancel-subscription-button {
+  background-color: green;
+}
+
+.cancel-subscription-button:hover {
+  background-color: orange; /* Change this to the desired hover color */
+}
+
+
     body {
         font-family: 'Arial', sans-serif;
         background-color: #f4f4f4;
@@ -38,6 +73,14 @@
         align-items: center;
         height: auto;
     }
+
+    .cancel-button {
+  background-color: red;
+}
+
+.cancel-button:hover {
+  background-color: orange;
+}
     
     
     .content {
@@ -123,6 +166,7 @@
     @media (max-width: 768px) {
         /* Adjust styles for smaller screens if needed */
     }
+
     
     .reload_resume_and_website-button, button {
         background-color: #3498db; /* Attractive blue color */
@@ -262,7 +306,7 @@
         <button type="button"> Build Page </button>
     </a>
 
-    <a href="{% url 'account_details' account_id=account.id %}" class="reload_resume_and_website-button">
+    <a href="{% url 'account' account_id=account.id %}" class="reload_resume_and_website-button">
         <button type="button"> Account details </button>
     </a>
     
@@ -308,7 +352,7 @@
             <th>End Date</th>
             <th>Status</th>
             <!-- <th>Cancel Status</th> -->
-            <th>Cancel Status Text</th>
+            <!-- <th>Cancel Status Text</th> -->
             <th>Subscription ID</th>
             <th>Email</th>
             <!-- <th>Customer ID</th> -->
@@ -324,7 +368,7 @@
                 <td>{{ payment_instance.end_date }}</td>
                 <td>{{ payment_instance.subscription_status }}</td>
                 <!-- <td>{{ payment_instance.subscription_cancel_status }}</td> -->
-                <td>{{ payment_instance.subscription_cancel_status_text }}</td>
+                <!-- <td>{{ payment_instance.subscription_cancel_status_text }}</td> -->
                 <td>{{ payment_instance.subscription_id }}</td>
                 <td>{{ payment_instance.customer_email }}</td>
                 <!-- <td>{{ payment_instance.customer_id }}</td> -->
@@ -334,9 +378,9 @@
                         {% csrf_token %}
                         <input type="hidden" name="subscription_id" value="{{ payment_instance.subscription_id }}">
                         {% if payment_instance.subscription_status != 'cancelled' %}
-                            <button type="button"  onclick="confirmPause('{{ payment_instance.end_date }}', '{{ payment_instance.subscription_id }}')">Cancel Subscription</button>
+                        <button type="button" class="cancel-subscription-button" onclick="confirmPause('{{ payment_instance.end_date }}', '{{ payment_instance.subscription_id }}')">Cancel Subscription</button>
                         {% else %}
-                        <button type="button" onclick="alreadyCancelled('{{ payment_instance.end_date }}', '{{ payment_instance.subscription_id }}')"> Subscription already cancelled</button>
+                            <button type="button" class="cancel-button" onclick="alreadyCancelled('{{ payment_instance.end_date }}', '{{ payment_instance.subscription_id }}')">Subscription already cancelled</button>
                         {% endif %}
 
                     </form>
@@ -369,13 +413,12 @@
 
         </script>
     
-
 <br> <br>  <br>  <br> 
 
 <h1> Cancel Subscription(s) </h1>
 
 If you pause now, you will no longer be charged and your subscription will remain active until the end of the month. 
-Click the "pause subscription" button for more information. 
+Click the "cancel subscription" button for more information. 
 
 <br><br>
 

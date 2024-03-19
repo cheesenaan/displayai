@@ -9,56 +9,84 @@
 <header id="header" class="fixed-top d-flex align-items-center">
     <div class="container d-flex justify-content-between">
 
-      <div class="logo">
-        <h1><a href="/">display.ai</a></h1>
-      </div>
+        <div class="logo">
+            <h1><a href="/">display.ai</a></h1>
+        </div>
 
-      <nav id="navbar" class="navbar">
-        <ul>
-            <li><a class="nav-link scrollto active" href="{% url 'home'  %}">Home</a></li>
-          <li><a class="nav-link scrollto active" href=" {% url 'account_details' account_id=account.id %} ">   Account</a></li>
-          <li><a class="nav-link scrollto active" href="{% url 'logout'  %}">Log Out</a></li>
+        <nav id="navbar-form" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="/">Home</a></li>
+                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
 
-          
-        </ul>
-        <i class="bi bi-list mobile-nav-toggle"></i>
-      </nav><!-- .navbar -->
-      
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
     </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Mobile navigation toggle
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('mobile-nav-toggle')) {
+                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
+                e.target.classList.toggle('bi-list');
+                e.target.classList.toggle('bi-x');
+            }
+        });
+
+        // Mobile nav dropdowns activate
+        document.addEventListener('click', function (e) {
+            var navbar = document.querySelector('#navbar-form');
+            if (navbar.classList.contains('navbar-mobile')) {
+                var dropdownLink = e.target.closest('.navbar .dropdown > a');
+                if (dropdownLink) {
+                    e.preventDefault();
+                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
+                }
+            }
+        }, true);
+    });
+
+
+    </script>
+
 </header>
 
 
 <style>
 
-#dataForm table {
-    width: 100%;
-    border-collapse: none;
-}
+    #dataForm table {
+        width: 100%;
+        border-collapse: none;
+    }
 
-#dataForm td {
-    padding: 10px;
-    border: 0px;
-}
+    #dataForm td {
+        padding: 10px;
+        border: 0px;
+    }
 
-#dataForm .form-row td {
-    text-align: left;
-}
+    #dataForm .form-row td {
+        text-align: left;
+    }
 
-#dataForm td:first-child,
-#dataForm td:nth-child(2) {
-    width: 10px; /* Set equal width for both columns */
-}
+    #dataForm td:first-child,
+    #dataForm td:nth-child(2) {
+        width: 10px; /* Set equal width for both columns */
+    }
 
-#dataForm input, #dataForm select {
-    width: 100%;
-    padding: 8px;
-    box-sizing: border-box;
-    margin-bottom: 5px;
-}
+    #dataForm input, #dataForm select {
+        width: 100%;
+        padding: 8px;
+        box-sizing: border-box;
+        margin-bottom: 5px;
+    }
 
-#dataForm br {
-    clear: both;
-}
+    #dataForm br {
+        clear: both;
+    }
 
 
 
@@ -190,13 +218,13 @@
 
 
             <!-- <p> you are on the {{account.tier}} version </p> -->
-            <p> You can try <b> {{remaining}}</b> more resume(s) and personal website(s) on your current {{ account.tier }} version </p>
+            <p> <b> {{remaining}}</b> more resume(s) and personal website(s) on  <b>{{ account.tier }} </b> version </p>
 
             {% if account.user_profile is None %}
-                <p> you do not have any user profiles, please fill in the below form </p>
+                <p> No user profile found, please fill in below form </p>
             {% else %}
-            <p> an existing user profile has been found and loaded for you to save time </p>
-            <p id="user_profile_question"> <b> Do you want to update your user profile ? </b></p>
+            <p>  Existing user profile found & loaded to save time </p>
+            <p id="user_profile_question"> <b> Do you want to update user profile ? </b></p>
             <div id="user_profile_question">
                 <label>
                     <input type="radio" name="user_profile_question" id="yes_user_profile_question" value="yes" onclick="toggle_form()"> Yes
@@ -329,9 +357,20 @@
                                         <td><input type="text" name="work_experiences-${totalformNumberAdder}-city"></td>
                                         <td><input type="text" maxlength="2" name="work_experiences-${totalformNumberAdder}-state"></td>
                                     </tr>
+
+
                                     <tr class="form-row">
-                                        <td colspan="2">Description</td>
+                                        <td colspan="2">
+                                            <b style="color: palevioletred;"> 
+                                                Description of your work in simple English. What did you do? What technologies/skills did you use?
+                                                What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                                <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                            </b>
+                                        </td>
                                     </tr>
+
+
+
                                     <tr class="form-row">
                                         <td colspan="2"><textarea name="work_experiences-${totalformNumberAdder}-description"></textarea></td>
                                     </tr>
@@ -453,7 +492,6 @@
                                         <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
                                     </b>
                                 </td>
-                                
                             </tr>
                             <tr class="form-row">
                                 <td colspan="2">{{ work_form.description }}</td>
@@ -533,7 +571,13 @@
                                             <td><input type="text" maxlength="2" name="work_experiences-{{work_counter_index}}-state" value="{{work_experience.state}}"></td>
                                         </tr>
                                         <tr class="form-row">
-                                            <td colspan="2">Description</td>
+                                            <td colspan="2">
+                                                <b style="color: palevioletred;"> 
+                                                    Description of your work in simple English. What did you do? What technologies/skills did you use?
+                                                    What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                                    <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                                </b>
+                                            </td>
                                         </tr>
                                         <tr class="form-row">
                                             <td colspan="2"><textarea name="work_experiences-{{work_counter_index}}-description">{{work_experience.bullet1}}{{work_experience.bullet2}}{{work_experience.bullet3}}</textarea></td>
@@ -605,8 +649,6 @@
             
             {% endif %}
             
-            
-
 
     </div>
 
@@ -655,11 +697,11 @@
 
                             <tr>
                                 <th>
-                                <b style="color: palevioletred;"> 
-                                    Description of your project in simple English. What did you do? What technologies/skills did you use?
-                                    What was the numerical impact/benefit? The more info you give, the better your resume will be.
-                                    <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
-                                </b>
+                                    <b style="color: palevioletred;"> 
+                                        Description of your project in simple English. What did you do? What technologies/skills did you use?
+                                        What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                        <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                    </b>
                                 </th>
 
                             </tr>
@@ -706,7 +748,15 @@
                                         <td><input type="text" name="projects-${project_totalFormsField.value}-project_skills"></td>
                                     </tr>
                                     <tr>
-                                        <th>Description</th>
+
+                                        <th>
+                                            <b style="color: palevioletred;"> 
+                                                Description of your project in simple English. What did you do? What technologies/skills did you use?
+                                                What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                                <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                            </b>
+                                        </th>
+
                                     </tr>
                                     <tr class="form-row">
                                         <td><textarea name="projects-${project_totalFormsField.value}-description"></textarea></td>
@@ -841,8 +891,15 @@
                                                 <td><input type="text" name="projects-{{project_counter_index}}-project_skills" value="{{project.project_skills}}" ></td>
                                             </tr>
                                             <tr>
-                                                <th>Description</th>
+                                                <th>
+                                                    <b style="color: palevioletred;"> 
+                                                        Description of your project in simple English. What did you do? What technologies/skills did you use?
+                                                        What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                                        <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                                    </b>
+                                                </th>
                                             </tr>
+
                                             <tr class="form-row">
                                                 <td><textarea name="projects-{{project_counter_index}}-description">{{ project.bullet1 }}</textarea></td>
                                             </tr>
@@ -987,25 +1044,25 @@
                 }
 
                 // Check email field for @ and .com
-                var emailField = document.querySelector('input[name="email"]');
-                var emailValue = emailField.value.trim();
-                if (
-                    !emailValue.includes('@') ||
-                    (!emailValue.endsWith('.com') &&
-                        !emailValue.endsWith('.edu') &&
-                        !emailValue.endsWith('.org') &&
-                        !emailValue.endsWith('.gov') &&
-                        !emailValue.endsWith('.biz') &&
-                        !emailValue.endsWith('.net'))
-                )
-                {
-                    emailField.style.borderColor = 'red';
-                    alert('Please enter a valid email address. Must contain @ and end with either .com, .edu, .org, .gov, .biz, .net');
-                    scrollToElement(emailField);
-                    return;
-                } else {
-                    emailField.style.borderColor = ''; // Reset border color
-                }
+                // var emailField = document.querySelector('input[name="email"]');
+                // var emailValue = emailField.value.trim();
+                // if (
+                //     !emailValue.includes('@') ||
+                //     (!emailValue.endsWith('.com') &&
+                //         !emailValue.endsWith('.edu') &&
+                //         !emailValue.endsWith('.org') &&
+                //         !emailValue.endsWith('.gov') &&
+                //         !emailValue.endsWith('.biz') &&
+                //         !emailValue.endsWith('.net'))
+                // )
+                // {
+                //     emailField.style.borderColor = 'red';
+                //     alert('Please enter a valid email address. Must contain @ and end with either .com, .edu, .org, .gov, .biz, .net');
+                //     scrollToElement(emailField);
+                //     return;
+                // } else {
+                //     emailField.style.borderColor = ''; // Reset border color
+                // }
 
                 // If validation passes, submit the form
                 document.querySelector('form').submit();
@@ -1086,11 +1143,11 @@
         });
     </script>
 
-    {% if account.user_profile is None %}
-    <button type="submit" onclick="showLoadingModal()">CREATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
-    {% else %}
-    <button type="submit" onclick="showLoadingModal()">UPDATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
-    {% endif %}
+        {% if account.user_profile is None %}
+        <button type="submit" onclick="showLoadingModal()">CREATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
+        {% else %}
+        <button type="submit" onclick="showLoadingModal()">UPDATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
+        {% endif %}
 
         <style>
             /* Style for the modal */
@@ -1100,10 +1157,10 @@
                 top: 50%;
                 left: 50%;
                 transform: translate(-50%, -50%);
-                background-color: rgba(255, 255, 255, 0.9);
-                padding: 20px;
-                border-radius: 5px;
-                box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+                background-color: #f9bb75; /* White background */
+                padding: 30px;
+                border-radius: 10px;
+                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
                 text-align: center;
                 animation: fadeIn 0.5s ease-in-out;
                 z-index: 1000; /* Ensure the modal appears above the rest of the content */
@@ -1137,13 +1194,77 @@
             <p id="loadingText"><b>Loading...</b></p>
         </div>
         
-        <!-- The background overlay -->
         <div id="loadingOverlay"></div>
         
         <script>
-            
+            function showLoadingModal() {
+                // Show the loading modal and overlay
+                document.getElementById("loadingModal").style.display = "block";
+                document.getElementById("loadingOverlay").style.display = "block";
+        
+                // Array of loading messages
+                var loadingMessages = [
+                    "{{account.name}}, welcome to displayai ! ",
+                    "Requesting displayai AI & data science model  ...",
+                    "Connecting to cloud environment & creating resume google doc ...",
+                    "Adding data to personal website & resume",
+                    "Artificial Intelligence to generate bullets...",
+                    "Prompt engineering ...",
+                    "Data Science model to select the optimal bullets ...",
+                    "Natural Language Processing to make resume ATS friendly...",
+                    "Model to ensure resume bullets are short, concise ...",
+                    "Artificial Intelligence to ensure bullets quantification ...",
+                    "Cleaning bullet data and pushing to profile environment  ...",
+                    "Personal website ready ! ",
+                    "Editing google doc permissions ... ",
+                    "Ensuring account security ... ",
+                    "Formatting work experiences",
+                    "Formatting projects",
+                    "Formatting dates",
+                    "Saving resume to cloud environment",
+                    "Saving resume to profile",
+                    "Updating your account information",
+                    "Model is running slow due to traffic please be patient ... ",
+                    "Your internet connection is slowing model please be patient ... ",
+                    "Checking for errors ... ",
+                    "Ensuring account security ... ",
+                    "Model is running slow due to traffic please be patient ... ",
+                    "Your internet connection is slowing model please be patient ... ",
+                    "Ensuring account security ... ",
+                    "Model is running slow due to traffic please be patient ... ",
+                    "Your internet connection is slowing model please be patient ... ",
+                    "Ensuring account security ... ",
+                    "Model is running slow due to traffic please be patient ... ",
+                    "Your internet connection is slowing model please be patient ... ",
+                    "Ensuring account security ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                    "Your internet is too slow please try again ... ",
+                ];
+        
+                // Function to display loading messages in a loop
+                function displayLoadingMessages(index) {
+                    // Set the loading text
+                    document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+        
+                    // Increment index or reset to 0 if at the end
+                    index = (index + 1) % loadingMessages.length;
+        
+                    // Set a timeout for the next message
+                    setTimeout(function () {
+                        displayLoadingMessages(index);
+                    }, 1700); // Adjust the time delay between messages (in milliseconds)
+                }
+        
+                // Start the loop
+                displayLoadingMessages(0);
+        
+                // You can add additional logic or AJAX requests if needed here
+            }
         </script>
-
 
     <br>  <br>  <br>  <br>
 </form>

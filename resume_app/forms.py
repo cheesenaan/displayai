@@ -74,12 +74,12 @@ class UserProfileForm(forms.ModelForm):
 
     class Meta:
         model = UserProfile
-        fields = ['first_name', 'last_name', 'phone', 'email', 'city', 'state', 'linkedin_link', 'github_link', 'profile_image', 'institution', 'degree_type', 'major', 'minor', 'start_date', 'end_date', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership']
+        fields = ['first_name', 'last_name', 'phone','city', 'state', 'linkedin_link', 'github_link', 'profile_image', 'institution', 'degree_type', 'major', 'minor', 'start_date', 'end_date', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership']
         widgets = {
             'first_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
             'last_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
             'phone': forms.TextInput(attrs={'placeholder': 'Enter your phone number'}),
-            'email': forms.EmailInput(attrs={'placeholder': 'Enter your email address'}),
+            # 'email': forms.EmailInput(attrs={'placeholder': 'Enter your email address'}),
             'city': forms.TextInput(attrs={'placeholder': 'Enter your city'}),
             'state': forms.TextInput(attrs={'placeholder': 'Enter your state'}),
             'linkedin_link': forms.URLInput(attrs={'placeholder': 'https://www.linkedin.com/in/sulemaan-farooq/'}),
@@ -114,13 +114,14 @@ from .models import Account
 
 class LoginForm(forms.ModelForm):
     name = forms.CharField(max_length=255)
+    email = models.EmailField()
     password = forms.CharField(widget=forms.PasswordInput)
 
     class Meta:
         model = Account
-        fields = ['name', 'password']
+        fields = ['name','email', 'password']
 
 
     def __init__(self, *args, **kwargs):
         super(LoginForm, self).__init__(*args, **kwargs)
-        self.fields['password'].help_text = '<h6 style="color: maroon; font-weight: bold;">Your website will be hosted on display.ai/name/</h6> </p>'
+        # self.fields['password'].help_text = '<h6 style="color: maroon; font-weight: bold;">website will be hosted on display.ai/name/</h6> <br> <h6 style="color: maroon; font-weight: bold;"> Resume on google docs /</h6> </p>'

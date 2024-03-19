@@ -16,32 +16,34 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from .views import *
-from .views import CheckUrlNameView
-
+from django.contrib.auth.views import LoginView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
-    path('checkout/', checkout, name='checkout'),
-    path('login', login, name='login'),
-    path('logout/', logout, name='logout'),
-    path('<int:account_id>/account_details/', account_details, name='account_details'),
+    path('login/', login, name='login'),
+    path('forgot_password/', forgot_password, name='forgot_password'),
+    path('<int:account_id>/logout/', logout, name='logout'),
+    path('<int:account_id>/account/', account, name='account'),
     path('<int:account_id>/form/', form, name='form'),
+    path('<int:account_id>/reset_password/', reset_password, name='reset_password'),
+    path('<int:account_id>/edit_account_name/', edit_account_name, name='edit_account_name'),
+    path('<int:account_id>/edit_account_email/', edit_account_email, name='edit_account_email'),
     path('<int:account_id>/confirmation', confirmation, name='confirmation'),
     path('<int:account_id>/reload_resume_and_website', reload_resume_and_website, name='reload_resume_and_website'),
     path('<int:account_id>/reload_resume_and_website_with_job_description', reload_resume_and_website_with_job_description, name='reload_resume_and_website_with_job_description'),
     path('<int:account_id>/build_cover_letter', build_cover_letter, name='build_cover_letter'),
-    path('<int:account_id>/account_payments', account_payments, name='account_payments'),
+    path('<int:account_id>/subscriptions', subscriptions, name='subscriptions'),
     path('cancel_subscription/<int:account_id>/<str:subscription_id>/', cancel_subscription, name='cancel_subscription'),
-    
-    # path('payment_basic', payment_basic, name='payment_basic'),
-    # path('product_page', product_page, name='product_page'),
     path('payment_successful', payment_successful, name='payment_successful'),
     path('payment_cancelled', payment_cancelled, name='payment_cancelled'),
-    # path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
-    path('<str:url_name>/', website, name='website'),  
+    path('<str:url_name>/', website, name='website'),
     path('form/CheckUrlNameView/', CheckUrlNameView.as_view(), name='CheckUrlNameView'),
-    path('login/check_account_name/', CheckAccountNameView.as_view(), name='CheckAccountNameView'),
+    path('login/CheckAccountNameView/', CheckAccountNameView.as_view(), name='CheckAccountNameView'),
+    path('login/CheckAccountEmailView/', CheckAccountEmailView.as_view(), name='CheckAccountEmailView'),
 
 ]
+
+
+    # path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
 
