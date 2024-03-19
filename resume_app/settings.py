@@ -141,3 +141,4 @@ REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
 #SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
 SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 
+

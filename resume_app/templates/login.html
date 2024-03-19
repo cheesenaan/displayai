@@ -385,7 +385,6 @@ body {
     
     <div id="loadingOverlay"></div>
 
-    
 
     <a id="forgot_password" href="{% url 'forgot_password'%}" "display: none; color:#2980b9;">Forgot Password</a>
 
@@ -420,47 +419,37 @@ body {
             document.getElementById('forgot_password').style.display = "none";
 
             
-            function showLoadingModal() {
+        function showLoadingModal() {
 
-                document.getElementById("loadingModal").style.display = "block";
-                document.getElementById("loadingOverlay").style.display = "block";
+            document.getElementById("loadingModal").style.display = "block";
+            document.getElementById("loadingOverlay").style.display = "block";
 
-                document.getElementById("selected_action").value = formType;
+            document.getElementById("selected_action").value = formType;
 
-                if (formType === 'log_in') {
-                    // Array of loading messages
-                    var loadingMessages = [
-                        "Loggin In ",
-                    ];
 
-                }
-                else if (formType === 'create_account') {
+            var loadingMessages = [
+                "please wait ... ",
+            ];
 
-                    var loadingMessages = [
-                        "creating account",
-                        "please wait",
-                    ];
 
-                }
+            // Function to display loading messages in a loop
+            function displayLoadingMessages(index) {
+                // Set the loading text
+                document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
 
-                // Function to display loading messages in a loop
-                function displayLoadingMessages(index) {
-                    // Set the loading text
-                    document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+                // Increment index or reset to 0 if at the end
+                index = (index + 1) % loadingMessages.length;
 
-                    // Increment index or reset to 0 if at the end
-                    index = (index + 1) % loadingMessages.length;
-
-                    // Set a timeout for the next message
-                    setTimeout(function () {
-                        displayLoadingMessages(index);
-                    }, 1000); // Adjust the time delay between messages (in milliseconds)
-                }
-
-                // Start the loop
-                displayLoadingMessages(0);
-                // You can add additional logic or AJAX requests if needed here
+                // Set a timeout for the next message
+                setTimeout(function () {
+                    displayLoadingMessages(index);
+                }, 1000); // Adjust the time delay between messages (in milliseconds)
             }
+
+            // Start the loop
+            displayLoadingMessages(0);
+            // You can add additional logic or AJAX requests if needed here
+        }
 
 
         }
