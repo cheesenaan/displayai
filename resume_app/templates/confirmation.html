@@ -57,23 +57,11 @@
 
     <style>
 
-        .body-overlay {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            filter: blur(5px); 
-        }
+        
 
     /* For all devices */
         body {
-            background-image: url('{% static "img/0 copy.jpg" %}');
-            background-size: cover;  
-            background-position: center;
-            background-repeat: no-repeat;
+            
             font-family: 'Arial', sans-serif;
             padding: 60px 0 0 0; 
             display: flex;
@@ -82,17 +70,7 @@
             height: auto;
         }
 
-        body::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            z-index: -1; 
-            width: 100%;
-            height: 300%;
-            background-color: rgba(0, 0, 0, 0.5); 
-            filter: blur(10px); 
-        }
+        
 
     
 
@@ -101,13 +79,7 @@
             text-align: center;
         }
         
-        h1, h2 {
-            color: #333;
-        }
         
-        p {
-            color: #666;
-        }
         
         /* Header Styles */
         .header {
@@ -275,18 +247,6 @@
                 text-align: center;
             }
             
-            h1, h2, p {
-                margin: 0;
-            }
-            
-            h1, h2 {
-                color: white;
-            }
-            
-            p {
-                color: white;
-                margin-bottom: 10px;
-            }
             
             /* Header Styles */
             .header {
@@ -437,12 +397,28 @@
                 margin-top: -100px;
                 text-align: left;
             }
+
+            h1, h2 {
+            color: #333;
+            }
+            
+            p {
+                color: #666;
+            }
+
+            #below_embed {
+                margin-top: 1000px;
+            }
         }
 
             /* For laptops, computers, and desktops */
         @media (min-width: 1100px) {
             body {
                 zoom: 75%;
+                background-image: url('{% static "img/0 copy.jpg" %}');
+                background-size: cover;  
+                background-position: center;
+                background-repeat: no-repeat;
             }
 
             html {
@@ -452,6 +428,43 @@
                 float: right;
                 margin-right: -375px; /* Reduce bottom margin */
 
+            }
+
+            body::before {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                z-index: -1; 
+                width: 100%;
+                height: 300%;
+                background-color: rgba(0, 0, 0, 0.5); 
+
+                filter: blur(10px); 
+            }
+
+            .body-overlay {
+                content: '';
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                background-color: rgba(0, 0, 0, 0.5);
+                filter: blur(10px); 
+            }
+
+            h1, h2, p {
+                margin: 0;
+            }
+            
+            h1, h2 {
+                color: white;
+            }
+            
+            p {
+                color: white;
+                margin-bottom: 10px;
             }
 
 
@@ -755,13 +768,12 @@
                             // Check if the user is on a mobile device
                             if (/Mobi|Android/i.test(navigator.userAgent)) {
                                 // Display message for mobile users
-                                document.write('<b style="color: white;"><p>Build at least 4 times for optimal bullets. <br> Shrunk on mobile, view on PC </p></b>');
+                                document.write('<b style="color: white;"><p>Build at least 4 times for optimal bullets. <br> <span style="color: red;">Shrunk on mobile, view on PC</span></p></b>');
                             } else {
                                 // Display message for non-mobile users
                                 document.write('<h5 style="color: white;"> <br> <br> Build at least 4 times for optimal bullets </h5> ');
                             }
                         </script>
-                            
 
                         </ul>
 
@@ -794,38 +806,83 @@
                 </script>
                 
                 <script>
-                    if (resume_counter > 5) {
+
+                    let threshold = 0;
+
+                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                        threshold = 2;
+                    } else {
+                        threshold = 5;
+                    }
+
+                    if (resume_counter > threshold) {
                         let resumeTabs = document.getElementById('resumeTabs');
                         let originalDisplayStyle = resumeTabs.style.display;
                         resumeTabs.style.display = 'none';
                 
                         function toggleAllLinks() {
+
                             var resumeTabs = document.getElementById('resumeTabs');
                             var button = document.getElementById('showAllLinksButton');
                             
                             if (resumeTabs.style.display === 'none')  {
                                 resumeTabs.style.display = originalDisplayStyle;
                                 button.innerText = 'Untoggle All Links';
+                                
+                                var element = document.getElementById('below_embed');
+
+                                if (/Mobi|Android/i.test(navigator.userAgent)) {
+
+                                    if (element) {
+                                        // Get the current marginTop value
+                                        var currentMarginTop = parseInt(window.getComputedStyle(element).marginTop.replace('px', ''));
+
+                                        // Add 100px to the current marginTop value
+                                        var newMarginTop = currentMarginTop + ((resume_counter / 2 ) * 60) ;
+
+                                        // Set the new marginTop value to the element's style
+                                        element.style.marginTop = newMarginTop + 'px';
+                                    } 
+                                    else {
+                                        console.error("Element with ID 'below_embed' not found.");
+                                    }
+
+                                }
+                                
+
                             } else {
                                 resumeTabs.style.display = 'none';
                                 button.innerText = 'Toggle All Links';
+
+                                var element = document.getElementById('below_embed');
+
+                                if (/Mobi|Android/i.test(navigator.userAgent)) {
+
+                                    if (element) {
+                                    // Get the current marginTop value
+                                    var currentMarginTop = parseInt(window.getComputedStyle(element).marginTop.replace('px', ''));
+
+                                    // Add 100px to the current marginTop value
+                                    var newMarginTop = currentMarginTop - ((resume_counter / 2 ) * 60) ;
+
+                                    // Set the new marginTop value to the element's style
+                                    element.style.marginTop = newMarginTop + 'px';
+                                    } else {
+                                        console.error("Element with ID 'below_embed' not found.");
+                                    }
+
+                                }
+
                             }
                         }
                     } else {
                         document.getElementById('showAllLinksButton').style.display = 'none';
                     }
+
                 </script>
 
             </div>
 
-
-            <script>
-                // Check if the user is on a mobile device
-                if (/Mobi|Android/i.test(navigator.userAgent)) {
-                    // Display message for mobile users
-                    document.write('<br> <br> <br> <br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br><br> <br>');
-                } 
-            </script>
 
             <div id = "below_embed"> 
 
@@ -1309,6 +1366,7 @@
 
         </form>
     </section>
+
 
 </body>
 

@@ -142,3 +142,4 @@ REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
 SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 
 
+
