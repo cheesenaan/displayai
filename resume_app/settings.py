@@ -143,4 +143,3 @@ SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/
 #SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 
 
-
