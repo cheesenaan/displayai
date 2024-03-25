@@ -880,10 +880,11 @@
 
             <script>
                 if (/Mobi|Android|iPad/i.test(navigator.userAgent)) {
-                    var brTags = '<br>'.repeat(15); // Add 15 line breaks
+                    var brTags = '<br>'.repeat(/iPad/i.test(navigator.userAgent) ? 20 : 15); // Add 20 line breaks for iPad, otherwise add 15
                     document.write(brTags);
                 }
             </script>
+            
             
 
             <div id = "below_embed">
