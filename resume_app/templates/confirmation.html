@@ -334,44 +334,7 @@
             }
 
 
-            /* Style for the modal */
-            #loadingModal {
-                display: none;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: #f9bb75; /* White background */
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-                text-align: center;
-                animation: fadeIn 0.5s ease-in-out;
-                z-index: 1000; /* Ensure the modal appears above the rest of the content */
-            }
-
-            /* Animation for the modal */
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-
-            /* Style for the background overlay */
-            #loadingOverlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-                backdrop-filter: blur(5px); /* Add a blur effect to the background */
-                z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
-                display: none;
-            }
+            
 
     </style>
 
@@ -936,9 +899,59 @@
 
                         <div id="loadingOverlay"></div>
 
-                        <script>
+                        <style>
+                            /* Style for the modal */
+                            #loadingModal {
+                                display: none;
+                                position: fixed;
+                                top: 50%;
+                                left: 50%;
+                                transform: translate(-50%, -50%);
+                                background-color: #f9bb75; /* White background */
+                                padding: 30px;
+                                border-radius: 10px;
+                                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+                                text-align: center;
+                                z-index: 1000; /* Ensure the modal appears above the rest of the content */
+                            }
+                        
+                            /* Style for the background overlay */
+                            #loadingOverlay {
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+                                backdrop-filter: blur(5px); /* Add a blur effect to the background */
+                                z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
+                                display: none;
+                            }
+                        
+                            /* Animation for the modal */
+                            @keyframes fadeIn {
+                                from {
+                                    opacity: 0;
+                                }
+                                to {
+                                    opacity: 1;
+                                }
+                            }
+                        
+                            /* Add responsiveness for smaller screens */
+                            @media only screen and (max-width: 600px) {
+                                #loadingModal {
+                                    padding: 20px;
+                                }
+                            }
+                        </style>
+                        
+
+                       <script>
+
                             function showLoadingModal() {
                                 // Show the loading modal and overlay
+                                console.log("Showing loading modal");
                                 document.getElementById("loadingModal").style.display = "block";
                                 document.getElementById("loadingOverlay").style.display = "block";
 
@@ -988,6 +1001,8 @@
                                 // Function to display loading messages in a loop
                                 function displayLoadingMessages(index) {
                                     // Set the loading text
+                                    console.log("index " + index);
+                                    console.log("Displaying loading message: " + loadingMessages[index]);
                                     document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
 
                                     // Increment index or reset to 0 if at the end
@@ -1000,11 +1015,14 @@
                                 }
 
                                 // Start the loop
+                                console.log("starting displayLoadingMessages");
                                 displayLoadingMessages(0);
 
                                 // You can add additional logic or AJAX requests if needed here
                             }
-                        </script>
+
+
+                       </script>
 
                     {% else %}
                         <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Re-Build with same data </button>
