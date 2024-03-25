@@ -15,8 +15,6 @@ from django.core.files.storage import FileSystemStorage
 from django.conf import settings
 from datetime import date
 import os
-from django.contrib.auth.backends import ModelBackend
-from django.contrib.auth import get_user_model
 
 
 def validate_unique_url_name(value):
@@ -24,8 +22,8 @@ def validate_unique_url_name(value):
     if existing_profiles.exists():
         raise ValidationError('This URL name is already taken. Please choose a different one.')
 
-from django.contrib.auth.models import AbstractUser
-from django.db import models
+from django.contrib.auth.models import User 
+
 
 class Account(models.Model):
     id = models.AutoField(primary_key=True)
@@ -34,13 +32,13 @@ class Account(models.Model):
     email = models.EmailField()
     tier = models.CharField(max_length=255, default = "free")
     user_profile = models.ForeignKey('UserProfile', on_delete=models.SET_NULL, null=True, related_name='user_profile_account')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='account_user')
     user_plan = models.ForeignKey('Plan', on_delete=models.SET_NULL, null=True, related_name='user_plan')
     user_payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, related_name='user_payment')
     resume_links = models.CharField(max_length=100000, blank=True, null=True, help_text="Separate links with commas")
-    is_authenticated = models.BooleanField(default=True)
-    last_login = models.DateTimeField(auto_now=True)
     unique_words = models.CharField(max_length=10000000, blank=True, null=True, help_text="Separate actions words with commas")
     reset_password_code = models.CharField(max_length=255, null=True)
+    is_active = models.BooleanField(default=True)
 
     def get_resume_links(self):
         return self.resume_links.split(',') if self.resume_links else []
@@ -61,29 +59,6 @@ class Account(models.Model):
 
     def __str__(self):
         return f"{self.id}: {self.name}"
-    
-from django.contrib.auth.backends import BaseBackend
-from .models import Account
-
-class AccountBackend(BaseBackend):
-    def authenticate(self, request, name=None, password=None):
-        print("inside authenticate backend")
-        print("trying to get account  with name, password : ", name, password)
-        try:
-            account = Account.objects.get(name=name, password=password)
-            return account
-        except Account.DoesNotExist:
-            print("account does not exist")
-            return None
-
-    def get_user(self, user_id):
-        print("trying to get account  with user_id : ", user_id)
-        try:
-            return Account.objects.get(id=user_id)
-        except Account.DoesNotExist:
-            print("account does not exist with user_id")
-            return None
-
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length=None):
@@ -100,6 +75,7 @@ class UserProfile(models.Model):
     
     id = models.AutoField(primary_key=True)
     account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name='account_user_profile')
+    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='user_profile_user')
     # url_name = models.CharField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -284,44 +260,3 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.account}, {self.product_name}"
-
-
-# class UserProfile(models.Model):
-#     id = models.AutoField(primary_key=True)
-#     url_name = models.CharField(max_length=255, unique=True)
-#     first_name = models.CharField(max_length=255, default='Sulemaan')
-#     last_name = models.CharField(max_length=255, default='Farooq')
-#     phone = models.CharField(max_length=15, default='9174565697')
-#     email = models.EmailField(default='shf46@rutgers.edu')
-#     city = models.CharField(max_length=255, default='Edison')
-#     state = models.CharField(max_length=255, default='NJ')
-#     linkedin_link = models.URLField(default='https://www.linkedin.com/in/sulemaan-farooq/')
-#     resume_link = models.URLField(default='https://www.linkedin.com/in/sulemaan-farooq/')
-#     github_link = models.URLField(default='https://www.linkedin.com/in/sulemaan-farooq/')
-#     profile_image = models.ImageField()
-#     institution = models.CharField(max_length=255, blank=True, null=True, default='Rutgers')
-#     major = models.CharField(max_length=255, blank=True, null=True, default='computer science')
-#     minor = models.CharField(max_length=255, blank=True, null=True, default='data science')
-#     start_date = models.DateField(default='2023-12-31')  
-#     end_date = models.DateField(default='2023-12-31')
-
-#     spoken_languages = models.CharField(max_length=255, blank=True, null=True, default='English, Arabic, Urdu')
-#     programming_languages = models.CharField(max_length=255, blank=True, null=True, default=' R, Java, , Spring Boot Pythonanywhere, React, Ruby')
-#     technical_skills = models.CharField(max_length=255, blank=True, null=True, default='GCP, Springboot, DataDog')
-
-#     leadership = models.CharField(max_length=255, blank=True, null=True, default='rutgers sports club')
-
-#     DEGREE_CHOICES = [
-#         ('Science', 'Science'),
-#         ('Art', 'Art'),
-#     ]
-
-#     degree_type = models.CharField(
-#         max_length=10,
-#         choices=DEGREE_CHOICES,
-#         blank=True,
-#         null=True,
-#     )
-
-#     def __str__(self):
-#         return f"{self.id}: {self.url_name}"

@@ -211,7 +211,6 @@
 
 </style>
 
-
         <div class = "beginning">
 
             <h1>Welcome {{account.name}}</h1>
@@ -284,8 +283,6 @@
         <div id="dataForm" method="post">
             {% csrf_token %}
             {{ form.as_p }}
-                
-                <br>
         </div>
         <br>
     </div>
@@ -975,6 +972,7 @@
 
     </div>
 
+    <!-- validation -->
     <script>
         document.addEventListener('DOMContentLoaded', function () {
             var submitButton = document.querySelector('button[type="submit"]');
@@ -984,13 +982,28 @@
 
                 var inputs = document.querySelectorAll('#dataForm input, #dataForm textarea');
                 for (var i = 0; i < inputs.length; i++) {
-                    if (inputs[i].value.trim() === '' & inputs[i].getAttribute('name') != 'profile_image') {
+                    if (inputs[i].value.trim() === '' && 
+                    (inputs[i].getAttribute('name') != 'profile_image' && 
+                        inputs[i].getAttribute('name') != 'linkedin_link' && 
+                        inputs[i].getAttribute('name') != 'github_link' && 
+                        inputs[i].getAttribute('name') != 'minor')) {
                         alert('Please fill in all fields before submitting the form. Missing field: ' + inputs[i].getAttribute('name'));
                         inputs[i].style.borderColor = 'red';
                         scrollToElement(inputs[i]);
                         return;
                     }
+
+                    if (inputs[i].getAttribute('name') == 'state') {
+                        if (inputs[i].value.trim().length !== 2) {
+                            alert('Please ensure state is 2 letters only');
+                            inputs[i].style.borderColor = 'red';
+                            scrollToElement(inputs[i]);
+                            return;
+                        }
+                    }
+
                 }
+
 
                 // Check if work experience form is displayed
                 var workForm = document.getElementById('work_form');
@@ -1043,26 +1056,6 @@
                     }
                 }
 
-                // Check email field for @ and .com
-                // var emailField = document.querySelector('input[name="email"]');
-                // var emailValue = emailField.value.trim();
-                // if (
-                //     !emailValue.includes('@') ||
-                //     (!emailValue.endsWith('.com') &&
-                //         !emailValue.endsWith('.edu') &&
-                //         !emailValue.endsWith('.org') &&
-                //         !emailValue.endsWith('.gov') &&
-                //         !emailValue.endsWith('.biz') &&
-                //         !emailValue.endsWith('.net'))
-                // )
-                // {
-                //     emailField.style.borderColor = 'red';
-                //     alert('Please enter a valid email address. Must contain @ and end with either .com, .edu, .org, .gov, .biz, .net');
-                //     scrollToElement(emailField);
-                //     return;
-                // } else {
-                //     emailField.style.borderColor = ''; // Reset border color
-                // }
 
                 // If validation passes, submit the form
                 document.querySelector('form').submit();
@@ -1271,7 +1264,5 @@
 
     <br>  <br>  <br>  <br>  <br>
     <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-
 
 {% endblock %}

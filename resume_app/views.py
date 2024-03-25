@@ -33,6 +33,10 @@ from django.template.loader import render_to_string
 from .models import UserProfile, Account
 from .forms import *
 import openai
+from django.contrib.auth.models import User
+from django.contrib.auth import authenticate
+from django.contrib.auth import login as auth_login
+from django.contrib.auth import logout as auth_logout
 
 
 prices_dict = {
@@ -43,7 +47,6 @@ prices_dict = {
             'pilot': 'price_1OkLKeBFOKaICuMNSAiwrsVw',
             'pilot2': 'price_1OkLLVBFOKaICuMN557sysPE'
 }
-
 
 action_words_list = ["Streamlined", "Leveraged", "Developed", "Engineered", "Deployed", "Incorporated", 
               "Accelerated", "Devised", "Evaluated", "Invented", "Integrated", "Orchestrated", 
@@ -64,13 +67,23 @@ def login(request):
             print("logging in user")
 
             try:
+                authenticated_user = authenticate(username=user_name, email=user_email, password=user_password)
+                print("authenticated_user is ", authenticated_user)
                 account = Account.objects.get(name = user_name, email = user_email, password = user_password)
-                # messages.success(request, 'Login successful !')
-                account.is_authenticated = True
-                account.save()
-                return redirect('form', account.id)
+                
+                if authenticated_user is not None:
+                    # User is authenticated, log them in
+                    auth_login(request, authenticated_user)
+                    # Redirect the user to the appropriate page
+                    return redirect('form', account.id)
+                else:
+                    messages.error(request, 'Invalid login credentials.')
             except Account.DoesNotExist:
                 messages.error(request, 'Invalid login credentials.')
+            except Exception as e:
+                # Handle any other exceptions that might occur during the authentication process
+                print(e)
+                messages.error(request, 'An error occurred during login.')
 
         elif request.POST['action'] == 'create_account':
             if Account.objects.filter(name = user_name).exists():
@@ -79,16 +92,24 @@ def login(request):
                 messages.error(request, 'Email already taken. Please choose another.')
             else:
 
+                user = User.objects.create_user(user_name, user_email, user_password)
+
                 new_account = Account()
                 new_account.name = user_name
                 new_account.email = user_email
                 new_account.password = user_password
+                new_account.user = user
                 new_account.save()
                 free_plan = Plan(account=new_account)
+                free_plan.user = user
                 free_plan.save()
                 new_account.user_plan = free_plan
-                new_account.is_authenticated = True
                 new_account.save()
+
+                authenticated_user = authenticate(username=user_name, email=user_email, password=user_password)
+
+                if authenticated_user is not None:
+                    auth_login(request, authenticated_user)
 
                 try:
                     subject = 'Welcome to DisplayAI'
@@ -107,7 +128,7 @@ def login(request):
                     new_account.delete()
                     messages.error(request, 'Connection issue, please try again')
 
-                # messages.success(request, 'Account created !')
+                messages.success(request, 'Account created !')
 
                 return redirect('form' , account_id = new_account.id)
     else:
@@ -116,16 +137,17 @@ def login(request):
     context = {'login_form': login_form}
     return render(request, 'login.html', context)
 
-
+@login_required
 def logout(request, account_id):
+    # Retrieve the account based on the provided account_id
     account = Account.objects.get(id=account_id)
-    account.is_authenticated = False
-    account.save()
-
+    
+    # Log out the currently logged-in user
+    auth_logout(request)
+    
     return redirect('home')
 
-
-
+@login_required
 def forgot_password(request):
     if request.method == 'POST':
         # Extracting form data
@@ -176,7 +198,7 @@ def forgot_password(request):
     else:
         return render(request, "forgot_password.html")
 
-
+@login_required
 def reset_password(request, account_id):
 
     if request.method == 'POST':
@@ -207,7 +229,7 @@ def reset_password(request, account_id):
 
         return render(request, "reset_password.html", context)
 
-
+@login_required
 def account(request , account_id):
     
     account = Account.objects.get(id=account_id)
@@ -223,7 +245,7 @@ def account(request , account_id):
 
     return render (request, "account.html", context)
 
-
+@login_required
 def edit_account_name(request, account_id):
     account = Account.objects.get(id=account_id)
 
@@ -243,7 +265,7 @@ def edit_account_name(request, account_id):
     
     return redirect('account', account_id)
 
-
+@login_required
 def edit_account_email(request, account_id):
     account = Account.objects.get(id=account_id)
 
@@ -262,7 +284,7 @@ def edit_account_email(request, account_id):
     
     return redirect('account', account_id)
 
-
+@login_required
 def form(request , account_id):
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
@@ -281,6 +303,7 @@ def form(request , account_id):
         user_profile.account = account
         user_profile.website_link = settings.REDIRECT_DOMAIN + "/" + account.name
         user_profile.website_link = user_profile.website_link.replace("http://", "")
+        user_profile.user = account.user
         user_profile.save()
 
         post_data = request.POST.dict()
@@ -406,7 +429,7 @@ def website(request, url_name):
     # Render the template with the context
     return render(request, 'website.html', context)
 
-
+@login_required
 def confirmation(request, account_id):
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
@@ -483,7 +506,7 @@ def confirmation(request, account_id):
         template = loader.get_template('confirmation.html')
         return HttpResponse(template.render(context, request))
 
-
+@login_required
 def payment_successful(request):
     if request.method == 'GET':
         stripe.api_key = settings.STRIPE_API_KEY
@@ -557,14 +580,14 @@ def payment_successful(request):
         messages.error(request, "You cannot reload this page.")
         return redirect('home')  # Redirect to your home page or any other appropriate
 
-
+@login_required
 def payment_cancelled(request):
     print("payment_cancelled")
     stripe.api_key = settings.STRIPE_API_KEY
     
     return render(request, 'payment_cancelled.html')
 
-
+@login_required
 def subscriptions(request, account_id):
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
@@ -585,7 +608,7 @@ def subscriptions(request, account_id):
 
         return render(request, 'subscriptions.html' , context)
 
-
+@login_required
 def cancel_subscription(request, account_id, subscription_id):
     stripe.api_key = settings.STRIPE_API_KEY
 
@@ -638,7 +661,7 @@ def cancel_subscription(request, account_id, subscription_id):
 
     return redirect('subscriptions', account_id=account_id)
 
-
+@login_required
 def reload_resume_and_website_with_job_description(request: HttpRequest, account_id: int):
     try:
         account = Account.objects.get(id=account_id)
@@ -692,7 +715,7 @@ def reload_resume_and_website_with_job_description(request: HttpRequest, account
 
     return redirect('confirmation', account_id=account_id)
 
-
+@login_required
 def reload_resume_and_website(request, account_id):
     try:
         account = Account.objects.get(id=account_id)
@@ -739,7 +762,6 @@ def reload_resume_and_website(request, account_id):
         messages.error(request, "Unkown error. Please try again.")
 
     return redirect('confirmation', account_id=account_id)
-
 
 def update_resume(user_profile, account, DOCUMENT_ID):
     
@@ -915,7 +937,6 @@ def update_resume(user_profile, account, DOCUMENT_ID):
     user_profile.save()
     return 
 
-
 def create_resume(user_profile, account):
     
     try:
@@ -936,10 +957,10 @@ def create_resume(user_profile, account):
                 'minor': user_profile.minor,
                 'spoken_languages': user_profile.spoken_languages,
                 'languages': user_profile.programming_languages,
-                'technologies': user_profile.technical_skills,
+                'technical_skills': user_profile.technical_skills,
                 'leadership': user_profile.leadership,
                 'degree_type' : user_profile.degree_type,
-                'website_link': user_profile.website_link ,
+                'website_link': user_profile.website_link,
             }
 
             # Work experiences
@@ -1114,7 +1135,6 @@ def create_resume(user_profile, account):
         print(f"An unexpected error occurred: {e}")
         return "TIME_OUT_ERROR_974"
 
-
 def create_cover_letter_google_doc(data):
 
     try:
@@ -1164,7 +1184,6 @@ def create_cover_letter_google_doc(data):
     except Exception as e:
         print(f"An unexpected error occurred: {e}")
         return "TIME_OUT_ERROR_974"
-
 
 def build_cover_letter(request: HttpRequest, account_id: int):
 
@@ -1242,7 +1261,6 @@ def build_cover_letter(request: HttpRequest, account_id: int):
 
     return redirect('confirmation', account_id=account_id)
 
-
 def openai_work_experience_with_job_description(JOB_DESCRIPTION, EXPERIENCE ,TITLE, DESCRIPTION ):
     openai.api_key = settings.OPENAI_API_KEY
 
@@ -1277,7 +1295,6 @@ def openai_work_experience_with_job_description(JOB_DESCRIPTION, EXPERIENCE ,TIT
     three = lines[2].split('. ')[1]
 
     return one, two, three
-
 
 def openai_project_with_job_description(JOB_DESCRIPTION, PROJECT, DESCRIPTION):
     openai.api_key = settings.OPENAI_API_KEY
@@ -1314,7 +1331,6 @@ def openai_project_with_job_description(JOB_DESCRIPTION, PROJECT, DESCRIPTION):
     two = lines[1].split('. ')[1]
 
     return one, two
-
 
 def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
     
@@ -1413,7 +1429,6 @@ def openai_work_experience(EXPERIENCE ,TITLE, DESCRIPTION):
 #     print()
 
 #     return one, two, three
-
 
 def openai_project(PROJECT, DESCRIPTION):
 

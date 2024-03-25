@@ -42,7 +42,8 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 ]
 
-X_FRAME_OPTIONS = 'SAMEORIGIN'
+
+# AUTH_USER_MODEL = 'resume_app.User'
 
 
 MIDDLEWARE = [

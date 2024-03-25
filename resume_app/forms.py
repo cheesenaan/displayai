@@ -78,17 +78,17 @@ class UserProfileForm(forms.ModelForm):
         widgets = {
             'first_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
             'last_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
-            'phone': forms.TextInput(attrs={'placeholder': 'Enter your phone number'}),
+            'phone': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
             # 'email': forms.EmailInput(attrs={'placeholder': 'Enter your email address'}),
-            'city': forms.TextInput(attrs={'placeholder': 'Enter your city'}),
-            'state': forms.TextInput(attrs={'placeholder': 'Enter your state'}),
-            'linkedin_link': forms.URLInput(attrs={'placeholder': 'https://www.linkedin.com/in/sulemaan-farooq/'}),
+            'city': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
+            'state': forms.TextInput(attrs={'placeholder': 'REQUIRED (2-letter abbreviation)'}),
+            'linkedin_link': forms.URLInput(attrs={'placeholder': 'OPTIONAL'}),
             'resume_link': forms.URLInput(attrs={'placeholder': 'https://www.'}),
-            'github_link': forms.URLInput(attrs={'placeholder': 'https://www.github.com'}),
-            'profile_image': forms.ClearableFileInput(attrs={'placeholder': 'Choose a profile image'}),
-            'institution': forms.TextInput(attrs={'placeholder': 'Enter your university'}),
-            'major': forms.TextInput(attrs={'placeholder': 'Enter your major'}),
-            'minor': forms.TextInput(attrs={'placeholder': 'Enter your minor'}),
+            'github_link': forms.URLInput(attrs={'placeholder': 'OPTIONAL'}),
+            'profile_image': forms.ClearableFileInput(attrs={'placeholder': 'OPTIONAL'}),
+            'institution': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
+            'major': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
+            'minor': forms.TextInput(attrs={'placeholder': 'OPTIONAL'}),
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
             'spoken_languages': forms.TextInput(attrs={'placeholder': 'English, Spanish, Arabic ... '}),
@@ -105,9 +105,11 @@ class UserProfileForm(forms.ModelForm):
     def clean(self):
         cleaned_data = super().clean()
         for field_name in self.fields_to_capitalize:
-            if field_name in cleaned_data:
+            if cleaned_data.get(field_name):
                 cleaned_data[field_name] = cleaned_data[field_name].title()
         return cleaned_data
+
+    
 
 from django import forms
 from .models import Account
