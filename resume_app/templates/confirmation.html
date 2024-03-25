@@ -781,9 +781,35 @@
 
                         <div class="tab-content">
                             {% for link in account.get_resume_links %}
+
+                            <style>
+
+                                /* For computers */
+                                    @media only screen and (min-width: 768px) {
+                                        #resumeIframe {
+                                            height: 1650px;
+                                            transform: scale(0.73);
+                                            transform-origin: 0 0;
+                                            width: 220%;
+                                        }
+                                    }
+
+                                    /* For mobile devices */
+                                    @media only screen and (max-width: 767px) {
+                                        #resumeIframe {
+                                            transform: scale(0.7);
+                                            height: 1000px;
+                                            width: 200%;
+                                            margin-left: -50px;
+                                        }
+                                    }
+
+                            </style>
+
                             <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="resume{{ forloop.counter }}">
-                                <iframe id="resumeIframe" style="height: 1650px; width: 220%; transform: scale(0.73); transform-origin: 0 0;"></iframe>
+                                <iframe id="resumeIframe"></iframe>
                             </div>
+                            
 
                             {% endfor %}
                         </div>
