@@ -927,25 +927,8 @@
                                 z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
                                 display: none;
                             }
-                        
-                            /* Animation for the modal */
-                            @keyframes fadeIn {
-                                from {
-                                    opacity: 0;
-                                }
-                                to {
-                                    opacity: 1;
-                                }
-                            }
-                        
-                            /* Add responsiveness for smaller screens */
-                            @media only screen and (max-width: 600px) {
-                                #loadingModal {
-                                    padding: 20px;
-                                }
-                            }
+                            
                         </style>
-                        
 
                        <script>
 
@@ -1002,7 +985,7 @@
                                 function displayLoadingMessages(index) {
                                     // Set the loading text
                                     console.log("index " + index);
-                                    console.log("Displaying loading message: " + loadingMessages[index]);
+                                    console.log("Displaying loading message: " + document.getElementById("loadingText").innerHTML);
                                     document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
 
                                     // Increment index or reset to 0 if at the end
