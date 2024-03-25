@@ -869,14 +869,13 @@
 
             </div>
 
-             <script>
-
-                if (/Mobi|Android/i.test(navigator.userAgent)) {
-                    var brTags = '<br>'.repeat(15); // Add 8 line breaks
+            <script>
+                if (/Mobi|Android|iPad/i.test(navigator.userAgent)) {
+                    var brTags = '<br>'.repeat(15); // Add 15 line breaks
                     document.write(brTags);
                 }
-
             </script>
+            
 
             <div id = "below_embed">
 
