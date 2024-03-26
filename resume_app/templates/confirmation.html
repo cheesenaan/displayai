@@ -80,7 +80,7 @@
                     }
 
                     .div2 {
-                        margin-left: -900px;
+                        /* margin-left: -900px; */
                     }
 
                     body {
@@ -91,18 +91,16 @@
                         /* background-repeat: no-repeat; */
                     }
 
-                    
-
                     /* html {
                         margin-left: -500px;
                     } */
                     .resume-container {
                         float: right;
-                        width: 50%;
+                        width: 100%;
                     }
 
                     #resumeIframe {
-                        height: 1000px;
+                        height: 1250px;
                         transform: scale(0.73);
                         transform-origin: 0 0;
                         width: 180%;
@@ -154,10 +152,6 @@
                     color: #0066cc;
                     }
 
-                    .pricing p {
-                    margin-bottom: 30px;
-                    color: black;
-                    }
 
                     /* Pricing cards */
                     .pricing-cards {
@@ -365,9 +359,9 @@
     <!-- mobile styles  -->
    <style>
 
-        @media (max-width: 768px) {
-            /* Adjust styles for smaller screens if needed */
+        @media only screen and (max-width: 768px) and (orientation: portrait) {
 
+            /* Adjust styles for smaller screens if needed */
 
             h1, h2 {
             color: #333;
@@ -380,10 +374,6 @@
             /* Base styles */
             .pricing {
                 text-align: center;
-            }
-
-            .pricing h1 {
-                color: #0066cc;
             }
 
             .pricing p {
@@ -452,6 +442,7 @@
 
             .flex-container {
                 display: flex;
+                flex-direction: column; /* Change flex direction to column */
             }
 
             .div1,
@@ -466,7 +457,20 @@
             }
 
             .div2 {
-                display: none; /* Hide div2 from the webpage */
+                /* Styles for div2 */
+                
+            }
+
+            .resume-container {
+                float: left;
+                width: auto;
+                margin-left: 50px;
+            }
+
+            #resumeIframe {
+                height: 10px;
+                transform: scale(0.73);
+                transform-origin: 0 0;
             }
 
 
@@ -632,6 +636,31 @@
                     <div id="resume">
                         <h1>Resume</h1>
                         <p><a href="{{user_profile.resume_link}}" target="_blank"> <b> RESUME LINK </b> </a></p>
+
+                        <div id="previewResumeLink"></div>
+
+                        <script>
+                            // Check if the user is on a mobile device or iPad
+                            if (/Mobi|Android|iPad/i.test(navigator.userAgent)) {
+                                // For mobile devices and iPads, create the link and add it to the placeholder element
+                                var previewResumeLink = document.createElement('a');
+                                previewResumeLink.href = "#div2"; // Link destination
+                                previewResumeLink.className = "reload_resume_and_website-button";
+                                previewResumeLink.innerHTML = '<button type="button" onclick="scrollToDiv2()">Preview Resume</button>';
+                                document.getElementById('previewResumeLink').appendChild(previewResumeLink);
+                            }
+
+                            // Function to scroll to div2
+                            function scrollToDiv2() {
+                                // Scroll to div2 smoothly
+                                document.getElementById('div2').scrollIntoView({ behavior: 'smooth' });
+                                // Remove the onclick event after the first click
+                                document.querySelector('.reload_resume_and_website-button').removeAttribute('onclick');
+                            }
+                        </script>
+
+
+
                     </div>
 
                      <!-- Re-Build  with same data -->
@@ -1050,7 +1079,29 @@
 
                 </div>
 
-                <div class="div2">
+                <div class="div2" id="div2">
+
+                    <div id="resumeMobilePreview"></div>
+
+                    <script>
+                        // Check if the user is on a mobile device or iPad
+                        if (/Mobi|Android|iPad/i.test(navigator.userAgent)) {
+                            // Create elements for mobile preview
+                            var resumeMobilePreview = document.getElementById('resumeMobilePreview');
+                            
+                            // Create h1 element
+                            var h1Element = document.createElement('h2');
+                            h1Element.textContent = 'Resume mobile preview';
+                            resumeMobilePreview.appendChild(h1Element);
+                            
+                            // Create p element with red bold font
+                            var pElement = document.createElement('p');
+                            pElement.textContent = 'Best view on PC';
+                            pElement.style.color = 'red';
+                            pElement.style.fontWeight = 'bold';
+                            resumeMobilePreview.appendChild(pElement);
+                        }
+                    </script>
                     
                      <!-- embed google docs  -->
                     <div>
@@ -1212,46 +1263,11 @@
                                     if (resumeTabs.style.display === 'none')  {
                                         resumeTabs.style.display = originalDisplayStyle;
                                         button.innerText = 'Untoggle All Links';
-                                        var element = document.getElementById('below_embed');
-                                        if (/Mobi|Android/i.test(navigator.userAgent)) {
-
-                                            if (element) {
-                                                // Get the current marginTop value
-                                                var currentMarginTop = parseInt(window.getComputedStyle(element).marginTop.replace('px', ''));
-
-                                                // Add 100px to the current marginTop value
-                                                var newMarginTop = currentMarginTop + ((resume_counter / 2 ) * 60) ;
-
-                                                // Set the new marginTop value to the element's style
-                                                element.style.marginTop = newMarginTop + 'px';
-                                            }
-                                            else {
-                                                console.error("Element with ID 'below_embed' not found.");
-                                            }
-
-                                        }
-
 
                                     } else {
                                         resumeTabs.style.display = 'none';
                                         button.innerText = 'Toggle All Links';
-                                        var element = document.getElementById('below_embed');
-                                        if (/Mobi|Android/i.test(navigator.userAgent)) {
-
-                                            if (element) {
-                                            // Get the current marginTop value
-                                            var currentMarginTop = parseInt(window.getComputedStyle(element).marginTop.replace('px', ''));
-
-                                            // Add 100px to the current marginTop value
-                                            var newMarginTop = currentMarginTop - ((resume_counter / 2 ) * 60) ;
-
-                                            // Set the new marginTop value to the element's style
-                                            element.style.marginTop = newMarginTop + 'px';
-                                            } else {
-                                                console.error("Element with ID 'below_embed' not found.");
-                                            }
-
-                                        }
+                                        
                                     }
                                 }
                             } 
@@ -1276,15 +1292,6 @@
         <p>    Research finds that around 68% of candidates who use a professional resume writing service get a job within 90 days of sending out their resume
          </p>
 
-         <style>
-
-            h2 {
-                color:#0066cc;
-            }
-            
-
-         </style>
-
         <form method="post" action="{% url 'confirmation' account_id=account.id %}">
             {% csrf_token %}
             <div class="pricing-cards">
@@ -1305,7 +1312,7 @@
                         <li>5 ATS friendly and optimized resumes</li>
                         <li>5 personal websites valid for 6 months</li>
                     </ul>
-                    <p class="price">$9.99</p>
+                    <h2 class="price">$9.99</h2>
                     <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
 
                 </div>
@@ -1316,7 +1323,7 @@
                         <li>10 ATS friendly and optimized resumes</li>
                         <li>10 personal websites valid for 6 months</li>
                     </ul>
-                    <p class="price">$14.99</p>
+                    <h2 class="price">$14.99</h2>
                     <button class="get-now-button" name="selected_plan" value="economy">Get Now</button>
 
                 </div>
@@ -1327,7 +1334,7 @@
                         <li>20 ATS friendly and optimized resumes</li>
                         <li>20 personal websites valid for 6 months</li>
                     </ul>
-                    <p class="price">$19.99</p>
+                    <h2 class="price">$19.99</h2>
                     <button class="get-now-button" name="selected_plan" value="business">Get Now</button>
                 </div>
 
@@ -1337,7 +1344,7 @@
                         <li>50 ATS friendly and optimized resumes</li>
                         <li>50 personal  websites valid for 1 year</li>
                     </ul>
-                    <p class="price">$39.99</p>
+                    <h2 class="price">$39.99</h2>
                     <button class="get-now-button" name="selected_plan" value="first_class">Get Now</button>
                 </div>
 
@@ -1347,7 +1354,7 @@
                         <li>100 ATS friendly and optimized resumes</li>
                         <li>100 personal websites valid for 1 year</li>
                     </ul>
-                    <p class="price">$99.99</p>
+                    <h2 class="price">$99.99</h2>
                     <button class="get-now-button" name="selected_plan" value="pilot">Get Now</button>
                 </div>
 
@@ -1358,7 +1365,7 @@
                         <li>300 ATS friendly and optimized resumes</li>
                         <li>300 personal websites valid for 6 months</li>
                     </ul>
-                    <p class="price">$199.99</p>
+                    <h2 class="price">$199.99</h2>
                     <button class="get-now-button" name="selected_plan" value="pilot2">Get Now</button>
                 </div>
 
@@ -1368,7 +1375,7 @@
                         <li>Contact sales</li>
                         <li>shf46@rutgers.edu</li>
                     </ul>
-                    <p class="price">Custom</p>
+                    <h2 class="price">Custom</h2>
                     <button class="get-now-button">Get Now</button>
                 </div>
 
@@ -1377,9 +1384,6 @@
         </form>
     </section>
 
-
 </body>
-
-
 
 {% endblock %}
