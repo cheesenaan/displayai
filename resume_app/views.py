@@ -763,6 +763,7 @@ def reload_resume_and_website(request, account_id):
 
     return redirect('confirmation', account_id=account_id)
 
+
 def update_resume(user_profile, account, DOCUMENT_ID):
     
     # Dictionary to store the placeholder replacements

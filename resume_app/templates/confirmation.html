@@ -1386,4 +1386,92 @@
 
 </body>
 
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Loading Popup</title>
+<style>
+/* Modal styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 9999; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 200px;
+    text-align: center;
+}
+
+/* Loader */
+.loader {
+    border: 4px solid #f3f3f3; /* Light grey */
+    border-top: 4px solid #3498db; /* Blue */
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+</style>
+</head>
+<body>
+
+<a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" id="reloadButton">
+    <button type="button">Test Button</button>
+</a>
+
+<!-- Loading Modal -->
+<div id="loadingModal" class="modal">
+    <div class="modal-content">
+        <div class="loader"></div>
+        <p>Loading...</p>
+    </div>
+</div>
+
+<script>
+// Function to show loading modal
+function showLoadingModal() {
+    document.getElementById("loadingModal").style.display = "block";
+}
+
+// Add event listener when DOM is loaded
+document.addEventListener("DOMContentLoaded", function() {
+    // Get the reload button element
+    var reloadButton = document.getElementById("reloadButton");
+
+    // Add click event listener to the reload button
+    reloadButton.addEventListener("click", function() {
+        showLoadingModal();
+    });
+});
+</script>
+
+</body>
+</html>
+
+
+
+
+
+
 {% endblock %}
