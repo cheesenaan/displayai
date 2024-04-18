@@ -64,6 +64,11 @@
     <style>
 
         @media (min-width: 768px) {
+                        #website, #resume, #re-build, #projects  {
+                            margin-top: 60px;
+                            margin-bottom: 60px;
+                        }
+
 
                     .flex-container {
                         display: flex;
@@ -84,16 +89,14 @@
                     }
 
                     body {
-                        /* zoom: 75%; */
+                        /* zoom: 75%;  */
                         background-image: url('{% static "img/0 copy.jpg" %}');
                         background-size: cover;
-                        background-position: center;
-                        /* background-repeat: no-repeat; */
+                        background-position: center; 
+                        background-repeat: no-repeat;
                     }
 
-                    /* html {
-                        margin-left: -500px;
-                    } */
+                   
                     .resume-container {
                         float: right;
                         width: 100%;
@@ -112,23 +115,25 @@
                         top: 0;
                         left: 0;
                         z-index: -1;
-                        width: 100%;
-                        height: 300%;
+                        width: 102%;
+                        height: 318%;
                         background-color: rgba(0, 0, 0, 0.5);
-
                         filter: blur(10px);
                     }
 
-                    .body-overlay {
+                    
+
+
+                    /* .body-overlay {
                         content: '';
                         position: absolute;
                         top: 0;
                         left: 0;
                         width: 100%;
                         height: 100%;
-                        background-color: rgba(0, 0, 0, 0.5);
+                        background-color: rgba(0, 0, 0, 0.65);
                         filter: blur(10px);
-                    }
+                    } */
 
                     h1, h2, p {
                         margin: 0;
@@ -143,9 +148,10 @@
                         margin-bottom: 10px;
                     }
 
-                    .pricing {
-                    padding: 50px 0;
-                    text-align: center;
+                    #pricing {
+                        padding: 50px 0;
+                        text-align: center;
+                        margin-top: -30%;
                     }
 
                     .pricing h1 {
@@ -197,6 +203,8 @@
 
     <!-- for all devices -->
     <style>
+
+        
       
         /* Button Styles */
         .get-now-button {
@@ -372,6 +380,11 @@
             }
 
             /* Base styles */
+
+            #pricing {
+                margin-top: -70%;
+            }
+
             .pricing {
                 text-align: center;
             }
@@ -473,6 +486,39 @@
                 transform-origin: 0 0;
             }
 
+            body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 200%;
+            height: 550%;
+            background-color: rgba(0, 0, 0, 0.5);
+            filter: blur(40px);
+
+            
+
+           
+        }
+
+        h1, h2 {
+            color: white;
+            }
+
+            p {
+                color: white;
+                margin-bottom: 10px;
+            }
+
+            body {
+                /* zoom: 75%;  */
+                background-image: url('{% static "img/0 copy.jpg" %}');
+                background-size: cover;
+                background-position: center; 
+                background-repeat: no-repeat;
+            }
+
 
         }
 
@@ -486,7 +532,14 @@
     <!-- body -->
     <div>
 
+        <h1>{{user_profile.first_name}}'s build page </h1> 
+
+        <a href="{% url 'account' account_id=account.id %}" class="reload_resume_and_website-button">
+            Your Account
+        </a>
+
             <div class="flex-container">
+
 
                 <div class="div1">
 
@@ -494,51 +547,7 @@
                     <h1>{{user_profile.first_name}}, {{ account.tier }} version limit reached, you must upgrade your <a href="#pricing"> plan </a> </h1>
                     {% endif %}
 
-
-                    <h1>{{user_profile.first_name}}'s build page </h1> <br>
-
-                     <!-- table -->
-                    <div class="user-info-container">
-                        <table class="user-info-table">
-                            <tr>
-                                <td>Your Tier:</td>
-                                <td>{{account.tier}}</td>
-                            </tr>
-                            <tr>
-                                <td>Total Created on {{account.tier}}:</td>
-                                <td>{{user_plan.forms_filled_on_current_plan}}</td>
-                            </tr>
-                            <tr>
-                                <td>Total Tailored Resumes:</td>
-                                <td>{{user_plan.total_tailored_resumes}} </td>
-                            </tr>
-                            <tr>
-                                <td>Total Cover Letters:</td>
-                                <td>{{user_plan.total_cover_letters}} </td>
-                            </tr>
-                            <tr>
-                                <td>Total Created on all tiers:</td>
-                                <td>{{user_plan.total_forms_filled}} </td>
-                            </tr>
-                            <tr>
-                                <td>Remaining:</td>
-                                <td> <b> {{remaining}} </b> </td>
-                            </tr>
-
-
-                        </table>
-
-
-                        <div class="buttons-container">
-                            <a href="{% url 'account' account_id=account.id %}" class="reload_resume_and_website-button">
-                                Account Details
-                            </a>
-
-                            <a href="{% url 'subscriptions' account_id=account.id %}" class="reload_resume_and_website-button">
-                                Subscriptions
-                            </a>
-                        </div>
-                    </div>
+                   
 
                     <!-- messages -->
                     <div>
@@ -560,8 +569,10 @@
 
                     </div>
 
+                    
+
                     <!-- WEBSITE -->
-                    <div>
+                    <div id="website">
 
                         <h1>Website</h1>
                         <p>
@@ -570,7 +581,7 @@
                         <img src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code" style="max-width: 50%; height: 120px; margin-top: -10px;">
 
 
-                        <p id="expiry">Time to expiry: <span id="timer"></span></p>
+                        <!-- <p id="expiry">Time to expiry: <span id="timer"></span></p> -->
 
                         <script>
                             var timerElement = document.getElementById('timer');
@@ -660,426 +671,470 @@
                         </script>
 
 
-
                     </div>
 
-                     <!-- Re-Build  with same data -->
-                    <div class="action-section">
-                        <div id="title">
-                            <h1>Re-Build Displayai</h1>
-                            <p>Our AI and Data Science model might need multiple builds for perfect bullets</p>
-                        </div>
+                    <div id="re-build">
 
-                        {% if remaining > 0 %}
-
-                            <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" onclick="showLoadingModal()">
-                                <button type="button">Re-Build with same data</button>
-                            </a>
-
-                            <div id="loadingModal">
-                                <p id="loadingText"><b>Loading...</b></p>
+                        <!-- Re-Build  with same data -->
+                        <div class="action-section">
+                            <div id="title">
+                                <h1>Re-Build Displayai</h1>
+                                <p>Our model might need multiple builds for perfect bullets</p>
                             </div>
 
-                            <div id="loadingOverlay"></div>
+                            {% if remaining > 0 %}
 
-                            <style>
-                                /* Style for the modal */
-                                #loadingModal {
-                                    display: none;
-                                    position: fixed;
-                                    top: 50%;
-                                    left: 50%;
-                                    transform: translate(-50%, -50%);
-                                    background-color: #f9bb75; /* White background */
-                                    padding: 30px;
-                                    border-radius: 10px;
-                                    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-                                    text-align: center;
-                                    z-index: 1000; /* Ensure the modal appears above the rest of the content */
-                                }
-                            
-                                /* Style for the background overlay */
-                                #loadingOverlay {
-                                    position: fixed;
-                                    top: 0;
-                                    left: 0;
-                                    width: 100%;
-                                    height: 100%;
-                                    background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-                                    backdrop-filter: blur(5px); /* Add a blur effect to the background */
-                                    z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
-                                    display: none;
-                                }
+                                <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" onclick="showLoadingModal()">
+                                    <button type="button">Re-Build with same data</button>
+                                </a>
+
+                                <div id="loadingModal">
+                                    <p id="loadingText"><b>Loading...</b></p>
+                                </div>
+
+                                <div id="loadingOverlay"></div>
+
+                                <style>
+                                    /* Style for the modal */
+                                    #loadingModal {
+                                        display: none;
+                                        position: fixed;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        background-color: #f9bb75; /* White background */
+                                        padding: 30px;
+                                        border-radius: 10px;
+                                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+                                        text-align: center;
+                                        z-index: 1000; /* Ensure the modal appears above the rest of the content */
+                                    }
                                 
-                            </style>
+                                    /* Style for the background overlay */
+                                    #loadingOverlay {
+                                        position: fixed;
+                                        top: 0;
+                                        left: 0;
+                                        width: 100%;
+                                        height: 100%;
+                                        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+                                        backdrop-filter: blur(5px); /* Add a blur effect to the background */
+                                        z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
+                                        display: none;
+                                    }
+                                    
+                                </style>
 
-                        <script>
+                            <script>
 
-                                function showLoadingModal() {
-                                    // Show the loading modal and overlay
-                                    console.log("Showing loading modal");
-                                    document.getElementById("loadingModal").style.display = "block";
-                                    document.getElementById("loadingOverlay").style.display = "block";
+                                    function showLoadingModal() {
+                                        // Show the loading modal and overlay
+                                        console.log("Showing loading modal");
+                                        document.getElementById("loadingModal").style.display = "block";
+                                        document.getElementById("loadingOverlay").style.display = "block";
 
-                                    // Array of loading messages
-                                    var loadingMessages = [
-                                        "{{account.name}}, welcome to displayai ! ",
-                                        "Requesting displayai AI & data science model  ...",
-                                        "Connecting to cloud environment & creating resume google doc ...",
-                                        "Adding data to personal website & resume",
-                                        "Artificial Intelligence to generate bullets...",
-                                        "Prompt engineering ...",
-                                        "Data Science model to select the optimal bullets ...",
-                                        "Natural Language Processing to make resume ATS friendly...",
-                                        "Model to ensure resume bullets are short, concise ...",
-                                        "Artificial Intelligence to ensure bullets quantification ...",
-                                        "Cleaning bullet data and pushing to profile environment  ...",
-                                        "Personal website ready ! ",
-                                        "Editing google doc permissions ... ",
-                                        "Ensuring account security ... ",
-                                        "Formatting work experiences",
-                                        "Formatting projects",
-                                        "Formatting dates",
-                                        "Saving resume to cloud environment",
-                                        "Saving resume to profile",
-                                        "Updating your account information",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Checking for errors ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                    ];
+                                        // Array of loading messages
+                                        var loadingMessages = [
+                                            "{{account.name}}, welcome to displayai ! ",
+                                            "Requesting displayai AI & data science model  ...",
+                                            "Connecting to cloud environment & creating resume google doc ...",
+                                            "Adding data to personal website & resume",
+                                            "Artificial Intelligence to generate bullets...",
+                                            "Prompt engineering ...",
+                                            "Data Science model to select the optimal bullets ...",
+                                            "Natural Language Processing to make resume ATS friendly...",
+                                            "Model to ensure resume bullets are short, concise ...",
+                                            "Artificial Intelligence to ensure bullets quantification ...",
+                                            "Cleaning bullet data and pushing to profile environment  ...",
+                                            "Personal website ready ! ",
+                                            "Editing google doc permissions ... ",
+                                            "Ensuring account security ... ",
+                                            "Formatting work experiences",
+                                            "Formatting projects",
+                                            "Formatting dates",
+                                            "Saving resume to cloud environment",
+                                            "Saving resume to profile",
+                                            "Updating your account information",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Checking for errors ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                        ];
 
-                                    // Function to display loading messages in a loop
-                                    function displayLoadingMessages(index) {
-                                        // Set the loading text
-                                        console.log("index " + index);
-                                        console.log("Displaying loading message: " + document.getElementById("loadingText").innerHTML);
-                                        document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+                                        // Function to display loading messages in a loop
+                                        function displayLoadingMessages(index) {
+                                            // Set the loading text
+                                            console.log("index " + index);
+                                            console.log("Displaying loading message: " + document.getElementById("loadingText").innerHTML);
+                                            document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
 
-                                        // Increment index or reset to 0 if at the end
-                                        index = (index + 1) % loadingMessages.length;
+                                            // Increment index or reset to 0 if at the end
+                                            index = (index + 1) % loadingMessages.length;
 
-                                        // Set a timeout for the next message
-                                        setTimeout(function () {
-                                            displayLoadingMessages(index);
-                                        }, 1700); // Adjust the time delay between messages (in milliseconds)
+                                            // Set a timeout for the next message
+                                            setTimeout(function () {
+                                                displayLoadingMessages(index);
+                                            }, 1700); // Adjust the time delay between messages (in milliseconds)
+                                        }
+
+                                        // Start the loop
+                                        console.log("starting displayLoadingMessages");
+                                        displayLoadingMessages(0);
+
+                                        // You can add additional logic or AJAX requests if needed here
                                     }
 
-                                    // Start the loop
-                                    console.log("starting displayLoadingMessages");
-                                    displayLoadingMessages(0);
 
-                                    // You can add additional logic or AJAX requests if needed here
-                                }
+                            </script>
 
+                            {% else %}
+                                <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Re-Build with same data </button>
 
-                        </script>
+                            {% endif %}
+                        </div>
 
-                        {% else %}
-                            <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Re-Build with same data </button>
-
-                        {% endif %}
-                    </div>
-
-                    <!-- Edit data & Re-Build -->
-                    <div class="action-section1">
-                        <p>Want to edit your data ? </p>
-                        {% if remaining > 0 %}
-                        <a href="www.cheesenaan.app/{{ account.id }}/form/" class="reload_resume_and_website-button">
-                            <button type="button">Edit data & Re-Build</button>
-                        </a>
-                        {% else %}
-                        <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Edit data & Re-Build </button>
-
-                        <script>
-                            function edit_data_redirect_pricing() {
-                                alert("Your verison has ended, please upgrade plan");
-                                window.location.href = "www.cheesenaan.app/{{account.id}}/confirmation#pricing";
-                            }
-                        </script>
-                        {% endif %}
-
-
-
-                        <!-- job description feature -->
-                        <div class="action-section2">
-                            <!-- Add this in your HTML head section -->
-                            <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                            <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-                            <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-                            <p> Tailored resumes increase response chances by 70% </p>
-
+                        <!-- Edit data & Re-Build -->
+                        <div class="action-section1">
+                            <p>Want to edit your data ? </p>
                             {% if remaining > 0 %}
-                            <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#jobDescriptionModal">
-                                <button type="button">Build job description tailored resume</button>
+                            <a href="{{ redirect_domain }}/{{ account.id }}/form/" class="reload_resume_and_website-button">
+                                <button type="button">Edit data & Re-Build</button>
                             </a>
                             {% else %}
+                            <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Edit data & Re-Build </button>
+
+                            <script>
+                                function edit_data_redirect_pricing() {
+                                    alert("Your verison has ended, please upgrade plan");
+                                    var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
+                                    var redirectDomain = "{{ redirect_domain }}";
+                                    var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                                    window.location.href = confirmationUrl;
+
+                                }
+                            </script>
+                            {% endif %}
+
+
+                            <!-- job description feature -->
+                            <div class="action-section2">
+                                <!-- Add this in your HTML head section -->
+                                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                                <p> Tailored resumes increase response chances by 70% </p>
+
+                                {% if remaining > 0 %}
+                                <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#jobDescriptionModal">
+                                    <button type="button">Build job description tailored resume</button>
+                                </a>
+                                {% else %}
+                                    <script>
+                                        function redirectToPricing() {
+                                            alert("Your verison has ended, please upgrade plan");
+                                        var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
+                                        var redirectDomain = "{{ redirect_domain }}";
+                                        var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                                        window.location.href = confirmationUrl;
+                                        }
+                                    </script>
+
+                                    <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build job description tailored resume </button>
+                                {% endif %}
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="jobDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="jobDescriptionModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="jobDescriptionModalLabel">  </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="jobDescriptionInput">Input Job Description</label>
+                                                <textarea class="form-control" id="jobDescriptionInput" style="height: 500px;"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="submitJobDescription()">Build tailored resume</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="loadingModal">
+                                    <p id="loadingText"><b>Loading...</b></p>
+                                </div>
+
+                                <div id="loadingOverlay"></div>
+
                                 <script>
-                                    function redirectToPricing() {
-                                        alert("Your version has ended, please upgrade plan");
-                                        window.location.href = "www.cheesenaan.app/{{account.id}}/confirmation#pricing";
+                                    function submitJobDescription() {
+                                        var jobDescription = document.getElementById('jobDescriptionInput').value;
+                                        // Call the API with the entered job description
+                                        window.location.href = "{% url 'reload_resume_and_website_with_job_description' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
+
+                                        // Show the loading modal and overlay
+                                        // document.getElementById("jobDescriptionModal").style.display = "none";
+                                        document.querySelector('.btn-secondary').click();
+                                        document.getElementById("loadingModal").style.display = "block";
+                                        document.getElementById("loadingOverlay").style.display = "block";
+
+                                        // Array of loading messages
+                                        var loadingMessages = [
+                                            "{{account.name}}, welcome to displayai tailored resume  ! ",
+                                            "Analyzing job description key words  ...",
+                                            "Requesting displayai AI & data science model  ...",
+                                            "Connecting to cloud environment & creating resume google doc ...",
+                                            "Adding data to personal website & resume",
+                                            "Artificial Intelligence to generate bullets...",
+                                            "Prompt engineering ...",
+                                            "Data Science model to select the optimal bullets ...",
+                                            "Natural Language Processing to make resume ATS friendly...",
+                                            "Model to ensure resume bullets are short, concise ...",
+                                            "Artificial Intelligence to ensure bullets quantification ...",
+                                            "Cleaning bullet data and pushing to profile environment  ...",
+                                            "Personal website ready ! ",
+                                            "Editing google doc permissions ... ",
+                                            "Ensuring account security ... ",
+                                            "Formatting work experiences",
+                                            "Formatting projects",
+                                            "Formatting dates",
+                                            "Saving resume to cloud environment",
+                                            "Saving resume to profile",
+                                            "Updating your account information",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Checking for errors ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                        ];
+
+                                        // Function to display loading messages in a loop
+                                        function displayLoadingMessages(index) {
+                                            // Set the loading text
+                                            document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+
+                                            // Increment index or reset to 0 if at the end
+                                            index = (index + 1) % loadingMessages.length;
+
+                                            // Set a timeout for the next message
+                                            setTimeout(function () {
+                                                displayLoadingMessages(index);
+                                            }, 1700); // Adjust the time delay between messages (in milliseconds)
+                                        }
+
+                                        // Start the loop
+                                        displayLoadingMessages(0);
+
+                                        // You can add additional logic or AJAX requests if needed here
                                     }
                                 </script>
 
-                                <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build job description tailored resume </button>
-                            {% endif %}
+                            </div>
 
-                            <!-- Modal -->
-                            <div class="modal fade" id="jobDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="jobDescriptionModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="jobDescriptionModalLabel">  </h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <label for="jobDescriptionInput">Input Job Description</label>
-                                            <textarea class="form-control" id="jobDescriptionInput" style="height: 500px;"></textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="submitJobDescription()">Build tailored resume</button>
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                            <!-- cover letter feature -->
+                            <div class="action-section3">
+                                <p>78% of recruiters & hiring managers want a cover letter</p>
+
+                                {% if remaining > 0%}
+                                <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#coverLetterModal">
+                                    <button type="button">Build Cover Letter for a job description</button>
+                                </a>
+                                {% else %}
+
+                                <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build Cover Letter for a job description</button>
+
+                                <script>
+                                    function redirectToPricing() {
+                                        alert("Your verison has ended, please upgrade plan");
+                                        var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
+                                        var redirectDomain = "{{ redirect_domain }}";
+                                        var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                                        window.location.href = confirmationUrl;
+                                    }
+                                </script>
+
+
+                                {% endif %}
+
+                                <!-- Cover Letter Modal -->
+                                <div class="modal fade" id="coverLetterModal" tabindex="-1" role="dialog" aria-labelledby="coverLetterModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="coverLetterModalLabel"></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="coverLetterDescriptionInput">Input Job Description</label>
+                                                <textarea class="form-control" id="coverLetterDescriptionInput" style="height: 500px;"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="submitCoverLetter()">Build Cover Letter</button>
+                                                <button type="button" class="btn btn-secondary-cover-letter" data-dismiss="modal">Close</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <div id="loadingModal">
-                                <p id="loadingText"><b>Loading...</b></p>
-                            </div>
-
-                            <div id="loadingOverlay"></div>
-
-                            <script>
-                                function submitJobDescription() {
-                                    var jobDescription = document.getElementById('jobDescriptionInput').value;
-                                    // Call the API with the entered job description
-                                    window.location.href = "{% url 'reload_resume_and_website_with_job_description' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
-
-                                    // Show the loading modal and overlay
-                                    // document.getElementById("jobDescriptionModal").style.display = "none";
-                                    document.querySelector('.btn-secondary').click();
-                                    document.getElementById("loadingModal").style.display = "block";
-                                    document.getElementById("loadingOverlay").style.display = "block";
-
-                                    // Array of loading messages
-                                    var loadingMessages = [
-                                        "{{account.name}}, welcome to displayai tailored resume  ! ",
-                                        "Analyzing job description key words  ...",
-                                        "Requesting displayai AI & data science model  ...",
-                                        "Connecting to cloud environment & creating resume google doc ...",
-                                        "Adding data to personal website & resume",
-                                        "Artificial Intelligence to generate bullets...",
-                                        "Prompt engineering ...",
-                                        "Data Science model to select the optimal bullets ...",
-                                        "Natural Language Processing to make resume ATS friendly...",
-                                        "Model to ensure resume bullets are short, concise ...",
-                                        "Artificial Intelligence to ensure bullets quantification ...",
-                                        "Cleaning bullet data and pushing to profile environment  ...",
-                                        "Personal website ready ! ",
-                                        "Editing google doc permissions ... ",
-                                        "Ensuring account security ... ",
-                                        "Formatting work experiences",
-                                        "Formatting projects",
-                                        "Formatting dates",
-                                        "Saving resume to cloud environment",
-                                        "Saving resume to profile",
-                                        "Updating your account information",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Checking for errors ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                    ];
-
-                                    // Function to display loading messages in a loop
-                                    function displayLoadingMessages(index) {
-                                        // Set the loading text
-                                        document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
-
-                                        // Increment index or reset to 0 if at the end
-                                        index = (index + 1) % loadingMessages.length;
-
-                                        // Set a timeout for the next message
-                                        setTimeout(function () {
-                                            displayLoadingMessages(index);
-                                        }, 1700); // Adjust the time delay between messages (in milliseconds)
-                                    }
-
-                                    // Start the loop
-                                    displayLoadingMessages(0);
-
-                                    // You can add additional logic or AJAX requests if needed here
-                                }
-                            </script>
-
-                        </div>
-
-                        <!-- cover letter feature -->
-                        <div class="action-section3">
-                            <p>78% of recruiters & hiring managers want a cover letter</p>
-
-                            {% if remaining > 0%}
-                            <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#coverLetterModal">
-                                <button type="button">Build Cover Letter for a job description</button>
-                            </a>
-                            {% else %}
-
-                            <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build Cover Letter for a job description</button>
-
-                            <script>
-                                function redirectToPricing() {
-                                    alert("Your version has ended, please upgrade plan");
-                                    window.location.href = "www.cheesenaan.app/{{account.id}}/confirmation#pricing";
-                                }
-                            </script>
-
-
-                            {% endif %}
-
-                            <!-- Cover Letter Modal -->
-                            <div class="modal fade" id="coverLetterModal" tabindex="-1" role="dialog" aria-labelledby="coverLetterModalLabel" aria-hidden="true">
-                                <div class="modal-dialog" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="coverLetterModalLabel"></h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <label for="coverLetterDescriptionInput">Input Job Description</label>
-                                            <textarea class="form-control" id="coverLetterDescriptionInput" style="height: 500px;"></textarea>
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-primary" onclick="submitCoverLetter()">Build Cover Letter</button>
-                                            <button type="button" class="btn btn-secondary-cover-letter" data-dismiss="modal">Close</button>
-                                        </div>
-                                    </div>
+                                <div id="loadingModal">
+                                    <p id="loadingText"><b>Loading...</b></p>
                                 </div>
-                            </div>
 
-                            <div id="loadingModal">
-                                <p id="loadingText"><b>Loading...</b></p>
-                            </div>
+                                <div id="loadingOverlay"></div>
 
-                            <div id="loadingOverlay"></div>
+                                <script>
+                                    function submitCoverLetter() {
+                                        var jobDescription = document.getElementById('coverLetterDescriptionInput').value;
+                                        // Call the API with the entered job description
+                                        window.location.href = "{% url 'build_cover_letter' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
 
-                            <script>
-                                function submitCoverLetter() {
-                                    var jobDescription = document.getElementById('coverLetterDescriptionInput').value;
-                                    // Call the API with the entered job description
-                                    window.location.href = "{% url 'build_cover_letter' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
+                                        // Show the loading modal and overlay
+                                        // document.getElementById("coverLetterModal").style.display = "none";
+                                        document.querySelector('.btn-secondary-cover-letter').click();
+                                        document.getElementById("loadingModal").style.display = "block";
+                                        document.getElementById("loadingOverlay").style.display = "block";
 
-                                    // Show the loading modal and overlay
-                                    // document.getElementById("coverLetterModal").style.display = "none";
-                                    document.querySelector('.btn-secondary-cover-letter').click();
-                                    document.getElementById("loadingModal").style.display = "block";
-                                    document.getElementById("loadingOverlay").style.display = "block";
+                                        // Array of loading messages
+                                        var loadingMessages = [
+                                            "{{account.name}}, welcome to displayai cover letter  ! ",
+                                            "Analyzing key words from job description ",
+                                            "Connecting to cloud environment & creating resume google doc ...",
+                                            "Requesting displayai AI & data science model  ...",
+                                            "Artificial Intelligence to write cover letter ...",
+                                            "Prompt engineering ...",
+                                            "Data Science model to select best letter ...",
+                                            "Natural Language Processing to make ATS friendly...",
+                                            "Model to ensure sentences are short, concise ...",
+                                            "Cleaning data and pushing to profile environment  ...",
+                                            "Editing google doc permissions ... ",
+                                            "Ensuring account security ... ",
+                                            "Saving cover letter to cloud environment",
+                                            "Saving cover letter to profile",
+                                            "Updating your account information",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Checking for errors ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                        ];
 
-                                    // Array of loading messages
-                                    var loadingMessages = [
-                                        "{{account.name}}, welcome to displayai cover letter  ! ",
-                                        "Analyzing key words from job description ",
-                                        "Connecting to cloud environment & creating resume google doc ...",
-                                        "Requesting displayai AI & data science model  ...",
-                                        "Artificial Intelligence to write cover letter ...",
-                                        "Prompt engineering ...",
-                                        "Data Science model to select best letter ...",
-                                        "Natural Language Processing to make ATS friendly...",
-                                        "Model to ensure sentences are short, concise ...",
-                                        "Cleaning data and pushing to profile environment  ...",
-                                        "Editing google doc permissions ... ",
-                                        "Ensuring account security ... ",
-                                        "Saving cover letter to cloud environment",
-                                        "Saving cover letter to profile",
-                                        "Updating your account information",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Checking for errors ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                    ];
+                                        // Function to display loading messages in a loop
+                                        function displayLoadingMessages(index) {
+                                            // Set the loading text
+                                            document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
 
-                                    // Function to display loading messages in a loop
-                                    function displayLoadingMessages(index) {
-                                        // Set the loading text
-                                        document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+                                            // Increment index or reset to 0 if at the end
+                                            index = (index + 1) % loadingMessages.length;
 
-                                        // Increment index or reset to 0 if at the end
-                                        index = (index + 1) % loadingMessages.length;
+                                            // Set a timeout for the next message
+                                            setTimeout(function () {
+                                                displayLoadingMessages(index);
+                                            }, 1700); // Adjust the time delay between messages (in milliseconds)
+                                        }
 
-                                        // Set a timeout for the next message
-                                        setTimeout(function () {
-                                            displayLoadingMessages(index);
-                                        }, 1700); // Adjust the time delay between messages (in milliseconds)
+                                        // Start the loop
+                                        displayLoadingMessages(0);
+
                                     }
+                                </script>
 
-                                    // Start the loop
-                                    displayLoadingMessages(0);
+                            </div>
 
-                                }
-                            </script>
-
+                            <!-- projects -->
+                            
                         </div>
 
-                        <!-- projects -->
-                        <div class="action-section4">
-                            <h1>Projects</h1>
-                            <p> Do not know what projects to put? You do not have any projects? You need help with projects? <a href="#">Click here</a> </p> </p>
-                        </div>
+                     </div>
+
+
+                    <div id="projects">
+                        <h1>Projects</h1>
+                        <p> Need help with projects ?  <a href="#">Click here</a> </p> </p>
                     </div>
 
                 </div>
 
                 <div class="div2" id="div2">
+
+                    <table class="user-info-table">
+                        <tr>
+                            <td>Your Tier:</td>
+                            <td>{{account.tier}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Created on {{account.tier}}:</td>
+                            <td>{{user_plan.forms_filled_on_current_plan}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Tailored Resumes:</td>
+                            <td>{{user_plan.total_tailored_resumes}} </td>
+                        </tr>
+                        <tr>
+                            <td>Total Cover Letters:</td>
+                            <td>{{user_plan.total_cover_letters}} </td>
+                        </tr>
+                        <tr>
+                            <td>Total Created on all tiers:</td>
+                            <td>{{user_plan.total_forms_filled}} </td>
+                        </tr>
+                        <tr>
+                            <td>Remaining:</td>
+                            <td> <b> {{remaining}} </b> </td>
+                        </tr>
+
+
+                    </table>
 
                     <div id="resumeMobilePreview"></div>
 
@@ -1283,194 +1338,126 @@
 
             </div>
 
-    </div>
+            <div>
+                <!-- pricing -->
+                <section id="pricing">
+                    <h1>Pricing</h1>
 
-    <!-- pricing -->
-    <section id="pricing" class="pricing">
-        <h1>Pricing</h1>
+                    <!-- <div class="services-banner">
+                        <p style="color: white;">Our services: personal website, resume, tailored resume given job description, tailored cover letter given job description</p>
+                    </div> -->
+                    
 
-        <p>    Research finds that around 68% of candidates who use a professional resume writing service get a job within 90 days of sending out their resume
-         </p>
-
-        <form method="post" action="{% url 'confirmation' account_id=account.id %}">
-            {% csrf_token %}
-            <div class="pricing-cards">
-                <div class="card">
-                    <h2>Free</h2>
-                    <ul>
-                        <li>2 ATS friendly and optimized resumes</li>
-                        <li>Bullet points for only one work experience or one project for testing</li>
-                        <li>2 personal websites valid for 1 hour</li>
-                    </ul>
-                    <p class="price">Free</p>
-                    <button class="get-now-button">Current</button>
-                </div>
-
-                <div class="card">
-                    <h2>Basic</h2>
-                    <ul>
-                        <li>5 ATS friendly and optimized resumes</li>
-                        <li>5 personal websites valid for 6 months</li>
-                    </ul>
-                    <h2 class="price">$9.99</h2>
-                    <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
-
-                </div>
-
-                <div class="card">
-                    <h2>Economy</h2>
-                    <ul>
-                        <li>10 ATS friendly and optimized resumes</li>
-                        <li>10 personal websites valid for 6 months</li>
-                    </ul>
-                    <h2 class="price">$14.99</h2>
-                    <button class="get-now-button" name="selected_plan" value="economy">Get Now</button>
-
-                </div>
-
-                <div class="card">
-                    <h2>Business</h2>
-                    <ul>
-                        <li>20 ATS friendly and optimized resumes</li>
-                        <li>20 personal websites valid for 6 months</li>
-                    </ul>
-                    <h2 class="price">$19.99</h2>
-                    <button class="get-now-button" name="selected_plan" value="business">Get Now</button>
-                </div>
-
-                <div class="card">
-                    <h2>First Class</h2>
-                    <ul>
-                        <li>50 ATS friendly and optimized resumes</li>
-                        <li>50 personal  websites valid for 1 year</li>
-                    </ul>
-                    <h2 class="price">$39.99</h2>
-                    <button class="get-now-button" name="selected_plan" value="first_class">Get Now</button>
-                </div>
-
-                <div class="card">
-                    <h2>Pilot</h2>
-                    <ul>
-                        <li>100 ATS friendly and optimized resumes</li>
-                        <li>100 personal websites valid for 1 year</li>
-                    </ul>
-                    <h2 class="price">$99.99</h2>
-                    <button class="get-now-button" name="selected_plan" value="pilot">Get Now</button>
-                </div>
+                    <p>    
+                      All resumes are optimized for Applicant Tracking Systems (ATS)
+                    </p>
 
 
-                <div class="card">
-                    <h2>Pilot 2</h2>
-                    <ul>
-                        <li>300 ATS friendly and optimized resumes</li>
-                        <li>300 personal websites valid for 6 months</li>
-                    </ul>
-                    <h2 class="price">$199.99</h2>
-                    <button class="get-now-button" name="selected_plan" value="pilot2">Get Now</button>
-                </div>
+                    <form method="post" action="{% url 'confirmation' account_id=account.id %}">
+                        {% csrf_token %}
+                        
+                        <div class="pricing-cards">
 
-                <div class="card">
-                    <h2>Custom</h2>
-                    <ul>
-                        <li>Contact sales</li>
-                        <li>shf46@rutgers.edu</li>
-                    </ul>
-                    <h2 class="price">Custom</h2>
-                    <button class="get-now-button">Get Now</button>
-                </div>
+                            <div class="card">
+                                <h2>Free</h2>
+                                <p class="price" style="color: brown;">$0.00</p>
+                                <ul>
+                                    <li>2 limited builds</li>
+                                    <li>Personal website for 1 hour</li>
+                                    Upgrade for complete build of all bullets
+                                </ul>
+                                <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
+                            </div>
 
+                            <div class="card">
+                                <h2>Basic</h2>
+                                <p class="price" style="color: brown;">$19.99</p>
+
+                                
+
+                                <ul>
+                                    <li>20 builds</li>
+                                    <li>Personal website for 6 months</li>
+                                    <a href="#what_are_builds">What are builds</a>
+
+
+                                </ul>
+                                <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
+                            </div>
+                    
+                            <div class="card">
+                                <h2>Economy</h2>
+                                <p class="price" style="color: brown;">$39.99</p>
+                                <ul>
+                                    <li>50 builds</li>
+                                    <li>Personal website for 1 year</li>
+                                    <a href="#what_are_builds">What are builds</a>
+
+                                </ul>
+                                <button class="get-now-button" name="selected_plan" value="economy">Get Now</button>
+                            </div>
+                    
+                            <div class="card">
+                                <h2>Business</h2>
+                                <p class="price" style="color: brown;">$59.99</p>
+                                <ul>
+                                    <li>100 builds</li>
+                                    <li>Personal website for 1 year</li>
+                                    <a href="#what_are_builds">What are builds</a>
+
+                                </ul>
+                                <button class="get-now-button" name="selected_plan" value="business">Get Now</button>
+                            </div>
+                    
+                            <div class="card">
+                                <h2>First Class</h2>
+                                <p class="price" style="color: brown;">$99.99</p>
+                                <ul>
+                                    <li>200 builds</li>
+                                    <li>Personal website for 2 years</li>
+                                    <a href="#what_are_builds">What are builds</a>
+
+                                </ul>
+                                <button class="get-now-button" name="selected_plan" value="first_class">Get Now</button>
+                            </div>
+                    
+                            <div class="card">
+                                <h2>Pilot</h2>
+                                <p class="price" style="color: brown;">$199.99</p>
+                                <ul>
+                                    <li>400 builds</li>
+                                    <li>Personal website for 2 years</li>
+                                    <a href="#what_are_builds">What are builds</a>
+
+                                </ul>
+                                <button class="get-now-button" name="selected_plan" value="pilot">Get Now</button>
+                            </div>
+                        </div>
+
+                    </form>
+
+
+                    <div id="what_are_builds">
+                        <div class="card">
+                            <h2>What are builds</h2>
+                            <ul> Each build includes three customizable options: </ul>
+                            <ul>
+                                <li> - Create a resume using your user profile</li>
+                                <li> - Create a tailored resume based on a job description</li>
+                                <li> - Create a tailored cover letter based on a job description</li>
+                            </ul>
+                        <ul> Whichever option you choose, you'll receive an updated personal website </ul>
+                        </div>
+                    </div>
+
+                </section>
             </div>
 
-        </form>
-    </section>
-
-</body>
-
-
-
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Loading Popup</title>
-<style>
-/* Modal styles */
-.modal {
-    display: none; /* Hidden by default */
-    position: fixed; /* Stay in place */
-    z-index: 9999; /* Sit on top */
-    left: 0;
-    top: 0;
-    width: 100%; /* Full width */
-    height: 100%; /* Full height */
-    background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
-}
-
-/* Modal Content */
-.modal-content {
-    background-color: #fefefe;
-    margin: 15% auto;
-    padding: 20px;
-    border: 1px solid #888;
-    width: 200px;
-    text-align: center;
-}
-
-/* Loader */
-.loader {
-    border: 4px solid #f3f3f3; /* Light grey */
-    border-top: 4px solid #3498db; /* Blue */
-    border-radius: 50%;
-    width: 30px;
-    height: 30px;
-    animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-    0% { transform: rotate(0deg); }
-    100% { transform: rotate(360deg); }
-}
-</style>
-</head>
-<body>
-
-<a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" id="reloadButton">
-    <button type="button">Test Button</button>
-</a>
-
-<!-- Loading Modal -->
-<div id="loadingModal" class="modal">
-    <div class="modal-content">
-        <div class="loader"></div>
-        <p>Loading...</p>
     </div>
-</div>
 
-<script>
-// Function to show loading modal
-function showLoadingModal() {
-    document.getElementById("loadingModal").style.display = "block";
-}
-
-// Add event listener when DOM is loaded
-document.addEventListener("DOMContentLoaded", function() {
-    // Get the reload button element
-    var reloadButton = document.getElementById("reloadButton");
-
-    // Add click event listener to the reload button
-    reloadButton.addEventListener("click", function() {
-        showLoadingModal();
-    });
-});
-</script>
+    
 
 </body>
-</html>
-
-
-
 
 
 

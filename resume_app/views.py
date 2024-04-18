@@ -492,6 +492,7 @@ def confirmation(request, account_id):
             'user_profile': account.user_profile,
             'remaining': user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
             'qr_code_image': qr_code_base64,
+            'redirect_domain': settings.REDIRECT_DOMAIN,
         }
 
         # Render the template
