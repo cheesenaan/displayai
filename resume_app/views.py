@@ -79,18 +79,33 @@ def login(request):
                     return redirect('form', account.id)
                 else:
                     messages.error(request, 'Invalid login credentials.')
+                    login_form = LoginForm()
+                    context = {'login_form': login_form}
+                    return render(request, 'login.html', context)
             except Account.DoesNotExist:
                 messages.error(request, 'Invalid login credentials.')
+                login_form = LoginForm()
+                context = {'login_form': login_form}
+                return render(request, 'login.html', context)
             except Exception as e:
                 # Handle any other exceptions that might occur during the authentication process
                 print(e)
                 messages.error(request, 'An error occurred during login.')
+                login_form = LoginForm()
+                context = {'login_form': login_form}
+                return render(request, 'login.html', context)
 
         elif request.POST['action'] == 'create_account':
             if Account.objects.filter(name = user_name).exists():
                 messages.error(request, 'Username already taken. Please choose another.')
+                login_form = LoginForm()
+                context = {'login_form': login_form}
+                return render(request, 'login.html', context)
             elif Account.objects.filter(email = user_email).exists():
                 messages.error(request, 'Email already taken. Please choose another.')
+                login_form = LoginForm()
+                context = {'login_form': login_form}
+                return render(request, 'login.html', context)
             else:
 
                 try:

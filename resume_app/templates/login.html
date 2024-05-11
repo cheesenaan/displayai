@@ -372,7 +372,7 @@ body {
             });
         });
     </script>
-    
+
 
     <button type="submit" onclick="showLoadingModal()">Submit</button>
 
@@ -418,40 +418,6 @@ body {
             document.getElementById('emailValidation').style.display = 'block';
             document.getElementById('forgot_password').style.display = "none";
 
-            
-        function showLoadingModal() {
-
-            document.getElementById("loadingModal").style.display = "block";
-            document.getElementById("loadingOverlay").style.display = "block";
-
-            document.getElementById("selected_action").value = formType;
-
-
-            var loadingMessages = [
-                "please wait ... ",
-            ];
-
-
-            // Function to display loading messages in a loop
-            function displayLoadingMessages(index) {
-                // Set the loading text
-                document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
-
-                // Increment index or reset to 0 if at the end
-                index = (index + 1) % loadingMessages.length;
-
-                // Set a timeout for the next message
-                setTimeout(function () {
-                    displayLoadingMessages(index);
-                }, 1000); // Adjust the time delay between messages (in milliseconds)
-            }
-
-            // Start the loop
-            displayLoadingMessages(0);
-            // You can add additional logic or AJAX requests if needed here
-        }
-
-
         }
     }
 
@@ -469,35 +435,51 @@ body {
     }
 
     function showLoadingModal() {
-        // Show the loading modal and overlay
-        document.getElementById("loadingModal").style.display = "block";
-        document.getElementById("loadingOverlay").style.display = "block";
-
-        // Array of loading messages
-        var loadingMessages = [
-            "Please wait...",
-            // "A confirmation email is being sent...",
-        ];
-
-        // Function to display loading messages in a loop
-        function displayLoadingMessages(index) {
-            // Set the loading text
-            document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
-
-            // Increment index or reset to 0 if at the end
-            index = (index + 1) % loadingMessages.length;
-
-            // Set a timeout for the next message
-            setTimeout(function () {
-                displayLoadingMessages(index);
-            }, 3000); // Adjust the time delay between messages (in milliseconds)
+    // Check if all required fields are filled
+    var allFieldsFilled = true;
+    $('#login-form input[required]').each(function() {
+        if ($(this).val() === '') {
+            allFieldsFilled = false;
+            return false; // Exit the loop early if any required field is empty
         }
+    });
 
-        // Start the loop
-        displayLoadingMessages(0);
+    if (allFieldsFilled) {
+        if (document.getElementById("selected_action").value == 'create_account') {
+            // Show the loading modal and overlay
+            document.getElementById("loadingModal").style.display = "block";
+            document.getElementById("loadingOverlay").style.display = "block";
 
-        // You can add additional logic or AJAX requests if needed here
+            // Array of loading messages
+            var loadingMessages = [
+                "Please wait...",
+                "A confirmation email is being sent...",
+            ];
+
+            // Function to display loading messages in a loop
+            function displayLoadingMessages(index) {
+                // Set the loading text
+                document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+
+                // Increment index or reset to 0 if at the end
+                index = (index + 1) % loadingMessages.length;
+
+                // Set a timeout for the next message
+                setTimeout(function () {
+                    displayLoadingMessages(index);
+                }, 3000); // Adjust the time delay between messages (in milliseconds)
+            }
+
+            // Start the loop
+            displayLoadingMessages(0);
+        }
+    } else {
+        // If not all fields are filled, display an error message or take appropriate action
+        alert("Please fill in all required fields.");
     }
+}
+
+
 </script>
 
 {% if messages %}
