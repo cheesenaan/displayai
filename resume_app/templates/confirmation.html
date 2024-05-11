@@ -1129,7 +1129,7 @@
                             <td>{{user_plan.total_forms_filled}} </td>
                         </tr>
                         <tr>
-                            <td>Remaining:</td>
+                            <td> <b> Builds Remaining:</b></td>
                             <td> <b> {{remaining}} </b> </td>
                         </tr>
 
@@ -1366,7 +1366,13 @@
                                     <li>Personal website for 1 hour</li>
                                     Upgrade for complete build of all bullets
                                 </ul>
-                                <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
+                                <button class="get-now-button" name="selected_plan">
+                                    {% if account.tier == 'free' %}
+                                        Current
+                                    {% else %}
+                                        Free version expired 
+                                    {% endif %}
+                                </button>
                             </div>
 
                             <div class="card">
@@ -1382,7 +1388,13 @@
 
 
                                 </ul>
-                                <button class="get-now-button" name="selected_plan" value="basic">Get Now</button>
+                                <button class="get-now-button" name="selected_plan" value="basic">
+                                    {% if account.tier == 'basic' %}
+                                        Current
+                                    {% else %}
+                                        Get Now
+                                    {% endif %}
+                                </button>
                             </div>
                     
                             <div class="card">
@@ -1394,7 +1406,13 @@
                                     <a href="#what_are_builds">What are builds</a>
 
                                 </ul>
-                                <button class="get-now-button" name="selected_plan" value="economy">Get Now</button>
+                                <button class="get-now-button" name="selected_plan" value="economy">
+                                    {% if account.tier == 'economy' %}
+                                        Current
+                                    {% else %}
+                                        Get Now
+                                    {% endif %}
+                                </button>
                             </div>
                     
                             <div class="card">
@@ -1406,7 +1424,13 @@
                                     <a href="#what_are_builds">What are builds</a>
 
                                 </ul>
-                                <button class="get-now-button" name="selected_plan" value="business">Get Now</button>
+                                <button class="get-now-button" name="selected_plan" value="business">
+                                    {% if account.tier == 'business' %}
+                                        Current
+                                    {% else %}
+                                        Get Now
+                                    {% endif %}
+                                </button>
                             </div>
                     
                             <div class="card">
@@ -1418,7 +1442,13 @@
                                     <a href="#what_are_builds">What are builds</a>
 
                                 </ul>
-                                <button class="get-now-button" name="selected_plan" value="first_class">Get Now</button>
+                                <button class="get-now-button" name="selected_plan" value="first_class">
+                                    {% if account.tier == 'first_class' %}
+                                        Current
+                                    {% else %}
+                                        Get Now
+                                    {% endif %}
+                                </button>
                             </div>
                     
                             <div class="card">
@@ -1430,7 +1460,13 @@
                                     <a href="#what_are_builds">What are builds</a>
 
                                 </ul>
-                                <button class="get-now-button" name="selected_plan" value="pilot">Get Now</button>
+                                <button class="get-now-button" name="selected_plan" value="pilot">
+                                    {% if account.tier == 'pilot' %}
+                                        Current
+                                    {% else %}
+                                        Get Now
+                                    {% endif %}
+                                </button>
                             </div>
                         </div>
 

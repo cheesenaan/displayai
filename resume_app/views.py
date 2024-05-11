@@ -6,6 +6,7 @@ import secrets
 import string
 from io import BytesIO
 from PIL import Image
+from django.db import IntegrityError
 import qrcode
 import stripe
 import httplib2
@@ -92,7 +93,14 @@ def login(request):
                 messages.error(request, 'Email already taken. Please choose another.')
             else:
 
-                user = User.objects.create_user(user_name, user_email, user_password)
+                try:
+                    user = User.objects.create_user(user_name, user_email, user_password)
+                except IntegrityError as e:
+                    messages.error(request, 'Username  or Email already taken. Please choose another.')
+                    login_form = LoginForm()
+                    context = {'login_form': login_form}
+                    return render(request, 'login.html', context)
+
 
                 new_account = Account()
                 new_account.name = user_name
@@ -133,9 +141,8 @@ def login(request):
                 return redirect('form' , account_id = new_account.id)
     else:
         login_form = LoginForm()
-
-    context = {'login_form': login_form}
-    return render(request, 'login.html', context)
+        context = {'login_form': login_form}
+        return render(request, 'login.html', context)
 
 @login_required
 def logout(request, account_id):
@@ -402,13 +409,22 @@ def form(request , account_id):
         work_experience_formset = WorkExperienceFormSet(instance=UserProfile())
         projects_formset = ProjectsFormSet(instance=UserProfile())
 
+
+        required_fields = [
+        'first_name', 'last_name', 'phone', 'city', 'state',
+        'institution', 'major', 'start_date', 'end_date',
+        'spoken_languages', 'programming_languages', 'technical_skills', 'leadership'
+        ]
+
+
         context = {
             'form': form,
             'work_experience_formset': work_experience_formset,
             'projects_formset': projects_formset,
             'account' : account,
             'user_plan' : user_plan,
-            'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
+            'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
+             'required_fields': required_fields
         }
         
         return render(request, 'form.html', context)
@@ -764,7 +780,6 @@ def reload_resume_and_website(request, account_id):
 
     return redirect('confirmation', account_id=account_id)
 
-
 def update_resume(user_profile, account, DOCUMENT_ID):
     
     # Dictionary to store the placeholder replacements
@@ -780,7 +795,7 @@ def update_resume(user_profile, account, DOCUMENT_ID):
             'university': user_profile.institution,
             'university start date': user_profile.start_date.strftime('%b %Y'),
             'university end date' : user_profile.end_date.strftime('%b %Y'),
-            'major': user_profile.major,
+            'major': user_profile.major + (f" And Minor in {user_profile.minor}" if user_profile.minor else ''),
             'minor': user_profile.minor,
             'spoken_languages': user_profile.spoken_languages,
             'languages': user_profile.programming_languages,
@@ -955,7 +970,7 @@ def create_resume(user_profile, account):
                 'university': user_profile.institution,
                 'university start date': user_profile.start_date.strftime('%b %Y'),
                 'university end date' : user_profile.end_date.strftime('%b %Y'),
-                'major': user_profile.major,
+                'major': user_profile.major + (f" And Minor in {user_profile.minor}" if user_profile.minor else ''),
                 'minor': user_profile.minor,
                 'spoken_languages': user_profile.spoken_languages,
                 'languages': user_profile.programming_languages,
@@ -1486,13 +1501,13 @@ class CheckUrlNameView(View):
 class CheckAccountNameView(View):
     def get(self, request, *args, **kwargs):
         name = request.GET.get('name', None)
-        data = {'is_taken': Account.objects.filter(name=name).exists()}
+        data = {'is_taken': User.objects.filter(username=name).exists()}
         return JsonResponse(data)
 
 class CheckAccountEmailView(View):
     def get(self, request, *args, **kwargs):
         email = request.GET.get('email', None)
-        data = {'is_taken': Account.objects.filter(email=email).exists()}
+        data = {'is_taken': User.objects.filter(email=email).exists()}
         return JsonResponse(data)
 
 # def stripe_webhook(request):

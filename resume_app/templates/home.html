@@ -85,6 +85,28 @@ li {
 
 <style>
   
+  .icon {
+    position: absolute;
+    bottom: 200px;
+    left: 50%;
+    transform: translateX(-50%);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 40px; /* Adjust height as needed */
+    width: 50px; /* Adjust width as needed */
+    border-radius: 20px; /* Rounded edges */
+    background-color: #4CAF50; /* Green background color */
+    color: #fff; /* White icon color */
+    font-size: 24px; /* Adjust icon size as needed */
+    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
+    transition: background-color 0.3s ease; /* Smooth color transition */
+}
+
+.icon:hover {
+    background-color: #388E3C; /* Darker green on hover */
+}
+
 
 /* ======= About Section ======= */
 
@@ -178,18 +200,126 @@ li {
 
       <!-- ======= Main Section ======= -->
       <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-
         <div class="container text-center text-md-left" data-aos="fade-up">
-          <h1> DisplayAI </h1>
-        <p style="color: aliceblue;">  
-           Build resume & website in 30 seconds
-        </p>
-          <a href="{% url 'login'%}" class="btn-get-started scrollto">BUILD </a>
-          <a  class="btn-get-started scrollto">DEMO </a>
-          <br> <br> 
-          <a href="#about" class="btn-get-started scrollto">LEARN MORE </a>
+            <h1> DisplayAI </h1>
+            <p style="color: aliceblue;">Build resume & website in 30 seconds</p>
+            <a href="{% url 'login'%}" class="btn-get-started scrollto">BUILD </a>
+            <br> <br>
         </div>
-      </section>
+
+        <div class="container custom-container">
+
+          <style>
+            .custom-container {
+              padding: 20px 0;
+              text-align: center; /* Center align content */
+            }
+          
+            .custom-icon-box {
+              border: 0px solid white; /* Add white border */
+              padding: 10px;
+              text-align: center;
+              border-radius: 8px;
+              width: 205px; /* Adjust the width as needed */
+              height: 115px; /* Adjust the height as needed */
+              margin-bottom: 10px; /* Reduce space between boxes */
+              display: inline-block; /* Display boxes inline */
+              margin-right: 0px; /* Add some margin between boxes */
+              margin-left: 0px; /* Add some margin between boxes */
+            }
+          
+            .custom-icon-box i {
+              font-size: 30px;
+              color: white;
+            }
+          
+            .custom-icon-box h3 {
+              font-size: 12px;
+              margin-top: 8px;
+              color: white;
+            }
+          
+            .custom-icon-box p {
+              margin-top: 8px;
+              font-size: 12px;
+              color: white;
+            }
+
+            @media only screen and (max-width: 768px) {
+              #nonMobileHome {
+                display: none;
+              }
+            }
+
+            @media only screen and (min-width: 768px) {
+              #mobileHome {
+                display: none;
+              }
+            }
+            
+          </style>
+          
+          <div id="nonMobileHome">
+            <div class="row justify-content-center">
+            
+              <div class="col-lg-3 col-md-4">
+                <div class="icon-box custom-icon-box">
+                  <i class="bi bi-link-45deg"></i>
+                  <h3><a href="#" style="color: white;"> <b> Website + QR Code </b></a></h3>
+                  <p style="color: white;">www.displayai/your_name</p>
+                </div>
+              </div>
+          
+              <div class="col-lg-3 col-md-4">
+                <div class="icon-box custom-icon-box">
+                  <i class="bi bi-file-earmark-text"></i>
+                  <h3><a href="#" style="color: white;"> <b> Google Doc Resume Bullets </b> </a></h3>
+                  <p style="color: white;">  Model generates ATS bullets</p>
+                </div>
+              </div>
+          
+              <div class="col-lg-3 col-md-4">
+                <div class="icon-box custom-icon-box">
+                  <i class="bi bi-file-earmark-person"></i>
+                  <h3><a href="#" style="color: white;"> <b> Tailored Resume / Cover Letter </b></a></h3>
+                  <p style="color: white;">customized for job description</p>
+                </div>
+              </div>
+
+            
+          
+            </div>
+          </div>
+          
+          <div id="mobileHome">
+            <div class="row justify-content-center">
+              <div class="col-10">
+                <div class="icon-box custom-icon-box">
+                  <h3><a href="#" style="color: white;"> <b> Website + QR Code </b></a></h3>
+                  <!-- <p style="color: white;">www.displayai/your_name</p>  -->
+          
+                  <h3><a href="#" style="color: white;"> <b> Google Doc Resume Bullets </b> </a></h3>
+                  <!-- <p style="color: white;">  Model generates ATS bullets</p>  -->
+          
+                  <h3><a href="#" style="color: white;"> <b> Tailored Resume / Cover Letter </b></a></h3>
+                  <!-- <p style="color: white;">customized for job description</p>  -->
+                </div>
+              </div>
+            </div>
+          </div>
+
+
+
+        </div>
+
+        <a href="#about" class="scrollto">
+          <div class="icon">
+              <i class="bi bi-arrow-down-short"></i>
+          </div>
+        </a>
+      
+    </section>
+    
 
       <main id="main">
 
@@ -699,6 +829,9 @@ li {
 
       <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
 
+
+      
+
       <!-- Vendor JS Files -->
       <script src="static/vendor/aos/aos.js"></script>
       <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -712,8 +845,5 @@ li {
       
 
     </body>
-
-
-    
 
 {% endblock %}

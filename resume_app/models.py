@@ -27,12 +27,12 @@ from django.contrib.auth.models import User
 
 class Account(models.Model):
     id = models.AutoField(primary_key=True)
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='account_user')
     name = models.CharField(max_length=255, unique=True) # needs to be unique
     password = models.CharField(max_length=255)
     email = models.EmailField()
     tier = models.CharField(max_length=255, default = "free")
     user_profile = models.ForeignKey('UserProfile', on_delete=models.SET_NULL, null=True, related_name='user_profile_account')
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='account_user')
     user_plan = models.ForeignKey('Plan', on_delete=models.SET_NULL, null=True, related_name='user_plan')
     user_payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, related_name='user_payment')
     resume_links = models.CharField(max_length=100000, blank=True, null=True, help_text="Separate links with commas")
@@ -71,11 +71,10 @@ class UserProfile(models.Model):
 
     def profile_image_upload_to(instance, filename):
         return f"profile_pictures/{instance.account.id}.jpg"
-
     
     id = models.AutoField(primary_key=True)
-    account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name='account_user_profile')
-    user = models.ForeignKey(User, on_delete=models.SET_NULL, null=True, related_name='user_profile_user')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='account_user_profile')
+    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='user_profile_user')
     # url_name = models.CharField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
@@ -186,7 +185,7 @@ class Plan(models.Model):
             return f"{self.account}"
 
 class Payment(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.SET_NULL, null=True, related_name='account_payments')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='account_payments')
     subscription_id = models.CharField(max_length=100000, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
     end_date = models.DateTimeField(blank=True, null=True)

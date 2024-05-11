@@ -36,7 +36,7 @@ class ProjectsForm(forms.ModelForm):
         model = Project
         fields = ['project_name', 'description', 'project_skills']
         widgets = {
-            'project_skills': forms.TextInput(attrs={'placeholder': 'Python, HTML, CSS, Javascript'}),
+            'project_skills': forms.TextInput(attrs={'placeholder': 'Python, Excel, Communication'}),
         }
 
     def clean(self):
@@ -76,19 +76,19 @@ class UserProfileForm(forms.ModelForm):
         model = UserProfile
         fields = ['first_name', 'last_name', 'phone','city', 'state', 'linkedin_link', 'github_link', 'profile_image', 'institution', 'degree_type', 'major', 'minor', 'start_date', 'end_date', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership']
         widgets = {
-            'first_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
-            'last_name': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
-            'phone': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
+            'first_name': forms.TextInput(attrs={'placeholder': ''}),
+            'last_name': forms.TextInput(attrs={'placeholder': ''}),
+            'phone': forms.TextInput(attrs={'placeholder': ''}),
             # 'email': forms.EmailInput(attrs={'placeholder': 'Enter your email address'}),
-            'city': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
-            'state': forms.TextInput(attrs={'placeholder': 'REQUIRED (2-letter abbreviation)'}),
-            'linkedin_link': forms.URLInput(attrs={'placeholder': 'OPTIONAL'}),
+            'city': forms.TextInput(attrs={'placeholder': ''}),
+            'state': forms.TextInput(attrs={'placeholder': '2-letter abbreviation'}),
+            'linkedin_link': forms.URLInput(attrs={'placeholder': 'https://www.'}),
             'resume_link': forms.URLInput(attrs={'placeholder': 'https://www.'}),
-            'github_link': forms.URLInput(attrs={'placeholder': 'OPTIONAL'}),
-            'profile_image': forms.ClearableFileInput(attrs={'placeholder': 'OPTIONAL'}),
-            'institution': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
-            'major': forms.TextInput(attrs={'placeholder': 'REQUIRED'}),
-            'minor': forms.TextInput(attrs={'placeholder': 'OPTIONAL'}),
+            'github_link': forms.URLInput(attrs={'placeholder': 'https://www.'}),
+            'profile_image': forms.ClearableFileInput(attrs={'placeholder': ''}),
+            'institution': forms.TextInput(attrs={'placeholder': ''}),
+            'major': forms.TextInput(attrs={'placeholder': ''}),
+            'minor': forms.TextInput(attrs={'placeholder': ''}),
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
             'spoken_languages': forms.TextInput(attrs={'placeholder': 'English, Spanish, Arabic ... '}),
@@ -96,6 +96,8 @@ class UserProfileForm(forms.ModelForm):
             'technical_skills': forms.TextInput(attrs={'placeholder': 'Excel, AWS, GCP, ... '}),
             'leadership': forms.TextInput(attrs={'placeholder': 'Soccer club, Hackathon ...'}),
         }
+
+        
 
 
     def __init__(self, *args, **kwargs):
