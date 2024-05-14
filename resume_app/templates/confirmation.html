@@ -102,24 +102,6 @@
             position: relative; /* Add position relative to make the ::before pseudo-element work */
         }
 
-        /* #website_and_resume_section::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('{% static "img/deep_mind.webp" %}');
-            background-size: cover;
-            background-position: top; 
-            filter: brightness(40%);
-            border-radius: 20px;
-            z-index: -1;
-        } */
-
-
-
-        
 
         #google_doc_section {
             /* background-color: white; */
@@ -128,28 +110,6 @@
             position: relative;
             border-radius: 20px;
         }
-
-        /* #google_doc_section::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-image: url('{% static "img/0 copy.jpg" %}');
-            background-size: cover;
-            background-position: center;
-            background-repeat: no-repeat;
-            transform: scaleX(-1);
-            filter: brightness(40%);
-            z-index: -1;
-            border-radius: 20px; 
-        } */
-
-
-        #pricing {
-        }
-
 
        
 </style>
@@ -222,8 +182,50 @@
                 }
     }
 
-</style>
 
+    @media (max-width: 768px) {
+        .pricing-cards {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+    }
+
+    .card {
+        flex: 0 0 90%; /* Each card takes up the full width */
+        background-color: #f9f9f9;
+        border-radius: 10px;
+        margin: 10px;
+        padding: 20px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        text-align: left;
+    }
+
+    .card h2 {
+        color: #0066cc;
+        font-size: 20px; /* Decrease font size for smaller screens */
+        margin-bottom: 10px;
+    }
+
+    .card ul {
+        list-style-type: none;
+        padding: 0;
+        margin-bottom: 15px; /* Decrease margin for better spacing */
+    }
+
+    .card ul li {
+        margin-bottom: 5px;
+        font-size: small;
+    }
+
+    .card .price {
+        font-size: 18px; /* Decrease font size for smaller screens */
+        margin-bottom: 15px; /* Decrease margin for better spacing */
+    }
+
+    }
+
+
+</style>
 
 <!-- for all devices -->
     <style>
@@ -353,14 +355,6 @@
 
 <body>
 
-    <!-- <section id="welcome">
-    
-        <h2 style="text-align: center;">{{user_profile.first_name}}'s build page  </h2>
-        
-        <a href="{% url 'account' account_id=account.id %}" class="reload_resume_and_website-button"> Your Account </a>
-    
-    </section> -->
-
     <section id="landed_section">
 
         <h2 style="text-align: center;">{{user_profile.first_name}}'s build page  </h2>
@@ -470,6 +464,7 @@
 
     <section id="website_and_resume_section">
         <style>
+            @media only screen and (min-width: 768px) {
             .row {
                 display: flex;
                 justify-content: space-between;
@@ -487,9 +482,37 @@
             .column:last-child {
                 margin-right: 0; /* Remove right margin for the last column */
             }
+        }
+
+        @media only screen and (max-width: 768px) {
+            #website_and_resume_section {
+                text-align: center;
+            }
+
+            .user-info-table {
+                margin-top: 2%;
+                margin-left: 23%;
+            }
+
+        }
+
         </style>
     
         <div class="row">
+
+            <div class="column" id="resume">
+                <h3>Resume</h3>
+                <p><b><a href="#google_doc_section">PREVIEW RESUME</a></b></p>
+            </div>
+           
+
+            <div class="column" id="website">
+                <h3>Website</h3>
+                <p>
+                    <a id="link" href="/{{account.name}}" target="_blank"><b> cheesenaan.app/{{account.name}}</b></a>
+                </p>
+                <img src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code" style="max-width: 50%; height: 120px; margin-top: -10px;">
+            </div>
 
             <div class="column user-info-table">
                 <style>
@@ -542,32 +565,47 @@
                     </tr>
                 </table>
             </div>
-
-            <div class="column" id="website">
-                <h3>Website</h3>
-                <p>
-                    <a id="link" href="/{{account.name}}" target="_blank"><b> cheesenaan.app/{{account.name}}</b></a>
-                </p>
-                <img src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code" style="max-width: 50%; height: 120px; margin-top: -10px;">
-            </div>
     
-            <div class="column" id="resume">
-                <h3>Resume</h3>
-                <p><b><a href="#google_doc_section">PREVIEW RESUME</a></b></p>
-            </div>
+            
 
         </div>
     </section>
-    
 
-    <section id="google_doc_section" style="display: flex; flex-wrap: wrap;">
+    <style>
+        @media only screen and (min-width: 768px) {
+            #google_doc_section {
+            display: flex;
+            flex-wrap: wrap;
+            }
+            #google_doc_section_left {
+                flex: 1;
+                padding: 0px;
+                text-align: center;
+                width: 100%;
+            }
+            #google_doc_section_right {
+                flex: 1;
+                padding: 0px;
+            }
+        }
+
+        @media only screen and (max-width: 768px) {
+            #google_doc_section {
+                flex-direction: column; /* Stack items vertically */
+            }
+            #google_doc_section_left, #google_doc_section_right {
+                width: 100%; /* Take up full width */
+                flex: none; /* Reset flex property */
+                text-align: center;
+            }
+        }
+
+    </style>
 
 
-        <!-- <h3 style="text-align: center; width: 100%;">Resume Preview and Features</h3> -->
+    <section id="google_doc_section" >
 
-        <div style="flex: 1; padding: 0px;text-align: center; width: 100%;"">
-
-            
+        <div id="google_doc_section_left">
 
             <div id="features" style="margin-top: 25%;">
 
@@ -986,7 +1024,7 @@
 
         </div>
     
-        <div style="flex: 1; padding: 0px; margin-left: -5%;">
+        <div id="google_doc_section_right">
              <!-- embed google docs  -->
              <div>
 
@@ -1039,6 +1077,7 @@
                 <div class="resume-container">
                     <script> let resume_counter = 0; </script>
 
+                    <br>
                     {% if account.resume_links %}
                     {% if account.get_resume_links %}
                     <select id="resumeDropdown" onchange="updateResumeIframe(this)">
@@ -1079,10 +1118,10 @@
                             /* For mobile devices */
                             @media only screen and (max-width: 767px) {
                                 #resumeIframe {
-                                    transform: scale(0.7);
-                                    height: 1000px;
-                                    width: 200%;
-                                    margin-left: -50px;
+                                    height: 500px; /* Let the height adjust dynamically */
+                                    max-width: auto; /* Ensure the iframe doesn't overflow horizontally */
+                                    transform: scale(0.8); /* Scale down the iframe for better fit */
+                                    transform-origin: 0 0;
                                 }
                             }
                         </style>
@@ -1176,32 +1215,76 @@
                 {% csrf_token %}
 
                 <style>
-                    .payment-mode-container {
-                        display: flex;
-                        justify-content: center; /* Center content horizontally */
-                        align-items: center; /* Center content vertically */
-                        height: 8vh; /* Set full viewport height */
-                        margin: 0; /* Remove default margin */
+
+                    @media only screen and (min-width: 768px) {
+
+                            .payment-mode-container {
+                                display: flex;
+                                justify-content: center; /* Center content horizontally */
+                                align-items: center; /* Center content vertically */
+                                height: 8vh; /* Set full viewport height */
+                                margin: 0; /* Remove default margin */
+                            }
+                        
+                            .payment-mode-box {
+                                background-color: olivedrab; /* Light gray background */
+                                border-radius: 5px; /* Rounded corners */
+                                padding: 10px; /* Add some padding */
+                                margin-bottom: 10px; /* Add some space below */
+                                width: 40%;
+                            }
+                        
+                            .payment-mode-box label {
+                                font-weight: bold; /* Make label text bold */
+                                margin-right: 10px; /* Add some space between label and select */
+                            }
+                        
+                            .payment-mode-box select {
+                                padding: 5px; /* Add some padding to select */
+                                border: 1px solid #ccc; /* Light border */
+                                border-radius: 3px; /* Rounded corners */
+                            }
+
                     }
-                
-                    .payment-mode-box {
-                        background-color: olivedrab; /* Light gray background */
-                        border-radius: 5px; /* Rounded corners */
-                        padding: 10px; /* Add some padding */
-                        margin-bottom: 10px; /* Add some space below */
-                        width: 40%;
+
+
+                    @media only screen and (max-width: 768px) {
+
+                        .payment-mode-container {
+                            display: flex;
+                            justify-content: center; /* Center content horizontally */
+                            align-items: center; /* Center content vertically */
+                            height: auto; /* Reset height */
+                            margin: 0; /* Remove default margin */
+                            padding: 10px; /* Add some padding */
+                        }
+
+                        .payment-mode-box {
+                            background-color: olivedrab; /* Light gray background */
+                            border-radius: 5px; /* Rounded corners */
+                            padding: 10px; /* Add some padding */
+                            margin-bottom: 10px; /* Add some space below */
+                            width: 100%; /* Full width */
+                        }
+
+                        .payment-mode-box label {
+                            font-weight: bold; /* Make label text bold */
+                            margin-right: 10px; /* Add some space between label and select */
+                            display: block; /* Display block for better spacing */
+                            margin-bottom: 5px; /* Add some space below label */
+                        }
+
+                        .payment-mode-box select {
+                            padding: 5px; /* Add some padding to select */
+                            border: 1px solid #ccc; /* Light border */
+                            border-radius: 3px; /* Rounded corners */
+                            width: calc(100% - 20px); /* Take up most of the width with some padding */
+                        }
+
+
                     }
-                
-                    .payment-mode-box label {
-                        font-weight: bold; /* Make label text bold */
-                        margin-right: 10px; /* Add some space between label and select */
-                    }
-                
-                    .payment-mode-box select {
-                        padding: 5px; /* Add some padding to select */
-                        border: 1px solid #ccc; /* Light border */
-                        border-radius: 3px; /* Rounded corners */
-                    }
+
+
                 </style>
                 
                 <div class="payment-mode-container">
@@ -1449,7 +1532,7 @@
                 <div id="onetime-pricing"> 
                     <div class="subscription-info">
                         <p>These are one-time payment plans. Plan ends when builds run out. Website remains active depending on plan. </p>
-                    </div>
+                    </div> <br>
                     <div class="pricing-cards">
                         <!-- free -->
                         <div class="card">
@@ -1543,16 +1626,37 @@
                         </div>
                         
                         <style>
-                        .recommended-banner {
-                            position: absolute;
-                            top: -10px;
-                            left: -10px;
-                            background-color: #ff5722; /* Orange color */
-                            color: white;
-                            padding: 5px 10px;
-                            font-size: 14px;
-                            border-radius: 5px;
-                            }
+                             @media only screen and (min-width: 768px) {
+
+                                .recommended-banner {
+                                    position: absolute;
+                                    top: -10px;
+                                    left: -10px;
+                                    background-color: #ff5722; /* Orange color */
+                                    color: white;
+                                    padding: 5px 10px;
+                                    font-size: 14px;
+                                    border-radius: 5px;
+                                    }
+                             }
+
+                             @media only screen and (max-width: 768px) {
+
+                                .recommended-banner {
+                                    position: relative; /* Change position to relative */
+                                    top: 0; /* Remove top positioning */
+                                    left: 0; /* Remove left positioning */
+                                    margin-bottom: 10px; /* Add margin for space */
+                                    background-color: #ff5722; /* Orange color */
+                                    color: white;
+                                    padding: 5px 10px;
+                                    font-size: 12px; /* Decrease font size for smaller screens */
+                                    border-radius: 5px;
+                                    width: 40%;
+                                }
+
+                             }
+
                         </style>
                         
                         <!-- first class -->
@@ -1660,6 +1764,7 @@
 
         </section>
     </div>
+
 
 
 </body>
