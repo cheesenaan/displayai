@@ -167,11 +167,11 @@ class Plan(models.Model):
         type_forms_mapping = {
             'free': 2,
             'basic': 20,
-            'economy': 40,
-            'business': 80,
-            'first_class': 100,
-            'pilot': 200,
-            'pilot2': 300,
+            'economy': 50,
+            'business': 100,
+            'first_class': 200,
+            'pilot': 400,
+            'pilot2': 1000,
         }
 
         # Update forms_remaining based on the type

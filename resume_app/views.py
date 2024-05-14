@@ -41,12 +41,12 @@ from django.contrib.auth import logout as auth_logout
 
 
 prices_dict = {
-            'basic': 'price_1PFZSCBFOKaICuMNktFsRfln',
-            'economy': 'price_1PFecjBFOKaICuMNf7KCTY3D',
-            'business': '',
-            'first_class': '',
-            'pilot': '',
-            'pilot2': ''
+            'basic': 'price_1PGLwPBFOKaICuMNcQUiUkL8',
+            'economy': 'price_1PGLxXBFOKaICuMNTWFFLW2Q',
+            'business': 'price_1PGLylBFOKaICuMNAW5DbjE5',
+            'first_class': 'price_1PGLzzBFOKaICuMNBaMJAJx2',
+            'pilot': 'price_1PGM0lBFOKaICuMNLBT2PnVA',
+            'pilot2': 'price_1PGM1VBFOKaICuMNuGNqILRd'
 }
 
 action_words_list = ["Streamlined", "Leveraged", "Developed", "Engineered", "Deployed", "Incorporated", 

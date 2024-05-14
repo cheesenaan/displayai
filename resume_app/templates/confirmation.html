@@ -58,7 +58,8 @@
         body {
             margin-top: 20px; /* Reduced top margin */
             font-family: Arial, sans-serif; /* Font family for better readability */
-            background-color: whitesmoke;
+            /* background-color: whitesmoke; */
+            background-image: url('{% static "img/white_pattern.png" %}');
 
         }
 
@@ -545,15 +546,14 @@
             <div class="column" id="website">
                 <h3>Website</h3>
                 <p>
-                    <a id="link" href="/{{account.name}}" target="_blank"><b>displayai/{{account.name}}</b></a>
+                    <a id="link" href="/{{account.name}}" target="_blank"><b> cheesenaan.app/{{account.name}}</b></a>
                 </p>
                 <img src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code" style="max-width: 50%; height: 120px; margin-top: -10px;">
             </div>
     
             <div class="column" id="resume">
                 <h3>Resume</h3>
-                <p><a href="{{user_profile.resume_link}}" target="_blank"><b>RESUME LINK</b></a></p>
-                <p> <b> PREVIEW RESUME  </b></p>
+                <p><b><a href="#google_doc_section">PREVIEW RESUME</a></b></p>
             </div>
 
         </div>
@@ -1037,78 +1037,105 @@
                 </script>
 
                 <div class="resume-container">
-                    <a id="showAllLinksButton" href="javascript:void(0);" onclick="toggleAllLinks()" class="reload_resume_and_website-button">Toggle All Links</a>
-
-
                     <script> let resume_counter = 0; </script>
 
                     {% if account.resume_links %}
-                        <ul class="nav nav-tabs" id="resumeTabs">
-                            {% for link in account.get_resume_links %}
-                                <li class="nav-item">
-                                    <a class="nav-link {% if forloop.first %}active{% endif %}" data-toggle="tab" href="#resume{{ forloop.counter }}" id="tab{{ forloop.counter }}" onclick="updateIframeSrc('{{ link }}', 'tab{{ forloop.counter }}', event)">
+                    {% if account.get_resume_links %}
+                    <select id="resumeDropdown" onchange="updateResumeIframe(this)">
+                        {% for link in account.get_resume_links %}
+                        <option value="{{ link }}" {% if forloop.last %}selected{% endif %}>{{ 'Resume ' }}{{ forloop.counter }}</option>
+                        {% endfor %}
+                    </select>
+                    {% endif %}
 
-                                        Resume {{ forloop.counter }}
-                                        <script> resume_counter = "{{ forloop.counter }}" </script>
-                                    </a>
-                                </li>
-                            {% endfor %}
+                    <script>
+                        // Check if the user is on a mobile device
+                        if (/Mobi|Android/i.test(navigator.userAgent)) {
+                            // Display message for mobile users
+                            document.write('<b"><p>Build at least 4 times for optimal bullets. <br>  <span style="color: red;">Shrunk on mobile, view on PC</span></p></b>');
+                        } else {
+                            // Display message for non-mobile users
+                            document.write('<h5"> <br> <br> Build at least 4 times for optimal bullets </h5> ');
+                        }
+                    </script>
 
-                        <script>
-                            // Check if the user is on a mobile device
-                            if (/Mobi|Android/i.test(navigator.userAgent)) {
-                                // Display message for mobile users
-                                document.write('<b"><p>Build at least 4 times for optimal bullets. <br> <span style="color: red;">Shrunk on mobile, view on PC</span></p></b>');
-                            } else {
-                                // Display message for non-mobile users
-                                document.write('<h5"> <br> <br> Build at least 4 times for optimal bullets </h5> ');
+                    <p><a href="{% url 'account' account_id=account.id %}" target="_blank"><b>All resume links</b></a></p>
+
+
+                    <div class="tab-content">
+                        {% for link in account.get_resume_links %}
+                        <style>
+                            /* For computers */
+                            @media only screen and (min-width: 768px) and (min-height: 1024px) {}
+                            /* For iPads */
+                            @media only screen and (max-width: 1024px) and (max-height: 1366px) {
+                                #resumeIframe {
+                                    transform: scale(0.7);
+                                    height: 1000px;
+                                    width: 200%;
+                                    margin-left: -50px;
+                                }
                             }
-                        </script>
-
-                        </ul>
-
-                        <div class="tab-content">
-                            {% for link in account.get_resume_links %}
-
-                            <style>
-                                /* For computers */
-                                @media only screen and (min-width: 768px) and (min-height: 1024px) {
-                                    
+                            /* For mobile devices */
+                            @media only screen and (max-width: 767px) {
+                                #resumeIframe {
+                                    transform: scale(0.7);
+                                    height: 1000px;
+                                    width: 200%;
+                                    margin-left: -50px;
                                 }
-                            
-                                /* For iPads */
-                                @media only screen and (max-width: 1024px) and (max-height: 1366px) {
-                                    #resumeIframe {
-                                        transform: scale(0.7);
-                                        height: 1000px;
-                                        width: 200%;
-                                        margin-left: -50px;
-                                    }
-                                }
-                            
-                                /* For mobile devices */
-                                @media only screen and (max-width: 767px) {
-                                    #resumeIframe {
-                                        transform: scale(0.7);
-                                        height: 1000px; /* Adjust this height for mobile devices */
-                                        width: 200%;
-                                        margin-left: -50px;
-                                    }
-                                }
-                            </style>
-                            
+                            }
+                        </style>
 
-                            <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="resume{{ forloop.counter }}">
-                                <iframe id="resumeIframe"></iframe>
-                            </div>
-                            
-
-                            {% endfor %}
+                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="resume{{ forloop.counter }}">
+                            <iframe id="resumeIframe" src="{{ link }}"></iframe>
                         </div>
+
+                        {% endfor %}
+                    </div>
                     {% else %}
-                        <p>No resume links available.</p>
+                    <p>No resume links available.</p>
                     {% endif %}
                 </div>
+
+                <script>
+                    let threshold = 0;
+
+                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                        threshold = 2;
+                    } else {
+                        threshold = 5;
+                    }
+
+                    if (resume_counter > threshold) {
+                        var dropdown = document.createElement("select");
+                        dropdown.setAttribute("id", "resumeDropdown");
+
+                        var tabContent = document.querySelector(".tab-content");
+                        tabContent.parentNode.insertBefore(dropdown, tabContent);
+
+                        {% if account.get_resume_links %}
+                        {% for link in account.get_resume_links %}
+                        var option = document.createElement("option");
+                        option.setAttribute("value", "{{ link }}");
+                        option.innerText = "{{ 'Resume ' }}{{ forloop.counter }}";
+                        dropdown.appendChild(option);
+                        {% endfor %}
+                        {% endif %}
+
+                        var resumeIframe = document.getElementById("resumeIframe");
+                        if (resumeIframe) {
+                            var lastResumeLink = "{{ account.get_resume_links|last }}";
+                            resumeIframe.src = lastResumeLink;
+                        }
+                    }
+
+                    function updateResumeIframe(select) {
+                        var selectedLink = select.value;
+                        document.getElementById('resumeIframe').src = selectedLink;
+                    }
+                </script>
+
 
                 <script>
                     function toggleGoogleDocs() {
@@ -1125,41 +1152,6 @@
                     }
                 </script>
 
-                <script>
-
-                    let threshold = 0;
-
-                    if (/Mobi|Android/i.test(navigator.userAgent)) {
-                        threshold = 2;
-                    } else {
-                        threshold = 5;
-                    }
-
-                    if (resume_counter > threshold) {
-                        let resumeTabs = document.getElementById('resumeTabs');
-                        let originalDisplayStyle = resumeTabs.style.display;
-                        resumeTabs.style.display = 'none';
-
-                        function toggleAllLinks() {
-                            var resumeTabs = document.getElementById('resumeTabs');
-                            var button = document.getElementById('showAllLinksButton');
-
-                            if (resumeTabs.style.display === 'none')  {
-                                resumeTabs.style.display = originalDisplayStyle;
-                                button.innerText = 'Untoggle All Links';
-
-                            } else {
-                                resumeTabs.style.display = 'none';
-                                button.innerText = 'Toggle All Links';
-                                
-                            }
-                        }
-                    } 
-                    else {
-                        document.getElementById('showAllLinksButton').style.display = 'none';
-                    }
-
-                </script>
 
             </div>
         </div>
@@ -1178,7 +1170,6 @@
             <p>    
               All resumes are optimized for Applicant Tracking Systems (ATS)
             </p>
-
             
 
             <form method="post" action="{% url 'confirmation' account_id=account.id %}">
@@ -1218,14 +1209,12 @@
                         <label for="mode">Select Plan Mode:</label>
                         <select id="mode" name="mode" onchange="togglePricing()">
                             <option value="payment">One-time Plan</option>
-                            <option value="subscription">Subscription Plan</option>
+                            <!-- <option value="payment">Subscription Plan is coming soon</option> -->
+                            <!-- <option value="subscription">Subscription Plan</option> -->
                         </select>
                     </div>
                 </div>
                 
-                
-                
-
                 <script>
                     function togglePricing() {
                         var mode = document.getElementById("mode").value;
@@ -1259,16 +1248,12 @@
                     }
                 </style>
 
-                
-
                 <div id="subscription-pricing" style="display: none;"> 
                     <div class="subscription-info">
                         <p>These are monthly subscriptions. Cancel anytime. Unused builds will be added to the next month.</p>
                     </div>
                     <div class="pricing-cards">
 
-                        
-                        
                         <!-- free -->
                         <div class="card">
                             <h2>Free</h2>
@@ -1306,11 +1291,11 @@
                                 <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
                             </ul>
                         
-                            <button class="get-now-button" name="selected_plan" value="basic">
+                            <button class="get-now-button" name="selected_plan" value="basic_sub">
                                 {% if account.tier == 'basic' %}
                                 Current
                                 {% else %}
-                                Subscribe Now
+                                Coming Soon
                                 {% endif %}
                             </button>
                         </div>
@@ -1328,11 +1313,11 @@
                                 <li>&#10003; All bullets AI generated  </li>
                                 <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
                             </ul>
-                            <button class="get-now-button" name="selected_plan" value="economy">
+                            <button class="get-now-button" name="selected_plan" value="economy_sub">
                                 {% if account.tier == 'economy' %}
                                     Current
                                 {% else %}
-                                    Subscribe Now
+                                    Coming Soon
                                 {% endif %}
                             </button>
                         </div>
@@ -1351,11 +1336,11 @@
                                 <li>&#10003; All bullets AI generated  </li>
                                 <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
                             </ul>
-                            <button class="get-now-button" name="selected_plan" value="business">
+                            <button class="get-now-button" name="selected_plan" value="business_sub">
                                 {% if account.tier == 'business' %}
                                     Current
                                 {% else %}
-                                    Subscribe Now
+                                    Coming Soon
                                 {% endif %}
                             </button>
                         </div>
@@ -1386,11 +1371,11 @@
                                 <li>&#10003; All bullets AI generated  </li>
                                 <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
                             </ul>
-                            <button class="get-now-button" name="selected_plan" value="first_class">
+                            <button class="get-now-button" name="selected_plan" value="first_class_sub">
                                 {% if account.tier == 'first_class' %}
                                     Current
                                 {% else %}
-                                    Subscribe Now
+                                    Coming Soon
                                 {% endif %}
                             </button>
                         </div>
@@ -1401,18 +1386,18 @@
                             <b> <p  style="color: brown;">$99.99 / month </p> </b>
                             
                             <ul>
-                                <li>&#10003; 300 builds  </li>
+                                <li>&#10003; 400 builds  </li>
                                 <li>&#10003; Tailored resume  </li>
                                 <li>&#10003; Tailored cover letter  </li>
                                 <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
                                 <li>&#10003; All bullets AI generated  </li>
                                 <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
                             </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot">
+                            <button class="get-now-button" name="selected_plan" value="pilot_sub">
                                 {% if account.tier == 'pilot' %}
                                     Current
                                 {% else %}
-                                    Subscribe Now
+                                    Coming Soon
                                 {% endif %}
                             </button>
                         </div>
@@ -1431,11 +1416,11 @@
                                 <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
                                 
                             </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot2">
+                            <button class="get-now-button" name="selected_plan" value="pilot2_sub">
                                 {% if account.tier == 'pilot' %}
                                     Current
                                 {% else %}
-                                    Subscribe Now
+                                    Coming Soon
                                 {% endif %}
                             </button>
                         </div>
@@ -1598,7 +1583,7 @@
                             <b> <p  style="color: brown;">$99.99 </p> </b>
                             
                             <ul>
-                                <li>&#10003; 300 builds  </li>
+                                <li>&#10003; 400 builds  </li>
                                 <li>&#10003; Tailored resume  </li>
                                 <li>&#10003; Tailored cover letter  </li>
                                 <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
@@ -1657,7 +1642,6 @@
 
                     </div>
                 </div>
-
 
             </form>
 
