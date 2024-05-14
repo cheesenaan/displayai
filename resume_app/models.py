@@ -24,7 +24,6 @@ def validate_unique_url_name(value):
 
 from django.contrib.auth.models import User 
 
-
 class Account(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='account_user')
@@ -167,11 +166,11 @@ class Plan(models.Model):
         # Define the mapping of types to forms_remaining values
         type_forms_mapping = {
             'free': 2,
-            'basic': 5,
-            'economy': 10,
-            'business': 20,
-            'first_class': 50,
-            'pilot': 100,
+            'basic': 20,
+            'economy': 40,
+            'business': 80,
+            'first_class': 100,
+            'pilot': 200,
             'pilot2': 300,
         }
 
@@ -185,6 +184,13 @@ class Plan(models.Model):
             return f"{self.account}"
 
 class Payment(models.Model):
+
+    PAYMENT_MODE_CHOICES = [
+        ('payment', 'Payment'),
+        ('subscription', 'Subscription'),
+    ]
+
+    mode = models.CharField(max_length=20, choices=PAYMENT_MODE_CHOICES, default='payment')
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='account_payments')
     subscription_id = models.CharField(max_length=100000, blank=True, null=True)
     start_date = models.DateTimeField(blank=True, null=True)
@@ -198,6 +204,7 @@ class Payment(models.Model):
     price_id = models.CharField(max_length=100, blank=True, null=True)
     product_name = models.CharField(max_length=255, blank=True, null=True)
     product_price = models.DecimalField(max_digits=10, decimal_places=2, blank=True, null=True)
+
 
     def update_subscription_info(self):
         try:

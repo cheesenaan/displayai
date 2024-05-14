@@ -41,12 +41,12 @@ from django.contrib.auth import logout as auth_logout
 
 
 prices_dict = {
-            'basic': 'price_1OibgCBFOKaICuMNShWHaBHo',
-            'economy': 'price_1OkLejBFOKaICuMNZEKWocxq',
-            'business': 'price_1OkLHsBFOKaICuMNh2kNKtXF',
-            'first_class': 'price_1OkLJfBFOKaICuMNDON9NIkm',
-            'pilot': 'price_1OkLKeBFOKaICuMNSAiwrsVw',
-            'pilot2': 'price_1OkLLVBFOKaICuMN557sysPE'
+            'basic': 'price_1PFZSCBFOKaICuMNktFsRfln',
+            'economy': 'price_1PFecjBFOKaICuMNf7KCTY3D',
+            'business': '',
+            'first_class': '',
+            'pilot': '',
+            'pilot2': ''
 }
 
 action_words_list = ["Streamlined", "Leveraged", "Developed", "Engineered", "Deployed", "Incorporated", 
@@ -478,19 +478,20 @@ def confirmation(request, account_id):
                     'quantity': 1,
                 },
             ],
-            mode='subscription',
+            mode=request.POST.get('mode'),  
             # customer_creation='always',
             success_url=settings.REDIRECT_DOMAIN + '/payment_successful?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=settings.REDIRECT_DOMAIN + '/payment_cancelled',
             metadata={
                 'account_id': account_id,  # Include the account_id as metadata
                 'price_dictionary_value' : request.POST.get('selected_plan'),
+                'mode': request.POST.get('mode'),
             },
         )
-        # print(checkout_session)
-        # print()
-        # print("stripe.checkout.Session.retrieve is ")
-        # print(stripe.checkout.Session.retrieve(checkout_session.id))
+        print(checkout_session)
+        print()
+        print("stripe.checkout.Session.retrieve is ")
+        print(stripe.checkout.Session.retrieve(checkout_session.id))
         return redirect(checkout_session.url, code=303)
 
     if request.method == 'GET':
@@ -543,67 +544,155 @@ def payment_successful(request):
     if request.method == 'GET':
         stripe.api_key = settings.STRIPE_API_KEY
         print("inside payment_successful")
+
         session_id = request.GET.get('session_id', None)
         session = stripe.checkout.Session.retrieve(session_id)
-        customer = stripe.Customer.retrieve(session.customer)
-        account_id = session.get('metadata', {}).get('account_id')
-        price_dictionary_value = session.get('metadata', {}).get('price_dictionary_value')
-        account = Account.objects.get(id=account_id)
-        user_plan = Plan.objects.get(account=account)
-        userprofile = UserProfile.objects.get(account=account)
+        mode = session.get('metadata', {}).get('mode')
 
-        stripe_payment_data = stripe.checkout.Session.retrieve(session_id)
-        subscription_value = stripe_payment_data["subscription"]
+        print("session_id", session_id)
+        print("session", session)
+        print("mode", mode)
 
-        # Check if a Payment instance already exists
-        payment_instance, created = Payment.objects.get_or_create(
-            account=account,
-            subscription_id=subscription_value
-        )
 
-        if created:
-            # Payment instance already exists, update information
-            print("updating other fields in payment_instance")
-            payment_instance.update_subscription_info()
-            payment_instance.save()
-            account.tier = price_dictionary_value
-            user_plan.type = price_dictionary_value
-            user_plan.forms_filled_on_current_plan = 0
-            user_plan.set_subscription_ids(subscription_value)
+        if mode == 'subscription':
 
-        account.user_payment = payment_instance
-        account.save()
-        user_plan.save()
-        userprofile.save()
+            session_id = request.GET.get('session_id', None)
+            session = stripe.checkout.Session.retrieve(session_id)
+            customer = stripe.Customer.retrieve(session.customer)
+            account_id = session.get('metadata', {}).get('account_id')
+            price_dictionary_value = session.get('metadata', {}).get('price_dictionary_value')
+            account = Account.objects.get(id=account_id)
+            user_plan = Plan.objects.get(account=account)
+            userprofile = UserProfile.objects.get(account=account)
 
-        context = {
-            'account': account,
-            'user_profile': userprofile,
-            'user_plan': user_plan,
-            'remaining': user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
-        }
+            stripe_payment_data = stripe.checkout.Session.retrieve(session_id)
+            subscription_value = stripe_payment_data["subscription"]
 
-        
+            # Check if a Payment instance already exists
+            payment_instance, created = Payment.objects.get_or_create(
+                account=account,
+                subscription_id=subscription_value
+            )
 
-        payment_instance = Payment.objects.get(account=account, subscription_id=subscription_value)
+            if created:
+                # Payment instance already exists, update information
+                print("updating other fields in payment_instance")
+                payment_instance.update_subscription_info()
+                payment_instance.mode = 'subscription'
+                payment_instance.save()
+                account.tier = price_dictionary_value
+                user_plan.type = price_dictionary_value
+                user_plan.forms_filled_on_current_plan = 0
+                user_plan.set_subscription_ids(subscription_value)
 
-        if payment_instance:
-            subject = 'DisplayAI Order Confirmation - ' + str(account.tier)
-            from_email = settings.EMAIL_HOST_USER
-            recipient_list = [account.email]
+            account.user_payment = payment_instance
+            account.save()
+            user_plan.save()
+            userprofile.save()
 
-            # Prepare context with payment details
-            context_email = {
+            context = {
                 'account': account,
-                'payment_instance' : payment_instance
+                'user_profile': userprofile,
+                'user_plan': user_plan,
+                'remaining': user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
             }
 
-            # Render email template
-            email_html = render_to_string('order_confirmation_email.html', context_email)
+            payment_instance = Payment.objects.get(account=account, subscription_id=subscription_value)
 
-            # Send email
-            send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
+            if payment_instance:
+                subject = 'DisplayAI Order Confirmation - ' + str(account.tier)
+                from_email = settings.EMAIL_HOST_USER
+                recipient_list = [account.email]
 
+                # Prepare context with payment details
+                context_email = {
+                    'account': account,
+                    'payment_instance' : payment_instance
+                }
+
+                # Render email template
+                email_html = render_to_string('order_confirmation_subscription_email.html', context_email)
+
+                # Send email
+                send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
+
+        elif mode == 'payment': 
+
+            session_id = request.GET.get('session_id', None)
+            session = stripe.checkout.Session.retrieve(session_id)
+            account_id = session.get('metadata', {}).get('account_id')
+            price_dictionary_value = session.get('metadata', {}).get('price_dictionary_value')
+            account = Account.objects.get(id=account_id)
+            user_plan = Plan.objects.get(account=account)
+            userprofile = UserProfile.objects.get(account=account)
+
+            stripe_payment_data = stripe.checkout.Session.retrieve(session_id)
+
+            session = stripe.checkout.Session.retrieve(session_id)
+            # Extract relevant information
+            payment_intent_id = session.payment_intent
+            amount = session.amount_total / 100  # Amount is in cents, convert to dollars
+            currency = session.currency
+            payment_status = session.payment_status
+            date_of_purchase = datetime.fromtimestamp(session.created)
+
+            mode = session.mode
+
+            # Extract customer name and email
+            customer_name = session.customer_details.name
+            customer_email = session.customer_details.email
+
+
+            payment_instance, created = Payment.objects.get_or_create(
+                account=account,
+                subscription_id=session.id
+            )
+
+            if created:
+                payment_instance.save()
+                account.tier = price_dictionary_value
+                user_plan.type = price_dictionary_value
+                user_plan.forms_filled_on_current_plan = 0
+                user_plan.set_subscription_ids(session.id)
+                payment_instance.subscription_id = session.id
+                payment_instance.start_date = datetime.fromtimestamp(session.created)
+                payment_instance.customer_email = customer_email
+                payment_instance.customer_name = customer_name
+                payment_instance.product_price = amount
+                payment_instance.product_name = price_dictionary_value + " one time plan"
+                payment_instance.save()
+
+
+            account.user_payment = payment_instance
+            account.save()
+            user_plan.save()
+            userprofile.save()
+
+            context = {
+                'account': account,
+                'user_profile': userprofile,
+                'user_plan': user_plan,
+                'remaining': user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
+            }
+
+            payment_instance = Payment.objects.get(account=account, subscription_id=session.id)
+
+            if payment_instance:
+                subject = 'DisplayAI Order Confirmation - ' + str(account.tier)
+                from_email = settings.EMAIL_HOST_USER
+                recipient_list = [account.email]
+
+                # Prepare context with payment details
+                context_email = {
+                    'account': account,
+                    'payment_instance' : payment_instance
+                }
+
+                # Render email template
+                email_html = render_to_string('order_confirmation_onetime_email.html', context_email)
+
+                # Send email
+                send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
 
 
         return render(request, 'payment_successful.html', context)
@@ -626,6 +715,8 @@ def subscriptions(request, account_id):
     userprofile = UserProfile.objects.get(account = account)
 
     payment_instances = Payment.objects.filter(account=account)
+    subscription_exists = any(payment_instance.mode == 'subscription' for payment_instance in payment_instances)
+
 
     # if request.method == 'POST':
 
@@ -635,7 +726,8 @@ def subscriptions(request, account_id):
                     'user_profile': userprofile,
                     'user_plan' : user_plan,
                     'payment_instances' : payment_instances ,
-                    'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
+                    'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
+                    'subscription_exists': subscription_exists,
         }
 
         return render(request, 'subscriptions.html' , context)
@@ -1525,32 +1617,32 @@ class CheckAccountEmailView(View):
         data = {'is_taken': User.objects.filter(email=email).exists()}
         return JsonResponse(data)
 
-# def stripe_webhook(request):
-#     stripe.api_key = settings.STRIPE_API_KEY
+def stripe_webhook(request):
+    stripe.api_key = settings.STRIPE_API_KEY
 
-#     time.sleep(10)
-#     payload = request.body
-#     signature_header = request.META['HTTP_STRIPE_SIGNATURE']
-#     event = None
-#     print("inside stripe_webhook")
-#     try:
-#         print("event 1")
-#         event = stripe.Webhook.construct_event(
-#             payload, signature_header, 'whsec_225411bfa0199497eabcad4a58cfc6cd5007421edbc018658d5ab000eeeeccdc'
-#         )
-#     except ValueError as e:
-#         print("event 2")
-#         return HttpResponse(status=400)
-#     except stripe.error.SignatureVerificationError as e:
-#         print("event 3")
-#         return HttpResponse(status=400)
+    time.sleep(10)
+    payload = request.body
+    signature_header = request.META['HTTP_STRIPE_SIGNATURE']
+    event = None
+    print("inside stripe_webhook")
+    try:
+        print("event 1")
+        event = stripe.Webhook.construct_event(
+            payload, signature_header, 'whsec_225411bfa0199497eabcad4a58cfc6cd5007421edbc018658d5ab000eeeeccdc'
+        )
+    except ValueError as e:
+        print("event 2")
+        return HttpResponse(status=400)
+    except stripe.error.SignatureVerificationError as e:
+        print("event 3")
+        return HttpResponse(status=400)
     
-#     if event['type'] == 'checkout.session.completed':
-#         print("checkout.session.completed !!!!")
+    if event['type'] == 'checkout.session.completed':
+        print("checkout.session.completed !!!!")
 
-#         session = event['data']['object']
-#         session_id = session.get('id', None)
-#         time.sleep(15)
+        session = event['data']['object']
+        session_id = session.get('id', None)
+        time.sleep(15)
     
-#     return HttpResponse(status=200)
+    return HttpResponse(status=200)
 

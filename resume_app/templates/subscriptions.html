@@ -331,8 +331,49 @@
     </table>
 
 
-    <h1> subscription information </h1>
+    <h1> One Time Plan Information </h1>
+    <p> These are based off the number of builds and are not subscriptions.</p>
+
+    {% if payment_instances %}
+
+        {% for payment_instance in payment_instances %}
+
+            {% if payment_instance.mode == 'payment' %}
+
+                <table border="1">
+                    <tr>
+                        <th>Payment ID</th>
+                        <th>Customer Name</th>
+                        <th>Customer Email</th>
+                        <th>Product Name</th>
+                        <th>Product Price</th>
+                        <th>Date of Purchase</th>
+                    </tr>
+            
+                        <tr>
+                            <td>{{ payment_instance.subscription_id }}</td>
+                            <td>{{ payment_instance.customer_name }}</td>
+                            <td>{{ payment_instance.customer_email }}</td>
+                            <td>{{ payment_instance.product_name }}</td>
+                            <td>{{ payment_instance.product_price }}</td>
+                            <td>{{ payment_instance.start_date }}</td>
+                            
+                           
+                        </tr>
+                </table>
+
+            {% endif %}
+
+        {% endfor %}
+    {% else %}
+        <b> <p>No one time payment plans found for this account</p> </b>
+    {% endif %}
+
+
+
+    <h1> Subscription Information </h1>
     <p> These are monthly subscriptions and you will be charged every month until cancelled </p>
+
 
     {% if messages %}
     <ul class="messages">
@@ -361,6 +402,8 @@
         </tr>
 
         {% for payment_instance in payment_instances %}
+
+            {% if payment_instance.mode == 'subscription' %}
             <tr>
                 <td>{{ payment_instance.product_name }}</td>
                 <td>{{ payment_instance.product_price }}</td>
@@ -386,10 +429,11 @@
                     </form>
                 </td>
             </tr>
+            {% endif %}
         {% endfor %}
     </table>
     {% else %}
-    <p>No payment instances found for this account</p>
+    <b> <p>No subscription payment instances found for this account</p> </b>
     {% endif %}
 
         <script>
@@ -412,13 +456,18 @@
         }
 
         </script>
+
+        <br>
     
-<br> <br>  <br>  <br> 
 
-<h1> Cancel Subscription(s) </h1>
-
-If you pause now, you will no longer be charged and your subscription will remain active until the end of the month. 
-Click the "cancel subscription" button for more information. 
+    {% if subscription_exists %}
+        <h1>Cancel Subscription(s)</h1>
+        <p>
+            If you pause now, you will no longer be charged and your subscription will remain active until the end of the month. 
+            Click the "cancel subscription" button for more information.
+        </p>
+    {% endif %}
+    
 
 <br><br>
 

@@ -135,12 +135,5 @@ MEDIA_URL = '/profile_pictures/'
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-#REDIRECT_DOMAIN = 'http://127.0.0.1:8000'
-REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
-
-
-#SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
-SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 
 

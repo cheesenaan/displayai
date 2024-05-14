@@ -1,0 +1,2326 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+
+<br>
+<br>
+<br>
+<br>
+
+
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
+
+        <div class="logo">
+            <h1><a href="/">display.ai</a></h1>
+        </div>
+
+        <nav id="navbar-form" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="/">Home</a></li>
+                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
+
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Mobile navigation toggle
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('mobile-nav-toggle')) {
+                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
+                e.target.classList.toggle('bi-list');
+                e.target.classList.toggle('bi-x');
+            }
+        });
+
+        // Mobile nav dropdowns activate
+        document.addEventListener('click', function (e) {
+            var navbar = document.querySelector('#navbar-form');
+            if (navbar.classList.contains('navbar-mobile')) {
+                var dropdownLink = e.target.closest('.navbar .dropdown > a');
+                if (dropdownLink) {
+                    e.preventDefault();
+                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
+                }
+            }
+        }, true);
+    });
+
+
+    </script>
+
+</header>
+
+<!-- Styles specific to laptops, computers, and desktops -->
+    <style>
+
+        @media (min-width: 768px) {
+                        #website, #resume, #re-build, #projects  {
+                            margin-top: 60px;
+                            margin-bottom: 60px;
+                        }
+
+
+                    .flex-container {
+                        display: flex;
+                    }
+
+                    .div1,
+                    .div2 {
+                        flex: 1;
+                        padding: 10px;
+                        box-sizing: border-box;
+                    }
+
+                    .div1 {
+                    }
+
+                    .div2 {
+                        /* margin-left: -900px; */
+                    }
+
+                    body {
+                        /* zoom: 75%;  */
+                        background-image: url('{% static "img/0 copy.jpg" %}');
+                        background-size: cover;
+                        background-position: center; 
+                        background-repeat: no-repeat;
+                    }
+
+                   
+                    .resume-container {
+                        float: right;
+                        width: 100%;
+                    }
+
+                    #resumeIframe {
+                        height: 1250px;
+                        transform: scale(0.73);
+                        transform-origin: 0 0;
+                        width: 180%;
+                    }
+
+                    body::before {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        z-index: -1;
+                        width: 102%;
+                        height: 318%;
+                        background-color: rgba(0, 0, 0, 0.5);
+                        filter: blur(10px);
+                    }
+
+
+                    /* .body-overlay {
+                        content: '';
+                        position: absolute;
+                        top: 0;
+                        left: 0;
+                        width: 100%;
+                        height: 100%;
+                        background-color: rgba(0, 0, 0, 0.65);
+                        filter: blur(10px);
+                    } */
+
+                    h1, h2, p {
+                        margin: 0;
+                    }
+
+                    h1, h2 {
+                        color: white;
+                    }
+
+                    p {
+                        color: white;
+                        margin-bottom: 10px;
+                    }
+
+                    #pricing {
+                        padding: 50px 0;
+                        text-align: center;
+                        margin-top: -30%;
+                    }
+
+                    .pricing h1 {
+                    color: #0066cc;
+                    }
+
+
+                    /* Pricing cards */
+                    .pricing-cards {
+                        display: flex;
+                        flex-wrap: wrap;
+                        justify-content: center;
+                    }
+
+                    .card {
+                        flex: 0 0 calc(25% - 20px); /* Adjust the width of each card */
+                        background-color: #f9f9f9;
+                        border-radius: 10px;
+                        margin: 10px;
+                        padding: 20px;
+                        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                        text-align: left;
+                    }
+
+                    .card h2 {
+                    color: #0066cc;
+                    font-size: 24px;
+                    margin-bottom: 10px;
+                    }
+
+                    .card ul {
+                        list-style-type: none;
+                        padding: 0;
+                        margin-bottom: 20px;
+                    }
+
+                    .card ul li {
+                        margin-bottom: 5px;
+                        font-size: small;
+                    }
+
+                    .card .price {
+                    font-size: 20px;
+                    margin-bottom: 20px;
+                    }
+        }
+
+    </style>
+
+
+    <!-- for all devices -->
+    <style>
+
+        
+      
+        /* Button Styles */
+        .get-now-button {
+            background-color: #4285f4;
+            color: #fff;
+            padding: 12px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            transition: background-color 0.3s;
+        }
+
+        .get-now-button:hover {
+            background-color: #0066cc;
+        }
+
+        .reload_resume_and_website-button, button {
+            background-color: #3498db; /* Attractive blue color */
+            color: white;
+            border: none;
+            padding: 8px; /* Slightly increased padding for a consistent size */
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 5px;
+            cursor: pointer;
+            border-radius: 5px;
+            position: relative; /* Add relative positioning for pseudo-elements */
+        }
+
+        .reload_resume_and_website-button:hover,
+        button:hover {
+            background-color: #f9bb75; /* Color resembling cheese */
+        }
+
+        .reload_resume_and_website-button:hover::before,
+        button:hover::before {
+            content: ''; /* Create pseudo-element for animation */
+            position: absolute;
+            top: 50%; /* Initial position - center vertically */
+            left: 50%; /* Initial position - center horizontally */
+            width: 25px; /* Width of cheese slice */
+            height: 25px; /* Height of cheese slice */
+            background-color: #fda949; /* Color resembling cheese */
+            transform: rotate(45deg); /* Rotate the pseudo-element */
+            animation: cheeseAnimation 1.5s ease-in-out infinite; /* Apply animation */
+            border-radius: 5px; /* Round corners */
+            clip-path: polygon(
+                10% 0%,
+                90% 0%,
+                100% 20%,
+                100% 80%,
+                90% 100%,
+                10% 100%,
+                0% 80%,
+                0% 20%
+            ); /* Clip path to create square cheese slice with holes */
+        }
+
+        /* Keyframes for cheese animation */
+        @keyframes cheeseAnimation {
+            0% {
+                transform: translate(-50%, -50%) rotate(45deg); /* Initial position */
+                opacity: 1; /* Fully visible */
+            }
+            50% {
+                transform: translate(calc(-50% + 15px), calc(-50% - 50px)) rotate(45deg); /* Mid-air position */
+                opacity: 0.5; /* Semi-transparent */
+            }
+            100% {
+                transform: translate(calc(-50% + 30px), calc(-50% - 100px)) rotate(45deg); /* Final position */
+                opacity: 0; /* Fully transparent */
+            }
+        }
+
+
+        .user-info-table {
+            width: auto;
+            border-collapse: collapse;
+            margin-bottom: 20px; /* Optional: Adjust spacing between tables */
+        }
+
+        .user-info-table td {
+            padding: 8px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .user-info-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        .user-info-table tr:nth-child(odd) {
+            background-color: #f2f2f2;
+        }
+
+        .user-info-table tr:hover {
+            background-color: orange;
+        }
+
+        .user-info-table b {
+            color: #0066cc; /* Optional: Change the color of the bold text */
+
+        }
+
+
+        .action-section {
+            text-align: left;
+            margin-bottom: 10px; /* Adjust as needed */
+        }
+
+        .action-section p {
+            margin-bottom: 5px;
+        }
+
+
+            .content {
+                text-align: center;
+            }
+
+
+            /* Modal Styles */
+            .modal-body {
+                padding: 20px;
+            }
+
+            .modal-title {
+                margin: 0;
+            }
+
+
+            .messages li {
+                margin: 5px 0;
+                padding: 10px;
+                border-radius: 5px;
+            }
+
+            .messages li.success {
+                color: #155724;
+                background-color: #d4edda;
+                border-color: #c3e6cb;
+                font-weight: bold;
+                width: 50%;
+            }
+
+            .messages li.error {
+                color: #721c24;
+                background-color: #f8d7da;
+                border-color: #f5c6cb;
+                font-weight: bold;
+                width: 50%;
+            }
+
+
+            
+
+    </style>
+
+    <!-- mobile styles  -->
+   <style>
+
+        @media only screen and (max-width: 768px) and (orientation: portrait) {
+
+            /* Adjust styles for smaller screens if needed */
+
+            h1, h2 {
+            color: #333;
+            }
+
+            p {
+                color: #666;
+            }
+
+            /* Base styles */
+
+            #pricing {
+                margin-top: -70%;
+            }
+
+            .pricing {
+                text-align: center;
+            }
+
+            .pricing p {
+                margin-bottom: 30px;
+            }
+
+            /* Pricing cards */
+            .pricing-cards {
+                display: flex;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+
+            .card {
+                flex: 1 0 100%; /* Each card takes full width on mobile */
+                margin-bottom: 20px; /* Add some space between cards */
+                background-color: #f9f9f9;
+                border-radius: 10px;
+                padding: 20px;
+                box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                text-align: left;
+            }
+
+            .card h2 {
+                color: #0066cc;
+                font-size: 24px;
+                margin-bottom: 10px;
+            }
+
+            .card ul {
+                list-style-type: none;
+                padding: 0;
+                margin-bottom: 20px;
+            }
+
+            .card ul li {
+                margin-bottom: 5px;
+            }
+
+            .card .price {
+                font-size: 20px;
+                margin-bottom: 20px;
+            }
+
+            .get-now-button {
+                background-color: #0066cc;
+                color: #fff;
+                border: none;
+                border-radius: 5px;
+                padding: 10px 20px;
+                cursor: pointer;
+                transition: background-color 0.3s;
+            }
+
+            .get-now-button:hover {
+                background-color: #0050a5;
+            }
+
+            /* Mobile styles */
+            @media only screen and (max-width: 767px) {
+                .card {
+                    flex-basis: calc(100% - 20px); /* Each card takes full width with some margin */
+                    margin: 10px; /* Adjust margin */
+                }
+            }
+
+            .flex-container {
+                display: flex;
+                flex-direction: column; /* Change flex direction to column */
+            }
+
+            .div1,
+            .div2 {
+                flex: 1;
+                padding: 10px;
+                box-sizing: border-box;
+            }
+
+            .div1 {
+                /* Styles for div1 */
+            }
+
+            .div2 {
+                /* Styles for div2 */
+                
+            }
+
+            .resume-container {
+                float: left;
+                width: auto;
+                margin-left: 50px;
+            }
+
+            #resumeIframe {
+                height: 10px;
+                transform: scale(0.73);
+                transform-origin: 0 0;
+            }
+
+            body::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: -1;
+            width: 200%;
+            height: 550%;
+            background-color: rgba(0, 0, 0, 0.5);
+            filter: blur(40px);
+
+            
+
+           
+        }
+
+        h1, h2 {
+            color: white;
+            }
+
+            p {
+                color: white;
+                margin-bottom: 10px;
+            }
+
+            body {
+                /* zoom: 75%;  */
+                background-image: url('{% static "img/0 copy.jpg" %}');
+                background-size: cover;
+                background-position: center; 
+                background-repeat: no-repeat;
+            }
+
+
+        }
+
+    
+
+    </style>
+
+<body>
+
+
+    <!-- body -->
+    <div>
+
+        <h1>{{user_profile.first_name}}'s build page </h1> 
+
+        <a href="{% url 'account' account_id=account.id %}" class="reload_resume_and_website-button">
+            Your Account
+        </a>
+
+            <!-- body -->
+            <div class="flex-container">
+
+
+                <div class="div1">
+
+                    {% if remaining < 0 %}
+                    <h1>{{user_profile.first_name}}, {{ account.tier }} version limit reached, you must upgrade your <a href="#pricing"> plan </a> </h1>
+                    {% endif %}
+
+                   
+
+                    <!-- messages -->
+                    <div>
+
+                        {% if remaining == 0 %}
+                                <span style="color: red; font-weight: bold;">
+                                    {{ account.tier }} version limit reached, view our <a href="#pricing"> pricing plans </a>
+                                </span> <br>
+                        {% endif %}
+
+                        {% if messages %}
+                            <ul class="messages">
+                            {% for message in messages %}
+                                <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+                            {% endfor %}
+                            </ul>
+
+                        {% endif %}
+
+                    </div>
+
+                    
+
+                    <!-- WEBSITE -->
+                    <div id="website">
+
+                        <h1>Website</h1>
+                        <p>
+                            <a id="link" href="/{{account.name}}" target="_blank"><b>displayai/{{account.name}}</b></a>
+                        </p>
+                        <img src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code" style="max-width: 50%; height: 120px; margin-top: -10px;">
+
+
+                        <!-- <p id="expiry">Time to expiry: <span id="timer"></span></p> -->
+
+                        <script>
+                            var timerElement = document.getElementById('timer');
+
+                            // Check if there is a change in account tier
+                            var storedTier = localStorage.getItem('tier');
+                            var currentTier = "{{ account.tier }}";
+
+                            if (storedTier !== currentTier) {
+                                // If there is a change in tier, reset cookies and local storage
+                                localStorage.setItem('tier', currentTier);
+                                localStorage.removeItem('expiration');
+                            }
+
+                            // Retrieve the stored expiration timestamp from localStorage
+                            var storedExpiration = localStorage.getItem('expiration');
+                            var expirationTimestamp;
+
+                            // Check if there is a stored expiration timestamp
+                            if (storedExpiration) {
+                                expirationTimestamp = parseInt(storedExpiration, 10);
+                            } else {
+                                // If not, set the default timer duration based on account tier
+                                if (currentTier === "free") {
+                                    expirationTimestamp = Math.floor(Date.now() / 1000) + 2 * 60 * 60; // 2 hours in seconds
+                                } else {
+                                    expirationTimestamp = Math.floor(Date.now() / 1000) + 6 * 30 * 24 * 60 * 60; // 6 months in seconds
+                                }
+
+                                // Store the initial expiration timestamp in localStorage
+                                localStorage.setItem('expiration', expirationTimestamp);
+                            }
+
+                            // Call the function to start the timer
+                            startTimer(expirationTimestamp - Math.floor(Date.now() / 1000));
+
+                            function startTimer(duration) {
+                                setInterval(function () {
+                                    var days, hours, minutes, seconds;
+
+                                    days = Math.floor(duration / (60 * 60 * 24));
+                                    hours = Math.floor((duration % (60 * 60 * 24)) / (60 * 60));
+                                    minutes = Math.floor((duration % (60 * 60)) / 60);
+                                    seconds = duration % 60;
+
+                                    // Format the time into days, hours, minutes, and seconds
+                                    var timeString = days + " days, " + hours + " hours, " + minutes + " minutes, " + seconds + " seconds";
+
+                                    timerElement.innerHTML = "<b>" + timeString + "</b>";
+
+                                    if (--duration < 0) {
+                                        // You can handle what happens when the timer reaches zero here
+                                        timerElement.textContent = "Expired";
+                                    }
+                                }, 1000); // Update the timer every second
+                            }
+                        </script>
+
+
+                    </div>
+
+                     <!-- RESUME -->
+                    <div id="resume">
+                        <h1>Resume</h1>
+                        <p><a href="{{user_profile.resume_link}}" target="_blank"> <b> RESUME LINK </b> </a></p>
+
+                        <div id="previewResumeLink"></div>
+
+                        <script>
+                            // Check if the user is on a mobile device or iPad
+                            if (/Mobi|Android|iPad/i.test(navigator.userAgent)) {
+                                // For mobile devices and iPads, create the link and add it to the placeholder element
+                                var previewResumeLink = document.createElement('a');
+                                previewResumeLink.href = "#div2"; // Link destination
+                                previewResumeLink.className = "reload_resume_and_website-button";
+                                previewResumeLink.innerHTML = '<button type="button" onclick="scrollToDiv2()">Preview Resume</button>';
+                                document.getElementById('previewResumeLink').appendChild(previewResumeLink);
+                            }
+
+                            // Function to scroll to div2
+                            function scrollToDiv2() {
+                                // Scroll to div2 smoothly
+                                document.getElementById('div2').scrollIntoView({ behavior: 'smooth' });
+                                // Remove the onclick event after the first click
+                                document.querySelector('.reload_resume_and_website-button').removeAttribute('onclick');
+                            }
+                        </script>
+
+
+                    </div>
+
+                    <div id="re-build">
+
+                        <!-- Re-Build  with same data -->
+                        <div class="action-section">
+                            <div id="title">
+                                <h1>Re-Build Displayai</h1>
+                                <p>Our model might need multiple builds for perfect bullets</p>
+                            </div>
+
+                            {% if remaining > 0 %}
+
+                                <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" onclick="showLoadingModal()">
+                                    <button type="button">Re-Build with same data</button>
+                                </a>
+
+                                <div id="loadingModal">
+                                    <p id="loadingText"><b>Loading...</b></p>
+                                </div>
+
+                                <div id="loadingOverlay"></div>
+
+                                <style>
+                                    /* Style for the modal */
+                                    #loadingModal {
+                                        display: none;
+                                        position: fixed;
+                                        top: 50%;
+                                        left: 50%;
+                                        transform: translate(-50%, -50%);
+                                        background-color: #f9bb75; /* White background */
+                                        padding: 30px;
+                                        border-radius: 10px;
+                                        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+                                        text-align: center;
+                                        z-index: 1000; /* Ensure the modal appears above the rest of the content */
+                                    }
+                                
+                                    /* Style for the background overlay */
+                                    #loadingOverlay {
+                                        position: fixed;
+                                        top: 0;
+                                        left: 0;
+                                        width: 100%;
+                                        height: 100%;
+                                        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
+                                        backdrop-filter: blur(5px); /* Add a blur effect to the background */
+                                        z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
+                                        display: none;
+                                    }
+                                    
+                                </style>
+
+                            <script>
+
+                                    function showLoadingModal() {
+                                        // Show the loading modal and overlay
+                                        console.log("Showing loading modal");
+                                        document.getElementById("loadingModal").style.display = "block";
+                                        document.getElementById("loadingOverlay").style.display = "block";
+
+                                        // Array of loading messages
+                                        var loadingMessages = [
+                                            "{{account.name}}, welcome to displayai ! ",
+                                            "Requesting displayai AI & data science model  ...",
+                                            "Connecting to cloud environment & creating resume google doc ...",
+                                            "Adding data to personal website & resume",
+                                            "Artificial Intelligence to generate bullets...",
+                                            "Prompt engineering ...",
+                                            "Data Science model to select the optimal bullets ...",
+                                            "Natural Language Processing to make resume ATS friendly...",
+                                            "Model to ensure resume bullets are short, concise ...",
+                                            "Artificial Intelligence to ensure bullets quantification ...",
+                                            "Cleaning bullet data and pushing to profile environment  ...",
+                                            "Personal website ready ! ",
+                                            "Editing google doc permissions ... ",
+                                            "Ensuring account security ... ",
+                                            "Formatting work experiences",
+                                            "Formatting projects",
+                                            "Formatting dates",
+                                            "Saving resume to cloud environment",
+                                            "Saving resume to profile",
+                                            "Updating your account information",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Checking for errors ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                        ];
+
+                                        // Function to display loading messages in a loop
+                                        function displayLoadingMessages(index) {
+                                            // Set the loading text
+                                            console.log("index " + index);
+                                            console.log("Displaying loading message: " + document.getElementById("loadingText").innerHTML);
+                                            document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+
+                                            // Increment index or reset to 0 if at the end
+                                            index = (index + 1) % loadingMessages.length;
+
+                                            // Set a timeout for the next message
+                                            setTimeout(function () {
+                                                displayLoadingMessages(index);
+                                            }, 1700); // Adjust the time delay between messages (in milliseconds)
+                                        }
+
+                                        // Start the loop
+                                        console.log("starting displayLoadingMessages");
+                                        displayLoadingMessages(0);
+
+                                        // You can add additional logic or AJAX requests if needed here
+                                    }
+
+
+                            </script>
+
+                            {% else %}
+                                <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Re-Build with same data </button>
+
+                            {% endif %}
+                        </div>
+
+                        <!-- Edit data & Re-Build -->
+                        <div class="action-section1">
+                            <p>Want to edit your data ? </p>
+                            {% if remaining > 0 %}
+                            <a href="{{ redirect_domain }}/{{ account.id }}/form/" class="reload_resume_and_website-button">
+                                <button type="button">Edit data & Re-Build</button>
+                            </a>
+                            {% else %}
+                            <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Edit data & Re-Build </button>
+
+                            <script>
+                                function edit_data_redirect_pricing() {
+                                    alert("Your verison has ended, please upgrade plan");
+                                    var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
+                                    var redirectDomain = "{{ redirect_domain }}";
+                                    var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                                    window.location.href = confirmationUrl;
+
+                                }
+                            </script>
+                            {% endif %}
+
+
+                            <!-- job description feature -->
+                            <div class="action-section2">
+                                <!-- Add this in your HTML head section -->
+                                <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                                <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                                <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                                <p> Tailored resumes increase response chances by 70% </p>
+
+                                {% if remaining > 0 %}
+                                <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#jobDescriptionModal">
+                                    <button type="button">Build job description tailored resume</button>
+                                </a>
+                                {% else %}
+                                    <script>
+                                        function redirectToPricing() {
+                                            alert("Your verison has ended, please upgrade plan");
+                                        var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
+                                        var redirectDomain = "{{ redirect_domain }}";
+                                        var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                                        window.location.href = confirmationUrl;
+                                        }
+                                    </script>
+
+                                    <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build job description tailored resume </button>
+                                {% endif %}
+
+                                <!-- Modal -->
+                                <div class="modal fade" id="jobDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="jobDescriptionModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="jobDescriptionModalLabel">  </h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="jobDescriptionInput">Input Job Description</label>
+                                                <textarea class="form-control" id="jobDescriptionInput" style="height: 500px;"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="submitJobDescription()">Build tailored resume</button>
+                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="loadingModal">
+                                    <p id="loadingText"><b>Loading...</b></p>
+                                </div>
+
+                                <div id="loadingOverlay"></div>
+
+                                <script>
+                                    function submitJobDescription() {
+                                        var jobDescription = document.getElementById('jobDescriptionInput').value;
+                                        // Call the API with the entered job description
+                                        window.location.href = "{% url 'reload_resume_and_website_with_job_description' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
+
+                                        // Show the loading modal and overlay
+                                        // document.getElementById("jobDescriptionModal").style.display = "none";
+                                        document.querySelector('.btn-secondary').click();
+                                        document.getElementById("loadingModal").style.display = "block";
+                                        document.getElementById("loadingOverlay").style.display = "block";
+
+                                        // Array of loading messages
+                                        var loadingMessages = [
+                                            "{{account.name}}, welcome to displayai tailored resume  ! ",
+                                            "Analyzing job description key words  ...",
+                                            "Requesting displayai AI & data science model  ...",
+                                            "Connecting to cloud environment & creating resume google doc ...",
+                                            "Adding data to personal website & resume",
+                                            "Artificial Intelligence to generate bullets...",
+                                            "Prompt engineering ...",
+                                            "Data Science model to select the optimal bullets ...",
+                                            "Natural Language Processing to make resume ATS friendly...",
+                                            "Model to ensure resume bullets are short, concise ...",
+                                            "Artificial Intelligence to ensure bullets quantification ...",
+                                            "Cleaning bullet data and pushing to profile environment  ...",
+                                            "Personal website ready ! ",
+                                            "Editing google doc permissions ... ",
+                                            "Ensuring account security ... ",
+                                            "Formatting work experiences",
+                                            "Formatting projects",
+                                            "Formatting dates",
+                                            "Saving resume to cloud environment",
+                                            "Saving resume to profile",
+                                            "Updating your account information",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Checking for errors ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                        ];
+
+                                        // Function to display loading messages in a loop
+                                        function displayLoadingMessages(index) {
+                                            // Set the loading text
+                                            document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+
+                                            // Increment index or reset to 0 if at the end
+                                            index = (index + 1) % loadingMessages.length;
+
+                                            // Set a timeout for the next message
+                                            setTimeout(function () {
+                                                displayLoadingMessages(index);
+                                            }, 1700); // Adjust the time delay between messages (in milliseconds)
+                                        }
+
+                                        // Start the loop
+                                        displayLoadingMessages(0);
+
+                                        // You can add additional logic or AJAX requests if needed here
+                                    }
+                                </script>
+
+                            </div>
+
+                            <!-- cover letter feature -->
+                            <div class="action-section3">
+                                <p>78% of recruiters & hiring managers want a cover letter</p>
+
+                                {% if remaining > 0%}
+                                <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#coverLetterModal">
+                                    <button type="button">Build Cover Letter for a job description</button>
+                                </a>
+                                {% else %}
+
+                                <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build Cover Letter for a job description</button>
+
+                                <script>
+                                    function redirectToPricing() {
+                                        alert("Your verison has ended, please upgrade plan");
+                                        var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
+                                        var redirectDomain = "{{ redirect_domain }}";
+                                        var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                                        window.location.href = confirmationUrl;
+                                    }
+                                </script>
+
+
+                                {% endif %}
+
+                                <!-- Cover Letter Modal -->
+                                <div class="modal fade" id="coverLetterModal" tabindex="-1" role="dialog" aria-labelledby="coverLetterModalLabel" aria-hidden="true">
+                                    <div class="modal-dialog" role="document">
+                                        <div class="modal-content">
+                                            <div class="modal-header">
+                                                <h5 class="modal-title" id="coverLetterModalLabel"></h5>
+                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                    <span aria-hidden="true">&times;</span>
+                                                </button>
+                                            </div>
+                                            <div class="modal-body">
+                                                <label for="coverLetterDescriptionInput">Input Job Description</label>
+                                                <textarea class="form-control" id="coverLetterDescriptionInput" style="height: 500px;"></textarea>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <button type="button" class="btn btn-primary" onclick="submitCoverLetter()">Build Cover Letter</button>
+                                                <button type="button" class="btn btn-secondary-cover-letter" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div id="loadingModal">
+                                    <p id="loadingText"><b>Loading...</b></p>
+                                </div>
+
+                                <div id="loadingOverlay"></div>
+
+                                <script>
+                                    function submitCoverLetter() {
+                                        var jobDescription = document.getElementById('coverLetterDescriptionInput').value;
+                                        // Call the API with the entered job description
+                                        window.location.href = "{% url 'build_cover_letter' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
+
+                                        // Show the loading modal and overlay
+                                        // document.getElementById("coverLetterModal").style.display = "none";
+                                        document.querySelector('.btn-secondary-cover-letter').click();
+                                        document.getElementById("loadingModal").style.display = "block";
+                                        document.getElementById("loadingOverlay").style.display = "block";
+
+                                        // Array of loading messages
+                                        var loadingMessages = [
+                                            "{{account.name}}, welcome to displayai cover letter  ! ",
+                                            "Analyzing key words from job description ",
+                                            "Connecting to cloud environment & creating resume google doc ...",
+                                            "Requesting displayai AI & data science model  ...",
+                                            "Artificial Intelligence to write cover letter ...",
+                                            "Prompt engineering ...",
+                                            "Data Science model to select best letter ...",
+                                            "Natural Language Processing to make ATS friendly...",
+                                            "Model to ensure sentences are short, concise ...",
+                                            "Cleaning data and pushing to profile environment  ...",
+                                            "Editing google doc permissions ... ",
+                                            "Ensuring account security ... ",
+                                            "Saving cover letter to cloud environment",
+                                            "Saving cover letter to profile",
+                                            "Updating your account information",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Checking for errors ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Model is running slow due to traffic please be patient ... ",
+                                            "Your internet connection is slowing model please be patient ... ",
+                                            "Ensuring account security ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                            "Your internet is too slow please try again ... ",
+                                        ];
+
+                                        // Function to display loading messages in a loop
+                                        function displayLoadingMessages(index) {
+                                            // Set the loading text
+                                            document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+
+                                            // Increment index or reset to 0 if at the end
+                                            index = (index + 1) % loadingMessages.length;
+
+                                            // Set a timeout for the next message
+                                            setTimeout(function () {
+                                                displayLoadingMessages(index);
+                                            }, 1700); // Adjust the time delay between messages (in milliseconds)
+                                        }
+
+                                        // Start the loop
+                                        displayLoadingMessages(0);
+
+                                    }
+                                </script>
+
+                            </div>
+
+                            <!-- projects -->
+                            
+                        </div>
+
+                     </div>
+
+
+                    <!-- <div id="projects">
+                        <h1>Projects</h1>
+                        <p> Need help with projects ?  <a href="#">Click here</a> </p> </p>
+                    </div> -->
+
+                </div>
+
+                <div class="div2" id="div2">
+
+                    <table class="user-info-table">
+                        <tr>
+                            <td>Your Tier:</td>
+                            <td>{{account.tier}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Created on {{account.tier}}:</td>
+                            <td>{{user_plan.forms_filled_on_current_plan}}</td>
+                        </tr>
+                        <tr>
+                            <td>Total Tailored Resumes:</td>
+                            <td>{{user_plan.total_tailored_resumes}} </td>
+                        </tr>
+                        <tr>
+                            <td>Total Cover Letters:</td>
+                            <td>{{user_plan.total_cover_letters}} </td>
+                        </tr>
+                        <tr>
+                            <td>Total Created on all tiers:</td>
+                            <td>{{user_plan.total_forms_filled}} </td>
+                        </tr>
+                        <tr>
+                            <td> <b> Builds Remaining:</b></td>
+                            <td> <b> {{remaining}} </b> </td>
+                        </tr>
+
+
+                    </table>
+
+                    <div id="resumeMobilePreview"></div>
+
+                    <script>
+                        // Check if the user is on a mobile device or iPad
+                        if (/Mobi|Android|iPad/i.test(navigator.userAgent)) {
+                            // Create elements for mobile preview
+                            var resumeMobilePreview = document.getElementById('resumeMobilePreview');
+                            
+                            // Create h1 element
+                            var h1Element = document.createElement('h2');
+                            h1Element.textContent = 'Resume mobile preview';
+                            resumeMobilePreview.appendChild(h1Element);
+                            
+                            // Create p element with red bold font
+                            var pElement = document.createElement('p');
+                            pElement.textContent = 'Best view on PC';
+                            pElement.style.color = 'red';
+                            pElement.style.fontWeight = 'bold';
+                            resumeMobilePreview.appendChild(pElement);
+                        }
+                    </script>
+                    
+                     <!-- embed google docs  -->
+                    <div>
+
+                        <style>
+                            .nav-link {
+                                transition: filter 0.3s ease-in-out;
+                                filter: brightness(0.8); /* Default dim state */
+                            }
+
+                            .nav-link.active {
+                                filter: brightness(1.2); /* Bright state for the active tab */
+                            }
+                        </style>
+
+                        <script>
+                            function updateIframeSrc(link, tabId, event) {
+                                // Prevent the default behavior of the link
+                                event.preventDefault();
+
+                                // Remove 'active' class from all tabs
+                                document.querySelectorAll('.nav-link').forEach(function(tab) {
+                                    tab.classList.remove('active');
+                                });
+
+                                // Add 'active' class to the clicked tab
+                                document.getElementById(tabId).classList.add('active');
+
+                                // Update iframe src
+                                document.getElementById('resumeIframe').src = link;
+                            }
+
+                            window.onload = function() {
+                                document.querySelectorAll('.nav-link').forEach(function(tab) {
+                                    tab.classList.remove('active');
+                                });
+                                // Get the last link from the list
+                                var lastLink = '{{ account.get_resume_links|last }}';
+
+                                // Get the corresponding tab ID
+                                var lastTabId = 'tab{{ account.get_resume_links|length }}';
+
+                                // Set initial active state
+                                document.getElementById(lastTabId).classList.add('active');
+
+                                // Update iframe src with the last link
+                                document.getElementById('resumeIframe').src = lastLink;
+                            };
+                        </script>
+
+                        <div class="resume-container">
+                            <a id="showAllLinksButton" href="javascript:void(0);" onclick="toggleAllLinks()" class="reload_resume_and_website-button">Toggle All Links</a>
+
+
+                            <script> let resume_counter = 0; </script>
+
+                            {% if account.resume_links %}
+                                <ul class="nav nav-tabs" id="resumeTabs">
+                                    {% for link in account.get_resume_links %}
+                                        <li class="nav-item">
+                                            <a class="nav-link {% if forloop.first %}active{% endif %}" data-toggle="tab" href="#resume{{ forloop.counter }}" id="tab{{ forloop.counter }}" onclick="updateIframeSrc('{{ link }}', 'tab{{ forloop.counter }}', event)">
+
+                                                Resume {{ forloop.counter }}
+                                                <script> resume_counter = "{{ forloop.counter }}" </script>
+                                            </a>
+                                        </li>
+                                    {% endfor %}
+
+                                <script>
+                                    // Check if the user is on a mobile device
+                                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                                        // Display message for mobile users
+                                        document.write('<b style="color: white;"><p>Build at least 4 times for optimal bullets. <br> <span style="color: red;">Shrunk on mobile, view on PC</span></p></b>');
+                                    } else {
+                                        // Display message for non-mobile users
+                                        document.write('<h5 style="color: white;"> <br> <br> Build at least 4 times for optimal bullets </h5> ');
+                                    }
+                                </script>
+
+                                </ul>
+
+                                <div class="tab-content">
+                                    {% for link in account.get_resume_links %}
+
+                                    <style>
+                                        /* For computers */
+                                        @media only screen and (min-width: 768px) and (min-height: 1024px) {
+                                            
+                                        }
+                                    
+                                        /* For iPads */
+                                        @media only screen and (max-width: 1024px) and (max-height: 1366px) {
+                                            #resumeIframe {
+                                                transform: scale(0.7);
+                                                height: 1000px;
+                                                width: 200%;
+                                                margin-left: -50px;
+                                            }
+                                        }
+                                    
+                                        /* For mobile devices */
+                                        @media only screen and (max-width: 767px) {
+                                            #resumeIframe {
+                                                transform: scale(0.7);
+                                                height: 1000px; /* Adjust this height for mobile devices */
+                                                width: 200%;
+                                                margin-left: -50px;
+                                            }
+                                        }
+                                    </style>
+                                    
+
+                                    <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="resume{{ forloop.counter }}">
+                                        <iframe id="resumeIframe"></iframe>
+                                    </div>
+                                    
+
+                                    {% endfor %}
+                                </div>
+                            {% else %}
+                                <p>No resume links available.</p>
+                            {% endif %}
+                        </div>
+
+                        <script>
+                            function toggleGoogleDocs() {
+                                var googleDocsContent = document.getElementById('googleDocsContent');
+                                var button = document.querySelector('.toggle-docs-button');
+
+                                if (googleDocsContent.style.display === 'none' || googleDocsContent.style.display === '') {
+                                    googleDocsContent.style.display = 'block';
+                                    button.innerText = 'Hide Google Docs';
+                                } else {
+                                    googleDocsContent.style.display = 'none';
+                                    button.innerText = 'Show Google Docs';
+                                }
+                            }
+                        </script>
+
+                        <script>
+
+                            let threshold = 0;
+
+                            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                                threshold = 2;
+                            } else {
+                                threshold = 5;
+                            }
+
+                            if (resume_counter > threshold) {
+                                let resumeTabs = document.getElementById('resumeTabs');
+                                let originalDisplayStyle = resumeTabs.style.display;
+                                resumeTabs.style.display = 'none';
+
+                                function toggleAllLinks() {
+                                    var resumeTabs = document.getElementById('resumeTabs');
+                                    var button = document.getElementById('showAllLinksButton');
+
+                                    if (resumeTabs.style.display === 'none')  {
+                                        resumeTabs.style.display = originalDisplayStyle;
+                                        button.innerText = 'Untoggle All Links';
+
+                                    } else {
+                                        resumeTabs.style.display = 'none';
+                                        button.innerText = 'Toggle All Links';
+                                        
+                                    }
+                                }
+                            } 
+                            else {
+                                document.getElementById('showAllLinksButton').style.display = 'none';
+                            }
+
+                        </script>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+             <!-- pricing -->
+            <div>
+                <section id="pricing">
+                    <h1>Pricing</h1>
+
+                    <!-- <div class="services-banner">
+                        <p style="color: white;">Our services: personal website, resume, tailored resume given job description, tailored cover letter given job description</p>
+                    </div> -->
+
+                    <p>    
+                      All resumes are optimized for Applicant Tracking Systems (ATS)
+                    </p>
+
+                    
+
+                    <form method="post" action="{% url 'confirmation' account_id=account.id %}">
+                        {% csrf_token %}
+
+                        <style>
+                            .payment-mode-container {
+                                display: flex;
+                                justify-content: center; /* Center content horizontally */
+                                align-items: center; /* Center content vertically */
+                                height: 8vh; /* Set full viewport height */
+                                margin: 0; /* Remove default margin */
+                            }
+                        
+                            .payment-mode-box {
+                                background-color: olivedrab; /* Light gray background */
+                                border-radius: 5px; /* Rounded corners */
+                                padding: 10px; /* Add some padding */
+                                margin-bottom: 10px; /* Add some space below */
+                                width: 40%;
+                            }
+                        
+                            .payment-mode-box label {
+                                font-weight: bold; /* Make label text bold */
+                                margin-right: 10px; /* Add some space between label and select */
+                            }
+                        
+                            .payment-mode-box select {
+                                padding: 5px; /* Add some padding to select */
+                                border: 1px solid #ccc; /* Light border */
+                                border-radius: 3px; /* Rounded corners */
+                            }
+                        </style>
+                        
+                        <div class="payment-mode-container">
+                            <div class="payment-mode-box">
+                                <label for="mode">Select Plan Mode:</label>
+                                <select id="mode" name="mode" onchange="togglePricing()">
+                                    <option value="payment">One-time Plan</option>
+                                    <option value="subscription">Subscription Plan</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        
+                        
+
+                        <script>
+                            function togglePricing() {
+                                var mode = document.getElementById("mode").value;
+                                var subscriptionPricing = document.getElementById("subscription-pricing");
+                                var onetimePricing = document.getElementById("onetime-pricing");
+                        
+                                if (mode === "subscription") {
+                                    subscriptionPricing.style.display = "";
+                                    onetimePricing.style.display = "none";
+                                } else {
+                                    subscriptionPricing.style.display = "none";
+                                    onetimePricing.style.display = "";
+                                }
+                            }
+                        
+                            // Call togglePricing function initially to set default state
+                            togglePricing();
+                        </script>
+
+                        <style>
+                            .subscription-info {
+                                background-color: #0050a5; /* Light gray background */
+                                padding: 10px;
+                                border-radius: 5px;
+                                width: 100%;
+                            }
+
+                            .subscription-info p {
+                                margin: 0; /* Remove default paragraph margin */
+                            }
+                        </style>
+
+                        
+
+                        <div id="subscription-pricing" style="display: none;"> 
+                            <div class="subscription-info">
+                                <p>These are monthly subscriptions. Cancel anytime. Unused builds will be added to the next month.</p>
+                            </div>
+                            <div class="pricing-cards">
+
+                                
+                                
+                                <!-- free -->
+                                <div class="card">
+                                    <h2>Free</h2>
+                                    <b> <p  style="color: brown;">$0.00 </p> </b>
+                                    <ul>
+                                        <li>&#10003; 2 builds <a href="#what_are_builds">What are builds ?</a> </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+
+                                        <li>&#9888; Personal website <span style="background-color: yellow;">(1 day)</span></li>
+                                        <li>&#9888; Generated bullets for  </li>
+                                        <li>&emsp;  only 1 experience or project </li>
+                                    </ul>
+                                    
+                                    <button class="get-now-button" name="selected_plan">
+                                        {% if account.tier == 'free' %}
+                                            Current
+                                        {% else %}
+                                            Free version expired 
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                
+                                <!-- basic -->
+                                <div class="card">
+                                    <h2>Basic</h2>
+                                    <b><p style="color: brown;">$9.99 / month</p></b>
+                                
+                                    <ul>
+                                        <li>&#10003; 20 builds</li>
+                                        <li>&#10003; Tailored resume</li>
+                                        <li>&#10003; Tailored cover letter</li>
+                                        <li>&#9888; Personal website <span style="background-color: yellow;">(6 months)</span></li>
+                                        <li>&#10003; All bullets AI generated</li>
+                                        <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
+                                    </ul>
+                                
+                                    <button class="get-now-button" name="selected_plan" value="basic">
+                                        {% if account.tier == 'basic' %}
+                                        Current
+                                        {% else %}
+                                        Subscribe Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+
+                                <!-- economy -->
+                                <div class="card">
+                                    <h2>Economy</h2>
+                                    <b> <p  style="color: brown;">$19.99 / month </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 50 builds  </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#9888; Personal website <span style="background-color: yellow;">(1 year)</span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="economy">
+                                        {% if account.tier == 'economy' %}
+                                            Current
+                                        {% else %}
+                                            Subscribe Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                
+                                <!-- business -->
+                                <div class="card" style="position: relative;">
+                                    <div class="recommended-banner">Recommended</div> <!-- Added recommended banner -->
+                                    <h2>Business</h2>
+                                    <b> <p  style="color: brown;">$39.99 / month </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 100 builds </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="business">
+                                        {% if account.tier == 'business' %}
+                                            Current
+                                        {% else %}
+                                            Subscribe Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                
+                                <style>
+                                .recommended-banner {
+                                    position: absolute;
+                                    top: -10px;
+                                    left: -10px;
+                                    background-color: #ff5722; /* Orange color */
+                                    color: white;
+                                    padding: 5px 10px;
+                                    font-size: 14px;
+                                    border-radius: 5px;
+                                    }
+                                </style>
+                                
+                                <!-- first class -->
+                                <div class="card">
+                                    <h2>First Class</h2>
+                                    <b> <p  style="color: brown;">$59.99 / month </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 200 builds </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="first_class">
+                                        {% if account.tier == 'first_class' %}
+                                            Current
+                                        {% else %}
+                                            Subscribe Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                
+                                <!-- pilot -->
+                                <div class="card">
+                                    <h2>Pilot</h2>
+                                    <b> <p  style="color: brown;">$99.99 / month </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 300 builds  </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="pilot">
+                                        {% if account.tier == 'pilot' %}
+                                            Current
+                                        {% else %}
+                                            Subscribe Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+
+                                <!-- pilot 2 -->
+                                <div class="card">
+                                    <h2>Pilot 2</h2>
+                                    <b> <p  style="color: brown;">$199.99 / month </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 1000 builds </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                        
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="pilot2">
+                                        {% if account.tier == 'pilot' %}
+                                            Current
+                                        {% else %}
+                                            Subscribe Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+
+                                <!-- custom -->
+                                <div class="card">
+                                    <h2>Custom</h2>
+                                    <b> <p  style="color: brown;">$custom / month </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; custom builds </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="custom">
+                                        Contact Us
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                        <div id="onetime-pricing"> 
+                            <div class="subscription-info">
+                                <p>These are one-time payment plans. Plan ends when builds run out. Website remains active depending on plan. </p>
+                            </div>
+                            <div class="pricing-cards">
+                                <!-- free -->
+                                <div class="card">
+                                    <h2>Free</h2>
+                                    <b> <p  style="color: brown;">$0.00 </p> </b>
+                                    <ul>
+                                        <li>&#10003; 2 builds <a href="#what_are_builds">What are builds ?</a> </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+
+                                        <li>&#9888; Personal website <span style="background-color: yellow;">(1 day)</span></li>
+                                        <li>&#9888; Generated bullets for  </li>
+                                        <li>&emsp;  only 1 experience or project </li>
+                                    </ul>
+                                    
+                                    <button class="get-now-button" name="selected_plan">
+                                        {% if account.tier == 'free' %}
+                                            Current
+                                        {% else %}
+                                            Free version expired 
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                
+                                <!-- basic -->
+                                <div class="card">
+                                    <h2>Basic</h2>
+                                    <b><p style="color: brown;">$9.99</p></b>
+                                
+                                    <ul>
+                                        <li>&#10003; 20 builds</li>
+                                        <li>&#10003; Tailored resume</li>
+                                        <li>&#10003; Tailored cover letter</li>
+                                        <li>&#9888; Personal website <span style="background-color: yellow;">(6 months)</span></li>
+                                        <li>&#10003; All bullets AI generated</li>
+                                        <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
+                                    </ul>
+                                
+                                    <button class="get-now-button" name="selected_plan" value="basic">
+                                        {% if account.tier == 'basic' %}
+                                        Current
+                                        {% else %}
+                                        Buy Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+
+                                <!-- economy -->
+                                <div class="card">
+                                    <h2>Economy</h2>
+                                    <b> <p  style="color: brown;">$19.99 </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 50 builds  </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#9888; Personal website <span style="background-color: yellow;">(1 year)</span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="economy">
+                                        {% if account.tier == 'economy' %}
+                                            Current
+                                        {% else %}
+                                            Buy Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                
+                                <!-- business -->
+                                <div class="card" style="position: relative;">
+                                    <div class="recommended-banner">Recommended</div> <!-- Added recommended banner -->
+                                    <h2>Business</h2>
+                                    <b> <p  style="color: brown;">$39.99 </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 100 builds </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="business">
+                                        {% if account.tier == 'business' %}
+                                            Current
+                                        {% else %}
+                                            Buy Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                
+                                <style>
+                                .recommended-banner {
+                                    position: absolute;
+                                    top: -10px;
+                                    left: -10px;
+                                    background-color: #ff5722; /* Orange color */
+                                    color: white;
+                                    padding: 5px 10px;
+                                    font-size: 14px;
+                                    border-radius: 5px;
+                                    }
+                                </style>
+                                
+                                <!-- first class -->
+                                <div class="card">
+                                    <h2>First Class</h2>
+                                    <b> <p  style="color: brown;">$59.99 </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 200 builds </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="first_class">
+                                        {% if account.tier == 'first_class' %}
+                                            Current
+                                        {% else %}
+                                            Buy Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+                                
+                                <!-- pilot -->
+                                <div class="card">
+                                    <h2>Pilot</h2>
+                                    <b> <p  style="color: brown;">$99.99 </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 300 builds  </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="pilot">
+                                        {% if account.tier == 'pilot' %}
+                                            Current
+                                        {% else %}
+                                            Buy Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+
+                                <!-- pilot 2 -->
+                                <div class="card">
+                                    <h2>Pilot 2</h2>
+                                    <b> <p  style="color: brown;">$199.99 </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; 1000 builds </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                        
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="pilot2">
+                                        {% if account.tier == 'pilot' %}
+                                            Current
+                                        {% else %}
+                                            Buy Now
+                                        {% endif %}
+                                    </button>
+                                </div>
+
+                                <!-- custom -->
+                                <div class="card">
+                                    <h2>Custom</h2>
+                                    <b> <p  style="color: brown;">$custom </p> </b>
+                                    
+                                    <ul>
+                                        <li>&#10003; custom builds </li>
+                                        <li>&#10003; Tailored resume  </li>
+                                        <li>&#10003; Tailored cover letter  </li>
+                                        <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                        <li>&#10003; All bullets AI generated  </li>
+                                        <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                    </ul>
+                                    <button class="get-now-button" name="selected_plan" value="custom">
+                                        Contact Us
+                                    </button>
+                                </div>
+
+                            </div>
+                        </div>
+
+
+                    </form>
+
+                    <div id="what_are_builds">
+                        <div class="card">
+                            <h2>What are builds</h2>
+                            <ul> Each build includes three customizable options: </ul>
+                            <ul>
+                                <li> - Create a resume using your user profile</li>
+                                <li> - Create a tailored resume based on a job description</li>
+                                <li> - Create a tailored cover letter based on a job description</li>
+                            </ul>
+                        <ul> Whichever option you choose, you'll receive an updated personal website </ul>
+                        </div>
+                    </div>
+
+                </section>
+            </div>
+
+    </div>
+
+</body>
+
+<!-- Styles specific to laptops, computers, and desktops -->
+<style>
+
+    @media (min-width: 768px) {
+                    #website, #resume, #re-build, #projects  {
+                        margin-top: 60px;
+                        margin-bottom: 60px;
+                    }
+
+
+                .flex-container {
+                    display: flex;
+                }
+
+                .div1,
+                .div2 {
+                    flex: 1;
+                    padding: 10px;
+                    box-sizing: border-box;
+                }
+
+                .div1 {
+                }
+
+                .div2 {
+                    /* margin-left: -900px; */
+                }
+
+                body {
+                    /* zoom: 75%;  */
+                    background-image: url('{% static "img/0 copy.jpg" %}');
+                    background-size: cover;
+                    background-position: center; 
+                    background-repeat: no-repeat;
+                }
+
+               
+                .resume-container {
+                    float: right;
+                    width: 100%;
+                }
+
+                #resumeIframe {
+                    height: 1250px;
+                    transform: scale(0.73);
+                    transform-origin: 0 0;
+                    width: 180%;
+                }
+
+                body {
+                    /* zoom: 75%;  */
+                    background-image: url('{% static "img/0 copy.jpg" %}');
+                    background-size: cover;
+                    background-position: center; 
+                    background-repeat: no-repeat;
+                }
+
+                body::before {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    z-index: -1;
+                    width: 102%;
+                    height: 318%;
+                    background-color: rgba(0, 0, 0, 0.5);
+                    filter: blur(10px);
+                }
+
+
+                /* .body-overlay {
+                    content: '';
+                    position: absolute;
+                    top: 0;
+                    left: 0;
+                    width: 100%;
+                    height: 100%;
+                    background-color: rgba(0, 0, 0, 0.65);
+                    filter: blur(10px);
+                } */
+
+                h1, h2, p {
+                    margin: 0;
+                }
+
+                h1, h2 {
+                    color: white;
+                }
+
+                p {
+                    color: white;
+                    margin-bottom: 10px;
+                }
+
+                #pricing {
+                    padding: 50px 0;
+                    text-align: center;
+                    margin-top: -30%;
+                }
+
+                .pricing h1 {
+                color: #0066cc;
+                }
+
+
+                /* Pricing cards */
+                .pricing-cards {
+                    display: flex;
+                    flex-wrap: wrap;
+                    justify-content: center;
+                }
+
+                .card {
+                    flex: 0 0 calc(25% - 20px); /* Adjust the width of each card */
+                    background-color: #f9f9f9;
+                    border-radius: 10px;
+                    margin: 10px;
+                    padding: 20px;
+                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                    text-align: left;
+                }
+
+                .card h2 {
+                color: #0066cc;
+                font-size: 24px;
+                margin-bottom: 10px;
+                }
+
+                .card ul {
+                    list-style-type: none;
+                    padding: 0;
+                    margin-bottom: 20px;
+                }
+
+                .card ul li {
+                    margin-bottom: 5px;
+                    font-size: small;
+                }
+
+                .card .price {
+                font-size: 20px;
+                margin-bottom: 20px;
+                }
+    }
+
+</style>
+
+
+<!-- for all devices -->
+<style>
+
+    
+  
+    /* Button Styles */
+    .get-now-button {
+        background-color: #4285f4;
+        color: #fff;
+        padding: 12px 20px;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        font-size: 16px;
+        transition: background-color 0.3s;
+    }
+
+    .get-now-button:hover {
+        background-color: #0066cc;
+    }
+
+    .reload_resume_and_website-button, button {
+        background-color: #3498db; /* Attractive blue color */
+        color: white;
+        border: none;
+        padding: 8px; /* Slightly increased padding for a consistent size */
+        text-align: center;
+        text-decoration: none;
+        display: inline-block;
+        font-size: 16px;
+        margin: 5px;
+        cursor: pointer;
+        border-radius: 5px;
+        position: relative; /* Add relative positioning for pseudo-elements */
+    }
+
+    .reload_resume_and_website-button:hover,
+    button:hover {
+        background-color: #f9bb75; /* Color resembling cheese */
+    }
+
+    .reload_resume_and_website-button:hover::before,
+    button:hover::before {
+        content: ''; /* Create pseudo-element for animation */
+        position: absolute;
+        top: 50%; /* Initial position - center vertically */
+        left: 50%; /* Initial position - center horizontally */
+        width: 25px; /* Width of cheese slice */
+        height: 25px; /* Height of cheese slice */
+        background-color: #fda949; /* Color resembling cheese */
+        transform: rotate(45deg); /* Rotate the pseudo-element */
+        animation: cheeseAnimation 1.5s ease-in-out infinite; /* Apply animation */
+        border-radius: 5px; /* Round corners */
+        clip-path: polygon(
+            10% 0%,
+            90% 0%,
+            100% 20%,
+            100% 80%,
+            90% 100%,
+            10% 100%,
+            0% 80%,
+            0% 20%
+        ); /* Clip path to create square cheese slice with holes */
+    }
+
+    /* Keyframes for cheese animation */
+    @keyframes cheeseAnimation {
+        0% {
+            transform: translate(-50%, -50%) rotate(45deg); /* Initial position */
+            opacity: 1; /* Fully visible */
+        }
+        50% {
+            transform: translate(calc(-50% + 15px), calc(-50% - 50px)) rotate(45deg); /* Mid-air position */
+            opacity: 0.5; /* Semi-transparent */
+        }
+        100% {
+            transform: translate(calc(-50% + 30px), calc(-50% - 100px)) rotate(45deg); /* Final position */
+            opacity: 0; /* Fully transparent */
+        }
+    }
+
+
+    .user-info-table {
+        width: auto;
+        border-collapse: collapse;
+        margin-bottom: 20px; /* Optional: Adjust spacing between tables */
+    }
+
+    .user-info-table td {
+        padding: 8px;
+        border: 1px solid #ddd;
+        text-align: left;
+    }
+
+    .user-info-table tr:nth-child(even) {
+        background-color: #f2f2f2;
+    }
+    .user-info-table tr:nth-child(odd) {
+        background-color: #f2f2f2;
+    }
+
+    .user-info-table tr:hover {
+        background-color: orange;
+    }
+
+    .user-info-table b {
+        color: #0066cc; /* Optional: Change the color of the bold text */
+
+    }
+
+
+    .action-section {
+        text-align: left;
+        margin-bottom: 10px; /* Adjust as needed */
+    }
+
+    .action-section p {
+        margin-bottom: 5px;
+    }
+
+
+        .content {
+            text-align: center;
+        }
+
+
+        /* Modal Styles */
+        .modal-body {
+            padding: 20px;
+        }
+
+        .modal-title {
+            margin: 0;
+        }
+
+
+        .messages li {
+            margin: 5px 0;
+            padding: 10px;
+            border-radius: 5px;
+        }
+
+        .messages li.success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+            font-weight: bold;
+            width: 50%;
+        }
+
+        .messages li.error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+            font-weight: bold;
+            width: 50%;
+        }
+
+
+        
+
+</style>
+
+<!-- mobile styles  -->
+<style>
+
+    @media only screen and (max-width: 768px) and (orientation: portrait) {
+
+        /* Adjust styles for smaller screens if needed */
+
+        h1, h2 {
+        color: #333;
+        }
+
+        p {
+            color: #666;
+        }
+
+        /* Base styles */
+
+        #pricing {
+            margin-top: -70%;
+        }
+
+        .pricing {
+            text-align: center;
+        }
+
+        .pricing p {
+            margin-bottom: 30px;
+        }
+
+        /* Pricing cards */
+        .pricing-cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .card {
+            flex: 1 0 100%; /* Each card takes full width on mobile */
+            margin-bottom: 20px; /* Add some space between cards */
+            background-color: #f9f9f9;
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            text-align: left;
+        }
+
+        .card h2 {
+            color: #0066cc;
+            font-size: 24px;
+            margin-bottom: 10px;
+        }
+
+        .card ul {
+            list-style-type: none;
+            padding: 0;
+            margin-bottom: 20px;
+        }
+
+        .card ul li {
+            margin-bottom: 5px;
+        }
+
+        .card .price {
+            font-size: 20px;
+            margin-bottom: 20px;
+        }
+
+        .get-now-button {
+            background-color: #0066cc;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .get-now-button:hover {
+            background-color: #0050a5;
+        }
+
+        /* Mobile styles */
+        @media only screen and (max-width: 767px) {
+            .card {
+                flex-basis: calc(100% - 20px); /* Each card takes full width with some margin */
+                margin: 10px; /* Adjust margin */
+            }
+        }
+
+        .flex-container {
+            display: flex;
+            flex-direction: column; /* Change flex direction to column */
+        }
+
+        .div1,
+        .div2 {
+            flex: 1;
+            padding: 10px;
+            box-sizing: border-box;
+        }
+
+        .div1 {
+            /* Styles for div1 */
+        }
+
+        .div2 {
+            /* Styles for div2 */
+            
+        }
+
+        .resume-container {
+            float: left;
+            width: auto;
+            margin-left: 50px;
+        }
+
+        #resumeIframe {
+            height: 10px;
+            transform: scale(0.73);
+            transform-origin: 0 0;
+        }
+
+        body::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        z-index: -1;
+        width: 200%;
+        height: 550%;
+        background-color: rgba(0, 0, 0, 0.5);
+        filter: blur(40px);
+
+        
+
+       
+    }
+
+    h1, h2 {
+        color: white;
+        }
+
+        p {
+            color: white;
+            margin-bottom: 10px;
+        }
+
+        body {
+            /* zoom: 75%;  */
+            background-image: url('{% static "img/0 copy.jpg" %}');
+            background-size: cover;
+            background-position: center; 
+            background-repeat: no-repeat;
+        }
+
+
+    }
+
+
+
+</style>
+
+
+{% endblock %}
