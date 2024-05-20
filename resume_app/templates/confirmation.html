@@ -1026,58 +1026,34 @@
         </div>
     
         <div id="google_doc_section_right">
-             <!-- embed google docs  -->
-             <div>
-
-                <style>
-                    .nav-link {
-                        transition: filter 0.3s ease-in-out;
-                        filter: brightness(0.8); /* Default dim state */
-                    }
-
-                    .nav-link.active {
-                        filter: brightness(1.2); /* Bright state for the active tab */
-                    }
-                </style>
-
+            <!-- embed google docs  -->
+            <div>
                 <script>
-                    function updateIframeSrc(link, tabId, event) {
-                        // Prevent the default behavior of the link
-                        event.preventDefault();
-
-                        // Remove 'active' class from all tabs
-                        document.querySelectorAll('.nav-link').forEach(function(tab) {
-                            tab.classList.remove('active');
+                    function updateResumeIframe(select) {
+                        var selectedLink = select.value;
+                        document.querySelectorAll('.tab-pane').forEach(function(tab, index) {
+                            tab.classList.remove('show', 'active');
+                            if (tab.querySelector('iframe').dataset.src === selectedLink) {
+                                tab.classList.add('show', 'active');
+                                tab.querySelector('iframe').src = selectedLink; // Set the iframe source directly
+                            }
                         });
-
-                        // Add 'active' class to the clicked tab
-                        document.getElementById(tabId).classList.add('active');
-
-                        // Update iframe src
-                        document.getElementById('resumeIframe').src = link;
                     }
-
+        
                     window.onload = function() {
-                        document.querySelectorAll('.nav-link').forEach(function(tab) {
-                            tab.classList.remove('active');
-                        });
-                        // Get the last link from the list
                         var lastLink = '{{ account.get_resume_links|last }}';
-
-                        // Get the corresponding tab ID
-                        var lastTabId = 'tab{{ account.get_resume_links|length }}';
-
-                        // Set initial active state
-                        document.getElementById(lastTabId).classList.add('active');
-
-                        // Update iframe src with the last link
-                        document.getElementById('resumeIframe').src = lastLink;
+                        document.querySelectorAll('.tab-pane').forEach(function(tab) {
+                            tab.classList.remove('show', 'active');
+                        });
+                        var lastTab = document.querySelector('.tab-pane:last-child');
+                        lastTab.classList.add('show', 'active');
+                        document.querySelector('.tab-pane:last-child iframe').src = lastLink;
                     };
                 </script>
-
+        
                 <div class="resume-container">
                     <script> let resume_counter = 0; </script>
-
+        
                     <br>
                     {% if account.resume_links %}
                     {% if account.get_resume_links %}
@@ -1087,7 +1063,7 @@
                         {% endfor %}
                     </select>
                     {% endif %}
-
+        
                     <script>
                         // Check if the user is on a mobile device
                         if (/Mobi|Android/i.test(navigator.userAgent)) {
@@ -1098,10 +1074,9 @@
                             document.write('<h5"> <br> <br> Build at least 4 times for optimal bullets </h5> ');
                         }
                     </script>
-
+        
                     <p><a href="{% url 'account' account_id=account.id %}" target="_blank"><b>All resume links</b></a></p>
-
-
+        
                     <div class="tab-content">
                         {% for link in account.get_resume_links %}
                         <style>
@@ -1119,83 +1094,28 @@
                             /* For mobile devices */
                             @media only screen and (max-width: 767px) {
                                 #resumeIframe {
-                                    height: 500px; /* Let the height adjust dynamically */
-                                    max-width: auto; /* Ensure the iframe doesn't overflow horizontally */
-                                    transform: scale(0.8); /* Scale down the iframe for better fit */
+                                    max-width: 700px;
+                                    transform: scale(0.5);
                                     transform-origin: 0 0;
+                                    margin-left: 20px;
+                                    height: 1000000px;
                                 }
                             }
                         </style>
-
-                        <div class="tab-pane fade {% if forloop.first %}show active{% endif %}" id="resume{{ forloop.counter }}">
-                            <iframe id="resumeIframe" src="{{ link }}"></iframe>
+        
+                        <div class="tab-pane fade {% if forloop.last %}show active{% endif %}" id="resume{{ forloop.counter }}">
+                            <iframe id="resumeIframe" data-src="{{ link }}"></iframe>
                         </div>
-
+        
                         {% endfor %}
                     </div>
                     {% else %}
                     <p>No resume links available.</p>
                     {% endif %}
                 </div>
-
-                <script>
-                    let threshold = 0;
-
-                    if (/Mobi|Android/i.test(navigator.userAgent)) {
-                        threshold = 2;
-                    } else {
-                        threshold = 5;
-                    }
-
-                    if (resume_counter > threshold) {
-                        var dropdown = document.createElement("select");
-                        dropdown.setAttribute("id", "resumeDropdown");
-
-                        var tabContent = document.querySelector(".tab-content");
-                        tabContent.parentNode.insertBefore(dropdown, tabContent);
-
-                        {% if account.get_resume_links %}
-                        {% for link in account.get_resume_links %}
-                        var option = document.createElement("option");
-                        option.setAttribute("value", "{{ link }}");
-                        option.innerText = "{{ 'Resume ' }}{{ forloop.counter }}";
-                        dropdown.appendChild(option);
-                        {% endfor %}
-                        {% endif %}
-
-                        var resumeIframe = document.getElementById("resumeIframe");
-                        if (resumeIframe) {
-                            var lastResumeLink = "{{ account.get_resume_links|last }}";
-                            resumeIframe.src = lastResumeLink;
-                        }
-                    }
-
-                    function updateResumeIframe(select) {
-                        var selectedLink = select.value;
-                        document.getElementById('resumeIframe').src = selectedLink;
-                    }
-                </script>
-
-
-                <script>
-                    function toggleGoogleDocs() {
-                        var googleDocsContent = document.getElementById('googleDocsContent');
-                        var button = document.querySelector('.toggle-docs-button');
-
-                        if (googleDocsContent.style.display === 'none' || googleDocsContent.style.display === '') {
-                            googleDocsContent.style.display = 'block';
-                            button.innerText = 'Hide Google Docs';
-                        } else {
-                            googleDocsContent.style.display = 'none';
-                            button.innerText = 'Show Google Docs';
-                        }
-                    }
-                </script>
-
-
             </div>
         </div>
-    
+        
     </section>
 
      <!-- pricing -->
