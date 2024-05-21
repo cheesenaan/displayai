@@ -60,7 +60,6 @@
             font-family: Arial, sans-serif; /* Font family for better readability */
             /* background-color: whitesmoke; */
             background-image: url('{% static "img/white_pattern.png" %}');
-
         }
 
         #welcome {
@@ -92,7 +91,6 @@
             z-index: -1;
             filter: brightness(40%);
         }
-       
 
         #website_and_resume_section {
             display: flex;
@@ -102,21 +100,21 @@
             position: relative; /* Add position relative to make the ::before pseudo-element work */
         }
 
-
-        #google_doc_section {
-            /* background-color: white; */
-            margin: 0px;
-            height: 950px;
-            position: relative;
-            border-radius: 20px;
-        }
-
-       
 </style>
 
 <style>
 
     @media (min-width: 768px) {
+
+
+                #google_doc_section {
+                    /* background-color: white; */
+                    margin: 0px;
+                    height: 950px;
+                    position: relative;
+                    border-radius: 20px;
+                }
+
                
                 .resume-container {
                     float: right;
@@ -188,6 +186,16 @@
         display: flex;
         flex-wrap: wrap;
         justify-content: center;
+
+
+        #google_doc_section {
+            /* background-color: white; */
+            margin: 0px;
+            position: relative;
+            border-radius: 20px;
+        }
+
+
     }
 
     .card {
@@ -352,7 +360,6 @@
 
 </style>
 
-
 <body>
 
     <section id="landed_section">
@@ -407,7 +414,6 @@
         </style>
 
     </section>
-
     
     <div> 
         {% if remaining < 0 %}
@@ -574,8 +580,8 @@
     <style>
         @media only screen and (min-width: 768px) {
             #google_doc_section {
-            display: flex;
-            flex-wrap: wrap;
+                display: flex;
+                flex-wrap: wrap;
             }
             #google_doc_section_left {
                 flex: 1;
@@ -593,19 +599,19 @@
         @media only screen and (max-width: 768px) {
             #google_doc_section {
                 flex-direction: column; /* Stack items vertically */
+                height: 1100px;
             }
             #google_doc_section_left, #google_doc_section_right {
                 width: 100%; /* Take up full width */
                 flex: none; /* Reset flex property */
                 text-align: center;
             }
+            
         }
 
     </style>
 
-
     <section id="google_doc_section" >
-
         <div id="google_doc_section_left">
 
             <div id="features" style="margin-top: 25%;">
@@ -1098,7 +1104,7 @@
                                     transform: scale(0.5);
                                     transform-origin: 0 0;
                                     margin-left: 20px;
-                                    height: 1000000px;
+                                    max-height: fit-content;
                                 }
                             }
                         </style>
@@ -1115,7 +1121,6 @@
                 </div>
             </div>
         </div>
-        
     </section>
 
      <!-- pricing -->
