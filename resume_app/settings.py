@@ -132,27 +132,5 @@ MEDIA_ROOT = os.path.join(BASE_DIR, 'resume_app/static')
 MEDIA_URL = '/profile_pictures/'
 
 
-# Default primary key field type
-# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
-DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-REDIRECT_DOMAIN = 'http://127.0.0.1:8000'
-#REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
-
-
-SERVICE_ACCOUNT_FILE = '/Users/cheesenaan/Documents/projects/resume_app/project/.ipynb_checkpoints/resume_App/resume_app/resume_app/doc.json'
-#SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
-
-
-STRIPE_API_KEY = 'sk_test_51OibSIBFOKaICuMNwUyc27HPurXFcLQqowTzFRqr7RUcw0tbGu4WR4XkFRY3qEqN4a5bb5qX93ApQzmvjT7Ew6o200MbPOzO5i'
-OPENAI_API_KEY = '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'
-
-
-EMAIL_PORT = 587
-EMAIL_HOST = 'smtp.gmail.com'
-EMAIL_HOST_USER = 'cheesenaan.ai@gmail.com'
-EMAIL_HOST_PASSWORD = 'dpnbakthpofdhnem'
-EMAIL_USE_TLS = True
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_USE_SSL = False
 
