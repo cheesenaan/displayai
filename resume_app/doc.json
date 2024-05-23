@@ -1,13 +1,1 @@
-{
-  "type": "service_account",
-  "project_id": "resume-app-392923",
-  "private_key_id": "57db2bd13a3a9126dabd49fa66eb9640205dd809",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvQIBADANBgkqhkiG9w0BAQEFAASCBKcwggSjAgEAAoIBAQDFMkMyOC+vl9tT\nzNWdKrB6dx4pPB7wgjZObP4fqy/NYr+ZLCyfHQ/7tHvfArwzsGV2qCTyk+H6juom\n3kV9CY/hVUedQvnW14ZM1CzB/0Yh6J1ety8FEnX7b7BJcKE/4rlRPwoAPxpjSW0m\nBmJ6HErUHUQMxnYfKUcxLJRNqpdIME+MtX0PVb2IYEcXHN016ZH+J40nML7DXAci\nUXr+uEtnal/PEqB3mWbfwM1pkczpV/510TSf0PfmYWlb+bDRHfDJRDVo+USgDjKE\nQPKB2Bwe1msSGGuhRmmZu3mc8y3XGoT4QfKz2kOL8s6GlEs8EB0G6tHc2m4T5pzh\nD//nGiFVAgMBAAECggEALvgr3ThY02A+U5WEg+z5IBJjUrsJO4woV0HKvcxOlIMi\n098bucJ4XiG9J39FSKKJaFvggQ8MUlvcFen3bzLp3GgtqJ2dWLj5Oi+HgaXGFKmN\nYlQLlQ+ynnMZ8EQthEQClAGJ5kkhheilYNtAdYlroV5fKRPUatOwK1xM7rrlUcIU\n8uo/jxEkK1At72Mw4zxw/skKu2KmHC/SP+TjhILpEEYp9nEa5Era2rC/NXnhmIt8\nAXeBHw81SmXy3jig9cPtixxaWQ3+l/l0OyS8DnzXTcvQNuW60Ka32pTMY6PldSsF\nux1n17oQEW6tosL9XZylu623afKCzz5mOgUql+ai+QKBgQDpou9+wfNB7RZVCrFI\nv2xk5jJCc04dA61NXX6xypNuIln3jvwC50lDetXM9h6NS9BX3Mg+mJSvdvdWovZx\nP7GTg3rdoMu2Ql65rHCV8sy/2ByZTNvkaLjgFM5yUTJ1C2cDoVjxjVXDbYHqq9jB\nSs8et41XzlWSFGXq82ryYRK13wKBgQDYEmRwnqZ9G6ClmZqC8N/244LcwHUnyVwH\n70exZq5Vfkdw3d6BqUcRGXxWg19z7G2AJCVKR+khaQfqksbYV3O5B04fxSegC57O\neQHvSJvxquCOMR1n/VMc7n8qxxtk+b5pp/BmxwoxzVDLbZDMjFzJCc5z/ov/S1kd\nX17aE5JHSwKBgB3mNyYOphXixH/fnW6E6NdEylvMq8t0xAHpnCQem511kfPnfYLV\nnH+hQak4OhK1CBWmcI3qMuT9oYuZ0VYO46fQJLImOMu7VKoIUmQuLVvDyW0o898Y\nM8ihgQYKNB3cdrN1O4+2Gaqn4f9pPJUIANeaf+Ejy7mlGKHnwuD/4UgbAoGAalEK\neNunghGxByrAe0N4gCvMPUC5pL0QepsDRMgIaeq7zk5taJFZdZF7u7niotCnxJCE\nhLtDe/wJOCPGkbbeKyHsD/fbmoV9O40RJaMtkEkLOwvxszRTy/2SNwNHeHTme2h2\nAqxXWM/0vFQKFovOL+GSY0LRselqTOibbGSK6mcCgYEAn8W6FPTGxJIUWmllNsAu\nX0DMWWKOaJX++MU1l7kynni2Bhgk3OJDjzppSvF7S5zLk+EGnkYs6wEMbucGDllG\nKYqRzN1qm0vvc3f+UisUFTmg0r+LCLtMX+G0u9L5ltWAm6ygMyo3m6t2749HNQmy\nMMJUuL3zr4DrLHz/MAtSpl8=\n-----END PRIVATE KEY-----\n",
-  "client_email": "sulemaanfarooq@resume-app-392923.iam.gserviceaccount.com",
-  "client_id": "113841264362107518686",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/sulemaanfarooq%40resume-app-392923.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
-}
+
