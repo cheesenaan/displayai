@@ -3,83 +3,157 @@
 
 {% block content %}
 
+{% load static %}
+
+<style>
+body {
+            margin-top: 20px; /* Reduced top margin */
+            font-family: Arial, sans-serif; /* Font family for better readability */
+            /* background-color: whitesmoke; */
+            background-image: url('{% static "img/white_pattern.png" %}');
+
+        }
+
+        #landed_section {
+            font-size: 1.2em;
+            font-weight: bold;
+            text-align: center;
+            color: #333;
+            border-radius: 20px;
+            position: relative; /* Add position relative to make the ::before pseudo-element work */
+        }
+
+</style>
 
 <style>
 
+  @media (min-width: 768px) {
 
-/* Pricing Card Styles */
-.pricing-cards {
-    display: flex;
-    justify-content: center;
-    flex-wrap: wrap;
-    margin-top: -60px;
-    transform: scale(0.9); 
-}
 
-.card {
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    padding: 20px;
-    margin: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    width: 250px;
-    text-align: center;
-    transition: transform 0.3s;
-}
+              #google_doc_section {
+                  /* background-color: white; */
+                  margin: 0px;
+                  height: 950px;
+                  position: relative;
+                  border-radius: 20px;
+              }
 
-.card:hover {
-    transform: scale(1.05);
-}
+             
+              .resume-container {
+                  float: right;
+                  width: 100%;
+              }
 
-h2 {
-    color: #4285f4;
-}
+              #resumeIframe {
+                  height: 1250px;
+                  transform: scale(0.6);
+                  transform-origin: 0 0;
+                  width: 170%;
+                  border-radius: 40px;
+              }
+              
 
-ul {
-    list-style: none;
-    padding: 0;
-}
+              #pricing {
+                  padding: 50px 0;
+                  text-align: center;
+              }
 
-li {
-    margin-bottom: 8px;
-    color: #666;
-}
+              .pricing h1 {
+              color: #0066cc;
+              }
 
-.price {
-    font-size: 24px;
-    color: #333;
-    margin: 15px 0;
-    font-weight: bold;
-}
 
-/* Button Styles */
-.get-now-button {
-    background-color: #4285f4;
-    color: #fff;
-    padding: 12px 20px;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-    transition: background-color 0.3s;
-  margin-right: 10px; /* Adjust spacing between buttons if needed */
+              /* Pricing cards */
+              .pricing-cards {
+                  display: flex;
+                  flex-wrap: wrap;
+                  justify-content: center;
+              }
 
-}
+              .card {
+                  flex: 0 0 calc(25% - 20px); /* Adjust the width of each card */
+                  background-color: #f9f9f9;
+                  border-radius: 10px;
+                  margin: 10px;
+                  padding: 20px;
+                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+                  text-align: left;
+              }
 
-.get-now-button:hover {
-    background-color: #0066cc;
-}
+              .card h2 {
+              color: #0066cc;
+              font-size: 24px;
+              margin-bottom: 10px;
+              }
 
-.services-header {
-  text-align: center;
-  margin-bottom: 20px;
-}
+              .card ul {
+                  list-style-type: none;
+                  padding: 0;
+                  margin-bottom: 20px;
+              }
 
-.buttons-container {
-  margin-top: 10px;
-}
+              .card ul li {
+                  margin-bottom: 5px;
+                  font-size: small;
+              }
 
+              .card .price {
+              font-size: 20px;
+              margin-bottom: 20px;
+              }
+  }
+
+
+  @media (max-width: 768px) {
+      .pricing-cards {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+
+
+      #google_doc_section {
+          /* background-color: white; */
+          margin: 0px;
+          position: relative;
+          border-radius: 20px;
+      }
+
+
+  }
+
+  .card {
+      flex: 0 0 90%; /* Each card takes up the full width */
+      background-color: #f9f9f9;
+      border-radius: 10px;
+      margin: 10px;
+      padding: 20px;
+      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      text-align: left;
+  }
+
+  .card h2 {
+      color: #0066cc;
+      font-size: 20px; /* Decrease font size for smaller screens */
+      margin-bottom: 10px;
+  }
+
+  .card ul {
+      list-style-type: none;
+      padding: 0;
+      margin-bottom: 15px; /* Decrease margin for better spacing */
+  }
+
+  .card ul li {
+      margin-bottom: 5px;
+      font-size: small;
+  }
+
+  .card .price {
+      font-size: 18px; /* Decrease font size for smaller screens */
+      margin-bottom: 15px; /* Decrease margin for better spacing */
+  }
+
+  }
 
 
 </style>
@@ -116,12 +190,21 @@ li {
 }
 .about {
   /* background-image: url('static/img/3.png');  */
-  margin-top: 130px;
-  background-size: 100% 100%; 
   background-position: center;  
-  padding: 80px 0;
+  padding: 70px 0;
   text-align: center;
   transform: scale(0.9); 
+}
+
+.about {
+  margin-top: -5%;
+}
+
+/* Mobile styles */
+@media only screen and (max-width: 768px) {
+  .about {
+    margin-top: -35%;
+  }
 }
 
 
@@ -200,10 +283,10 @@ li {
     <body>
 
       <!-- ======= Main Section ======= -->
-      <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
+      <!-- <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
         <div class="container text-center text-md-left" data-aos="fade-up">
             <h1> DisplayAI </h1>
-            <p style="color: aliceblue;">Build resume & website in 30 seconds</p>
+            <p>Build resume & website in 30 seconds</p>
             <a href="{% url 'login'%}" class="btn-get-started scrollto">BUILD </a>
             <br> <br>
         </div>
@@ -213,37 +296,33 @@ li {
           <style>
             .custom-container {
               padding: 20px 0;
-              text-align: center; /* Center align content */
+              text-align: center; 
             }
           
             .custom-icon-box {
-              border: 0px solid white; /* Add white border */
               padding: 10px;
               text-align: center;
               border-radius: 8px;
-              width: 205px; /* Adjust the width as needed */
-              height: 115px; /* Adjust the height as needed */
-              margin-bottom: 10px; /* Reduce space between boxes */
-              display: inline-block; /* Display boxes inline */
-              margin-right: 0px; /* Add some margin between boxes */
-              margin-left: 0px; /* Add some margin between boxes */
+              width: 205px;
+              height: 115px; 
+              margin-bottom: 10px;
+              display: inline-block; 
+              margin-right: 0px;
+              margin-left: 0px; 
             }
           
             .custom-icon-box i {
               font-size: 30px;
-              color: white;
             }
           
             .custom-icon-box h3 {
               font-size: 12px;
               margin-top: 8px;
-              color: white;
             }
           
             .custom-icon-box p {
               margin-top: 8px;
               font-size: 12px;
-              color: white;
             }
 
             @media only screen and (max-width: 768px) {
@@ -266,24 +345,24 @@ li {
               <div class="col-lg-3 col-md-4">
                 <div class="icon-box custom-icon-box">
                   <i class="bi bi-link-45deg"></i>
-                  <h3><a href="#" style="color: white;"> <b> Website + QR Code </b></a></h3>
-                  <p style="color: white;">www.displayai/your_name</p>
+                  <h3><a href="#" style="color: black;"> <b> Website + QR Code </b></a></h3>
+                  <p>www.displayai/your_name</p>
                 </div>
               </div>
           
               <div class="col-lg-3 col-md-4">
                 <div class="icon-box custom-icon-box">
                   <i class="bi bi-file-earmark-text"></i>
-                  <h3><a href="#" style="color: white;"> <b> Google Doc Resume Bullets </b> </a></h3>
-                  <p style="color: white;">  Model generates ATS bullets</p>
+                  <h3><a href="#" style="color: black"> <b> Google Doc Resume Bullets </b> </a></h3>
+                  <p>  Model generates ATS bullets</p>
                 </div>
               </div>
           
               <div class="col-lg-3 col-md-4">
                 <div class="icon-box custom-icon-box">
                   <i class="bi bi-file-earmark-person"></i>
-                  <h3><a href="#" style="color: white;"> <b> Tailored Resume / Cover Letter </b></a></h3>
-                  <p style="color: white;">customized for job description</p>
+                  <h3><a href="#" style="color: black"> <b> Tailored Resume / Cover Letter </b></a></h3>
+                  <p>customized for job description</p>
                 </div>
               </div>
 
@@ -297,13 +376,10 @@ li {
               <div class="col-10">
                 <div class="icon-box custom-icon-box">
                   <h3><a href="#" style="color: white;"> <b> Website + QR Code </b></a></h3>
-                  <!-- <p style="color: white;">www.displayai/your_name</p>  -->
           
                   <h3><a href="#" style="color: white;"> <b> Google Doc Resume Bullets </b> </a></h3>
-                  <!-- <p style="color: white;">  Model generates ATS bullets</p>  -->
           
                   <h3><a href="#" style="color: white;"> <b> Tailored Resume / Cover Letter </b></a></h3>
-                  <!-- <p style="color: white;">customized for job description</p>  -->
                 </div>
               </div>
             </div>
@@ -312,36 +388,157 @@ li {
 
 
         </div>
-
-        <!-- <a href="#about" class="scrollto"> 
-          <div class="icon"> 
-              <i class="bi bi-arrow-down-short"> </i>
-          </div>
-        </a> -->
-      
-    </section>
-    
+       
+      </section> 
 
       <main id="main">
 
         <!-- ======= About Section ======= -->
+        
+        
         <section id="about" class="about">
+          <h3 style="font-size: 50px; font-weight: bold;"> DisplayAI </h3>
           <div class="container">
-            <h5> Fill in a form and we build you a resume and website in 30 seconds </h5>
-            <a href="https://www.sulemaanfarooq.com" target="_blank">
-              <button>Website Example</button>
-            </a>
+            <h5> Fill in a form then we build you Google Doc resume & website in 30 seconds with unlimited rebuilds! </h5>
 
-            <a href="#demo">
-              <button > Demo </button>
-            </a>
 
-            <a href="https://docs.google.com/document/d/1jCnu6g061EZTDTVq_e7zscP-xnQzyt4aKR0flOIis5Y/edit" target="_blank">
-                <button> Resume Example</button>
-            </a>
-          
+            <button style="background-color: white; color: black; border: 2px solid black; padding: 10px 20px; font-size: 14px; cursor: pointer; margin: 10px;" 
+            onmouseover="this.style.backgroundColor='black'; this.style.color='white';" 
+            onmouseout="this.style.backgroundColor='white'; this.style.color='black';">
+                AI Bullet Generation
+            </button>
+
+            <button style="background-color: white; color: black; border: 2px solid black; padding: 10px 20px; font-size: 14px; cursor: pointer; margin: 10px;" 
+                    onmouseover="this.style.backgroundColor='black'; this.style.color='white';" 
+                    onmouseout="this.style.backgroundColor='white'; this.style.color='black';">
+                    Job Description Tailored Cover Letter / Resume
+            </button>
+
+            <button style="background-color: white; color: black; border: 2px solid black; padding: 10px 20px; font-size: 14px; cursor: pointer; margin: 10px;" 
+                    onmouseover="this.style.backgroundColor='black'; this.style.color='white';" 
+                    onmouseout="this.style.backgroundColor='white'; this.style.color='black';">
+                www.displayai/your_name
+            </button>
+
+            <br><br>
+            <div>   
+                <p style="font-size: xx-small; margin-bottom: -0.5%;">LANDED INTERVIEWS AT</p>
+                <div class="company-logos">
+                    <img src="{% static 'img/landed/ford.png' %}" alt="Ford Motor" style="width: 70px; height: auto;">
+                    <img src="{% static 'img/landed/verizon.png' %}" alt="Verizon" style="width: 70px; height: auto;">
+                    <img src="{% static 'img/landed/meta.png' %}" alt="Meta" style="width: 70px; height: auto;">
+                    <img src="{% static 'img/landed/apple.png' %}" alt="apple" style="width:25px; height: auto;">
+                    <img src="{% static 'img/landed/signify.png' %}" alt="Signify" style="width: 70px; height: auto;">
+                    <img src="{% static 'img/landed/deloitte.png' %}" alt="Deloitte" style="width: 110px; height: auto;">
+                    <img src="{% static 'img/landed/colgate.png' %}" alt="Colgate" style="width: 70px; height: auto;">
+                    <img src="{% static 'img/landed/tiktok.png' %}" alt="TikTok" style="width: 70px; height: auto;">
+                    <img src="{% static 'img/landed/snowflake.png' %}" alt="Snowflake" style="width: 100px; height: auto;">
+                    <img src="{% static 'img/landed/accenture.png' %}" alt="Accenture" style="width: auto; height: 25px;">
+                    <img src="{% static 'img/landed/cisco.png' %}" alt="cisco" style="width:auto; height: 30px;">
+                    <!-- <img src="{% static 'img/landed/Johnson_and_Johnson.svg' %}" alt="Johnson_and_Johnson" style="width:auto; height: 25px;"> -->
+                    <!-- <img src="{% static 'img/landed/amazon.png' %}" alt="Amazon" style="width: 70px; height: auto;"> -->
+                    <!-- <img src="{% static 'img/landed/pepsico.png' %}" alt="pepsico" style="width:auto; height: 40px;">   -->
+                    <!-- <img src="{% static 'img/landed/Boeing.png' %}" alt="Boeing" style="width: 130px; height: auto;"> -->
+                    <!-- <img src="{% static 'img/landed/spectrum.png' %}" alt="spectrum" style="width:auto; height: 25px;"> -->
+        
+                </div>
+        
+                <style>
+                
+                    .company-logos img {
+                        margin-right: 25px; /* Space between logos */
+                    }
+
+                </style>
+            </div>
+
+            <br>
+            <button class="circle-button" style="background-color: white; color: black; border: 2px solid red; padding: 10px 20px; font-size: 20px; cursor: pointer; margin: 10px;" 
+                onmouseover="this.style.backgroundColor='black'; this.style.color='white';" 
+                onmouseout="this.style.backgroundColor='white'; this.style.color='black';">
+            <a href="{% url 'login' %}">BUILD</a>
+            </button>
+            <br>
+            <!-- <img src="static/home1.gif" alt="Home GIF"> → -->
+            <!-- <img src="static/home3.gif" alt="Home GIF" width="800px"> -->
+
+            <style>
+
+
+            @media (min-width: 768px) {
+              .video-container {
+                  display: flex;
+                  justify-content: center;
+                  align-items: flex-start;
+              }
+              .video-item {
+                  text-align: center;
+                  margin: 10px;
+              }
+              video {
+                  width: 600px;
+                  height: 400px;
+              }
+
+              .video-item p {
+                margin-bottom: -4%;
+            }
+            }
+              
+            @media (max-width: 768px) {
+              .video-container {
+                display: flex;
+                justify-content: center;
+                align-items: flex-start;
+                flex-wrap: wrap;
+              }
+              .video-item {
+                  text-align: center;
+                  margin: 10px;
+              }
+              video {
+                  width: 100%;
+                  height: auto;
+              }
+
+              .video-item p {
+                margin-bottom: 0;
+            }
+
+            }
+          </style>
+
+          <div class="video-container">
+            <div class="video-item">
+                <p style="font-size: xx-small;">RESUME</p>
+                <video id="resume-video" controls autoplay muted>
+                    <source src="static/resume_gif.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+            <div class="video-item">
+                <p style="font-size: xx-small;">WEBSITE</p>
+                <video id="website-video" controls autoplay muted>
+                    <source src="static/website_gif.mp4" type="video/mp4">
+                    Your browser does not support the video tag.
+                </video>
+            </div>
+          </div>
+
+          <script>
+            document.getElementById('resume-video').addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            });
+
+            document.getElementById('website-video').addEventListener('ended', function() {
+                this.currentTime = 0;
+                this.play();
+            });
+          </script>
 
             <div class="row">
+
               <div class="col-xl-6 col-lg-7" data-aos="fade-right">
                 <div class="icon-box" data-aos="fade-up">
                   <i class="bx bx-receipt"></i>
@@ -360,8 +557,6 @@ li {
                   <h4> Tailored Cover letter </h4>
                   <p> Build job description cover letter in under 30 seconds </p>
                 </div>
-
-                
 
               </div>
             
@@ -385,26 +580,22 @@ li {
                     <p> Build job description tailored resume in under 30 seconds </p>
                   </div>
 
-                  
-
-                  
-
               </div>
             </div>
+
           </div>
         </section>
 
         <!-- ======= Demo Section ======= -->
-      <section id="demo" class="demo">
+      <!-- <section id="demo" class="demo">
         <div class="container">
           <h1>Demo</h1>
-          <!-- Embed YouTube Video -->
           <style>
             .embed-responsive {
               position: relative;
               width: 100%;
               height: 0;
-              padding-bottom: 56.25%; /* This is the aspect ratio (16:9) */
+              padding-bottom: 56.25%; 
               overflow: hidden;
             }
           
@@ -418,12 +609,12 @@ li {
           </style>
           
           <div class="embed-responsive embed-responsive-16by9">
-            <!-- <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/F-2NzXRxs7Y" allowfullscreen></iframe> -->
+            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/F-2NzXRxs7Y" allowfullscreen></iframe>
               <h5> COMING SOON </h5>
           </div>
           
         </div>
-      </section>
+      </section> -->
 
       <!-- ======= Steps Section ======= -->
       <!-- <section id="steps" class="steps section-bg">
@@ -482,7 +673,7 @@ li {
 
 
        <!-- ======= Testimonials Section ======= -->
-       <section id="testimonials" class="testimonials">
+       <!-- <section id="testimonials" class="testimonials">
         <div class="container">
 
           <div class="section-title" data-aos="fade-up">
@@ -492,7 +683,6 @@ li {
           <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
             <div class="swiper-wrapper">
 
-              <!-- testimony - sulemaan -->
               <div class="swiper-slide">
                 <div class="testimonial-item">
                   <p>
@@ -552,106 +742,575 @@ li {
           </div>
 
         </div>
-      </section>
+      </section> -->
 
+        <!-- pricing -->
+      <div>
         <section id="pricing">
-          
-          <form method="post" action"">
-            <div style="text-align: center;">
-              <h2>Pricing</h2>
+            <h1>Pricing</h1>
+
+            <!-- <div class="services-banner">
+                <p style="color: white;">Our services: personal website, resume, tailored resume given job description, tailored cover letter given job description</p>
+            </div> -->
+
+            <p>    
+              All resumes are optimized for Applicant Tracking Systems (ATS)
+            </p>
+            
+
+            <form method="post" ">
+                {% csrf_token %}
+
+                <style>
+
+                    @media only screen and (min-width: 768px) {
+
+                            .payment-mode-container {
+                                display: flex;
+                                justify-content: center; /* Center content horizontally */
+                                align-items: center; /* Center content vertically */
+                                height: 8vh; /* Set full viewport height */
+                                margin: 0; /* Remove default margin */
+                            }
+                        
+                            .payment-mode-box {
+                                background-color: olivedrab; /* Light gray background */
+                                border-radius: 5px; /* Rounded corners */
+                                padding: 10px; /* Add some padding */
+                                margin-bottom: 10px; /* Add some space below */
+                                width: 40%;
+                            }
+                        
+                            .payment-mode-box label {
+                                font-weight: bold; /* Make label text bold */
+                                margin-right: 10px; /* Add some space between label and select */
+                            }
+                        
+                            .payment-mode-box select {
+                                padding: 5px; /* Add some padding to select */
+                                border: 1px solid #ccc; /* Light border */
+                                border-radius: 3px; /* Rounded corners */
+                            }
+
+                    }
+
+
+                    @media only screen and (max-width: 768px) {
+
+                        .payment-mode-container {
+                            display: flex;
+                            justify-content: center; /* Center content horizontally */
+                            align-items: center; /* Center content vertically */
+                            height: auto; /* Reset height */
+                            margin: 0; /* Remove default margin */
+                            padding: 10px; /* Add some padding */
+                        }
+
+                        .payment-mode-box {
+                            background-color: olivedrab; /* Light gray background */
+                            border-radius: 5px; /* Rounded corners */
+                            padding: 10px; /* Add some padding */
+                            margin-bottom: 10px; /* Add some space below */
+                            width: 100%; /* Full width */
+                        }
+
+                        .payment-mode-box label {
+                            font-weight: bold; /* Make label text bold */
+                            margin-right: 10px; /* Add some space between label and select */
+                            display: block; /* Display block for better spacing */
+                            margin-bottom: 5px; /* Add some space below label */
+                        }
+
+                        .payment-mode-box select {
+                            padding: 5px; /* Add some padding to select */
+                            border: 1px solid #ccc; /* Light border */
+                            border-radius: 3px; /* Rounded corners */
+                            width: calc(100% - 20px); /* Take up most of the width with some padding */
+                        }
+
+
+                    }
+
+
+                </style>
+                
+                <div class="payment-mode-container">
+                    <div class="payment-mode-box">
+                        <label for="mode">Select Plan Mode:</label>
+                        <select id="mode" name="mode" onchange="togglePricing()">
+                            <option value="payment">One-time Plan</option>
+                            <!-- <option value="payment">Subscription Plan is coming soon</option> -->
+                            <!-- <option value="subscription">Subscription Plan</option> -->
+                        </select>
+                    </div>
+                </div>
+                
+                <script>
+                    function togglePricing() {
+                        var mode = document.getElementById("mode").value;
+                        var subscriptionPricing = document.getElementById("subscription-pricing");
+                        var onetimePricing = document.getElementById("onetime-pricing");
+                
+                        if (mode === "subscription") {
+                            subscriptionPricing.style.display = "";
+                            onetimePricing.style.display = "none";
+                        } else {
+                            subscriptionPricing.style.display = "none";
+                            onetimePricing.style.display = "";
+                        }
+                    }
+                
+                    // Call togglePricing function initially to set default state
+                    togglePricing();
+                </script>
+
+                <style>
+                    .subscription-info {
+                        background-color: #0050a5; /* Light gray background */
+                        padding: 10px;
+                        border-radius: 5px;
+                        width: 100%;
+                        color: white;
+                    }
+
+                    .subscription-info p {
+                        margin: 0; /* Remove default paragraph margin */
+                    }
+                </style>
+
+                <div id="subscription-pricing" style="display: none;"> 
+                    <div class="subscription-info">
+                        <p>These are monthly subscriptions. Cancel anytime. Unused builds will be added to the next month.</p>
+                    </div>
+                    <div class="pricing-cards">
+
+                        <!-- free -->
+                        <div class="card">
+                            <h2>Free</h2>
+                            <b> <p  style="color: brown;">$0.00 </p> </b>
+                            <ul>
+                                <li>&#10003; 2 builds <a href="#what_are_builds">What are builds ?</a> </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+
+                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 day)</span></li>
+                                <li>&#9888; Generated bullets for  </li>
+                                <li>&emsp;  only 1 experience or project </li>
+                            </ul>
+                            
+                            <button class="get-now-button" name="selected_plan">
+                                {% if account.tier == 'free' %}
+                                    Current
+                                {% else %}
+                                    Free version expired 
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        <!-- basic -->
+                        <div class="card">
+                            <h2>Basic</h2>
+                            <b><p style="color: brown;">$9.99 / month</p></b>
+                        
+                            <ul>
+                                <li>&#10003; 20 builds</li>
+                                <li>&#10003; Tailored resume</li>
+                                <li>&#10003; Tailored cover letter</li>
+                                <li>&#9888; Personal website <span style="background-color: yellow;">(6 months)</span></li>
+                                <li>&#10003; All bullets AI generated</li>
+                                <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
+                            </ul>
+                        
+                            <button class="get-now-button" name="selected_plan" value="basic_sub">
+                                {% if account.tier == 'basic' %}
+                                Current
+                                {% else %}
+                                Coming Soon
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <!-- economy -->
+                        <div class="card">
+                            <h2>Economy</h2>
+                            <b> <p  style="color: brown;">$19.99 / month </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 50 builds  </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 year)</span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="economy_sub">
+                                {% if account.tier == 'economy' %}
+                                    Current
+                                {% else %}
+                                    Coming Soon
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        <!-- business -->
+                        <div class="card" style="position: relative;">
+                            <div class="recommended-banner">Recommended</div> <!-- Added recommended banner -->
+                            <h2>Business</h2>
+                            <b> <p  style="color: brown;">$39.99 / month </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 100 builds </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="business_sub">
+                                {% if account.tier == 'business' %}
+                                    Current
+                                {% else %}
+                                    Coming Soon
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        <style>
+                        .recommended-banner {
+                            position: absolute;
+                            top: -10px;
+                            left: -10px;
+                            background-color: #ff5722; /* Orange color */
+                            color: white;
+                            padding: 5px 10px;
+                            font-size: 14px;
+                            border-radius: 5px;
+                            }
+                        </style>
+                        
+                        <!-- first class -->
+                        <div class="card">
+                            <h2>First Class</h2>
+                            <b> <p  style="color: brown;">$59.99 / month </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 200 builds </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="first_class_sub">
+                                {% if account.tier == 'first_class' %}
+                                    Current
+                                {% else %}
+                                    Coming Soon
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        <!-- pilot -->
+                        <div class="card">
+                            <h2>Pilot</h2>
+                            <b> <p  style="color: brown;">$99.99 / month </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 400 builds  </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="pilot_sub">
+                                {% if account.tier == 'pilot' %}
+                                    Current
+                                {% else %}
+                                    Coming Soon
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <!-- pilot 2 -->
+                        <div class="card">
+                            <h2>Pilot 2</h2>
+                            <b> <p  style="color: brown;">$199.99 / month </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 1000 builds </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="pilot2_sub">
+                                {% if account.tier == 'pilot' %}
+                                    Current
+                                {% else %}
+                                    Coming Soon
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <!-- custom -->
+                        <div class="card">
+                            <h2>Custom</h2>
+                            <b> <p  style="color: brown;">$custom / month </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; custom builds </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="custom">
+                                Contact Us
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div id="onetime-pricing"> 
+                    <div class="subscription-info">
+                        <p>These are one-time payment plans. Plan ends when builds run out. Website remains active depending on plan. </p>
+                    </div> <br>
+                    <div class="pricing-cards">
+                        <!-- free -->
+                        <div class="card">
+                            <h2>Free</h2>
+                            <b> <p  style="color: brown;">$0.00 </p> </b>
+                            <ul>
+                                <li>&#10003; 2 builds <a href="#what_are_builds">What are builds ?</a> </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+
+                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 day)</span></li>
+                                <li>&#9888; Generated bullets for  </li>
+                                <li>&emsp;  only 1 experience or project </li>
+                            </ul>
+                            
+                            <button class="get-now-button" name="selected_plan">
+                                {% if account.tier == 'free' %}
+                                    Current
+                                {% else %}
+                                    Free version expired 
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        <!-- basic -->
+                        <div class="card">
+                            <h2>Basic</h2>
+                            <b><p style="color: brown;">$9.99</p></b>
+                        
+                            <ul>
+                                <li>&#10003; 20 builds</li>
+                                <li>&#10003; Tailored resume</li>
+                                <li>&#10003; Tailored cover letter</li>
+                                <li>&#9888; Personal website <span style="background-color: yellow;">(6 months)</span></li>
+                                <li>&#10003; All bullets AI generated</li>
+                                <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
+                            </ul>
+                        
+                            <button class="get-now-button" name="selected_plan" value="basic">
+                                {% if account.tier == 'basic' %}
+                                Current
+                                {% else %}
+                                Buy Now
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <!-- economy -->
+                        <div class="card">
+                            <h2>Economy</h2>
+                            <b> <p  style="color: brown;">$19.99 </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 50 builds  </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 year)</span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="economy">
+                                {% if account.tier == 'economy' %}
+                                    Current
+                                {% else %}
+                                    Buy Now
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        <!-- business -->
+                        <div class="card" style="position: relative;">
+                            <div class="recommended-banner">Recommended</div> <!-- Added recommended banner -->
+                            <h2>Business</h2>
+                            <b> <p  style="color: brown;">$39.99 </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 100 builds </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="business">
+                                {% if account.tier == 'business' %}
+                                    Current
+                                {% else %}
+                                    Buy Now
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        <style>
+                            @media only screen and (min-width: 768px) {
+
+                                .recommended-banner {
+                                    position: absolute;
+                                    top: -10px;
+                                    left: -10px;
+                                    background-color: #ff5722; /* Orange color */
+                                    color: white;
+                                    padding: 5px 10px;
+                                    font-size: 14px;
+                                    border-radius: 5px;
+                                    }
+                            }
+
+                            @media only screen and (max-width: 768px) {
+
+                                .recommended-banner {
+                                    position: relative; /* Change position to relative */
+                                    top: 0; /* Remove top positioning */
+                                    left: 0; /* Remove left positioning */
+                                    margin-bottom: 10px; /* Add margin for space */
+                                    background-color: #ff5722; /* Orange color */
+                                    color: white;
+                                    padding: 5px 10px;
+                                    font-size: 12px; /* Decrease font size for smaller screens */
+                                    border-radius: 5px;
+                                    width: 40%;
+                                }
+
+                            }
+
+                        </style>
+                        
+                        <!-- first class -->
+                        <div class="card">
+                            <h2>First Class</h2>
+                            <b> <p  style="color: brown;">$59.99 </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 200 builds </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="first_class">
+                                {% if account.tier == 'first_class' %}
+                                    Current
+                                {% else %}
+                                    Buy Now
+                                {% endif %}
+                            </button>
+                        </div>
+                        
+                        <!-- pilot -->
+                        <div class="card">
+                            <h2>Pilot</h2>
+                            <b> <p  style="color: brown;">$99.99 </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 400 builds  </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="pilot">
+                                {% if account.tier == 'pilot' %}
+                                    Current
+                                {% else %}
+                                    Buy Now
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <!-- pilot 2 -->
+                        <div class="card">
+                            <h2>Pilot 2</h2>
+                            <b> <p  style="color: brown;">$199.99 </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; 1000 builds </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                                
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="pilot2">
+                                {% if account.tier == 'pilot' %}
+                                    Current
+                                {% else %}
+                                    Buy Now
+                                {% endif %}
+                            </button>
+                        </div>
+
+                        <!-- custom -->
+                        <div class="card">
+                            <h2>Custom</h2>
+                            <b> <p  style="color: brown;">$custom </p> </b>
+                            
+                            <ul>
+                                <li>&#10003; custom builds </li>
+                                <li>&#10003; Tailored resume  </li>
+                                <li>&#10003; Tailored cover letter  </li>
+                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
+                                <li>&#10003; All bullets AI generated  </li>
+                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
+                            </ul>
+                            <button class="get-now-button" name="selected_plan" value="custom">
+                                Contact Us
+                            </button>
+                        </div>
+
+                    </div>
+                </div>
+
+            </form>
+
+            <div id="what_are_builds">
+                <div class="card">
+                    <h2>What are builds</h2>
+                    <ul> Each build includes three customizable options: </ul>
+                    <ul>
+                        <li> - Create a resume using your user profile</li>
+                        <li> - Create a tailored resume based on a job description</li>
+                        <li> - Create a tailored cover letter based on a job description</li>
+                    </ul>
+                <ul> Whichever option you choose, you'll receive an updated personal website </ul>
+                </div>
             </div>
 
-              {% csrf_token %}
-              <div class="pricing-cards">
-                  <div class="card">
-                      <h2>Free</h2>
-                      <ul>
-                          <li>2 ATS friendly and optimized resumes</li>
-                          <li>Bullet points for only one work experience or one project for testing</li>
-                          <li>2 personal websites valid for 1 hour</li>
-                      </ul>
-                      <p class="price">Free</p>
-                      <a href="{% url 'login' %}" class="get-now-button">Current</a>
-                  </div>
-  
-                  <div class="card">
-                      <h2>Basic</h2>
-                      <ul>
-                          <li>5 ATS friendly and optimized resumes</li>
-                          <li>5 personal websites valid for 6 months</li>
-                      </ul>
-                      <p class="price">$9.99</p>
-                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
-  
-                  </div>
-  
-                  <div class="card">
-                      <h2>Economy</h2>
-                      <ul>
-                          <li>10 ATS friendly and optimized resumes</li>
-                          <li>10 personal websites valid for 6 months</li>
-                      </ul>
-                      <p class="price">$14.99</p>
-                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
-  
-                  </div>
-  
-                  <div class="card">
-                      <h2>Business</h2>
-                      <ul>
-                          <li>20 ATS friendly and optimized resumes</li>
-                          <li>20 personal websites valid for 6 months</li>
-                      </ul>
-                      <p class="price">$19.99</p>
-                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
-                  </div>
-  
-                  <div class="card">
-                      <h2>First Class</h2>
-                      <ul>
-                          <li>50 ATS friendly and optimized resumes</li>
-                          <li>50 personal  websites valid for 1 year</li>
-                      </ul>
-                      <p class="price">$39.99</p>
-                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
-                  </div>
-  
-                  <div class="card">
-                      <h2>Pilot</h2>
-                      <ul>
-                          <li>100 ATS friendly and optimized resumes</li>
-                          <li>100 personal websites valid for 1 year</li>
-                      </ul>
-                      <p class="price">$99.99</p>
-                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
-                  </div>
-  
-  
-                  <div class="card">
-                      <h2>Pilot 2</h2>
-                      <ul>
-                          <li>300 ATS friendly and optimized resumes</li>
-                          <li>300 personal websites valid for 6 months</li>
-                      </ul>
-                      <p class="price">$199.99</p>
-                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
-                  </div>
-  
-                  <div class="card">
-                      <h2>Custom</h2>
-                      <ul>
-                          <li>Contact sales</li>
-                          <li>shf46@rutgers.edu</li>
-                      </ul>
-                      <p class="price">Custom</p>
-                      <a href="{% url 'login' %}" class="get-now-button">Get Now</a>
-                  </div>
-  
-              </div>
-  
-          </form>
         </section>
-
+      </div>
 
         <!-- ======= F.A.Q Section ======= -->
         <section id="faq" class="faq section-bg">
@@ -841,5 +1500,7 @@ li {
       
 
     </body>
+
+ 
 
 {% endblock %}

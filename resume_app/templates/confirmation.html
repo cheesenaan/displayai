@@ -599,6 +599,7 @@
         @media only screen and (max-width: 768px) {
             #google_doc_section {
                 flex-direction: column; /* Stack items vertically */
+                height: 1100px;
             }
             #google_doc_section_left, #google_doc_section_right {
                 width: 100%; /* Take up full width */
@@ -772,12 +773,17 @@
 
                 <!-- job description feature -->
                 <div id="jobDescription-rebuild" style="margin-top: 5%;">
-                   
 
                     <!-- <p> Tailored resumes increase response chances by 70% </p> -->
 
                     {% if remaining > 0 %}
                     <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#jobDescriptionModal">
+
+                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
+                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+                        
                         Build job description tailored resume
                     </a>
                     {% else %}
@@ -805,7 +811,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <label for="jobDescriptionInput">Input Job Description</label>
+                                    <label for="jobDescriptionInput">Input Job Description and we will build you a <b> tailored resume </b> </label>
                                     <textarea class="form-control" id="jobDescriptionInput" style="height: 500px;"></textarea>
                                 </div>
                                 <div class="modal-footer">
@@ -937,7 +943,7 @@
                                     </button>
                                 </div>
                                 <div class="modal-body">
-                                    <label for="coverLetterDescriptionInput">Input Job Description</label>
+                                    <label for="coverLetterDescriptionInput">Input Job Description and we will build you a tailored <b> cover letter </b> </label>
                                     <textarea class="form-control" id="coverLetterDescriptionInput" style="height: 500px;"></textarea>
                                 </div>
                                 <div class="modal-footer">
@@ -1103,7 +1109,7 @@
                                     transform: scale(0.5);
                                     transform-origin: 0 0;
                                     margin-left: 20px;
-                                    max-height: fit-content;
+                                    
                                 }
                             }
                         </style>
@@ -1689,7 +1695,6 @@
 
         </section>
     </div>
-
 
 
 </body>
