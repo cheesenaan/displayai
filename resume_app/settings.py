@@ -131,6 +131,3 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'resume_app/static')
 MEDIA_URL = '/profile_pictures/'
 
-
-
-
