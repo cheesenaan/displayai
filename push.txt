@@ -1,7 +1,7 @@
 push code from vscode django to github repo
-git add .                   
-git commit -m 'changes'
-git remote add origin https://github.com/cheesenaan/resume_app.git
+git add .
+git commit -m 'pushing code from pythonanywhere to github'
+git remote add origin https://github.com/cheesenaan/displayai.git
 git push -u origin main
 
 delete profile pictures except 0.jpg
