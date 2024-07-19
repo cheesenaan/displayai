@@ -133,4 +133,51 @@ MEDIA_URL = '/profile_pictures/'
 
 
 
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
+
+
+SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
+
+
+STRIPE_API_KEY = 'sk_test_51OibSIBFOKaICuMNwUyc27HPurXFcLQqowTzFRqr7RUcw0tbGu4WR4XkFRY3qEqN4a5bb5qX93ApQzmvjT7Ew6o200MbPOzO5i'
+OPENAI_API_KEY = 'sk-proj-hrqPtK3GH5SrXCWYDDyPT3BlbkFJHl4gkXR2yGAz4xnLUqno'
+
+
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'cheesenaan.ai@gmail.com'
+EMAIL_HOST_PASSWORD = 'dpnbakthpofdhnem'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = False
+
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
+
+
+SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
+
+
+STRIPE_API_KEY = 'sk_test_51OibSIBFOKaICuMNwUyc27HPurXFcLQqowTzFRqr7RUcw0tbGu4WR4XkFRY3qEqN4a5bb5qX93ApQzmvjT7Ew6o200MbPOzO5i'
+OPENAI_API_KEY = 'sk-proj-hrqPtK3GH5SrXCWYDDyPT3BlbkFJHl4gkXR2yGAz4xnLUqno'
+
+
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'cheesenaan.ai@gmail.com'
+EMAIL_HOST_PASSWORD = 'dpnbakthpofdhnem'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = False
+
+
+
 
