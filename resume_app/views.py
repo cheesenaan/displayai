@@ -110,6 +110,50 @@ def login(request):
 
                 try:
                     user = User.objects.create_user(user_name, user_email, user_password)
+
+                    new_account = Account()
+                    print("creating new account")
+                    new_account.name = user_name
+                    new_account.email = user_email
+                    new_account.password = user_password
+                    new_account.user = user
+                    new_account.save()
+                    free_plan = Plan(account=new_account)
+                    free_plan.user = user
+                    free_plan.save()
+                    new_account.user_plan = free_plan
+                    new_account.save()
+                    print("new account saved")
+                    print(new_account)
+                    print("id of new account is ", new_account)
+
+                    authenticated_user = authenticate(username=user_name, email=user_email, password=user_password)
+
+                    if authenticated_user is not None:
+                        auth_login(request, authenticated_user)
+
+                    try:
+                        subject = 'Welcome to DisplayAI'
+                        from_email = settings.EMAIL_HOST_USER
+                        recipient_list = [new_account.email]    
+
+                        # Prepare context with payment details
+                        context_email = {
+                            'account': new_account,
+                        }
+
+                        email_html = render_to_string('new_account_email.html', context_email)
+                        send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
+
+                    except Exception as e:
+                        print("this is the error : ", e)
+                        # messages.error(request, 'unable to send email')
+                        print("unable to send create account email")
+
+                    messages.success(request, 'Account created !')
+
+                    return redirect('form' , account_id = new_account.id)
+
                 except IntegrityError as e:
                     messages.error(request, 'Username  or Email already taken. Please choose another.')
                     login_form = LoginForm()
@@ -117,43 +161,7 @@ def login(request):
                     return render(request, 'login.html', context)
 
 
-                new_account = Account()
-                new_account.name = user_name
-                new_account.email = user_email
-                new_account.password = user_password
-                new_account.user = user
-                new_account.save()
-                free_plan = Plan(account=new_account)
-                free_plan.user = user
-                free_plan.save()
-                new_account.user_plan = free_plan
-                new_account.save()
-
-                authenticated_user = authenticate(username=user_name, email=user_email, password=user_password)
-
-                if authenticated_user is not None:
-                    auth_login(request, authenticated_user)
-
-                try:
-                    subject = 'Welcome to DisplayAI'
-                    from_email = settings.EMAIL_HOST_USER
-                    recipient_list = [new_account.email]    
-
-                    # Prepare context with payment details
-                    context_email = {
-                        'account': new_account,
-                    }
-
-                    email_html = render_to_string('new_account_email.html', context_email)
-                    send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
-
-                except Exception as e:
-                    new_account.delete()
-                    messages.error(request, 'Connection issue, please try again')
-
-                messages.success(request, 'Account created !')
-
-                return redirect('form' , account_id = new_account.id)
+                
     else:
         login_form = LoginForm()
         context = {'login_form': login_form}
@@ -446,19 +454,25 @@ def form(request , account_id):
 
 def website(request, url_name):
     # Retrieve the user profile using url_name
-    account = Account.objects.get(name=url_name)
-    user_profile = get_object_or_404(UserProfile, account=account)
-    user_plan = Plan.objects.get(account = account)
+    try:
+        account = Account.objects.get(name=url_name)
+        user_profile = get_object_or_404(UserProfile, account=account)
+        user_plan = Plan.objects.get(account = account)
 
-    # Pass the user profile to the template
-    context = {
-        'user_profile': user_profile,
-        'account' : account,
-        'user_plan' : user_plan,
-    }
+        # Pass the user profile to the template
+        context = {
+            'user_profile': user_profile,
+            'account' : account,
+            'user_plan' : user_plan,
+        }
 
-    # Render the template with the context
-    return render(request, 'website.html', context)
+        # Render the template with the context
+        return render(request, 'website.html', context)
+    except Account.DoesNotExist:
+        # Log the error or handle it as needed
+        print(f"Account with url_name {url_name} does not exist.")
+        return render(request, 'home.html', status=404)  # Render a custom 404 page
+
 
 @login_required
 def confirmation(request, account_id):

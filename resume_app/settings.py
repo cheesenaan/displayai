@@ -130,3 +130,30 @@ STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'resume_app/static')
 MEDIA_URL = '/profile_pictures/'
+
+# Default primary key field type
+# https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
+
+
+# SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
+
+SECRET_KEY = config('SECRET_KEY')
+DEBUG = config('DEBUG', default=False, cast=bool)
+
+# Read other settings from the .env file
+SERVICE_ACCOUNT_FILE = config('SERVICE_ACCOUNT_FILE')
+STRIPE_API_KEY = config('STRIPE_API_KEY')
+OPENAI_API_KEY = config('OPENAI_API_KEY')
+
+
+
+EMAIL_PORT = 587
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_HOST_USER = 'cheesenaan.ai@gmail.com'
+EMAIL_HOST_PASSWORD = 'dpnbakthpofdhnem'
+EMAIL_USE_TLS = True
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_USE_SSL = False
