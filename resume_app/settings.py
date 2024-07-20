@@ -135,8 +135,6 @@ MEDIA_URL = '/profile_pictures/'
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
-REDIRECT_DOMAIN = 'https://www.cheesenaan.app/'
-
 
 # SERVICE_ACCOUNT_FILE = '/home/displayai/displayai/resume_app/doc.json'
 
@@ -147,6 +145,8 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 SERVICE_ACCOUNT_FILE = config('SERVICE_ACCOUNT_FILE')
 STRIPE_API_KEY = config('STRIPE_API_KEY')
 OPENAI_API_KEY = config('OPENAI_API_KEY')
+REDIRECT_DOMAIN = config('REDIRECT_DOMAIN')
+
 
 
 
