@@ -4,31 +4,47 @@ from django import forms
 from django import forms
 from .models import *
 
+from django import forms
+from django.core.exceptions import ValidationError
+from .models import WorkExperience, UserProfile
+
 class WorkExperienceForm(forms.ModelForm):
     class Meta:
         model = WorkExperience
-        fields = ['company_name', 'job_title', 'start_date', 'end_date', 'city', 'state', 'description']
+        fields = ['company_name', 'job_title', 'start_date', 'end_date', 'currently_working', 'city', 'state', 'description']
         widgets = {
             'start_date': forms.DateInput(attrs={'type': 'date'}),
             'end_date': forms.DateInput(attrs={'type': 'date'}),
+            'currently_working': forms.CheckboxInput(),  # Add the checkbox widget
         }
 
     def clean(self):
         cleaned_data = super().clean()
 
         required_fields = [
-            'company_name', 'job_title', 'start_date', 'end_date', 'city', 'state', 'description'
+            'company_name', 'job_title', 'start_date', 'city', 'state', 'description'
         ]
 
         for field_name in required_fields:
             if not cleaned_data.get(field_name):
                 raise ValidationError(f"Please fill in the '{field_name.replace('_', ' ')}' field.")
 
-        if cleaned_data.get('start_date') > cleaned_data.get('end_date'):
+        currently_working = cleaned_data.get('currently_working')
+        end_date = cleaned_data.get('end_date')
+
+        if currently_working:
+            cleaned_data['end_date'] = None
+        elif not end_date:
+            raise ValidationError("Please provide an end date if you are not currently working.")
+
+        if end_date and cleaned_data.get('start_date') > end_date:
             raise ValidationError("End date must be greater than start date.")
 
+        return cleaned_data
 
 WorkExperienceFormSet = forms.inlineformset_factory(UserProfile, WorkExperience, form=WorkExperienceForm, extra=1, can_delete=True)
+
+
 
 class ProjectsForm(forms.ModelForm):
     

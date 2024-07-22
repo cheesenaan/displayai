@@ -300,6 +300,45 @@
         </div>
         <br>
     </div>
+        
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+            function handleCheckboxChange(event) {
+                if (event.target.classList.contains('currently-working-checkbox')) {
+                    const checkbox = event.target;
+                    const name = checkbox.name;
+                    const formNumMatch = name.match(/work_experiences-(\d+)-currently-working/);
+                    const formNum = formNumMatch ? formNumMatch[1] : null;
+    
+                    checkbox.value = checkbox.checked ? 'True' : 'False';
+    
+                    if (formNum !== null) {
+                        const endDateInput = document.querySelector(`input[name="work_experiences-${formNum}-end-date"]`);
+                        
+                        console.log(`formNum: ${formNum}`);
+                        console.log(`endDateInput:`, endDateInput);
+    
+                        if (endDateInput) {
+                            if (checkbox.checked) {
+                                alert(`Currently working checkbox clicked for form ${formNum}!`);
+                                endDateInput.disabled = true;
+                            } else {
+                                alert(`Currently working checkbox unchecked for form ${formNum}!`);
+                                endDateInput.disabled = false;
+                            }
+                        } else {
+                            console.warn(`End date input not found for form number ${formNum}`);
+                        }
+                    }
+                }
+            }
+    
+                document.getElementById('work_form').addEventListener('change', handleCheckboxChange);
+              });
+    
+        </script>
+
+        
     
 
     <b><p style="color:red;">We recommend a total of 10 work experiences and projects</p></b>
@@ -352,17 +391,19 @@
                                         <td><input type="text" name="work_experiences-${totalformNumberAdder}-company_name"></td>
                                         <td><input type="text" name="work_experiences-${totalformNumberAdder}-job_title"></td>
                                     </tr>
-                                    <tr class="form-row">
-                                        <td>Start Date</td>
-                                        <td>End Date</td>
+
+                                    <tr class="form-row"> 
+                                        <th>Start Date</th>
+                                        <th>End Date </th>
+                                        <th>Currently Working </th>
                                     </tr>
+
                                     <tr class="form-row">
-                                        <td>Start Date <input type="date" name="work_experiences-${totalformNumberAdder}-start_date"></td>
-                                        <td>End Date <input type="date" name="work_experiences-${totalformNumberAdder}-end_date"></td>
-
-
-
+                                        <td><input type="date" name="work_experiences-${totalformNumberAdder}-start_date"></td>
+                                        <td> <input type="date" name="work_experiences-${totalformNumberAdder}-end-date"></td>
+                                        <td> <input type="checkbox" name="work_experiences-${totalformNumberAdder}-currently-working" class="currently-working-checkbox"> </td>
                                     </tr>
+
                                     <tr class="form-row">
                                         <td>City</td>
                                         <td>State</td>
@@ -467,29 +508,37 @@
 
         <br> <br> <br>
 
+        
+        
+
         {% csrf_token %}
         {{ work_experience_formset.management_form }}
         <div id="work_form" style="display: none;">
             <div id="work_experiences_container-0">
                 <table>
                     <tbody>
+                        {% for work_form in work_experience_formset %}
                         <tr>
                             <th>Company Name</th>
                             <th>Job Title</th>
                         </tr>
-                        {% for work_form in work_experience_formset %}
                             <tr class="form-row">
                                 <td>{{ work_form.company_name }}</td>
                                 <td>{{ work_form.job_title }}</td>
                             </tr>
-                            <tr class="form-row">
-                                <td>Start Date</td>
-                                <td>End Date</td>
+
+                            <tr class="form-row"> 
+                                <th>Start Date</th>
+                                <th>End Date </th>
+                                <th>Currently Working </th>
                             </tr>
-                            <tr class="form-row">
+
+                            <tr class="form-row"> 
                                 <td>{{ work_form.start_date }}</td>
-                                <td>{{ work_form.end_date }}</td>
+                                <td> <input type="date" name="work_experiences-0-end-date"> </td>
+                                <td> <input type="checkbox" name="work_experiences-0-currently-working" class="currently-working-checkbox"> </td>
                             </tr>
+
                             <tr class="form-row">
                                 <td>City</td>
                                 <td>State</td>
@@ -993,7 +1042,7 @@
     </div>
 
     <!-- validation -->
-    <script>
+    <!-- <script>
         document.addEventListener('DOMContentLoaded', function () {
             var submitButton = document.querySelector('button[type="submit"]');
             submitButton.addEventListener('click', function (event) {
@@ -1167,7 +1216,7 @@
 
                 
         });
-    </script>
+    </script> -->
 
         {% if account.user_profile is None %}
         <button type="submit"">CREATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>

@@ -1,6 +1,6 @@
 push code from vscode django to github repo
 git add .
-git commit -m 'fixed create user error and added .gitignore file'
+git commit -m 'currently working feature for work experienec formset'
 git remote add origin https://github.com/cheesenaan/displayai.git
 git push -u origin main
 

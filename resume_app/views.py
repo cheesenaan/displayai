@@ -346,32 +346,41 @@ def form(request , account_id):
                 job_title = post_data.get(prefix + "job_title")
                 start_date = post_data.get(prefix + "start_date")
                 end_date = post_data.get(prefix + "end_date")
+                if not end_date:
+                    end_date = start_date
+                currently_working = post_data.get(prefix + "currently-working")
                 city = post_data.get(prefix + "city")
                 state = post_data.get(prefix + "state")
                 description = post_data.get(prefix + "description")
                 # bullet1 , bullet2, bullet3 = "bullet1" , "bullet2", "bullet3"
 
-                if company_name and job_title and start_date and end_date and city and state and description:
+                if company_name and job_title and start_date and (end_date or currently_working) and city and state and description:
                     if work_counter == 1 or account.tier != "free":
                         bullet1 , bullet2, bullet3 = openai_work_experience(company_name ,job_title, description)
                         work_counter = work_counter + 1
                     else:
                         bullet1 , bullet2, bullet3 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET", "UPGRADE PLAN FOR OPTIMIZED BULLET"
-                    work_experience = WorkExperience.objects.create(
-                        user_profile=user_profile,
-                        company_name=company_name,
-                        job_title=job_title,
-                        start_date=start_date,
-                        end_date=end_date,
-                        city=city,
-                        state=state,
-                        description=description,
-                        bullet1= bullet1,
-                        bullet2= bullet2,
-                        bullet3= bullet3
-                    )
-                    work_experience.account = account
-                    work_experience.save()
+                    try:
+                        work_experience = WorkExperience.objects.create(
+                            user_profile=user_profile,
+                            company_name=company_name,
+                            job_title=job_title,
+                            start_date=start_date,
+                            end_date=end_date,
+                            city=city,
+                            state=state,
+                            currently_working=currently_working,
+                            description=description,
+                            bullet1=bullet1,
+                            bullet2=bullet2,
+                            bullet3=bullet3
+                        )
+                        work_experience.account = account
+                        print("Saving work experience instance to database...")
+                        work_experience.save()
+                    except Exception as e:
+                        print(f"An error occurred with creating or saving work experience instance : {e}")
+
         else:
             print("there is no work experiences")
 
@@ -928,12 +937,12 @@ def update_resume(user_profile, account, DOCUMENT_ID):
 
         # Work experiences
     for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
-        placeholder_replacements.update({
+            placeholder_replacements.update({
             f'experience{i}': work_experience.company_name.title(),
             f'title{i}': work_experience.job_title.title(),
             f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
-            f'experience{i} end date': work_experience.end_date.strftime('%b %Y'),
-            f'experience{i} location': work_experience.city.strip().title() + ' , ' + work_experience.state.strip().upper(),
+            f'experience{i} end date': "Present" if work_experience.currently_working else work_experience.end_date.strftime('%b %Y'),
+            f'experience{i} location': work_experience.city.strip().title() + ', ' + work_experience.state.strip().upper(),
             f'experience{i} bullet1': work_experience.bullet1,
             f'experience{i} bullet2': work_experience.bullet2,
             f'experience{i} bullet3': work_experience.bullet3,
@@ -1104,15 +1113,17 @@ def create_resume(user_profile, account):
             # Work experiences
         for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
             placeholder_replacements.update({
-                f'experience{i}': work_experience.company_name.title(),
-                f'title{i}': work_experience.job_title.title(),
-                f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
-                f'experience{i} end date': work_experience.end_date.strftime('%b %Y'),
-                f'experience{i} location': work_experience.city.strip().title() + ' , ' + work_experience.state.strip().upper(),
-                f'experience{i} bullet1': work_experience.bullet1,
-                f'experience{i} bullet2': work_experience.bullet2,
-                f'experience{i} bullet3': work_experience.bullet3,
-            })
+            f'experience{i}': work_experience.company_name.title(),
+            f'title{i}': work_experience.job_title.title(),
+            f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
+            f'experience{i} end date': "Present" if work_experience.currently_working else work_experience.end_date.strftime('%b %Y'),
+            f'experience{i} location': work_experience.city.strip().title() + ', ' + work_experience.state.strip().upper(),
+            f'experience{i} bullet1': work_experience.bullet1,
+            f'experience{i} bullet2': work_experience.bullet2,
+            f'experience{i} bullet3': work_experience.bullet3,
+        })
+
+
         for i, project in enumerate(user_profile.projects.all(), start=1):
             placeholder_replacements.update({
                 f'project{i}': project.project_name.title(),
