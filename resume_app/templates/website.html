@@ -122,8 +122,6 @@
                         <img class="img-fluid img-profile rounded-circle" src="{% static 'img/rutgers.jpeg' %}" alt="Rutgers University" style="width: 100px; height: 100px;" />
                     </span>
                      -->
-                    <p> {{ user_profile.major }} <b> @{{ user_profile.institution }} </b> <br> </p>
-                      
 
                     <div class="social-icons">
                         <a class="social-icon" href="{{user_profile.resume_link}}" target="_blank"><i class="fa-solid fa-file-pdf"></i></a>
@@ -140,32 +138,43 @@
             <section class="resume-section" id="education">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Education</h2>
-                    {% for education in education_list %}
-                        <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
-                            <div class="flex-grow-1">
-                                <h3 class="mb-0">{{ education.institution }}</h3>
-                                <div class="subheading mb-3">Major in {{ education.major }}</div>
-                                <p>GPA: {{ education.GPA }}</p>  <!-- Display GPA -->
-                                <p>Coursework: {{ education.coursework }}</p> 
-                            </div>
-
-                            <div class="flex-shrink-0">
-                                <span class="text-primary">
-                                    {{ education.city }} , {{ education.country }} <br>
-                                    {{ education.start_date|date:"F Y" }} - 
-                                    {% if education.current %}
-                                        PRESENT
-                                    {% else %}
-                                        {{ education.end_date|date:"F Y" }}
+                    {% if education_list %}
+                        {% for education in education_list %}
+                            <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                                <div class="flex-grow-1">
+                                    <h3 class="mb-0">{{ education.institution|default_if_none:"Institution not provided" }}</h3>
+                                    {% if education.major %}
+                                        <div class="subheading mb-3">Major in {{ education.major }}</div>
                                     {% endif %}
-                                </span>
+                                    {% if education.GPA %}
+                                        <p>GPA: {{ education.GPA }}</p>
+                                    {% endif %}
+                                    {% if education.coursework %}
+                                        <p>Coursework: {{ education.coursework }}</p>
+                                    {% endif %}
+                                </div>
+            
+                                <div class="flex-shrink-0">
+                                    <span class="text-primary">
+                                        {% if education.city and education.country %}
+                                            {{ education.city }}, {{ education.country }} <br>
+                                        {% endif %}
+                                        {{ education.start_date|date:"F Y" }} - 
+                                        {% if education.current %}
+                                            PRESENT
+                                        {% else %}
+                                            {{ education.end_date|date:"F Y" }}
+                                        {% endif %}
+                                    </span>
+                                </div>
                             </div>
-                        </div>
-                    {% empty %}
+                        {% endfor %}
+                    {% else %}
                         <p>No education records found.</p>  <!-- Handle case with no education records -->
-                    {% endfor %}
+                    {% endif %}
                 </div>
             </section>
+            
             
 
 

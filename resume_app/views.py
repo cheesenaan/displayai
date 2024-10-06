@@ -515,6 +515,7 @@ def website(request, url_name):
         user_profile = get_object_or_404(UserProfile, account=account)
         user_plan = Plan.objects.get(account=account)
         education_list = Education.objects.filter(account=account)  # Use filter to get all related education records
+        print("education_list", education_list)
 
         # Pass the user profile to the template
         context = {

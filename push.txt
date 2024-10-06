@@ -1,7 +1,7 @@
 push code from vscode django to github repo
 git init
 git add .
-git commit -m 'updates oct 6 2024. work experience form'
+git commit -m 'fixing webiste showing @ and no text'
 git remote add origin https://github.com/cheesenaan/displayai.git
 git push -u origin main
 
