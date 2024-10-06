@@ -6,7 +6,37 @@ from .models import *
 
 from django import forms
 from django.core.exceptions import ValidationError
-from .models import WorkExperience, UserProfile
+from .models import WorkExperience, UserProfile, Account
+
+from django import forms
+from .models import Education
+from django.forms import formset_factory, BaseFormSet
+
+from django import forms
+from .models import Education
+
+from django import forms
+from .models import Education
+from django.forms import inlineformset_factory
+
+class EducationForm(forms.ModelForm):
+    class Meta:
+        model = Education
+        fields = ['institution', 'major', 'minor', 'start_date', 'end_date', 'current', 'degree_type', 'GPA', 'city', 'country', 'coursework']
+        widgets = {
+            'start_date': forms.DateInput(attrs={'type': 'date'}),
+            'end_date': forms.DateInput(attrs={'type': 'date'}),
+            'current': forms.CheckboxInput(),  # Add the checkbox widget
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(EducationForm, self).__init__(*args, **kwargs)
+        self.fields['start_date'].widget = forms.DateInput(attrs={'type': 'date'})
+        self.fields['end_date'].widget = forms.DateInput(attrs={'type': 'date'})
+
+EducationFormSet = inlineformset_factory(Account, Education, form=EducationForm, extra=1, can_delete=True)
+
+
 
 class WorkExperienceForm(forms.ModelForm):
     class Meta:
@@ -72,25 +102,14 @@ class UserProfileForm(forms.ModelForm):
 
     fields_to_capitalize = [
         'first_name', 'last_name', 'city', 'state', 
-        'institution', 'major', 'minor', 'spoken_languages', 
+        'spoken_languages', 
         'programming_languages', 'technical_skills', 'leadership'
     ]
-
-    DEGREE_CHOICES = [
-        ('Science', 'Science'),
-        ('Art', 'Art'),
-    ]
-
-    degree_type = forms.ChoiceField(
-        choices=DEGREE_CHOICES,
-        required=False,
-        widget=forms.Select(attrs={'class': 'form-control'}),
-    )
 
 
     class Meta:
         model = UserProfile
-        fields = ['first_name', 'last_name', 'phone','city', 'state', 'linkedin_link', 'github_link', 'profile_image', 'institution', 'degree_type', 'major', 'minor', 'start_date', 'end_date', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership']
+        fields = ['first_name', 'last_name', 'phone','city', 'state', 'linkedin_link', 'github_link', 'profile_image', 'spoken_languages', 'programming_languages', 'technical_skills', 'leadership']
         widgets = {
             'first_name': forms.TextInput(attrs={'placeholder': ''}),
             'last_name': forms.TextInput(attrs={'placeholder': ''}),
@@ -102,11 +121,6 @@ class UserProfileForm(forms.ModelForm):
             'resume_link': forms.URLInput(attrs={'placeholder': 'https://www.'}),
             'github_link': forms.URLInput(attrs={'placeholder': 'https://www.'}),
             'profile_image': forms.ClearableFileInput(attrs={'placeholder': ''}),
-            'institution': forms.TextInput(attrs={'placeholder': ''}),
-            'major': forms.TextInput(attrs={'placeholder': ''}),
-            'minor': forms.TextInput(attrs={'placeholder': ''}),
-            'start_date': forms.DateInput(attrs={'type': 'date'}),
-            'end_date': forms.DateInput(attrs={'type': 'date'}),
             'spoken_languages': forms.TextInput(attrs={'placeholder': 'English, Spanish, Arabic ... '}),
             'programming_languages': forms.TextInput(attrs={'placeholder': 'Python, R, C, Java ... '}),
             'technical_skills': forms.TextInput(attrs={'placeholder': 'Excel, AWS, GCP, ... '}),
@@ -126,7 +140,6 @@ class UserProfileForm(forms.ModelForm):
             if cleaned_data.get(field_name):
                 cleaned_data[field_name] = cleaned_data[field_name].title()
         return cleaned_data
-
     
 
 from django import forms

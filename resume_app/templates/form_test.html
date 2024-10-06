@@ -1,0 +1,315 @@
+{% extends 'index.html' %}
+{% block content %}
+{% load static %}
+<br><br><br><br><br><br><br>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.3/jquery.formset.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
+
+
+
+
+<header id="header" class="fixed-top d-flex align-items-center">
+    <div class="container d-flex justify-content-between">
+
+        <div class="logo">
+            <h1><a href="/">display.ai</a></h1>
+        </div>
+
+        <nav id="navbar-form" class="navbar">
+            <ul>
+                <li><a class="nav-link scrollto active" href="/">Home</a></li>
+                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
+                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
+            </ul>
+            <i class="bi bi-list mobile-nav-toggle"></i>
+        </nav>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+        // Mobile navigation toggle
+        document.addEventListener('click', function (e) {
+            if (e.target.classList.contains('mobile-nav-toggle')) {
+                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
+                e.target.classList.toggle('bi-list');
+                e.target.classList.toggle('bi-x');
+            }
+        });
+
+        // Mobile nav dropdowns activate
+        document.addEventListener('click', function (e) {
+            var navbar = document.querySelector('#navbar-form');
+            if (navbar.classList.contains('navbar-mobile')) {
+                var dropdownLink = e.target.closest('.navbar .dropdown > a');
+                if (dropdownLink) {
+                    e.preventDefault();
+                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
+                }
+            }
+        }, true);
+    });
+
+
+    </script>
+
+</header>
+
+
+<div>
+
+    <script>
+
+        function toggleEducationForm() {
+            const educationForm = document.getElementById('education_form');
+            const addButtonEdu = document.getElementById('add-education-form');
+            const yesEduRadio = document.getElementById('yesEduRadio');
+
+            if (yesEduRadio.checked) {
+                educationForm.style.display = "block";
+                addButtonEdu.style.display = "block";
+            } else {
+                educationForm.style.display = "none";
+                addButtonEdu.style.display = "none";
+            }
+        }
+
+    </script>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function handleCheckboxChange(event) {
+                if (event.target.classList.contains('current-checkbox')) {
+                    const checkbox = event.target;
+                    const name = checkbox.name;
+                    const formNumMatch = name.match(/education-(\d+)-current/);
+                    const formNum = formNumMatch ? formNumMatch[1] : null;
+
+                    checkbox.value = checkbox.checked ? 'True' : 'False';
+
+                    if (formNum !== null) {
+                        const endDateInput = document.querySelector(`input[name="education-${formNum}-end_date"]`);
+
+                        if (endDateInput) {
+                            endDateInput.disabled = checkbox.checked; // Disable end date if currently studying
+                        }
+                    }
+                }
+            }
+
+            document.getElementById('education_form').addEventListener('change', handleCheckboxChange);
+        });
+    </script>
+
+    <h3>Education</h3>
+
+    <script>
+        const myGlobalFunctionsEdu = {};
+        let totalformNumberAdderEdu = 0;
+
+        window.addEventListener('load', function() {
+            let educationForm = document.querySelector("#education_form");
+            let addButtonEdu = document.querySelector("#add-education-form");
+            let totalformNumberEdu = educationForm.children.length;
+            let totalFormsFieldEdu = document.querySelector("input[name='education-TOTAL_FORMS']");
+
+            addButtonEdu.addEventListener('click', addFormEdu);
+
+            function addFormEdu() {
+                let formNumEdu = educationForm.children.length; // Get the current number of forms
+
+                let newFormEdu = `
+                    <div id="education_container-${totalformNumberAdderEdu}">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <th>Institution</th>
+                                    <th>Major</th>
+                                    <th>Minor</th>
+                                    <th>GPA</th>
+                                </tr>
+                                <tr class="form-row">
+                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-institution"></td>
+                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-major"></td>
+                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-minor"></td>
+                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-GPA"></td>
+                                </tr>
+
+                                <tr class="form-row"> 
+                                    <th>Start Date</th>
+                                    <th>End Date</th>
+                                    <th>Currently Enrolled</th>
+                                    <th>Degree Type</th>
+                                </tr>
+                                <tr class="form-row">
+                                    <td><input type="date" name="education-${totalformNumberAdderEdu}-start_date"></td>
+                                    <td><input type="date" name="education-${totalformNumberAdderEdu}-end_date"></td>
+                                    <td><input type="checkbox" name="education-${totalformNumberAdderEdu}-current" class="current-checkbox"></td>
+                                    <td>
+                                        <select name="education-${totalformNumberAdderEdu}-degree_type">
+                                            <option value="">Select Degree</option>
+                                            <option value="Bachelor of Science">Bachelor of Science</option>
+                                            <option value="Bachelor of Art">Bachelor of Art</option>
+                                            <option value="Master of Arts">Master of Arts</option>
+                                            <option value="Master of Science">Master of Science</option>
+                                            <option value="Master of Business Administration">Master of Business Administration</option>
+                                            <option value="Associate of Arts">Associate of Arts</option>
+                                            <option value="Associate of Science">Associate of Science</option>
+                                            <option value="Associate of Business Administration">Associate of Business Administration</option>
+                                            <option value="Associate of Engineering">Associate of Engineering</option>
+                                            <option value="Associate of Nursing">Associate of Nursing</option>
+                                        </select>
+                                    </td>
+                                </tr>
+
+                                <tr class="form-row">
+                                    <td colspan="4">
+                                        <b style="color: palevioletred;">
+                                            Coursework Description:
+                                            <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                        </b>
+                                    </td>
+                                </tr>
+                                <tr class="form-row">
+                                    <td colspan="4"><textarea name="education-${totalformNumberAdderEdu}-coursework"></textarea></td>
+                                </tr>
+                                <tr class="form-row">
+                                    <td>City</td>
+                                    <td>Country</td>
+                                </tr>
+                                <tr class="form-row">
+                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-city"></td>
+                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-country"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <button id="delete-education-form-${totalformNumberAdderEdu}" type="button">Delete Education</button>
+                    </div>
+                `;
+
+                let container = document.createElement('div');
+                container.innerHTML = newFormEdu;
+                educationForm.appendChild(container);
+
+                // Add delete button for the newly added form
+                let deleteButtonEdu = container.querySelector(`#delete-education-form-${totalformNumberAdderEdu}`);
+
+                deleteButtonEdu.addEventListener('click', function() {
+                    deleteFormEdu(container);
+                });
+
+                totalformNumberEdu++;
+                totalformNumberAdderEdu++;
+                totalFormsFieldEdu.value = totalformNumberEdu;
+
+                console.log(`Total education forms after add: ${totalFormsFieldEdu.value}`);
+            }
+
+            function deleteFormEdu(form) {
+                let totalFormsFieldEdu = document.querySelector("input[name='education-TOTAL_FORMS']");
+                form.remove();
+                totalformNumberAdderEdu--;
+                totalFormsFieldEdu.value--;
+                console.log(`Total education forms after delete: ${totalFormsFieldEdu.value}`);
+            }
+
+            myGlobalFunctionsEdu.addForm = addFormEdu;
+            myGlobalFunctionsEdu.deleteForm = deleteFormEdu;
+        });
+    </script>
+
+    <p id="education_question">Do you have any educational background to add?</p>
+    <div id="education_options">
+        <label>
+            <input type="radio" name="hasEducation" id="yesEduRadio" value="yes" onclick="toggleEducationForm()"> Yes
+        </label>
+        <label>
+            <input type="radio" name="hasEducation" id="noEduRadio" value="no" onclick="toggleEducationForm()" checked> No
+        </label>
+    </div>
+
+    <br> <br> <br>
+
+    {% csrf_token %}
+    {{ education_formset.management_form }}
+    <div id="education_form" style="display: none;">
+        <div id="education_container-0">
+            <table>
+                <tbody>
+                    {% for edu_form in education_formset %}
+                    <tr>
+                        <th>Institution</th>
+                        <th>Major</th>
+                        <th>Minor</th>
+                        <th>GPA</th>
+                    </tr>
+                    <tr class="form-row">
+                        <td>{{ edu_form.institution }}</td>
+                        <td>{{ edu_form.major }}</td>
+                        <td>{{ edu_form.minor }}</td>
+                        <td>{{ edu_form.GPA }}</td>
+                    </tr>
+
+                    <tr class="form-row"> 
+                        <th>Start Date</th>
+                        <th>End Date</th>
+                        <th>Currently Enrolled</th>
+                        <th>Degree Type</th>
+                    </tr>
+                    <tr class="form-row"> 
+                        <td>{{ edu_form.start_date }}</td>
+                        <td>{{ edu_form.end_date }}</td>
+                        <td><input type="checkbox" name="education-0-current" class="current-checkbox" {% if edu_form.current %}checked{% endif %}></td>
+                        <td>{{ edu_form.degree_type }}</td>
+                    </tr>
+
+                    <tr class="form-row">
+                        <td colspan="4">
+                            <b style="color: palevioletred;">
+                                Coursework Description:
+                                <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                            </b>
+                        </td>
+                    </tr>
+                    <tr class="form-row">
+                        <td colspan="4">{{ edu_form.coursework }}</td>
+                    </tr>
+                    <tr class="form-row">
+                        <td>City</td>
+                        <td>Country</td>
+                    </tr>
+                    <tr class="form-row">
+                        <td>{{ edu_form.city }}</td>
+                        <td>{{ edu_form.country }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <button id="delete-education-form-0" type="button">Delete Education</button>
+        </div>
+    </div>
+    <button id="add-education-form" type="button" style="display: none;">Add Another Education</button>
+
+    {% if account.user_profile.educations.exists %}
+        <script>
+            var number_of_educations = "{{ account.user_profile.educations.count }}";
+            if (number_of_educations > 0) {
+                document.getElementById('education_form').style.display = "block";
+                document.getElementById('add-education-form').style.display = "block";
+            }
+        </script>
+    {% endif %}
+</div>
+
+
+        
+        
+        
+
+    <br>  <br>  <br>  <br>  <br>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+
+{% endblock %}

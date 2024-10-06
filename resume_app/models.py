@@ -31,6 +31,7 @@ class Account(models.Model):
     password = models.CharField(max_length=255)
     email = models.EmailField()
     tier = models.CharField(max_length=255, default = "free")
+    educations = models.ForeignKey('Education', on_delete=models.SET_NULL, null=True, related_name='education_account')
     user_profile = models.ForeignKey('UserProfile', on_delete=models.SET_NULL, null=True, related_name='user_profile_account')
     user_plan = models.ForeignKey('Plan', on_delete=models.SET_NULL, null=True, related_name='user_plan')
     user_payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, related_name='user_payment')
@@ -74,11 +75,9 @@ class UserProfile(models.Model):
     id = models.AutoField(primary_key=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='account_user_profile')
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='user_profile_user')
-    # url_name = models.CharField(max_length=255, unique=True)
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
-    # email = models.EmailField()
     city = models.CharField(max_length=255)
     state = models.CharField(max_length=255)
     linkedin_link = models.CharField(blank=True, null=True, max_length=255)
@@ -86,24 +85,51 @@ class UserProfile(models.Model):
     github_link = models.CharField(blank=True, null=True, max_length=255)
     website_link = models.URLField(blank=True, null=True)
     profile_image = models.ImageField(upload_to=profile_image_upload_to, storage=OverwriteStorage(), blank=True, null=True)
-    institution = models.CharField(max_length=255, blank=True, null=True)
-    major = models.CharField(max_length=255, blank=True, null=True)
-    minor = models.CharField(max_length=255, blank=True, null=True)
-    start_date = models.DateField(default=date.today)
-    end_date = models.DateField(default=date.today)
+
     spoken_languages = models.CharField(max_length=255, blank=True, null=True)
     programming_languages = models.CharField(max_length=255, blank=True, null=True)
     technical_skills = models.CharField(max_length=255, blank=True, null=True)
     leadership = models.CharField(max_length=255, blank=True, null=True)
 
-
+    def __str__(self):
+        return f"{self.id}: {self.account}"
+    
+class Education(models.Model):
+    id = models.AutoField(primary_key=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='account_education')
+    # user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='education', default=None)
+    institution = models.CharField(max_length=255, blank=True, null=True)
+    major = models.CharField(max_length=255, blank=True, null=True)
+    minor = models.CharField(max_length=255, blank=True, null=True)
+    GPA = models.CharField(max_length=255, blank=True, null=True)
+    start_date = models.DateField(default=date.today, null=True)
+    end_date = models.DateField(default=date.today, null=True)
+    city = models.CharField(max_length=255, blank=True, null=True)
+    country = models.CharField(max_length=255, blank=True, null=True)
+    current = models.BooleanField(default=False, null=True)  
+    coursework = models.CharField(max_length=1000, blank=True, null=True)
+    
     DEGREE_CHOICES = [
-        ('Science', 'Science'),
-        ('Art', 'Art'),
+        # Bachelor's Degrees
+        ('Bachelor of Science', 'Bachelor of Science'),
+        ('Bachelor of Art', 'Bachelor of Art'),
+
+        # Master's Degrees
+        ('Master of Arts', 'Master of Arts'),
+        ('Master of Science', 'Master of Science'),
+        ('Master of Business Administration', 'Master of Business Administration'),
+
+        # Associate Degrees (Community Colleges)
+        ('Associate of Arts', 'Associate of Arts'),
+        ('Associate of Science', 'Associate of Science'),
+        ('Associate of Business Administration', 'Associate of Business Administration'),
+        ('Associate of Engineering', 'Associate of Engineering'),
+        ('Associate of Nursing', 'Associate of Nursing'),
     ]
 
+
     degree_type = models.CharField(
-        max_length=10,
+        max_length=100,
         choices=DEGREE_CHOICES,
         blank=True,
         null=True,

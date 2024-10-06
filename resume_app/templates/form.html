@@ -21,7 +21,6 @@
                 <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
                 <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
                 <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
-
             </ul>
             <i class="bi bi-list mobile-nav-toggle"></i>
         </nav>
@@ -58,6 +57,24 @@
 
 
 <style>
+
+.account_education-current {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.account_education-current {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    background-color: #fff;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    
+}
+
+
 
     #dataForm table {
         width: 100%;
@@ -286,6 +303,7 @@
 
     <!-- personal form -->
     <div>
+        <h3>Basic Information </h3>
         <div id="dataForm" method="post">
             {% csrf_token %}
             {% for field in form %}
@@ -300,7 +318,296 @@
         </div>
         <br>
     </div>
+
+
+   <!-- education form -->
+   <div>
+
+   <style>
+    .education-form {
+        display: grid;
+        gap: 16px;
+        margin-bottom: 24px;
+        padding: 16px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+    }
+
+    .form-row-education {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 16px;
+    }
+
+    .form-row-education.three-columns {
+        grid-template-columns: 1fr 1fr 1fr;
+    }
+
+    .form-group {
+        display: flex;
+        flex-direction: column;
+    }
+
+   </style>
+    
+    <style>
+        /* Your existing styles */
+        .add-button, .remove-button {
+            cursor: pointer;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            margin: 4px;
+            border-radius: 4px;
+            font-size: 14px;
+        }
         
+        .remove-button {
+            background-color: #dc3545;
+        }
+    </style>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function handleCheckboxChange(event) {
+                if (event.target.classList.contains('account_education-current')) {
+                    const checkbox = event.target;
+                    const name = checkbox.name;
+                    const formNumMatch = name.match(/account_education-(\d+)-current/);
+                    const formNum = formNumMatch ? formNumMatch[1] : null;
+
+                    // Ensure the checkbox value is set correctly
+                    checkbox.value = checkbox.checked ? 'True' : 'False';
+
+                    if (formNum !== null) {
+                        const endDateInput = document.querySelector(`input[name="account_education-${formNum}-end_date"]`);
+                        
+                        console.log(`formNum: ${formNum}`);
+                        console.log(`endDateInput:`, endDateInput);
+
+                        if (endDateInput) {
+                            if (checkbox.checked) {
+                                alert(`Education checkbox checked for form ${formNum}!`);
+                                endDateInput.disabled = true;
+                            } else {
+                                alert(`Education checkbox unchecked for form ${formNum}!`);
+                                endDateInput.disabled = false;
+                            }
+                        } else {
+                            console.warn(`End date input not found for form number ${formNum}`);
+                        }
+                    }
+                }
+            }
+
+            document.getElementById('education-forms').addEventListener('change', handleCheckboxChange);
+        });
+    </script>
+
+    <div>
+        <div id="educationForm" method="post">
+            {% csrf_token %}
+            <h3>Education</h3>
+            {{ education_formset.management_form }}
+            <div id="education-forms">
+                {% for education_form in education_formset %}
+                {% csrf_token %}
+                    <div class="education-form" id="form-{{ forloop.counter0 }}">
+
+                        <div class="form-row-education">
+                            <div class="form-group">
+                                {{ education_form.institution.label_tag }} {{ education_form.institution }} {{educationInstance.institution}}
+                            </div>
+                            <div class="form-group">
+                                {{ education_form.coursework.label_tag }} {{ education_form.coursework }}
+                            </div>
+                        </div>
+                        <div class="form-row-education three-columns">
+                            <div class="form-group">
+                                {{ education_form.major.label_tag }} {{ education_form.major }}
+                            </div>
+                            <div class="form-group">
+                                {{ education_form.minor.label_tag }} {{ education_form.minor }}
+                            </div>
+                            <div class="form-group">
+                                {{ education_form.degree_type.label_tag }} {{ education_form.degree_type }}
+                            </div>
+                        </div>
+                        <div class="form-row-education three-columns">
+                            <div class="form-group">
+                                {{ education_form.city.label_tag }} {{ education_form.city }}
+                            </div>
+                            <div class="form-group">
+                                {{ education_form.country.label_tag }} {{ education_form.country }}
+                            </div>
+                            <div class="form-group">
+                                {{ education_form.GPA.label_tag }} {{ education_form.GPA }}
+                            </div>
+                        </div>
+                        <div class="form-row-education three-columns">
+                            <div class="form-group">
+                                {{ education_form.start_date.label_tag }} {{ education_form.start_date }}
+                            </div>
+                            <div class="form-group">
+                                {{ education_form.end_date.label_tag }} {{ education_form.end_date }}
+                            </div>
+                            <div class="form-group">
+                                {{ education_form.current.label_tag }}
+                                <input type="checkbox" name="account_education-{{ forloop.counter0 }}-current" class="account_education-current"> 
+                            </div>
+                        </div>
+                        <!-- <div class="form-row-education">
+                            <div class="form-group">
+                                <button type="button" class="remove-button" data-form-id="form-${{ forloop.counter0 }}">Remove</button>
+                            </div>
+                        </div> -->
+                        {% if education_form.instance.pk %}
+                        <br> 
+                            <!-- <div class="form-row-education">
+                                <div class="form-group">
+                                    {{ education_form.DELETE.label_tag }} {{ education_form.DELETE }}
+                                </div>
+                            </div> -->
+                            <div class="form-group">
+                                <button type="button" class="remove-button" data-form-id="form-${{ forloop.counter0 }}">Remove</button>
+                            </div>
+
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+            <button type="button" class="add-button" id="add-education-form">Add Education</button>
+        </div>
+    </div>
+
+    <script>
+
+document.addEventListener('DOMContentLoaded', function () {
+    let formIndex = {{ education_formset.total_form_count|add:"-1" }};
+    const formContainer = document.getElementById('education-forms');
+    let totalEdulFormsField = document.querySelector("input[name='account_education-TOTAL_FORMS']");
+    let total_edu_form_helper = totalEdulFormsField.value;
+
+    const degreeChoices = [
+        'Bachelor of Science',
+        'Bachelor of Art',
+        'Master of Arts',
+        'Master of Science',
+        'Master of Business Administration',
+        'Associate of Arts',
+        'Associate of Science',
+        'Associate of Business Administration',
+        'Associate of Engineering',
+        'Associate of Nursing'
+    ];
+
+    document.getElementById('add-education-form').addEventListener('click', function () {
+
+        if (total_edu_form_helper >= 3) {
+            alert("You have reached the maximum number of education entries allowed which is 3");
+            return; // Exit the function if the limit is reached
+        }
+
+        formIndex++;
+        const degreeOptions = degreeChoices.map(choice => `<option value="${choice}">${choice}</option>`).join('');
+        const formHtml = `
+            <div class="education-form" id="form-${formIndex}">
+                <b><h5>New Education</h5></b>
+                <input type="hidden" name="account_education-${formIndex}-id" id="id_account_education-${formIndex}-id">
+                <input type="hidden" name="account_education-${formIndex}-DELETE" id="id_account_education-${formIndex}-DELETE">
+                
+                <div class="form-row-education">
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-institution">Institution:</label>
+                        <input type="text" name="account_education-${formIndex}-institution" id="id_account_education-${formIndex}-institution">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-coursework">Coursework:</label>
+                        <input type="text" name="account_education-${formIndex}-coursework" id="id_account_education-${formIndex}-coursework">
+                    </div>
+                </div>
+
+                <div class="form-row-education three-columns">
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-major">Major:</label>
+                        <input type="text" name="account_education-${formIndex}-major" id="id_account_education-${formIndex}-major">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-minor">Minor:</label>
+                        <input type="text" name="account_education-${formIndex}-minor" id="id_account_education-${formIndex}-minor">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-degree_type">Degree type:</label>
+                        <select name="account_education-${formIndex}-degree_type" id="id_account_education-${formIndex}-degree_type">
+                            ${degreeOptions}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-row-education three-columns">
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-city">City:</label>
+                        <input type="text" name="account_education-${formIndex}-city" id="id_account_education-${formIndex}-city">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-country">Country:</label>
+                        <input type="text" name="account_education-${formIndex}-country" id="id_account_education-${formIndex}-country">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-GPA">GPA:</label>
+                        <input type="text" name="account_education-${formIndex}-GPA" id="id_account_education-${formIndex}-GPA">
+                    </div>
+                </div>
+
+                <div class="form-row-education three-columns">
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-start_date">Start date:</label>
+                        <input type="date" name="account_education-${formIndex}-start_date" id="id_account_education-${formIndex}-start_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-end_date">End date:</label>
+                        <input type="date" name="account_education-${formIndex}-end_date" id="id_account_education-${formIndex}-end_date">
+                    </div>
+                    <div class="form-group">
+                        <label for="id_account_education-${formIndex}-current">Current:</label>
+                        <input type="checkbox" name="account_education-${formIndex}-current" class="account_education-current">
+                    </div>
+                </div>
+                <div class="form-row-education">
+                    <div class="form-group">
+                        <button type="button" class="remove-button" data-form-id="form-${formIndex}">Remove</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        formContainer.insertAdjacentHTML('beforeend', formHtml);
+
+        totalEdulFormsField.value++;
+        total_edu_form_helper++;
+        console.log(`totalEdulFormsField.value after add: ${totalEdulFormsField.value}`);
+    });
+
+    formContainer.addEventListener('click', function (event) {
+        if (event.target.classList.contains('remove-button')) {
+            const formId = event.target.getAttribute('data-form-id');
+            const formElement = document.getElementById(formId);
+            // totalEdulFormsField.value--;
+            total_edu_form_helper--;
+            console.log(`totalEdulFormsField.value after remove: ${totalEdulFormsField.value}`);
+            formElement.remove();
+        }
+    });
+});
+
+    </script>
+        
+   </div>
+
+    
+    <!-- work experince form -->
+    <div>
+
         <script>
             document.addEventListener("DOMContentLoaded", function() {
             function handleCheckboxChange(event) {
@@ -337,14 +644,10 @@
               });
     
         </script>
-
-        
     
 
     <b><p style="color:red;">We recommend a total of 10 work experiences and projects</p></b>
 
-    <!-- work experince form -->
-    <div>
 
         <script>
             function toggleWorkExperienceForm() {
@@ -711,7 +1014,6 @@
                 </script>
             
             {% endif %}
-            
 
     </div>
 
@@ -1042,7 +1344,7 @@
     </div>
 
     <!-- validation -->
-    <!-- <script>
+    <script>
         document.addEventListener('DOMContentLoaded', function () {
             var submitButton = document.querySelector('button[type="submit"]');
             submitButton.addEventListener('click', function (event) {
@@ -1070,21 +1372,65 @@
                             return;
                         }
                     }
-
-                    // if (inputs[i].getAttribute('name') == 'linkedin_link' || inputs[i].getAttribute('name') == 'github_link') {
-                    // var linkValue = inputs[i].value.trim();
-                    // if (linkValue !== '') {
-                    //     // Manual check for URL format
-                    //     if (!(/^https?:\/\/www\.[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]{2,}$/.test(linkValue))) {
-                    //         alert('Please enter a valid URL (e.g., http://www.example.com) for ' + inputs[i].getAttribute('name'));
-                    //         inputs[i].style.borderColor = 'red';
-                    //         scrollToElement(inputs[i]);
-                    //         return;
-                    //     }
-                    // }
-            }
-
                 }
+
+                // Validate each field in the education form
+                var educationForms = document.getElementsByClassName('education-form');
+                for (var i = 0; i < educationForms.length; i++) {
+                    var inputs = educationForms[i].getElementsByTagName('input');
+                    var selects = educationForms[i].getElementsByTagName('select');
+                    var textareas = educationForms[i].getElementsByTagName('textarea');
+
+                    // Validate input fields
+                    for (var j = 0; j < inputs.length; j++) {
+                        if (inputs[j].type !== 'checkbox' && inputs[j].value.trim() === '' && 
+                            !inputs[j].getAttribute('name').includes('-minor') && 
+                            !inputs[j].getAttribute('name').includes('-id') && 
+                            !inputs[j].getAttribute('name').includes('-DELETE')) {
+                            
+                            // Skip validation for 'end_date' if 'current' is checked
+                            let currentCheckboxName = inputs[j].getAttribute('name').replace('end_date', 'current');
+                            let isCurrentChecked = document.querySelector(`input[name="${currentCheckboxName}"]`)?.checked;
+
+                            if (!(inputs[j].getAttribute('name').includes('end_date') && isCurrentChecked)) {
+                                console.log(inputs[j].getAttribute('name'));
+                                inputs[j].style.borderColor = 'red';
+                                alert('Please fill in the "' + inputs[j].getAttribute('name') + '" field in the education form.');
+                                scrollToElement(inputs[j]);
+                                return;
+                            } else {
+                                inputs[j].style.borderColor = ''; // Reset border color
+                            }
+                        } else {
+                            inputs[j].style.borderColor = ''; // Reset border color
+                        }
+                    }
+
+                    // Validate select fields
+                    for (var l = 0; l < selects.length; l++) {
+                        if (selects[l].value.trim() === '') {
+                            selects[l].style.borderColor = 'red';
+                            alert('Please select a value for the "' + selects[l].getAttribute('name') + '" field in the education form.');
+                            scrollToElement(selects[l]);
+                            return;
+                        } else {
+                            selects[l].style.borderColor = ''; // Reset border color
+                        }
+                    }
+
+                    // Validate textarea fields
+                    for (var k = 0; k < textareas.length; k++) {
+                        if (textareas[k].value.trim() === '') {
+                            textareas[k].style.borderColor = 'red';
+                            alert('Please fill in the "' + textareas[k].getAttribute('name') + '" field in the education form.');
+                            scrollToElement(textareas[k]);
+                            return;
+                        } else {
+                            textareas[k].style.borderColor = ''; // Reset border color
+                        }
+                    }
+                }
+
 
 
                 // Check if work experience form is displayed
@@ -1213,10 +1559,9 @@
                 // Scroll to the element
                 element.scrollIntoView({ behavior: 'smooth', block: 'center' });
             }
-
                 
         });
-    </script> -->
+    </script>
 
         {% if account.user_profile is None %}
         <button type="submit"">CREATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
@@ -1238,6 +1583,7 @@
                 box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
                 text-align: center;
                 animation: fadeIn 0.5s ease-in-out;
+                -webkit-animation: fadeIn 0.5s ease-in-out; /* Safari */
                 z-index: 1000; /* Ensure the modal appears above the rest of the content */
             }
         
@@ -1260,10 +1606,12 @@
                 height: 100%;
                 background: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity as needed */
                 backdrop-filter: blur(3px); /* Add a blur effect to the background */
+                -webkit-backdrop-filter: blur(3px); /* Safari */
                 z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
                 display: none;
             }
         </style>
+        
         
         <div id="loadingModal">
             <p id="loadingText"><b>Loading...</b></p>

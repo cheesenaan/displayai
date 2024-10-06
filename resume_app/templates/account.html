@@ -344,6 +344,27 @@
         <li><strong>Degree Type:</strong> {{ user_profile.get_degree_type_display }}</li>
     </ul>
 
+    <h2>Education</h2>
+    <ul>
+        {% for education in educations %}
+            <li>
+                <strong>Institution:</strong> {{ education.institution }}<br>
+                <strong>Degree:</strong> {{ education.degree_type }}<br>
+                <strong>Major:</strong> {{ education.major }}<br>
+                <strong>Minor:</strong> {{ education.minor }}<br>
+                <strong>GPA:</strong> {{ education.GPA }}<br>
+                <strong>Start Date:</strong> {{ education.start_date }}<br>
+                <strong>End Date:</strong> {{ education.end_date }}<br>
+                <strong>City:</strong> {{ education.city }}<br>
+                <strong>Country:</strong> {{ education.country }}<br>
+                <strong>Current:</strong> {{ education.current }}<br>
+                <strong>Coursework:</strong> {{ education.coursework }}
+            </li>  <br>
+        {% endfor %}
+    </ul>
+    
+
+
 
     
     <h2>Work Experiences</h2>

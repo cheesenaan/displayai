@@ -265,11 +265,13 @@ def account(request , account_id):
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
     user_profile = UserProfile.objects.get(account = account)
+    educations = Education.objects.filter(account=account)
 
     context = {
         'account' : account ,
         'user_plan': user_plan ,
         'user_profile' : user_profile ,
+        'educations' : educations ,
         'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
     }
 
@@ -318,6 +320,7 @@ def edit_account_email(request, account_id):
 def form(request , account_id):
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
+    EducationFormSet = inlineformset_factory(Account, Education, form=EducationForm, extra=1, can_delete=True)
 
     if request.method == 'POST':
 
@@ -327,16 +330,59 @@ def form(request , account_id):
         has_previous_user_profile = UserProfile.objects.filter(account_id=account_id).exists()
         if has_previous_user_profile:
             UserProfile.objects.filter(account=account).delete()
+            Education.objects.filter(account=account).delete()
 
         form = UserProfileForm(request.POST, request.FILES)
         user_profile = form.save(commit=False) 
         user_profile.account = account
-        user_profile.website_link = settings.REDIRECT_DOMAIN + "/" + account.name
+        user_profile.website_link = settings.REDIRECT_DOMAIN + account.name
         user_profile.website_link = user_profile.website_link.replace("http://", "")
         user_profile.user = account.user
         user_profile.save()
 
+
         post_data = request.POST.dict()
+
+        total_education_forms = int(post_data.get("account_education-TOTAL_FORMS", 0))
+        print("total number of total_education_forms is : ", total_education_forms)
+
+        for i in range(total_education_forms):
+            prefix = f"account_education-{i}-"
+            institution = post_data.get(prefix + "institution", "").title()
+            major = post_data.get(prefix + "major", "").title()
+            minor = post_data.get(prefix + "minor", "").title()
+            GPA = post_data.get(prefix + "GPA", "")
+            start_date = post_data.get(prefix + "start_date", "")
+            end_date = post_data.get(prefix + "end_date", start_date)
+            current = post_data.get(prefix + "current", "")
+            city = post_data.get(prefix + "city", "").title()
+            country = post_data.get(prefix + "country", "").title()
+            coursework = post_data.get(prefix + "coursework", "")
+            degree_type = post_data.get(prefix + "degree_type", "").title()
+
+            if institution and major and GPA and start_date and (end_date or current) and city and coursework and degree_type:
+                try:
+                    # Create Education instance
+                    education = Education.objects.create(
+                        account=account,
+                        institution=institution,
+                        major=major,
+                        minor=minor,
+                        GPA=GPA,
+                        start_date=start_date,
+                        end_date=end_date,
+                        city=city,
+                        country=country,
+                        current=current,  # Adjust this if you want to handle the 'current' field from post_data
+                        degree_type=degree_type,
+                        coursework=coursework
+                    )
+                    print(f"Education instance created: {education}")
+
+                except Exception as e:
+                    print(f"An error occurred with creating or saving education instance: {e}")
+
+
         total_work_forms = int(post_data.get("work_experiences-TOTAL_FORMS", 0))
         work_counter = 1
         if request.POST["hasWorkExperience"] == "yes":
@@ -438,13 +484,13 @@ def form(request , account_id):
         form = UserProfileForm()
         form = UserProfileForm(instance=account.user_profile)
 
+        education_formset = EducationFormSet(instance=account)
         work_experience_formset = WorkExperienceFormSet(instance=UserProfile())
         projects_formset = ProjectsFormSet(instance=UserProfile())
 
 
         required_fields = [
         'first_name', 'last_name', 'phone', 'city', 'state',
-        'institution', 'major', 'start_date', 'end_date',
         'spoken_languages', 'programming_languages', 'technical_skills', 'leadership'
         ]
 
@@ -453,10 +499,11 @@ def form(request , account_id):
             'form': form,
             'work_experience_formset': work_experience_formset,
             'projects_formset': projects_formset,
+            'education_formset': education_formset,
             'account' : account,
             'user_plan' : user_plan,
             'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
-             'required_fields': required_fields
+            'required_fields': required_fields
         }
         
         return render(request, 'form.html', context)
@@ -466,13 +513,15 @@ def website(request, url_name):
     try:
         account = Account.objects.get(name=url_name)
         user_profile = get_object_or_404(UserProfile, account=account)
-        user_plan = Plan.objects.get(account = account)
+        user_plan = Plan.objects.get(account=account)
+        education_list = Education.objects.filter(account=account)  # Use filter to get all related education records
 
         # Pass the user profile to the template
         context = {
             'user_profile': user_profile,
-            'account' : account,
-            'user_plan' : user_plan,
+            'account': account,
+            'user_plan': user_plan,
+            'education_list': education_list,  # Pass the list of education records
         }
 
         # Render the template with the context
@@ -481,7 +530,6 @@ def website(request, url_name):
         # Log the error or handle it as needed
         print(f"Account with url_name {url_name} does not exist.")
         return render(request, 'home.html', status=404)  # Render a custom 404 page
-
 
 @login_required
 def confirmation(request, account_id):
@@ -922,18 +970,27 @@ def update_resume(user_profile, account, DOCUMENT_ID):
             'linkedin_link': user_profile.linkedin_link,
             'resume_link': user_profile.resume_link,
             'github_link': user_profile.github_link,
-            'university': user_profile.institution,
-            'university start date': user_profile.start_date.strftime('%b %Y'),
-            'university end date' : user_profile.end_date.strftime('%b %Y'),
-            'major': user_profile.major + (f" And Minor in {user_profile.minor}" if user_profile.minor else ''),
-            'minor': user_profile.minor,
             'spoken_languages': user_profile.spoken_languages,
             'languages': user_profile.programming_languages,
-            'technologies': user_profile.technical_skills,
+            'technical_skills': user_profile.technical_skills,
             'leadership': user_profile.leadership,
-            'degree_type' : user_profile.degree_type,
-            'website_link': user_profile.website_link ,
+            'website_link': user_profile.website_link,
         }
+    
+        # Retrieve all education records associated with the account
+    education_records = Education.objects.filter(account=account)
+
+    for i, education in enumerate(education_records, start=1):
+        print("updating education placeholder for education ", i, education)
+        placeholder_replacements.update({
+            f'university {i}': education.institution,
+            f'university start date {i}': education.start_date.strftime('%b %Y'),
+            f'university end date {i}': "Present" if education.current else education.end_date.strftime('%b %Y'),
+            f'degree_type {i}': education.degree_type,
+            f'Major {i}': str(education.major + " and minor in " + education.minor) if education.minor else education.major,
+            f'coursework {i}': education.coursework
+            # f'location {i}': str(education.city + " , " + education.country)
+        })
 
         # Work experiences
     for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
@@ -1085,6 +1142,8 @@ def update_resume(user_profile, account, DOCUMENT_ID):
     return 
 
 def create_resume(user_profile, account):
+
+    # education = Education.objects.get(account=account)
     
     try:
         # Dictionary to store the placeholder replacements
@@ -1097,18 +1156,27 @@ def create_resume(user_profile, account):
                 'linkedin_link': user_profile.linkedin_link,
                 'resume_link': user_profile.resume_link,
                 'github_link': user_profile.github_link,
-                'university': user_profile.institution,
-                'university start date': user_profile.start_date.strftime('%b %Y'),
-                'university end date' : user_profile.end_date.strftime('%b %Y'),
-                'major': user_profile.major + (f" And Minor in {user_profile.minor}" if user_profile.minor else ''),
-                'minor': user_profile.minor,
                 'spoken_languages': user_profile.spoken_languages,
                 'languages': user_profile.programming_languages,
                 'technical_skills': user_profile.technical_skills,
                 'leadership': user_profile.leadership,
-                'degree_type' : user_profile.degree_type,
                 'website_link': user_profile.website_link,
             }
+        
+         # Retrieve all education records associated with the account
+        education_records = Education.objects.filter(account=account)
+
+        for i, education in enumerate(education_records, start=1):
+            print("updating education placeholder for education ", i, education)
+            placeholder_replacements.update({
+                f'university {i}': education.institution,
+                f'university start date {i}': education.start_date.strftime('%b %Y'),
+                f'university end date {i}': "Present" if education.current else education.end_date.strftime('%b %Y'),
+                f'degree_type {i}': education.degree_type,
+                f'Major {i}': str(education.major + " and minor in " + education.minor) if education.minor else education.major,
+                f'coursework {i}': education.coursework
+                # f'location {i}': str(education.city + " , " + education.country)
+            })
 
             # Work experiences
         for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):

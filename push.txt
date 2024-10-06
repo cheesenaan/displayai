@@ -1,6 +1,7 @@
 push code from vscode django to github repo
+git init
 git add .
-git commit -m 'currently working feature for work experienec formset'
+git commit -m 'updates oct 6 2024. work experience form'
 git remote add origin https://github.com/cheesenaan/displayai.git
 git push -u origin main
 
