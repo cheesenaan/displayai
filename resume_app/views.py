@@ -552,8 +552,8 @@ def confirmation(request, account_id):
             ],
             mode=request.POST.get('mode'),  
             # customer_creation='always',
-            success_url=settings.REDIRECT_DOMAIN + '/payment_successful?session_id={CHECKOUT_SESSION_ID}',
-            cancel_url=settings.REDIRECT_DOMAIN + '/payment_cancelled',
+            success_url=settings.REDIRECT_DOMAIN + 'payment_successful?session_id={CHECKOUT_SESSION_ID}',
+            cancel_url=settings.REDIRECT_DOMAIN + 'payment_cancelled',
             metadata={
                 'account_id': account_id,  # Include the account_id as metadata
                 'price_dictionary_value' : request.POST.get('selected_plan'),
@@ -568,7 +568,7 @@ def confirmation(request, account_id):
 
     if request.method == 'GET':
         # Construct the URL
-        url = f"http://127.0.0.1:8000/{account.name}"
+        url = f"{settings.REDIRECT_DOMAIN}/{account.name}"
 
         # Generate QR code
         qr = qrcode.QRCode(
