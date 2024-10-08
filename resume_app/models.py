@@ -4,7 +4,6 @@ from django.conf import settings
 from django.db import models
 from django.core.validators import MaxLengthValidator, MinLengthValidator
 from django.core.exceptions import ValidationError
-import stripe
 from django.db import models
 import stripe
 from datetime import datetime
@@ -74,7 +73,6 @@ class UserProfile(models.Model):
     
     id = models.AutoField(primary_key=True)
     account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='account_user_profile')
-    user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='user_profile_user')
     first_name = models.CharField(max_length=255)
     last_name = models.CharField(max_length=255)
     phone = models.CharField(max_length=15)
@@ -139,8 +137,7 @@ class Education(models.Model):
         return f"{self.id}: {self.account}"
 
 class WorkExperience(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='work_experiences')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='work_experiences')
     company_name = models.CharField(max_length=255, validators=[MinLengthValidator(1)])
     job_title = models.CharField(max_length=255, validators=[MinLengthValidator(1)])
     start_date = models.DateField()
@@ -157,8 +154,7 @@ class WorkExperience(models.Model):
         return f"Account : {self.account} , {self.company_name}"
 
 class Project(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True)
-    user_profile = models.ForeignKey(UserProfile, on_delete=models.CASCADE, related_name='projects')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='account_projects')
     project_name = models.CharField(max_length=255)
     project_skills = models.CharField(max_length=255)
     description = models.TextField()

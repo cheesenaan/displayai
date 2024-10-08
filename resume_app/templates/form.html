@@ -654,9 +654,13 @@ document.addEventListener('DOMContentLoaded', function () {
                 var workForm = document.getElementById('work_form');
                 var yesRadio = document.getElementById('yesRadio');
                 var addWorkFormButton = document.getElementById('add-work-form');
-
+        
                 workForm.style.display = yesRadio.checked ? 'block' : 'none';
                 addWorkFormButton.style.display = yesRadio.checked ? 'block' : 'none';
+        
+                // Log the value of the selected "hasWorkExperience" option
+                var selectedValue = document.querySelector('input[name="hasWorkExperience"]:checked').value;
+                console.log('Selected hasWorkExperience:', selectedValue);
             }
         </script>
 
@@ -1432,41 +1436,51 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
 
 
-
                 // Check if work experience form is displayed
                 var workForm = document.getElementById('work_form');
-                if (workForm.style.display !== 'none') {
-                    // Validate each field in the work experience form
-                    var workForms = document.getElementsByClassName('form-row');
-                    for (var i = 0; i < workForms.length; i++) {
-                        var inputs = workForms[i].getElementsByTagName('input');
-                        var textareas = workForms[i].getElementsByTagName('textarea');
+if (workForm.style.display !== 'none') {
+    // Validate each field in the work experience form
+    var workForms = document.getElementsByClassName('form-row');
+    for (var i = 0; i < workForms.length; i++) {
+        var inputs = workForms[i].getElementsByTagName('input');
+        var textareas = workForms[i].getElementsByTagName('textarea');
 
-                        // Validate input fields
-                        for (var j = 0; j < inputs.length; j++) {
-                            if (inputs[j].value.trim() === '') {
-                                inputs[j].style.borderColor = 'red';
-                                alert('Please fill in the "' + inputs[j].getAttribute('name') + '" field in the work experience form.');
-                                scrollToElement(inputs[j]);
-                                return;
-                            } else {
-                                inputs[j].style.borderColor = ''; // Reset border color
-                            }
-                        }
+        // Validate input fields
+        for (var j = 0; j < inputs.length; j++) {
+            var inputName = inputs[j].getAttribute('name');
 
-                        // Validate textarea fields
-                        for (var k = 0; k < textareas.length; k++) {
-                            if (textareas[k].value.trim() === '') {
-                                textareas[k].style.borderColor = 'red';
-                                alert('Please fill in the "' + textareas[k].getAttribute('name') + '" field in the work experience form.');
-                                scrollToElement(textareas[k]);
-                                return;
-                            } else {
-                                textareas[k].style.borderColor = ''; // Reset border color
-                            }
-                        }
-                    }
-                }
+            // Skip end date validation if 'Currently Working' checkbox is checked
+            var currentlyWorkingCheckbox = workForms[i].querySelector('.currently-working-checkbox');
+            if (currentlyWorkingCheckbox && currentlyWorkingCheckbox.checked && inputName.includes('end-date')) {
+                // Skip validation for 'end-date' when 'currently-working' is checked
+                inputs[j].style.borderColor = ''; // Reset border color if previously marked
+                continue; // Skip to next input
+            }
+
+            if (inputs[j].value.trim() === '') {
+                inputs[j].style.borderColor = 'red';
+                alert('Please fill in the "' + inputs[j].getAttribute('name') + '" field in the work experience form.');
+                scrollToElement(inputs[j]);
+                return;
+            } else {
+                inputs[j].style.borderColor = ''; // Reset border color
+            }
+        }
+
+        // Validate textarea fields
+        for (var k = 0; k < textareas.length; k++) {
+            if (textareas[k].value.trim() === '') {
+                textareas[k].style.borderColor = 'red';
+                alert('Please fill in the "' + textareas[k].getAttribute('name') + '" field in the work experience form.');
+                scrollToElement(textareas[k]);
+                return;
+            } else {
+                textareas[k].style.borderColor = ''; // Reset border color
+            }
+        }
+    }
+}
+
 
                 var projectForm = document.getElementById('projects_form');
                 if (projectForm.style.display !== 'none') {

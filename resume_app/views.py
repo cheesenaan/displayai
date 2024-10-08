@@ -320,17 +320,28 @@ def edit_account_email(request, account_id):
 def form(request , account_id):
     account = Account.objects.get(id=account_id)
     user_plan = Plan.objects.get(account = account)
-    EducationFormSet = inlineformset_factory(Account, Education, form=EducationForm, extra=1, can_delete=True)
 
     if request.method == 'POST':
 
         for key, value in request.POST.items():
             print(f"{key}: {value}")
 
-        has_previous_user_profile = UserProfile.objects.filter(account_id=account_id).exists()
-        if has_previous_user_profile:
-            UserProfile.objects.filter(account=account).delete()
-            Education.objects.filter(account=account).delete()
+        if UserProfile.objects.filter(account_id=account_id).exists():
+            UserProfile.objects.filter(account_id=account_id).delete()
+            print(f"Deleted prev UserProfile for account_id {account_id}")
+
+        if Education.objects.filter(account_id=account_id).exists():
+            Education.objects.filter(account_id=account_id).delete()
+            print(f"Deleted prev Education records for account_id {account_id}")
+
+        if WorkExperience.objects.filter(account_id=account_id).exists():
+            WorkExperience.objects.filter(account_id=account_id).delete()
+            print(f"Deleted prev WorkExperience records for account_id {account_id}")
+
+        if Project.objects.filter(account_id=account_id).exists():
+            Project.objects.filter(account_id=account_id).delete()
+            print(f"Deleted prev Project records for account_id {account_id}")
+        
 
         form = UserProfileForm(request.POST, request.FILES)
         user_profile = form.save(commit=False) 
@@ -377,24 +388,27 @@ def form(request , account_id):
                         degree_type=degree_type,
                         coursework=coursework
                     )
-                    print(f"Education instance created: {education}")
-
+                    education.account = account
+                    print(f"Education instance saved to database: {education}")
+                    education.save()
                 except Exception as e:
                     print(f"An error occurred with creating or saving education instance: {e}")
 
 
         total_work_forms = int(post_data.get("work_experiences-TOTAL_FORMS", 0))
+        print("post_data for work", post_data)
         work_counter = 1
         if request.POST["hasWorkExperience"] == "yes":
             for i in range(total_work_forms):
                 prefix = f"work_experiences-{i}-"
+                print("processing", prefix)
                 company_name = post_data.get(prefix + "company_name")
                 job_title = post_data.get(prefix + "job_title")
                 start_date = post_data.get(prefix + "start_date")
                 end_date = post_data.get(prefix + "end_date")
                 if not end_date:
                     end_date = start_date
-                currently_working = post_data.get(prefix + "currently-working")
+                currently_working = post_data.get(prefix + "currently-working", False)
                 city = post_data.get(prefix + "city")
                 state = post_data.get(prefix + "state")
                 description = post_data.get(prefix + "description")
@@ -407,8 +421,9 @@ def form(request , account_id):
                     else:
                         bullet1 , bullet2, bullet3 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET", "UPGRADE PLAN FOR OPTIMIZED BULLET"
                     try:
+                        print("trying to create work_experience")
                         work_experience = WorkExperience.objects.create(
-                            user_profile=user_profile,
+                            account=account,
                             company_name=company_name,
                             job_title=job_title,
                             start_date=start_date,
@@ -421,7 +436,6 @@ def form(request , account_id):
                             bullet2=bullet2,
                             bullet3=bullet3
                         )
-                        work_experience.account = account
                         print("Saving work experience instance to database...")
                         work_experience.save()
                     except Exception as e:
@@ -446,7 +460,7 @@ def form(request , account_id):
                     else:
                         bullet1, bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET"
                     project = Project.objects.create(
-                        user_profile=user_profile,
+                        account=account,
                         project_name=project_name,
                         description=description,
                         project_skills=project_skills,
@@ -458,7 +472,7 @@ def form(request , account_id):
         else:
             print("There are no projects")
 
-        resume_link = create_resume(user_profile, account)
+        resume_link = create_resume(account)
         if resume_link == "TIME_OUT_ERROR_974":
             messages.error(request, "TIME_OUT_ERROR_974. Your profile was created however your resume could not due to poor internet signal. Please click the Re-build with same data")
             user_profile.save()
@@ -480,32 +494,30 @@ def form(request , account_id):
         return redirect('confirmation', account_id=account_id)
     
     if request.method == 'GET':
+        form = UserProfileForm(instance=account)
 
-        form = UserProfileForm()
-        form = UserProfileForm(instance=account.user_profile)
-
+        EducationFormSet = inlineformset_factory(Account, Education, form=EducationForm, extra=1, can_delete=True)
         education_formset = EducationFormSet(instance=account)
-        work_experience_formset = WorkExperienceFormSet(instance=UserProfile())
-        projects_formset = ProjectsFormSet(instance=UserProfile())
 
+        work_experience_formset = WorkExperienceFormSet(instance=account)
+        projects_formset = ProjectsFormSet(instance=account)
 
         required_fields = [
-        'first_name', 'last_name', 'phone', 'city', 'state',
-        'spoken_languages', 'programming_languages', 'technical_skills', 'leadership'
+            'first_name', 'last_name', 'phone', 'city', 'state',
+            'spoken_languages', 'programming_languages', 'technical_skills', 'leadership'
         ]
-
 
         context = {
             'form': form,
             'work_experience_formset': work_experience_formset,
             'projects_formset': projects_formset,
             'education_formset': education_formset,
-            'account' : account,
-            'user_plan' : user_plan,
-            'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
+            'account': account,
+            'user_plan': user_plan,
+            'remaining': user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
             'required_fields': required_fields
         }
-        
+
         return render(request, 'form.html', context)
 
 def website(request, url_name):
@@ -866,7 +878,7 @@ def reload_resume_and_website_with_job_description(request: HttpRequest, account
         job_description = request.GET.get('JOB_DESCRIPTION', '').strip()
 
         work_counter = 1
-        for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
+        for i, work_experience in enumerate(account.work_experiences.all(), start=1):
             if work_counter == 1 or account.tier != "free":
                 work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience(work_experience.company_name, work_experience.job_title, work_experience.description)
                 work_counter = work_counter + 1
@@ -874,7 +886,7 @@ def reload_resume_and_website_with_job_description(request: HttpRequest, account
                 work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET", "UPGRADE PLAN FOR OPTIMIZED BULLET"
             work_experience.save()
 
-        for i, project in enumerate(user_profile.projects.all(), start=1):
+        for i, project in enumerate(account.projects.all(), start=1):
             if work_counter == 1 or account.tier != "free":
                 project.bullet1, project.bullet2 = openai_project(project.project_name, project.description)
                 work_counter = work_counter + 1
@@ -919,7 +931,7 @@ def reload_resume_and_website(request, account_id):
         user_profile = UserProfile.objects.get(account=account)
         
         work_counter = 1
-        for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
+        for i, work_experience in enumerate(account.work_experiences.all(), start=1):
             if work_counter == 1 or account.tier != "free":
                 work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience(work_experience.company_name, work_experience.job_title, work_experience.description)
                 work_counter = work_counter + 1
@@ -927,7 +939,7 @@ def reload_resume_and_website(request, account_id):
                 work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = "upgrade plan to see optimized bullet" , "upgrade plan to see optimized bullet", "upgrade plan to see optimized bullet"
             work_experience.save()
 
-        for i, project in enumerate(user_profile.projects.all(), start=1):
+        for i, project in enumerate(account.projects.all(), start=1):
             if work_counter == 1 or account.tier != "free":
                 project.bullet1, project.bullet2 = openai_project(project.project_name, project.description)
                 work_counter = work_counter + 1
@@ -994,7 +1006,7 @@ def update_resume(user_profile, account, DOCUMENT_ID):
         })
 
         # Work experiences
-    for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
+    for i, work_experience in enumerate(account.work_experiences.all(), start=1):
             placeholder_replacements.update({
             f'experience{i}': work_experience.company_name.title(),
             f'title{i}': work_experience.job_title.title(),
@@ -1007,7 +1019,7 @@ def update_resume(user_profile, account, DOCUMENT_ID):
         })
 
     # Projects
-    for i, project in enumerate(user_profile.projects.all(), start=1):
+    for i, project in enumerate(account.projects.all(), start=1):
         placeholder_replacements.update({
             f'project{i}': project.project_name.title(),
             f'skills{i}': project.project_skills,
@@ -1142,11 +1154,13 @@ def update_resume(user_profile, account, DOCUMENT_ID):
     user_profile.save()
     return 
 
-def create_resume(user_profile, account):
+def create_resume(account):
 
-    # education = Education.objects.get(account=account)
-    
     try:
+
+        user_profile = get_object_or_404(UserProfile, account=account)
+
+
         # Dictionary to store the placeholder replacements
         placeholder_replacements = {
                 'name': f"{user_profile.first_name.upper()} {user_profile.last_name.upper()}",
@@ -1165,41 +1179,46 @@ def create_resume(user_profile, account):
             }
         
          # Retrieve all education records associated with the account
-        education_records = Education.objects.filter(account=account)
 
-        for i, education in enumerate(education_records, start=1):
-            print("updating education placeholder for education ", i, education)
-            placeholder_replacements.update({
-                f'university {i}': education.institution,
-                f'university start date {i}': education.start_date.strftime('%b %Y'),
-                f'university end date {i}': "Present" if education.current else education.end_date.strftime('%b %Y'),
-                f'degree_type {i}': education.degree_type,
-                f'Major {i}': str(education.major + " and minor in " + education.minor) if education.minor else education.major,
-                f'coursework {i}': education.coursework
-                # f'location {i}': str(education.city + " , " + education.country)
-            })
+        education_records = Education.objects.filter(account=account)
+        if education_records:
+            for i, education in enumerate(education_records, start=1):
+                print("updating education placeholder for education ", i, education)
+                placeholder_replacements.update({
+                    f'university {i}': education.institution,
+                    f'university start date {i}': education.start_date.strftime('%b %Y'),
+                    f'university end date {i}': "Present" if education.current else education.end_date.strftime('%b %Y'),
+                    f'degree_type {i}': education.degree_type,
+                    f'Major {i}': str(education.major + " and minor in " + education.minor) if education.minor else education.major,
+                    f'coursework {i}': education.coursework
+                    # f'location {i}': str(education.city + " , " + education.country)
+                })
 
             # Work experiences
-        for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
-            placeholder_replacements.update({
-            f'experience{i}': work_experience.company_name.title(),
-            f'title{i}': work_experience.job_title.title(),
-            f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
-            f'experience{i} end date': "Present" if work_experience.currently_working else work_experience.end_date.strftime('%b %Y'),
-            f'experience{i} location': work_experience.city.strip().title() + ', ' + work_experience.state.strip().upper(),
-            f'experience{i} bullet1': work_experience.bullet1,
-            f'experience{i} bullet2': work_experience.bullet2,
-            f'experience{i} bullet3': work_experience.bullet3,
-        })
-
-
-        for i, project in enumerate(user_profile.projects.all(), start=1):
-            placeholder_replacements.update({
-                f'project{i}': project.project_name.title(),
-                f'skills{i}': project.project_skills,
-                f'project{i} bullet1': project.bullet1,
-                f'project{i} bullet2': project.bullet2,
+        work_records = WorkExperience.objects.filter(account=account)
+        if work_records:
+            for i, work_experience in enumerate(work_records, start=1):
+                placeholder_replacements.update({
+                f'experience{i}': work_experience.company_name.title(),
+                f'title{i}': work_experience.job_title.title(),
+                f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
+                f'experience{i} end date': "Present" if work_experience.currently_working else work_experience.end_date.strftime('%b %Y'),
+                f'experience{i} location': work_experience.city.strip().title() + ', ' + work_experience.state.strip().upper(),
+                f'experience{i} bullet1': work_experience.bullet1,
+                f'experience{i} bullet2': work_experience.bullet2,
+                f'experience{i} bullet3': work_experience.bullet3,
             })
+
+
+        project_records = Project.objects.filter(account=account)
+        if project_records:
+            for i, project in enumerate(project_records, start=1):
+                placeholder_replacements.update({
+                    f'project{i}': project.project_name.title(),
+                    f'skills{i}': project.project_skills,
+                    f'project{i} bullet1': project.bullet1,
+                    f'project{i} bullet2': project.bullet2,
+                })
 
         # Path to your service account credentials JSON file
         SERVICE_ACCOUNT_FILE = settings.SERVICE_ACCOUNT_FILE
@@ -1413,10 +1432,10 @@ def build_cover_letter(request: HttpRequest, account_id: int):
         work_experiences = []
         projects = []
 
-        for i, work_experience in enumerate(user_profile.work_experiences.all(), start=1):
+        for i, work_experience in enumerate(account.work_experiences.all(), start=1):
             work_experiences.append(work_experience)
 
-        for i, project in enumerate(user_profile.projects.all(), start=1):
+        for i, project in enumerate(account.projects.all(), start=1):
             projects.append(project)
 
 

@@ -72,7 +72,7 @@ class WorkExperienceForm(forms.ModelForm):
 
         return cleaned_data
 
-WorkExperienceFormSet = forms.inlineformset_factory(UserProfile, WorkExperience, form=WorkExperienceForm, extra=1, can_delete=True)
+WorkExperienceFormSet = forms.inlineformset_factory(Account, WorkExperience, form=WorkExperienceForm, extra=1, can_delete=True)
 
 
 
@@ -96,7 +96,7 @@ class ProjectsForm(forms.ModelForm):
         return cleaned_data
 
 
-ProjectsFormSet = forms.inlineformset_factory(UserProfile, Project, form=ProjectsForm, extra=1, can_delete=True)
+ProjectsFormSet = forms.inlineformset_factory(Account, Project, form=ProjectsForm, extra=1, can_delete=True)
 
 class UserProfileForm(forms.ModelForm):
 
