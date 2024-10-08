@@ -875,28 +875,39 @@ def cancel_subscription(request, account_id, subscription_id):
 def reload_resume_and_website_with_job_description(request: HttpRequest, account_id: int):
     try:
         account = Account.objects.get(id=account_id)
-        user_plan = Plan.objects.get(account = account)
-        user_profile = UserProfile.objects.get(account = account)
+        user_plan = Plan.objects.get(account=account)
+        user_profile = UserProfile.objects.get(account=account)
         job_description = request.GET.get('JOB_DESCRIPTION', '').strip()
 
         work_counter = 1
-        for i, work_experience in enumerate(account.work_experiences.all(), start=1):
+
+        # Use WorkExperience.objects.filter for work experiences
+        for i, work_experience in enumerate(WorkExperience.objects.filter(account_id=account_id), start=1):
             if work_counter == 1 or account.tier != "free":
-                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience(work_experience.company_name, work_experience.job_title, work_experience.description)
-                work_counter = work_counter + 1
+                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience(
+                    work_experience.company_name, work_experience.job_title, work_experience.description)
+                work_counter += 1
             else:
-                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET", "UPGRADE PLAN FOR OPTIMIZED BULLET"
+                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = (
+                    "UPGRADE PLAN FOR OPTIMIZED BULLET", 
+                    "UPGRADE PLAN FOR OPTIMIZED BULLET", 
+                    "UPGRADE PLAN FOR OPTIMIZED BULLET"
+                )
             work_experience.save()
 
-        for i, project in enumerate(account.projects.all(), start=1):
+        # Use Project.objects.filter for projects
+        for i, project in enumerate(Project.objects.filter(account_id=account_id), start=1):
             if work_counter == 1 or account.tier != "free":
                 project.bullet1, project.bullet2 = openai_project(project.project_name, project.description)
-                work_counter = work_counter + 1
+                work_counter += 1
             else:
-                project.bullet1, project.bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET"
+                project.bullet1, project.bullet2 = (
+                    "UPGRADE PLAN FOR OPTIMIZED BULLET", 
+                    "UPGRADE PLAN FOR OPTIMIZED BULLET"
+                )
             project.save()
 
-        new_resume_link = create_resume(user_profile, account)
+        new_resume_link = create_resume(account)
         if new_resume_link == "TIME_OUT_ERROR_974":
             messages.error(request, "TIME_OUT_ERROR_974. Could not build personal website and tailored resume due to poor internet. Please try again")
             return redirect('confirmation', account_id=account_id)
@@ -906,21 +917,21 @@ def reload_resume_and_website_with_job_description(request: HttpRequest, account
         print(user_profile.resume_link)
 
         user_profile.save()
-        user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
-        user_plan.total_forms_filled = user_plan.total_forms_filled + 1
+        user_plan.forms_filled_on_current_plan += 1
+        user_plan.total_forms_filled += 1
         account.save()
         user_plan.save()
 
-        messages.success(request, "personal website and tailored resume created")
+        messages.success(request, "Personal website and tailored resume created")
 
     except Timeout:
-        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+        messages.error(request, "Timeout error. Your internet connection is slow. Please click 'Build job description tailored resume' again.")
         return redirect('confirmation', account_id=account_id)
     except RefreshError as e:
-        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+        messages.error(request, "Timeout error. Your internet connection is slow. Please click 'Build job description tailored resume' again.")
         return redirect('confirmation', account_id=account_id)
     except Exception as e:
-        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+        messages.error(request, f"Unknown error: {str(e)}. Please click 'Build job description tailored resume' again.")
         return redirect('confirmation', account_id=account_id)
 
     return redirect('confirmation', account_id=account_id)
@@ -931,25 +942,31 @@ def reload_resume_and_website(request, account_id):
         account = Account.objects.get(id=account_id)
         user_plan = Plan.objects.get(account=account)
         user_profile = UserProfile.objects.get(account=account)
-        
+
         work_counter = 1
-        for i, work_experience in enumerate(account.work_experiences.all(), start=1):
+        # Use WorkExperience.objects.filter for filtering work experiences by account_id
+        for i, work_experience in enumerate(WorkExperience.objects.filter(account_id=account_id), start=1):
             if work_counter == 1 or account.tier != "free":
                 work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = openai_work_experience(work_experience.company_name, work_experience.job_title, work_experience.description)
-                work_counter = work_counter + 1
+                work_counter += 1
             else:
-                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = "upgrade plan to see optimized bullet" , "upgrade plan to see optimized bullet", "upgrade plan to see optimized bullet"
+                work_experience.bullet1, work_experience.bullet2, work_experience.bullet3 = (
+                    "UPGRADE PLAN FOR OPTIMIZED BULLET", 
+                    "UPGRADE PLAN FOR OPTIMIZED BULLET", 
+                    "UPGRADE PLAN FOR OPTIMIZED BULLET"
+                )
             work_experience.save()
 
-        for i, project in enumerate(account.projects.all(), start=1):
+        # Use Project.objects.filter for filtering projects by account_id
+        for i, project in enumerate(Project.objects.filter(account_id=account_id), start=1):
             if work_counter == 1 or account.tier != "free":
                 project.bullet1, project.bullet2 = openai_project(project.project_name, project.description)
-                work_counter = work_counter + 1
+                work_counter += 1
             else:
-                project.bullet1, project.bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET" , "UPGRADE PLAN FOR OPTIMIZED BULLET"
+                project.bullet1, project.bullet2 = "UPGRADE PLAN FOR OPTIMIZED BULLET", "UPGRADE PLAN FOR OPTIMIZED BULLET"
             project.save()
 
-        new_resume_link = create_resume(user_profile, account)
+        new_resume_link = create_resume(account)
         if new_resume_link == "TIME_OUT_ERROR_974":
             messages.error(request, "TIME_OUT_ERROR_974. Could not re-build personal website and resume due to poor internet. Please try again")
             return redirect('confirmation', account_id=account_id)
@@ -959,17 +976,17 @@ def reload_resume_and_website(request, account_id):
         print(user_profile.resume_link)
 
         user_profile.save()
-        user_plan.forms_filled_on_current_plan = user_plan.forms_filled_on_current_plan + 1
-        user_plan.total_forms_filled = user_plan.total_forms_filled + 1
+        user_plan.forms_filled_on_current_plan += 1
+        user_plan.total_forms_filled += 1
         account.save()
         user_plan.save()
 
-        messages.success(request, "Using same profile data, resume and personal data has been re-built")
+        messages.success(request, "Using the same profile data, resume and personal website have been re-built")
 
     except Timeout:
-        messages.error(request, "Timeout error. Your internet connection is slow. Please try again.")
+        messages.error(request, "Timeout error. Your internet connection is slow. Please click 'Re-Build with same data' again.")
     except Exception as e:
-        messages.error(request, "Unkown error. Please try again.")
+        messages.error(request, f"Unknown error: {str(e)}. Please click 'Re-Build with same data' again")
 
     return redirect('confirmation', account_id=account_id)
 
@@ -1248,34 +1265,48 @@ def build_cover_letter(request: HttpRequest, account_id: int):
         user_plan = Plan.objects.get(account = account)
         user_profile = UserProfile.objects.get(account = account)
         job_description = request.GET.get('JOB_DESCRIPTION', '').strip()
-        work_experiences = []
-        projects = []
 
-        for i, work_experience in enumerate(account.work_experiences.all(), start=1):
-            work_experiences.append(work_experience)
-
-        for i, project in enumerate(account.projects.all(), start=1):
-            projects.append(project)
-
+        education = Education.objects.filter(account_id=account_id)
+        work_experiences = WorkExperience.objects.filter(account_id=account_id)
+        projects = Project.objects.filter(account_id=account_id)
 
         openai.api_key = settings.OPENAI_API_KEY
         current_date = time.strftime("%Y-%m-%d")
 
         prompt = f"""
-        Using my work experinces and projects, build a cover letter. Do not add any placeholders
-        name : {user_profile.first_name} + {user_profile.last_name}
-        phone : {user_profile.phone}
-        email : {account.email}
-        address : {user_profile.city} + {user_profile.state}
-        institution : {user_profile.institution}
-        education : {user_profile.major} + {user_profile.minor}
-        skills : {user_profile.programming_languages}  + {user_profile.technical_skills}
-        date : {current_date}
-        work_experiences : {work_experiences}
-        projects ; {projects}
-        job description : {job_description}
-        'website_link': {user_profile.website_link} ,
-        """
+You are tasked with writing a professional, concise, and personalized cover letter based on the details provided below. 
+Please make sure the cover letter is well-structured and tailored to the job description, avoiding any placeholders.
+
+Personal Information:
+- Name: {user_profile.first_name} {user_profile.last_name}
+- Phone: {user_profile.phone}
+- Email: {account.email}
+- Address: {user_profile.city}, {user_profile.state}
+- Website: {user_profile.website_link}
+
+Education:
+{", ".join([
+    f"{edu.institution}, {edu.degree_type} in {edu.major} {'(Minor in ' + edu.minor + ')' if edu.minor else ''} - GPA: {edu.GPA if edu.GPA else 'N/A'}"
+    f" ({edu.start_date.strftime('%Y')} - {edu.end_date.strftime('%Y') if not edu.current else 'Present'})"
+    f" Location: {edu.city}, {edu.country} - Coursework: {edu.coursework}" 
+    for edu in education
+])}
+
+Skills:
+- Programming Languages: {user_profile.programming_languages}
+- Technical Skills: {user_profile.technical_skills}
+
+Work Experiences:
+{", ".join([f"{exp.company_name}, {exp.job_title} ({exp.start_date} - {exp.end_date}): {exp.description}" for exp in work_experiences])}
+
+Projects:
+{", ".join([f"{proj.project_name}: {proj.description}" for proj in projects])}
+
+Job Description:
+{job_description}
+
+"""
+
 
         # Make a request to OpenAI API using the chat/completions endpoint
         response = openai.ChatCompletion.create(
