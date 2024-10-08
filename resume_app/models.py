@@ -154,7 +154,7 @@ class WorkExperience(models.Model):
         return f"Account : {self.account} , {self.company_name}"
 
 class Project(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='account_projects')
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, null=True, related_name='projects')
     project_name = models.CharField(max_length=255)
     project_skills = models.CharField(max_length=255)
     description = models.TextField()

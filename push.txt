@@ -1,7 +1,7 @@
 push code from vscode django to github repo
 git init
 git add .
-git commit -m 'other fixes'
+git commit -m 'fixed project feature'
 git remote add origin https://github.com/cheesenaan/displayai.git
 git push -u origin main
 

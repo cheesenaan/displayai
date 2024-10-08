@@ -357,7 +357,7 @@ def form(request , account_id):
         total_education_forms = int(post_data.get("account_education-TOTAL_FORMS", 0))
         print("total number of total_education_forms is : ", total_education_forms)
 
-        for i in range(total_education_forms):
+        for i in range(total_education_forms+1):
             prefix = f"account_education-{i}-"
             institution = post_data.get(prefix + "institution", "").title()
             major = post_data.get(prefix + "major", "").title()
@@ -399,7 +399,7 @@ def form(request , account_id):
         print("post_data for work", post_data)
         work_counter = 1
         if request.POST["hasWorkExperience"] == "yes":
-            for i in range(total_work_forms):
+            for i in range(total_work_forms+1):
                 prefix = f"work_experiences-{i}-"
                 print("processing", prefix)
                 company_name = post_data.get(prefix + "company_name")
@@ -446,8 +446,9 @@ def form(request , account_id):
 
         total_project_forms = int(request.POST.get("projects-TOTAL_FORMS", 0))
         if request.POST.get("hasProjectExperience") == "yes":
-            for i in range(total_project_forms):    
+            for i in range(total_project_forms+1):    
                 prefix = f"projects-{i}-"
+                print("looping thru ", prefix)
                 project_name = request.POST.get(prefix + "project_name")
                 description = request.POST.get(prefix + "description")
                 project_skills = request.POST.get(prefix + "project_skills")
@@ -467,6 +468,7 @@ def form(request , account_id):
                         bullet1=bullet1,
                         bullet2=bullet2,
                     )
+                    print("saving ", prefix)
                     project.account = account
                     project.save()
         else:

@@ -1031,14 +1031,21 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <script>
             function toggleProjectExperienceForm() {
-                    var projectForm = document.getElementById('projects_form');
-                    var yesRadioProject = document.getElementById('yesProjectRadio');
-                    var addProjectFormButton = document.getElementById('add-project-form');
-
-                    projectForm.style.display = yesRadioProject.checked ? 'block' : 'none';
-                    addProjectFormButton.style.display = yesRadioProject.checked ? 'block' : 'none';
-                }
+                var projectForm = document.getElementById('projects_form');
+                var yesRadioProject = document.getElementById('yesProjectRadio');
+                var noRadioProject = document.getElementById('noProjectRadio');
+                var addProjectFormButton = document.getElementById('add-project-form');
+        
+                // Display or hide the form based on the selected radio button
+                projectForm.style.display = yesRadioProject.checked ? 'block' : 'none';
+                addProjectFormButton.style.display = yesRadioProject.checked ? 'block' : 'none';
+        
+                // Log the value of the selected radio button to the console
+                var selectedValue = yesRadioProject.checked ? 'yes' : 'no';
+                console.log("Has project experience: " + selectedValue);
+            }
         </script>
+        
 
         <p id="project_experience_question">Do you have project experience?</p>
         <div id="project_experience_options">
@@ -1104,20 +1111,20 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                     let project_newForm = `
-                        <div id="projects_container-${project_totalFormsField.value}">
+                        <div id="projects_container-${project_formNum}">
                             <table>
                                 <tbody>
                                     <tr>
                                         <th>Project Name</th>
                                     </tr>
                                     <tr class="form-row">
-                                        <td><input type="text" name="projects-${project_totalFormsField.value}-project_name"></td>
+                                        <td><input type="text" name="projects-${project_formNum}-project_name"></td>
                                     </tr>
                                     <tr>
                                         <th>Project Skills</th>
                                     </tr>
                                     <tr class="form-row">
-                                        <td><input type="text" name="projects-${project_totalFormsField.value}-project_skills"></td>
+                                        <td><input type="text" name="projects-${project_formNum}-project_skills"></td>
                                     </tr>
                                     <tr>
 
@@ -1131,11 +1138,11 @@ document.addEventListener('DOMContentLoaded', function () {
 
                                     </tr>
                                     <tr class="form-row">
-                                        <td><textarea name="projects-${project_totalFormsField.value}-description"></textarea></td>
+                                        <td><textarea name="projects-${project_formNum}-description"></textarea></td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <button id="delete-project-form-${project_totalFormsField.value}" type="button">Delete Project</button>
+                            <button id="delete-project-form-${project_formNum}" type="button">Delete Project</button>
                         </div>
                     `;
 
@@ -1145,7 +1152,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     project_projectForm.appendChild(project_container);
 
                     // Add delete button for the newly added form
-                    let project_deleteButton = document.querySelector(`#delete-project-form-${project_totalFormsField.value}`);
+                    let project_deleteButton = document.querySelector(`#delete-project-form-${project_formNum}`);
 
                     project_deleteButton.addEventListener('click', function() {
                         project_deleteForm(project_container, project_formNum);
