@@ -1,315 +1,404 @@
-{% extends 'index.html' %}
-{% block content %}
-{% load static %}
-<br><br><br><br><br><br><br>
-
-<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.formset/1.3/jquery.formset.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
-
-
-
-
-<header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex justify-content-between">
-
-        <div class="logo">
-            <h1><a href="/">display.ai</a></h1>
-        </div>
-
-        <nav id="navbar-form" class="navbar">
-            <ul>
-                <li><a class="nav-link scrollto active" href="/">Home</a></li>
-                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Mobile navigation toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('mobile-nav-toggle')) {
-                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
-                e.target.classList.toggle('bi-list');
-                e.target.classList.toggle('bi-x');
-            }
-        });
-
-        // Mobile nav dropdowns activate
-        document.addEventListener('click', function (e) {
-            var navbar = document.querySelector('#navbar-form');
-            if (navbar.classList.contains('navbar-mobile')) {
-                var dropdownLink = e.target.closest('.navbar .dropdown > a');
-                if (dropdownLink) {
-                    e.preventDefault();
-                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
-                }
-            }
-        }, true);
-    });
-
-
-    </script>
-
-</header>
-
-
+<!-- work experince form -->
 <div>
 
     <script>
-
-        function toggleEducationForm() {
-            const educationForm = document.getElementById('education_form');
-            const addButtonEdu = document.getElementById('add-education-form');
-            const yesEduRadio = document.getElementById('yesEduRadio');
-
-            if (yesEduRadio.checked) {
-                educationForm.style.display = "block";
-                addButtonEdu.style.display = "block";
-            } else {
-                educationForm.style.display = "none";
-                addButtonEdu.style.display = "none";
-            }
-        }
-
-    </script>
-
-    <script>
         document.addEventListener("DOMContentLoaded", function() {
-            function handleCheckboxChange(event) {
-                if (event.target.classList.contains('current-checkbox')) {
-                    const checkbox = event.target;
-                    const name = checkbox.name;
-                    const formNumMatch = name.match(/education-(\d+)-current/);
-                    const formNum = formNumMatch ? formNumMatch[1] : null;
+        function handleCheckboxChange(event) {
+            if (event.target.classList.contains('currently-working-checkbox')) {
+                const checkbox = event.target;
+                const name = checkbox.name;
+                const formNumMatch = name.match(/work_experiences-(\d+)-currently-working/);
+                const formNum = formNumMatch ? formNumMatch[1] : null;
 
-                    checkbox.value = checkbox.checked ? 'True' : 'False';
+                checkbox.value = checkbox.checked ? 'True' : 'False';
 
-                    if (formNum !== null) {
-                        const endDateInput = document.querySelector(`input[name="education-${formNum}-end_date"]`);
+                if (formNum !== null) {
+                    const endDateInput = document.querySelector(`input[name="work_experiences-${formNum}-end-date"]`);
+                    
+                    console.log(`formNum: ${formNum}`);
+                    console.log(`endDateInput:`, endDateInput);
 
-                        if (endDateInput) {
-                            endDateInput.disabled = checkbox.checked; // Disable end date if currently studying
+                    if (endDateInput) {
+                        if (checkbox.checked) {
+                            alert(`Currently working checkbox clicked for form ${formNum}!`);
+                            endDateInput.disabled = true;
+                        } else {
+                            alert(`Currently working checkbox unchecked for form ${formNum}!`);
+                            endDateInput.disabled = false;
                         }
+                    } else {
+                        console.warn(`End date input not found for form number ${formNum}`);
                     }
                 }
             }
+        }
 
-            document.getElementById('education_form').addEventListener('change', handleCheckboxChange);
-        });
+            document.getElementById('work_form').addEventListener('change', handleCheckboxChange);
+          });
+
     </script>
 
-    <h3>Education</h3>
+
+<b><p style="color:red;">We recommend a total of 10 work experiences and projects</p></b>
+
 
     <script>
-        const myGlobalFunctionsEdu = {};
-        let totalformNumberAdderEdu = 0;
+        function toggleWorkExperienceForm() {
+            var workForm = document.getElementById('work_form');
+            var yesRadio = document.getElementById('yesRadio');
+            var addWorkFormButton = document.getElementById('add-work-form');
+    
+            workForm.style.display = yesRadio.checked ? 'block' : 'none';
+            addWorkFormButton.style.display = yesRadio.checked ? 'block' : 'none';
+    
+            // Log the value of the selected "hasWorkExperience" option
+            var selectedValue = document.querySelector('input[name="hasWorkExperience"]:checked').value;
+            console.log('Selected hasWorkExperience:', selectedValue);
+        }
+    </script>
+
+    <h3>Work Experiences</h3>
+
+    <script>
+        const myGlobalFunctions = {};
 
         window.addEventListener('load', function() {
-            let educationForm = document.querySelector("#education_form");
-            let addButtonEdu = document.querySelector("#add-education-form");
-            let totalformNumberEdu = educationForm.children.length;
-            let totalFormsFieldEdu = document.querySelector("input[name='education-TOTAL_FORMS']");
+            let workForm = document.querySelector("#work_form");
+            let addButton = document.querySelector("#add-work-form");
+            let totalformNumber = workForm.children.length;
+            let total_added_work_form_count = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
+            let actual_work_form_count = actual_work_form_count;
+            
 
-            addButtonEdu.addEventListener('click', addFormEdu);
+            addButton.addEventListener('click', addForm);
 
-            function addFormEdu() {
-                let formNumEdu = educationForm.children.length; // Get the current number of forms
+            function addForm() {
 
-                let newFormEdu = `
-                    <div id="education_container-${totalformNumberAdderEdu}">
+                console.log("Add button clicked!");
+
+                let newForm = `
+                    <div id="work_experiences_container-${actual_work_form_count}">
                         <table>
                             <tbody>
                                 <tr>
-                                    <th>Institution</th>
-                                    <th>Major</th>
-                                    <th>Minor</th>
-                                    <th>GPA</th>
+                                    <th>Company Name</th>
+                                    <th>Job Title</th>
                                 </tr>
                                 <tr class="form-row">
-                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-institution"></td>
-                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-major"></td>
-                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-minor"></td>
-                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-GPA"></td>
+                                    <td><input type="text" name="work_experiences-${actual_work_form_count}-company_name"></td>
+                                    <td><input type="text" name="work_experiences-${actual_work_form_count}-job_title"></td>
                                 </tr>
 
                                 <tr class="form-row"> 
                                     <th>Start Date</th>
-                                    <th>End Date</th>
-                                    <th>Currently Enrolled</th>
-                                    <th>Degree Type</th>
-                                </tr>
-                                <tr class="form-row">
-                                    <td><input type="date" name="education-${totalformNumberAdderEdu}-start_date"></td>
-                                    <td><input type="date" name="education-${totalformNumberAdderEdu}-end_date"></td>
-                                    <td><input type="checkbox" name="education-${totalformNumberAdderEdu}-current" class="current-checkbox"></td>
-                                    <td>
-                                        <select name="education-${totalformNumberAdderEdu}-degree_type">
-                                            <option value="">Select Degree</option>
-                                            <option value="Bachelor of Science">Bachelor of Science</option>
-                                            <option value="Bachelor of Art">Bachelor of Art</option>
-                                            <option value="Master of Arts">Master of Arts</option>
-                                            <option value="Master of Science">Master of Science</option>
-                                            <option value="Master of Business Administration">Master of Business Administration</option>
-                                            <option value="Associate of Arts">Associate of Arts</option>
-                                            <option value="Associate of Science">Associate of Science</option>
-                                            <option value="Associate of Business Administration">Associate of Business Administration</option>
-                                            <option value="Associate of Engineering">Associate of Engineering</option>
-                                            <option value="Associate of Nursing">Associate of Nursing</option>
-                                        </select>
-                                    </td>
+                                    <th>End Date </th>
+                                    <th>Currently Working </th>
                                 </tr>
 
                                 <tr class="form-row">
-                                    <td colspan="4">
-                                        <b style="color: palevioletred;">
-                                            Coursework Description:
+                                    <td><input type="date" name="work_experiences-${actual_work_form_count}-start_date"></td>
+                                    <td> <input type="date" name="work_experiences-${actual_work_form_count}-end-date"></td>
+                                    <td> <input type="checkbox" name="work_experiences-${actual_work_form_count}-currently-working" class="currently-working-checkbox"> </td>
+                                </tr>
+
+                                <tr class="form-row">
+                                    <td>City</td>
+                                    <td>State</td>
+                                </tr>
+                                <tr class="form-row">
+                                    <td><input type="text" name="work_experiences-${actual_work_form_count}-city"></td>
+                                    <td><input type="text" maxlength="2" name="work_experiences-${actual_work_form_count}-state"></td>
+                                </tr>
+
+
+                                <tr class="form-row">
+                                    <td colspan="2">
+                                        <b style="color: palevioletred;"> 
+                                            Description of your work in simple English. What did you do? What technologies/skills did you use?
+                                            What was the numerical impact/benefit? The more info you give, the better your resume will be.
                                             <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
                                         </b>
                                     </td>
                                 </tr>
+
+
+
                                 <tr class="form-row">
-                                    <td colspan="4"><textarea name="education-${totalformNumberAdderEdu}-coursework"></textarea></td>
-                                </tr>
-                                <tr class="form-row">
-                                    <td>City</td>
-                                    <td>Country</td>
-                                </tr>
-                                <tr class="form-row">
-                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-city"></td>
-                                    <td><input type="text" name="education-${totalformNumberAdderEdu}-country"></td>
+                                    <td colspan="2"><textarea name="work_experiences-${actual_work_form_count}-description"></textarea></td>
                                 </tr>
                             </tbody>
                         </table>
-                        <button id="delete-education-form-${totalformNumberAdderEdu}" type="button">Delete Education</button>
+                        <button id="delete-work-form-${actual_work_form_count}" type="button"">Delete Work Experience</button>
                     </div>
                 `;
 
                 let container = document.createElement('div');
-                container.innerHTML = newFormEdu;
-                educationForm.appendChild(container);
+                container.innerHTML = newForm;
+                workForm.appendChild(container);
 
                 // Add delete button for the newly added form
-                let deleteButtonEdu = container.querySelector(`#delete-education-form-${totalformNumberAdderEdu}`);
+                let deleteButton = document.querySelector(`#delete-work-form-${actual_work_form_count}`);
 
-                deleteButtonEdu.addEventListener('click', function() {
-                    deleteFormEdu(container);
+                deleteButton.addEventListener('click', function() {
+                    deleteForm(container, formNum);
                 });
+                container.appendChild(deleteButton);
 
-                totalformNumberEdu++;
-                totalformNumberAdderEdu++;
-                totalFormsFieldEdu.value = totalformNumberEdu;
-
-                console.log(`Total education forms after add: ${totalFormsFieldEdu.value}`);
+                actual_work_form_count++;
+                total_added_work_form_count.value++;
+                console.log(`total_added_work_form_count after add: ${actual_work_form_count}`);
+                console.log(`Form added. Total forms: ${total_added_work_form_count.value}`);
             }
 
-            function deleteFormEdu(form) {
-                let totalFormsFieldEdu = document.querySelector("input[name='education-TOTAL_FORMS']");
-                form.remove();
-                totalformNumberAdderEdu--;
-                totalFormsFieldEdu.value--;
-                console.log(`Total education forms after delete: ${totalFormsFieldEdu.value}`);
+
+            function deleteForm(form, formNum) {
+                
+
+                if (actual_work_form_count == 1) {
+                    // If deleting the first form, just hide the work_form and set hasWorkExperience to 'no'
+                    console.log("there is only 1 form so the radio button should become closed");
+                    workForm.style.display = 'none';
+                    addButton.style.display = 'none';
+                    yesRadio.checked = false;
+                    document.getElementById('noRadio').checked = true;
+                } else {
+                    form.remove();
+                    actual_work_form_count--;
+                    console.log(`after deleting, actual_work_form_count: ${actual_work_form_count}`);
+                    console.log(`after deleting, total_added_work_form_count: ${total_added_work_form_count}`);
+                }
             }
 
-            myGlobalFunctionsEdu.addForm = addFormEdu;
-            myGlobalFunctionsEdu.deleteForm = deleteFormEdu;
+            let deleteButtons = document.querySelectorAll("[id^='delete-work-form-']");
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    let formNum = parseInt(button.id.split('-').pop());
+                    console.log("work form number " + formNum + " is being deleted");
+                    deleteForm(workForm.children[formNum], formNum);
+                });
+            });
+
+            myGlobalFunctions.addForm = addForm;
+            myGlobalFunctions.deleteForm = deleteForm;
+
         });
     </script>
+    
 
-    <p id="education_question">Do you have any educational background to add?</p>
-    <div id="education_options">
+    <p id="work_experience_question">Do you have relevant work experience?</p>
+    <div id="work_experience_options">
         <label>
-            <input type="radio" name="hasEducation" id="yesEduRadio" value="yes" onclick="toggleEducationForm()"> Yes
+            <input type="radio" name="hasWorkExperience" id="yesRadio" value="yes" onclick="toggleWorkExperienceForm()"> Yes
         </label>
         <label>
-            <input type="radio" name="hasEducation" id="noEduRadio" value="no" onclick="toggleEducationForm()" checked> No
+            <input type="radio" name="hasWorkExperience" id="noRadio" value="no" onclick="toggleWorkExperienceForm()" checked> No
         </label>
     </div>
 
     <br> <br> <br>
 
+    
+    
+
     {% csrf_token %}
-    {{ education_formset.management_form }}
-    <div id="education_form" style="display: none;">
-        <div id="education_container-0">
+    {{ work_experience_formset.management_form }}
+    <div id="work_form" style="display: none;">
+        <div id="work_experiences_container-0">
             <table>
                 <tbody>
-                    {% for edu_form in education_formset %}
+                    {% for work_form in work_experience_formset %}
                     <tr>
-                        <th>Institution</th>
-                        <th>Major</th>
-                        <th>Minor</th>
-                        <th>GPA</th>
+                        <th>Company Name</th>
+                        <th>Job Title</th>
                     </tr>
-                    <tr class="form-row">
-                        <td>{{ edu_form.institution }}</td>
-                        <td>{{ edu_form.major }}</td>
-                        <td>{{ edu_form.minor }}</td>
-                        <td>{{ edu_form.GPA }}</td>
-                    </tr>
+                        <tr class="form-row">
+                            <td>{{ work_form.company_name }}</td>
+                            <td>{{ work_form.job_title }}</td>
+                        </tr>
 
-                    <tr class="form-row"> 
-                        <th>Start Date</th>
-                        <th>End Date</th>
-                        <th>Currently Enrolled</th>
-                        <th>Degree Type</th>
-                    </tr>
-                    <tr class="form-row"> 
-                        <td>{{ edu_form.start_date }}</td>
-                        <td>{{ edu_form.end_date }}</td>
-                        <td><input type="checkbox" name="education-0-current" class="current-checkbox" {% if edu_form.current %}checked{% endif %}></td>
-                        <td>{{ edu_form.degree_type }}</td>
-                    </tr>
+                        <tr class="form-row"> 
+                            <th>Start Date</th>
+                            <th>End Date </th>
+                            <th>Currently Working </th>
+                        </tr>
 
-                    <tr class="form-row">
-                        <td colspan="4">
-                            <b style="color: palevioletred;">
-                                Coursework Description:
-                                <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
-                            </b>
-                        </td>
-                    </tr>
-                    <tr class="form-row">
-                        <td colspan="4">{{ edu_form.coursework }}</td>
-                    </tr>
-                    <tr class="form-row">
-                        <td>City</td>
-                        <td>Country</td>
-                    </tr>
-                    <tr class="form-row">
-                        <td>{{ edu_form.city }}</td>
-                        <td>{{ edu_form.country }}</td>
-                    </tr>
+                        <tr class="form-row"> 
+                            <td>{{ work_form.start_date }}</td>
+                            <td> <input type="date" name="work_experiences-0-end-date"> </td>
+                            <td> <input type="checkbox" name="work_experiences-0-currently-working" class="currently-working-checkbox"> </td>
+                        </tr>
+
+                        <tr class="form-row">
+                            <td>City</td>
+                            <td>State</td>
+                        </tr>
+                        <tr class="form-row">
+                            <td>{{ work_form.city }}</td>
+                            <td>{{ work_form.state }}</td>
+                        </tr>
+                        <tr class="form-row">
+                            <td colspan="2">
+                                <b style="color: palevioletred;"> 
+                                    Description of your work in simple English. What did you do? What technologies/skills did you use?
+                                    What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                    <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                </b>
+                            </td>
+                        </tr>
+                        <tr class="form-row">
+                            <td colspan="2">{{ work_form.description }}</td>
+                        </tr>
                     {% endfor %}
                 </tbody>
             </table>
-            <button id="delete-education-form-0" type="button">Delete Education</button>
+            <button id="delete-work-form-0" type="button"">Delete Work Experience</button>
         </div>
     </div>
-    <button id="add-education-form" type="button" style="display: none;">Add Another Education</button>
+    <button id="add-work-form" type="button" style="display: none;">Add Another Work Experience</button>
 
-    {% if account.user_profile.educations.exists %}
-        <script>
-            var number_of_educations = "{{ account.user_profile.educations.count }}";
-            if (number_of_educations > 0) {
-                document.getElementById('education_form').style.display = "block";
-                document.getElementById('add-education-form').style.display = "block";
-            }
-        </script>
-    {% endif %}
+
+        {% if  account.user_profile.work_experiences.exists %}
+
+            <script>
+                var number_of_work_experiences = "{{account.user_profile.work_experiences.count}}"
+
+                if (number_of_work_experiences > 0) {
+                    var workForm = document.getElementById('work_form');
+                    var yesRadio = document.getElementById('yesRadio');
+                    var addWorkFormButton = document.getElementById('add-work-form');
+                    yesRadio.checked = true;
+                    workForm.style.display = yesRadio.checked ? 'block' : 'none';
+                    addWorkFormButton.style.display = yesRadio.checked ? 'block' : 'none';
+                }
+
+                console.log(number_of_work_experiences)
+                window.addEventListener('load', function() {
+                    for (let i = 1; i < number_of_work_experiences; i++) {
+                        // console.log("adding previous work experience number ", i)
+                        // console.log("workForm.children.length is" , workForm.children.length)
+                        myGlobalFunctions.addForm();
+                    }
+
+                    var workForm = document.getElementById('work_form');
+                    console.log(workForm.children.length)
+
+                });
+            </script>
+
+
+            {% for work_experience in account.user_profile.work_experiences.all %}
+            <script>
+                window.addEventListener('load', function() {
+                    var workForm = document.getElementById('work_form');
+                    
+
+                    {% with work_counter_index=forloop.counter0 %}
+                    var newFormInstance = `
+                        <div id="work_experiences_container-{{work_counter_index}}">
+                            <table>
+                                <tbody>
+                                    <tr>
+                                        <th>Company Name</th>
+                                        <th>Job Title</th>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td><input type="text" name="work_experiences-{{work_counter_index}}-company_name" value="{{work_experience.company_name}}"></td>
+                                        <td><input type="text" name="work_experiences-{{work_counter_index}}-job_title" value="{{work_experience.job_title}}"></td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td>Start Date</td>
+                                        <td>End Date</td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td>Start Date <input type="date" name="work_experiences-{{work_counter_index}}-start_date" value="{{ work_experience.start_date|date:'Y-m-d' }}"></td>
+                                        <td>End Date <input type="date" name="work_experiences-{{work_counter_index}}-end_date" value="{{ work_experience.end_date|date:'Y-m-d' }}"></td>
+                                    </tr>
+
+                                    <tr class="form-row">
+                                        <td>City</td>
+                                        <td>State</td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td><input type="text" name="work_experiences-{{work_counter_index}}-city" value="{{work_experience.city}}"></td>
+                                        <td><input type="text" maxlength="2" name="work_experiences-{{work_counter_index}}-state" value="{{work_experience.state}}"></td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td colspan="2">
+                                            <b style="color: palevioletred;"> 
+                                                Description of your work in simple English. What did you do? What technologies/skills did you use?
+                                                What was the numerical impact/benefit? The more info you give, the better your resume will be.
+                                                <a href="https://www.google.com" style="color: lightskyblue;" target="_blank"> Examples</a>
+                                            </b>
+                                        </td>
+                                    </tr>
+                                    <tr class="form-row">
+                                        <td colspan="2"><textarea name="work_experiences-{{work_counter_index}}-description">{{work_experience.bullet1}}{{work_experience.bullet2}}{{work_experience.bullet3}}</textarea></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                            <button id="delete-prev-work-form-{{work_counter_index}}" type="button" "="">Delete Work Experience</button>
+                        </div>
+                    `;
+
+                    {% endwith %}
+
+                    workForm.children[{{ forloop.counter0 }}].innerHTML = newFormInstance;
+                    // console.log(workForm.children[{{ forloop.counter0 }}].innerHTML)
+                });
+            </script>
+            {% endfor %}
+
+            <script>
+                window.addEventListener('load', function() {
+                    var workForm = document.getElementById('work_form'); 
+                    
+            
+                    if (workForm) {
+                        workForm.addEventListener('click', function(event) {
+            
+                            // Check if the clicked element is a delete button
+                            if (event.target.id.startsWith('delete-prev-work-form-')) {
+                                // Extract the index from the button id
+                                var index = parseInt(event.target.id.split('-').pop());
+            
+                                // Check if the index is valid
+                                if (!isNaN(index)) {
+                                    // Get the corresponding div with id "work_experiences_container-[index]"
+                                    var containerId = 'work_experiences_container-' + index;
+                                    var containerToRemove = document.getElementById(containerId);
+
+                                    var containers = document.querySelectorAll('[id^="' + containerId + '"]');
+            
+                                    // Check if the container element exists
+                                    if (containerToRemove) {
+                                        if (totalformNumberAdderHelper == 1) {
+                                            console.log("there is only 1 form so the radio button should become closed");
+                                            workForm.style.display = 'none';
+                                            yesRadio.checked = false;
+                                            document.getElementById('noRadio').checked = true;
+
+                                        } else {
+                                            console.log("deleting workform container number" , index, containerId)
+                                            console.log(containerToRemove)
+                                            containerToRemove.remove();
+                                            totalformNumberAdderHelper--;
+                                            console.log("workForm.children.length" , workForm.children.length)
+                                        }
+                                        
+                                    } else {
+                                        console.error('Container element does not exist.', containerId);
+                                    }
+                                } else {
+                                    console.error('Invalid index or child element does not exist.', index);
+                                }
+                            }
+                        });
+                    } else {
+                        console.error('workForm is not defined.');
+                    }
+                });
+            </script>
+        
+        {% endif %}
+
 </div>
-
-
-        
-        
-        
-
-    <br>  <br>  <br>  <br>  <br>
-    <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
-
-{% endblock %}

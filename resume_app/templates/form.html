@@ -616,15 +616,15 @@ document.addEventListener('DOMContentLoaded', function () {
                     const name = checkbox.name;
                     const formNumMatch = name.match(/work_experiences-(\d+)-currently-working/);
                     const formNum = formNumMatch ? formNumMatch[1] : null;
-    
+
                     checkbox.value = checkbox.checked ? 'True' : 'False';
-    
+
                     if (formNum !== null) {
                         const endDateInput = document.querySelector(`input[name="work_experiences-${formNum}-end-date"]`);
                         
                         console.log(`formNum: ${formNum}`);
                         console.log(`endDateInput:`, endDateInput);
-    
+
                         if (endDateInput) {
                             if (checkbox.checked) {
                                 alert(`Currently working checkbox clicked for form ${formNum}!`);
@@ -639,12 +639,12 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
                 }
             }
-    
+
                 document.getElementById('work_form').addEventListener('change', handleCheckboxChange);
-              });
-    
+            });
+
         </script>
-    
+
 
     <b><p style="color:red;">We recommend a total of 10 work experiences and projects</p></b>
 
@@ -668,15 +668,14 @@ document.addEventListener('DOMContentLoaded', function () {
 
         <script>
             const myGlobalFunctions = {};
-            let totalformNumberAdderHelper = 0;
 
             window.addEventListener('load', function() {
                 let workForm = document.querySelector("#work_form");
                 let addButton = document.querySelector("#add-work-form");
                 let totalformNumber = workForm.children.length;
-                let totalformNumberAdder = totalformNumber;
-                totalformNumberAdderHelper = totalformNumber;
-                let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
+                let total_added_work_form_count = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
+                let actual_work_form_count = 1;
+                
 
                 addButton.addEventListener('click', addForm);
 
@@ -684,10 +683,10 @@ document.addEventListener('DOMContentLoaded', function () {
 
                     console.log("Add button clicked!");
 
-                    let formNum = workForm.children.length; // Get the current number of forms
+                    formNum = workForm.children.length;
 
                     let newForm = `
-                        <div id="work_experiences_container-${totalformNumberAdder}">
+                        <div id="work_experiences_container-${total_added_work_form_count.value}">
                             <table>
                                 <tbody>
                                     <tr>
@@ -695,8 +694,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <th>Job Title</th>
                                     </tr>
                                     <tr class="form-row">
-                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-company_name"></td>
-                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-job_title"></td>
+                                        <td><input type="text" name="work_experiences-${total_added_work_form_count.value}-company_name"></td>
+                                        <td><input type="text" name="work_experiences-${total_added_work_form_count.value}-job_title"></td>
                                     </tr>
 
                                     <tr class="form-row"> 
@@ -706,9 +705,9 @@ document.addEventListener('DOMContentLoaded', function () {
                                     </tr>
 
                                     <tr class="form-row">
-                                        <td><input type="date" name="work_experiences-${totalformNumberAdder}-start_date"></td>
-                                        <td> <input type="date" name="work_experiences-${totalformNumberAdder}-end-date"></td>
-                                        <td> <input type="checkbox" name="work_experiences-${totalformNumberAdder}-currently-working" class="currently-working-checkbox"> </td>
+                                        <td><input type="date" name="work_experiences-${total_added_work_form_count.value}-start_date"></td>
+                                        <td> <input type="date" name="work_experiences-${total_added_work_form_count.value}-end-date"></td>
+                                        <td> <input type="checkbox" name="work_experiences-${total_added_work_form_count.value}-currently-working" class="currently-working-checkbox"> </td>
                                     </tr>
 
                                     <tr class="form-row">
@@ -716,8 +715,8 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <td>State</td>
                                     </tr>
                                     <tr class="form-row">
-                                        <td><input type="text" name="work_experiences-${totalformNumberAdder}-city"></td>
-                                        <td><input type="text" maxlength="2" name="work_experiences-${totalformNumberAdder}-state"></td>
+                                        <td><input type="text" name="work_experiences-${total_added_work_form_count.value}-city"></td>
+                                        <td><input type="text" maxlength="2" name="work_experiences-${total_added_work_form_count.value}-state"></td>
                                     </tr>
 
 
@@ -734,46 +733,38 @@ document.addEventListener('DOMContentLoaded', function () {
 
 
                                     <tr class="form-row">
-                                        <td colspan="2"><textarea name="work_experiences-${totalformNumberAdder}-description"></textarea></td>
+                                        <td colspan="2"><textarea name="work_experiences-${total_added_work_form_count.value}-description"></textarea></td>
                                     </tr>
                                 </tbody>
                             </table>
-                            <button id="delete-work-form-${totalformNumberAdder}" type="button"">Delete Work Experience</button>
+                            <button id="delete-work-form-${total_added_work_form_count.value}" type="button"">Delete Work Experience</button>
                         </div>
                     `;
 
-
-
                     let container = document.createElement('div');
                     container.innerHTML = newForm;
-
                     workForm.appendChild(container);
 
                     // Add delete button for the newly added form
-                    let deleteButton = document.querySelector(`#delete-work-form-${totalformNumberAdder}`);
+                    let deleteButton = document.querySelector(`#delete-work-form-${total_added_work_form_count.value}`);
 
                     deleteButton.addEventListener('click', function() {
                         deleteForm(container, formNum);
                     });
                     container.appendChild(deleteButton);
 
+                    actual_work_form_count++;
+                    total_added_work_form_count.value++;
                     formNum++;
-                    totalformNumber++;
-                    totalformNumberAdder++;
-                    totalFormsField.value = formNum;
-                    totalformNumberAdderHelper = totalFormsField.value;
-                    console.log(`formNum after add: ${formNum}`);
-                    console.log(`Form added. Total forms: ${totalFormsField.value}`);
+                    console.log(`total_added_work_form_count after add: ${total_added_work_form_count.value}`);
+                    console.log(`actual_work_form_count after add: ${actual_work_form_count}`);
                 }
 
 
                 function deleteForm(form, formNum) {
-                    let totalFormsField = document.querySelector("input[name='work_experiences-TOTAL_FORMS']");
-                    console.log(`before deleting, totalFormsField value is: ${totalFormsField.value}`);
-                    console.log(`this form is being deleted: ${formNum}`);
-                    console.log(`workForm.children.length: ${workForm.children.length}`);
+                    
 
-                    if (totalformNumberAdderHelper == 1) {
+                    if (actual_work_form_count == 1) {
                         // If deleting the first form, just hide the work_form and set hasWorkExperience to 'no'
                         console.log("there is only 1 form so the radio button should become closed");
                         workForm.style.display = 'none';
@@ -782,8 +773,10 @@ document.addEventListener('DOMContentLoaded', function () {
                         document.getElementById('noRadio').checked = true;
                     } else {
                         form.remove();
-                        totalformNumberAdderHelper--;
-                        console.log(`after deleting, there are this number of forms: ${totalFormsField.value}`);
+                        actual_work_form_count--;
+                        formNum--;
+                        console.log(`after deleting, actual_work_form_count: ${actual_work_form_count}`);
+                        console.log(`after deleting, total_added_work_form_count: ${total_added_work_form_count.value}`);
                     }
                 }
 
