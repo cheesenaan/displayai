@@ -278,13 +278,29 @@ footer a:hover {
                     </span>
                      -->
 
-                    <div class="social-icons">
-                        <a class="social-icon" href="{{user_profile.resume_link}}" target="_blank"><i class="fa-solid fa-file-pdf"></i></a>
-                        <a class="social-icon" href="{{user_profile.linkedin_link}}" target="_blank" ><i class="fab fa-linkedin-in"></i></a>
-                        <a class="social-icon" href="{{user_profile.github_link}}" target="_blank"><i class="fab fa-github"></i></a>
-                        <!-- <a class="social-icon" href="https://twitter.com" target="_blank"><i class="fab fa-twitter"></i></a> -->
-                        <!-- <a class="social-icon" href="https://www.instagram.com" target="_blank"><i class="fab fa-instagram"></i></a> -->
+                     <div class="social-icons">
+                        <a class="social-icon" href="{% if user_profile.resume_link %}{{ user_profile.resume_link }}{% else %}#{% endif %}" target="{% if user_profile.resume_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </a>
+                    
+                        <a class="social-icon" href="{% if user_profile.linkedin_link %}{{ user_profile.linkedin_link }}{% else %}#{% endif %}" target="{% if user_profile.linkedin_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    
+                        <a class="social-icon" href="{% if user_profile.github_link %}{{ user_profile.github_link }}{% else %}#{% endif %}" target="{% if user_profile.github_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    
+                        <a class="social-icon" href="{% if user_profile.twitter_link %}{{ user_profile.twitter_link }}{% else %}#{% endif %}" target="{% if user_profile.twitter_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    
+                        <a class="social-icon" href="{% if user_profile.instagram_link %}{{ user_profile.instagram_link }}{% else %}#{% endif %}" target="{% if user_profile.instagram_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fab fa-instagram"></i>
+                        </a>
                     </div>
+                    
+                    
                 </div>
             </section>
 
