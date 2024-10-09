@@ -20,12 +20,167 @@
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
     </head>
 
+    <style>
+        /* General Body Styles */
+body {
+    font-family: 'Saira Extra Condensed', 'Muli', sans-serif;
+    background-color: #f8f9fa;
+    color: #333;
+    padding-top: 56px;
+}
+
+/* Navbar Styles */
+#sideNav {
+    background-color: #007bff; /* Custom dark blue color for navbar */
+    color: #fff;
+}
+
+.navbar-nav .nav-link {
+    color: #ffffff;
+    text-transform: uppercase;
+    font-size: 0.9rem;
+    letter-spacing: 0.1rem;
+    padding: 0.75rem 1rem;
+}
+
+.navbar-brand img {
+    border-radius: 50%;
+}
+
+/* Banner for Free Tier */
+#expiration-banner {
+    background-color: #f0ad4e;
+    color: #333;
+    font-size: 16px;
+    font-weight: bold;
+    padding: 10px;
+}
+
+/* Section Headings */
+h2 {
+    font-size: 2.5rem;
+    color: #green;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+}
+
+/* Subheadings */
+.subheading {
+    font-size: 1.25rem;
+    font-weight: 700;
+    margin-bottom: 1rem;
+    color: #6c757d;
+}
+
+/* Text and Bullet Points Styling */
+.resume-section-content p, ul {
+    font-size: 1rem;
+    color: #343a40;
+    line-height: 1.6;
+}
+
+ul {
+    padding-left: 20px;
+}
+
+ul li {
+    list-style-type: disc;
+}
+
+/* Profile Image Styling */
+.img-profile {
+    border-radius: 50%;
+    border: 5px solid #007bff; /* Custom border color */
+}
+
+/* Social Icons */
+.social-icons a {
+    color: #007bff;
+    font-size: 1.5rem;
+    margin-right: 10px;
+    transition: color 0.3s ease;
+}
+
+.social-icons a:hover {
+    color: #0056b3;
+}
+
+/* Experience, Education, and Projects Layout */
+.resume-section {
+    padding: 3rem 0;
+}
+
+.resume-section .d-flex {
+    align-items: flex-start;
+}
+
+.resume-section h3 {
+    font-size: 1.75rem;
+    color: #343a40;
+}
+
+.text-primary {
+    color: #2e780b !important;
+}
+
+.subheading {
+    color: #2e780b !important;
+}
+
+
+/* Skill Icons */
+.dev-icons i {
+    font-size: 2rem;
+    color: #6c757d;
+    margin-right: 10px;
+}
+
+/* Hover Effects for Links */
+.navbar-nav .nav-link:hover {
+    color: #0056b3;
+}
+
+.navbar-toggler {
+    background-color: #007bff;
+}
+
+/* Custom Button Styles */
+.btn-primary {
+    background-color: #green;
+    border: none;
+    transition: background-color 0.3s ease;
+}
+
+.btn-primary:hover {
+    background-color: #0056b3;
+}
+
+/* Footer Customizations */
+footer {
+    background-color: #007bff;
+    color: #fff;
+    padding: 20px;
+    text-align: center;
+}
+
+footer a {
+    color: #fff;
+    text-decoration: underline;
+}
+
+footer a:hover {
+    color: #ddd;
+}
+
+    </style>
+
     
     <body>
     
     <!-- Your existing body content -->
     
-    
+        
+
 
     <body id="page-top">
 
@@ -183,7 +338,7 @@
             <section class="resume-section" id="experience">
                 <div class="resume-section-content">
                     <h2 class="mb-5">Experience</h2>
-                    {% for work_experience in user_profile.work_experiences.all %}
+                    {% for work_experience in account.work_experiences.all %}
                     <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                         <div class="flex-grow-1">
                             <h3 class="mb-0">{{ work_experience.company_name }}</h3>
@@ -203,8 +358,8 @@
             <section class="resume-section" id="projects">
                 <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
                     <div class="flex-grow-1">
-                        <h3 class="mb-0">PROJECTS</h3>
-                        {% for project in user_profile.projects.all %}
+                        <h2 class="mb-5">PROJECTS</h2>
+                        {% for project in account.projects.all %}
                         <div class="subheading mb-3">{{ project.project_name }} | ({{ project.project_skills }})</div>
                         <p> {{ project.bullet1 }} </p>
                         <p> {{ project.bullet2 }} </p>
