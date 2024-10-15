@@ -266,13 +266,18 @@ def account(request , account_id):
     user_plan = Plan.objects.get(account = account)
     user_profile = UserProfile.objects.get(account = account)
     educations = Education.objects.filter(account=account)
+    work_experiences = WorkExperience.objects.filter(account=account)
+    projects = Project.objects.filter(account=account)
 
     context = {
         'account' : account ,
         'user_plan': user_plan ,
         'user_profile' : user_profile ,
         'educations' : educations ,
-        'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan
+        'remaining' : user_plan.forms_remaining - user_plan.forms_filled_on_current_plan,
+        'work_experiences' : work_experiences,
+        'projects' : projects
+
     }
 
     return render (request, "account.html", context)

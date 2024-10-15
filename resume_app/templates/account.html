@@ -310,7 +310,7 @@
 
     <h2>User Profile</h2>
     <a href="{% url 'form' account_id=account.id %}" class="reload_resume_and_website-button">
-        <button type="button"> Edit my profile data </button>
+        <button type="button"> Edit data </button>
     </a>
     
     <ul>
@@ -345,6 +345,9 @@
     </ul>
 
     <h2>Education</h2>
+    <a href="{% url 'form' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button"> Edit data </button>
+    </a>
     <ul>
         {% for education in educations %}
             <li>
@@ -368,10 +371,14 @@
 
     
     <h2>Work Experiences</h2>
+    <a href="{% url 'form' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button"> Edit data </button>
+    </a>
     <ul>
-            {% for work_experience in user_profile.work_experiences.all %}
+            {% for work_experience in work_experiences %}
                 <li>
-                    <strong>{{ work_experience.company_name }} - {{ work_experience.job_title }}</strong><br>
+                    <strong>Company Name:</strong> {{ work_experience.company_name }}<br>
+                    <strong>Job title:</strong> {{ work_experience.job_title }}<br>
                     <strong>Start Date:</strong> {{ work_experience.start_date }}<br>
                     <strong>End Date:</strong> {{ work_experience.end_date }}<br>
                     <strong>City:</strong> {{ work_experience.city }}<br>
@@ -381,20 +388,25 @@
                     <strong>Bullet 2:</strong> {{ work_experience.bullet2 }}<br>
                     <strong>Bullet 3:</strong> {{ work_experience.bullet3 }}
                 </li>
+                <br>
             {% endfor %}
     </ul>
 
 
     <h2>Projects</h2>
+    <a href="{% url 'form' account_id=account.id %}" class="reload_resume_and_website-button">
+        <button type="button"> Edit data </button>
+    </a>
     <ul>
-        {% for project in user_profile.projects.all %}
+        {% for project in projects %}
             <li>
-                <strong>{{ project.project_name }}</strong><br>
+                <strong>Project Name:</strong> {{ project.project_name }}<br>
                 <strong>Project Skills:</strong> {{ project.project_skills }}<br>
                 <strong>Description:</strong> {{ project.description }}<br>
                 <strong>Bullet 1:</strong> {{ project.bullet1 }}<br>
                 <strong>Bullet 2:</strong> {{ project.bullet2 }}
             </li>
+            <br>
         {% endfor %}
     </ul>
     
