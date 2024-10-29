@@ -501,13 +501,31 @@ def form(request , account_id):
         return redirect('confirmation', account_id=account_id)
     
     if request.method == 'GET':
-        form = UserProfileForm(instance=account)
+        form = UserProfileForm(instance=account.user_profile)
 
-        EducationFormSet = inlineformset_factory(Account, Education, form=EducationForm, extra=1, can_delete=True)
+        # Set extra forms for Education
+        education_extra = 1
+        if Education.objects.filter(account_id=account_id).exists():
+            education_extra = 0
+
+        EducationFormSet = inlineformset_factory(Account, Education, form=EducationForm, extra=education_extra, can_delete=True)
         education_formset = EducationFormSet(instance=account)
 
+        # Set extra forms for Work Experience
+        work_experience_extra = 1
+        if WorkExperience.objects.filter(account_id=account_id).exists():
+            work_experience_extra = 0
+
+        WorkExperienceFormSet = inlineformset_factory(Account, WorkExperience, form=WorkExperienceForm, extra=work_experience_extra, can_delete=True)
         work_experience_formset = WorkExperienceFormSet(instance=account)
-        projects_formset = ProjectsFormSet(instance=account)
+
+        # Set extra forms for Projects
+        project_extra = 1
+        if Project.objects.filter(account_id=account_id).exists():
+            project_extra = 0
+
+        ProjectFormSet = inlineformset_factory(Account, Project, form=ProjectsForm, extra=project_extra, can_delete=True)
+        projects_formset = ProjectFormSet(instance=account)
 
         required_fields = [
             'first_name', 'last_name', 'phone', 'city', 'state',
@@ -1030,7 +1048,7 @@ def create_resume(account):
                     f'university start date {i}': education.start_date.strftime('%b %Y'),
                     f'university end date {i}': "Present" if education.current else education.end_date.strftime('%b %Y'),
                     f'degree_type {i}': education.degree_type,
-                    f'Major {i}': str(education.major + " and minor in " + education.minor) if education.minor else education.major,
+                    f'Major {i}': str(education.major + " and Minor in " + education.minor) if education.minor else education.major,
                     f'coursework {i}': education.coursework
                     # f'location {i}': str(education.city + " , " + education.country)
                 })

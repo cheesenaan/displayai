@@ -34,9 +34,9 @@ class EducationForm(forms.ModelForm):
         self.fields['start_date'].widget = forms.DateInput(attrs={'type': 'date'})
         self.fields['end_date'].widget = forms.DateInput(attrs={'type': 'date'})
 
-EducationFormSet = inlineformset_factory(Account, Education, form=EducationForm, extra=1, can_delete=True)
+EducationFormSet = inlineformset_factory(Account, Education, form=EducationForm, extra=0, can_delete=True)
 
-
+# https://www.linkedin.com/in/suhail-sam-s-1210651b6/
 
 class WorkExperienceForm(forms.ModelForm):
     class Meta:
@@ -72,7 +72,7 @@ class WorkExperienceForm(forms.ModelForm):
 
         return cleaned_data
 
-WorkExperienceFormSet = forms.inlineformset_factory(Account, WorkExperience, form=WorkExperienceForm, extra=1, can_delete=True)
+WorkExperienceFormSet = forms.inlineformset_factory(Account, WorkExperience, form=WorkExperienceForm, extra=0, can_delete=True)
 
 
 
@@ -96,7 +96,7 @@ class ProjectsForm(forms.ModelForm):
         return cleaned_data
 
 
-ProjectsFormSet = forms.inlineformset_factory(Account, Project, form=ProjectsForm, extra=1, can_delete=True)
+ProjectsFormSet = forms.inlineformset_factory(Account, Project, form=ProjectsForm, extra=0, can_delete=True)
 
 class UserProfileForm(forms.ModelForm):
 

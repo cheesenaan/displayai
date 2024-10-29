@@ -763,7 +763,7 @@
                             alert("Your verison has ended, please upgrade plan");
                             var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
                             var redirectDomain = "{{ redirect_domain }}";
-                            var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                            var confirmationUrl = redirectDomain + '' + accountId + '/confirmation#pricing';
                             window.location.href = confirmationUrl;
 
                         }
@@ -792,7 +792,7 @@
                                 alert("Your verison has ended, please upgrade plan");
                             var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
                             var redirectDomain = "{{ redirect_domain }}";
-                            var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                            var confirmationUrl = redirectDomain + '' + accountId + '/confirmation#pricing';
                             window.location.href = confirmationUrl;
                             }
                         </script>
@@ -924,7 +924,7 @@
                             alert("Your verison has ended, please upgrade plan");
                             var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
                             var redirectDomain = "{{ redirect_domain }}";
-                            var confirmationUrl = redirectDomain + '/' + accountId + '/confirmation#pricing';
+                            var confirmationUrl = redirectDomain + '' + accountId + '/confirmation#pricing';
                             window.location.href = confirmationUrl;
                         }
                     </script>
