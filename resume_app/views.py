@@ -1039,34 +1039,39 @@ def create_resume(account):
         
          # Retrieve all education records associated with the account
 
-        education_records = Education.objects.filter(account=account)
+        # Retrieve and sort education records: 'current' records first, then by latest end_date
+        education_records = Education.objects.filter(account=account).order_by('-current', '-end_date')
+
         if education_records:
             for i, education in enumerate(education_records, start=1):
-                print("updating education placeholder for education ", i, education)
+                print("Updating education placeholder for education ", i, education)
                 placeholder_replacements.update({
                     f'university {i}': education.institution,
                     f'university start date {i}': education.start_date.strftime('%b %Y'),
                     f'university end date {i}': "Present" if education.current else education.end_date.strftime('%b %Y'),
                     f'degree_type {i}': education.degree_type,
-                    f'Major {i}': str(education.major + " and Minor in " + education.minor) if education.minor else education.major,
+                    f'Major {i}': f"{education.major} and Minor in {education.minor}" if education.minor else education.major,
                     f'coursework {i}': education.coursework
-                    # f'location {i}': str(education.city + " , " + education.country)
+                    # f'location {i}': f"{education.city}, {education.country}"
                 })
 
-            # Work experiences
-        work_records = WorkExperience.objects.filter(account=account)
+
+        # Retrieve and sort work records: 'currently_working' records first, then by latest end_date
+        work_records = WorkExperience.objects.filter(account=account).order_by('-currently_working', '-end_date')
+
         if work_records:
             for i, work_experience in enumerate(work_records, start=1):
                 placeholder_replacements.update({
-                f'experience{i}': work_experience.company_name.title(),
-                f'title{i}': work_experience.job_title.title(),
-                f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
-                f'experience{i} end date': "Present" if work_experience.currently_working else work_experience.end_date.strftime('%b %Y'),
-                f'experience{i} location': work_experience.city.strip().title() + ', ' + work_experience.state.strip().upper(),
-                f'experience{i} bullet1': work_experience.bullet1,
-                f'experience{i} bullet2': work_experience.bullet2,
-                f'experience{i} bullet3': work_experience.bullet3,
-            })
+                    f'experience{i}': work_experience.company_name.title(),
+                    f'title{i}': work_experience.job_title.title(),
+                    f'experience{i} start date': work_experience.start_date.strftime('%b %Y'),
+                    f'experience{i} end date': "Present" if work_experience.currently_working else work_experience.end_date.strftime('%b %Y'),
+                    f'experience{i} location': f"{work_experience.city.strip().title()}, {work_experience.state.strip().upper()}",
+                    f'experience{i} bullet1': work_experience.bullet1,
+                    f'experience{i} bullet2': work_experience.bullet2,
+                    f'experience{i} bullet3': work_experience.bullet3,
+                })
+
 
 
         project_records = Project.objects.filter(account=account)
