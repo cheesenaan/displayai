@@ -368,42 +368,68 @@
          }
      </style>
  
-     <script>
-         document.addEventListener("DOMContentLoaded", function() {
-             function handleCheckboxChange(event) {
-                 if (event.target.classList.contains('account_education-current')) {
-                     const checkbox = event.target;
-                     const name = checkbox.name;
-                     const formNumMatch = name.match(/account_education-(\d+)-current/);
-                     const formNum = formNumMatch ? formNumMatch[1] : null;
- 
-                     // Ensure the checkbox value is set correctly
-                     checkbox.value = checkbox.checked ? 'True' : 'False';
- 
-                     if (formNum !== null) {
-                         const endDateInput = document.querySelector(`input[name="account_education-${formNum}-end_date"]`);
-                         
-                         console.log(`formNum: ${formNum}`);
-                         console.log(`endDateInput:`, endDateInput);
- 
-                         if (endDateInput) {
-                             if (checkbox.checked) {
-                                 alert(`Education checkbox checked for form ${formNum}!`);
-                                 endDateInput.disabled = true;
-                             } else {
-                                 alert(`Education checkbox unchecked for form ${formNum}!`);
-                                 endDateInput.disabled = false;
-                             }
-                         } else {
-                             console.warn(`End date input not found for form number ${formNum}`);
-                         }
-                     }
-                 }
-             }
- 
-             document.getElementById('education-forms').addEventListener('change', handleCheckboxChange);
-         });
-     </script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+            function handleEducationCheckboxChange(event) {
+                if (event.target.classList.contains('account_education-current')) {
+                    const checkbox = event.target;
+                    const name = checkbox.name;
+                    const formNumMatch = name.match(/account_education-(\d+)-current/);
+                    const formNum = formNumMatch ? formNumMatch[1] : null;
+
+                    // Set the checkbox value to 'True' or 'False' based on the checked state
+                    checkbox.value = checkbox.checked ? 'True' : 'False';
+
+                    if (formNum !== null) {
+                        const endDateInput = document.querySelector(`input[name="account_education-${formNum}-end_date"]`);
+
+                        if (endDateInput) {
+                            if (checkbox.checked) {
+                                // Store the initial value if not already stored and disable the end date input
+                                if (!endDateInput.dataset.originalDate) {
+                                    endDateInput.dataset.originalDate = endDateInput.value;
+                                }
+                                endDateInput.value = "";  // Clear end date if currently studying
+                                endDateInput.disabled = true;
+                            } else {
+                                // Restore the stored value and enable the end date input
+                                if (endDateInput.dataset.originalDate) {
+                                    endDateInput.value = endDateInput.dataset.originalDate;
+                                }
+                                endDateInput.disabled = false;
+                            }
+                        } else {
+                            console.warn(`End date input not found for form number ${formNum}`);
+                        }
+                    }
+                }
+            }
+
+            // Add event listener to each education form checkbox
+            document.getElementById('education-forms').addEventListener('change', handleEducationCheckboxChange);
+
+            // On page load, check each checkbox and set end date state based on the checked status
+            document.querySelectorAll('.account_education-current').forEach((checkbox) => {
+                const name = checkbox.name;
+                const formNumMatch = name.match(/account_education-(\d+)-current/);
+                const formNum = formNumMatch ? formNumMatch[1] : null;
+
+                if (formNum !== null) {
+
+                    checkbox.value = checkbox.checked ? 'True' : 'False';
+
+                    const endDateInput = document.querySelector(`input[name="account_education-${formNum}-end_date"]`);
+                    if (checkbox.checked && endDateInput) {
+                        // Store the initial value in a data attribute and disable the end date input
+                        endDateInput.dataset.originalDate = endDateInput.value;
+                        endDateInput.disabled = true;
+                        endDateInput.value = "";  // Clear end date if currently studying
+                    } 
+                }
+            });
+        });
+    </script>
+
  
      <div>
          <div id="educationForm" method="post">
@@ -453,9 +479,9 @@
                                  {{ education_form.end_date.label_tag }} {{ education_form.end_date }}
                              </div>
                              <div class="form-group">
-                                 {{ education_form.current.label_tag }}
-                                 <input type="checkbox" name="account_education-{{ forloop.counter0 }}-current" class="account_education-current"> 
-                             </div>
+                                {{ education_form.current.label_tag }}
+                                <input type="checkbox" name="account_education-{{ forloop.counter0 }}-current" class="account_education-current" {% if education_form.current.value %}checked{% endif %}> 
+                            </div>
                          </div>
                          <!-- <div class="form-row-education">
                              <div class="form-group">
@@ -660,13 +686,21 @@
         
                     if (formNum !== null) {
                         const endDateInput = document.querySelector(`input[name="work_experiences-${formNum}-end_date"]`);
+                        
+                        // Set checkbox value based on checked state
+                        checkbox.value = checkbox.checked ? 'True' : 'False';
+
                         if (checkbox.checked && endDateInput) {
-                            // Store the initial value in a data attribute
-                            endDateInput.dataset.originalDate = endDateInput.value;
+                            // Store initial end date value if not already stored, then clear and disable the input
+                            endDateInput.dataset.originalDate = endDateInput.dataset.originalDate || endDateInput.value;
+                            endDateInput.value = "";  
                             endDateInput.disabled = true;
-                            endDateInput.value = "";  // Clear end date if currently working
+                        } else if (endDateInput) {
+                            // Restore original date and enable input if checkbox is unchecked
+                            endDateInput.value = endDateInput.dataset.originalDate || endDateInput.value;
+                            endDateInput.disabled = false;
                         }
-                    }
+}
                 });
             });
         </script>
