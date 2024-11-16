@@ -37,8 +37,11 @@
     background-color: #ffd60a;
 }
 
+
 </style>
 
+
+<section id="main">
 
 <section id="landed_section" style="text-align: center;">
     <h2>{{user_profile.first_name}}'s Build Page</h2>
@@ -168,7 +171,34 @@
     <div class="row">
         <!-- Rebuild Options Column (Left) -->
 
-        <div class="left-section" style="margin-top: 150px;"> 
+        <div class="left-section"> 
+
+            <div class="column website">
+                <script>
+                    // Define a variable to hold the HTML content
+                    let content = '';
+            
+                    // Check if the user is on a mobile device
+                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                        // Message for mobile users
+                        content = '<b>Build at least 4 times for optimal bullets.<br>' +
+                                  '<span style="color: red;">Shrunk on mobile, view on PC</span></b>';
+                    } else {
+                        // Message for non-mobile users
+                        content = '<span style="font-weight: bold;">Build at least 4 times for optimal bullets</span>';
+                    }
+            
+                    // Add the Google Doc link without any line breaks
+                    content += '<h3 id="googleDocLink" style="display: inline;"><a href="#" target="_blank" id="googleDocAnchor">Link to Google Doc</a></h3>';
+            
+                    // Insert the content into the div
+                    document.write(content);
+                </script>
+            </div>
+            
+            
+
+
             <div class="column rebuild-options">
                 <h3>Rebuild Options</h3>
                 <div class="button-group">
@@ -471,20 +501,7 @@
 
                         <!-- Additional Styles -->
                         <style>
-                            /* General Styles */
-                            html {
-                                scroll-behavior: smooth;
-                            }
-
-                            body {
-                                background-color: #1a1a1a;
-                                color: #c9d1d9;
-                                font-family: 'Arial', sans-serif;
-                                margin: 0;
-                                padding: 0;
-                                line-height: 1.6;
-                            }
-
+                            
                             /* Button Styles */
                             .btn {
                                 display: inline-block;
@@ -724,18 +741,7 @@
                         <!-- Additional Styles -->
                         <style>
                         /* General Styles */
-                        html {
-                            scroll-behavior: smooth;
-                        }
-
-                        body {
-                            background-color: #1a1a1a;
-                            color: #c9d1d9;
-                            font-family: 'Arial', sans-serif;
-                            margin: 0;
-                            padding: 0;
-                            line-height: 1.6;
-                        }
+                       
 
                         /* Button Styles */
                         .btn {
@@ -960,9 +966,7 @@
             <!-- Resume Column (Right) -->
             <div class="resume-container">
                 <!-- Dynamic Google Doc Link Heading -->
-                <h3 id="googleDocLink">
-                    <a href="#" target="_blank" id="googleDocAnchor">Link to Google Doc</a>
-                </h3>
+                
         
                 <script>
                     // Function to update the iframe and the Google Doc link
@@ -987,18 +991,7 @@
                     };
                 </script>
         
-                <script>
-                    // Check if the user is on a mobile device
-                    if (/Mobi|Android/i.test(navigator.userAgent)) {
-                        // Display message for mobile users
-                        document.write(
-                            '<b><p>Build at least 4 times for optimal bullets. <br> <span style="color: red;">Shrunk on mobile, view on PC</span></p></b> <br>'
-                        );
-                    } else {
-                        // Display message for non-mobile users
-                        document.write('<h5>Build at least 4 times for optimal bullets <br></h5>');
-                    }
-                </script>
+                
         
                 <!-- Dropdown for Resume Selection -->
                 {% if account.get_resume_links %}
@@ -1064,7 +1057,7 @@
 
 <form method="post" action="{% url 'confirmation' account_id=account.id %}">
 {% csrf_token %}
-<section id="pricing" name="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1000px; margin: auto;">
+<section id="pricing" name="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1100px; margin: auto;">
     <h2 style="text-align: center; font-size: 2.5em; color: #ffd60a; margin-bottom: 40px; font-family: 'Poppins', sans-serif;">Pricing</h2>
     <p style="text-align: center; color: #a9a9a9; font-size: 1.1em; margin-bottom: 30px;">All resumes are optimized for Applicant Tracking Systems (ATS)</p>
 
@@ -1275,8 +1268,6 @@ html {
     background-color: #1a1a1a;
     color: #c9d1d9;
     font-family: 'Arial', sans-serif;
-    margin: 0;
-    padding: 0;
     line-height: 1.6;
 }
 
@@ -1448,6 +1439,7 @@ h3 {
 
 </style>
 
+</section>
 
 </html>
 

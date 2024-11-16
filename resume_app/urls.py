@@ -41,6 +41,7 @@ urlpatterns = [
     path('form/CheckUrlNameView/', CheckUrlNameView.as_view(), name='CheckUrlNameView'),
     path('login/CheckAccountNameView/', CheckAccountNameView.as_view(), name='CheckAccountNameView'),
     path('login/CheckAccountEmailView/', CheckAccountEmailView.as_view(), name='CheckAccountEmailView'),
+    path('terms-of-service/', terms_of_service, name='terms_of_service'),
 
 ]
 

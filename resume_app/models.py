@@ -23,13 +23,15 @@ def validate_unique_url_name(value):
 
 from django.contrib.auth.models import User 
 
+from django.contrib.auth.hashers import make_password
+
 class Account(models.Model):
     id = models.AutoField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE, null=True, related_name='account_user')
-    name = models.CharField(max_length=255, unique=True) # needs to be unique
-    password = models.CharField(max_length=255)
+    name = models.CharField(max_length=255, unique=True)  # needs to be unique
+    password = models.CharField(max_length=255)  # Store hashed password
     email = models.EmailField()
-    tier = models.CharField(max_length=255, default = "free")
+    tier = models.CharField(max_length=255, default="free")
     educations = models.ForeignKey('Education', on_delete=models.SET_NULL, null=True, related_name='education_account')
     user_profile = models.ForeignKey('UserProfile', on_delete=models.SET_NULL, null=True, related_name='user_profile_account')
     user_plan = models.ForeignKey('Plan', on_delete=models.SET_NULL, null=True, related_name='user_plan')
@@ -38,6 +40,11 @@ class Account(models.Model):
     unique_words = models.CharField(max_length=10000000, blank=True, null=True, help_text="Separate actions words with commas")
     reset_password_code = models.CharField(max_length=255, null=True)
     is_active = models.BooleanField(default=True)
+
+    def save(self, *args, **kwargs):
+        if self.password:
+            self.password = make_password(self.password)  # Hash the password before saving
+        super(Account, self).save(*args, **kwargs)
 
     def get_resume_links(self):
         return self.resume_links.split(',') if self.resume_links else []
@@ -55,9 +62,13 @@ class Account(models.Model):
         words.append(word)
         self.unique_words = ','.join(words)
 
-
     def __str__(self):
         return f"{self.id}: {self.name}"
+
+    def check_password(self, raw_password):
+        from django.contrib.auth.hashers import check_password
+        return check_password(raw_password, self.password)  # Use check_password to verify a raw password
+
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length=None):

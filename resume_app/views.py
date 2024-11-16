@@ -57,6 +57,17 @@ action_words_list = ["Streamlined", "Leveraged", "Developed", "Engineered", "Dep
 def home(request):
     return render(request, "home.html")
 
+from django.contrib.auth import authenticate, login as auth_login
+from django.contrib.auth.hashers import check_password, make_password
+from django.shortcuts import render, redirect
+from django.contrib import messages
+from .forms import LoginForm
+from .models import Account, User, Plan
+from django.core.mail import send_mail
+from django.template.loader import render_to_string
+from django.db import IntegrityError
+from django.conf import settings
+
 def login(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
@@ -68,10 +79,12 @@ def login(request):
             print("logging in user")
 
             try:
-                authenticated_user = authenticate(username=user_name, email=user_email, password=user_password)
+                # Use authenticate to check the username and password
+                authenticated_user = authenticate(username=user_name, password=user_password)
                 print("authenticated_user is ", authenticated_user)
-                account = Account.objects.get(name = user_name, email = user_email, password = user_password)
                 
+                # If user exists in the database and the password is correct, authenticate them
+                account = Account.objects.get(name=user_name, email=user_email)
                 if authenticated_user is not None:
                     # User is authenticated, log them in
                     auth_login(request, authenticated_user)
@@ -96,48 +109,48 @@ def login(request):
                 return render(request, 'login.html', context)
 
         elif request.POST['action'] == 'create_account':
-            if Account.objects.filter(name = user_name).exists():
+            if Account.objects.filter(name=user_name).exists():
                 messages.error(request, 'Username already taken. Please choose another.')
                 login_form = LoginForm()
                 context = {'login_form': login_form}
                 return render(request, 'login.html', context)
-            elif Account.objects.filter(email = user_email).exists():
+            elif Account.objects.filter(email=user_email).exists():
                 messages.error(request, 'Email already taken. Please choose another.')
                 login_form = LoginForm()
                 context = {'login_form': login_form}
                 return render(request, 'login.html', context)
             else:
-
                 try:
-                    user = User.objects.create_user(user_name, user_email, user_password)
+                    # Hash the password before creating the user
+                    hashed_password = make_password(user_password)
 
-                    new_account = Account()
-                    print("creating new account")
-                    new_account.name = user_name
-                    new_account.email = user_email
-                    new_account.password = user_password
-                    new_account.user = user
+                    # Create the user with the hashed password
+                    user = User.objects.create_user(user_name, user_email, user_password)  # user_password is already hashed
+                    new_account = Account(name=user_name, email=user_email, password=hashed_password, user=user)
                     new_account.save()
+
+                    # Create a free plan and link to the account
                     free_plan = Plan(account=new_account)
                     free_plan.user = user
                     free_plan.save()
                     new_account.user_plan = free_plan
                     new_account.save()
-                    print("new account saved")
-                    print(new_account)
-                    print("id of new account is ", new_account)
 
-                    authenticated_user = authenticate(username=user_name, email=user_email, password=user_password)
+                    print("new account saved")
+                    print("id of new account is ", new_account.id)
+
+                    # Authenticate the user after account creation
+                    authenticated_user = authenticate(username=user_name, password=user_password)
 
                     if authenticated_user is not None:
                         auth_login(request, authenticated_user)
 
+                    # Send the welcome email
                     try:
                         subject = 'Welcome to DisplayAI'
                         from_email = settings.EMAIL_HOST_USER
-                        recipient_list = [new_account.email]    
+                        recipient_list = [new_account.email]
 
-                        # Prepare context with payment details
                         context_email = {
                             'account': new_account,
                         }
@@ -146,22 +159,18 @@ def login(request):
                         send_mail(subject, '', from_email, recipient_list, html_message=email_html, fail_silently=False)
 
                     except Exception as e:
-                        print("this is the error : ", e)
-                        # messages.error(request, 'unable to send email')
+                        print("this is the error: ", e)
                         print("unable to send create account email")
 
-                    messages.success(request, 'Account created !')
-
-                    return redirect('form' , account_id = new_account.id)
+                    messages.success(request, 'Account created!')
+                    return redirect('form', account_id=new_account.id)
 
                 except IntegrityError as e:
-                    messages.error(request, 'Username  or Email already taken. Please choose another.')
+                    messages.error(request, 'Username or Email already taken. Please choose another.')
                     login_form = LoginForm()
                     context = {'login_form': login_form}
                     return render(request, 'login.html', context)
 
-
-                
     else:
         login_form = LoginForm()
         context = {'login_form': login_form}
@@ -1578,4 +1587,9 @@ def stripe_webhook(request):
         time.sleep(15)
     
     return HttpResponse(status=200)
+
+
+
+def terms_of_service(request):
+    return render(request, 'terms_of_service.html')
 
