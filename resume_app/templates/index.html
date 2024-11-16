@@ -80,12 +80,14 @@
         .mobile-nav {
             display: none;
             flex-direction: column;
-            background-color: #1a1a1a;
+            background-color: #b0b0b0;
             position: absolute;
             top: 70px;
             right: 10%;
             width: 80%;
+            height: max-content;
             border-radius: 8px;
+            height: 700px;
             z-index: 1000;
         }
 
@@ -93,6 +95,7 @@
             padding: 15px;
             border-bottom: 1px solid #333;
             text-align: center;
+            color: #ffd60a;
         }
 
         .mobile-nav a:hover {
@@ -158,10 +161,6 @@
             <div class="header-logo">⚡ CheeseCV</div>
             <div class="header-nav">
                 {% block header_links %}
-                <a href="#">Home</a>
-                <a href="#">Pricing</a>
-                <a href="#">Features</a>
-                <a href="#">Contact</a>
                 {% endblock %}
             </div>
             <div class="hamburger" onclick="toggleMenu()">
@@ -171,10 +170,8 @@
             </div>
         </div>
         <div class="mobile-nav" id="mobileNav">
-            <a href="#">Home</a>
-            <a href="#">Pricing</a>
-            <a href="#">Features</a>
-            <a href="#">Contact</a>
+            {% block header_links_nav %}
+                {% endblock %}
         </div>
     </section>
 

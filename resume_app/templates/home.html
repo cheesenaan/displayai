@@ -10,6 +10,14 @@
 {% endblock %}
 
 
+{% block header_links_nav %}
+        <a href="{% url 'login' %}"> Build Now </a>
+        <a href="#pricing"> Pricing </a>
+        <a href="#work-experience"> About us </a>
+
+{% endblock %}
+
+
 {% block content %}
 
 
@@ -19,52 +27,13 @@
     <title>CheeseCV</title>
     <style>
         /* General Styles */
-        body {
-            background-color: #1a1a1a;
-            color: #ffffff;
-            font-family: 'Arial', sans-serif;
-            
-        }
 
-        /* Main Content */
-        .main {
-            display: flex;
-            flex-direction: column; /* Stacks columns on smaller screens */
-            gap: 40px;
-            margin-top: 20px;
-        }
-        
-        @media (min-width: 768px) {
-            .main {
-                flex-direction: row; /* Revert to row layout on larger screens */
-            }
-            .left-column, .right-column {
-                width: 48%; /* Adjusts columns to fit side by side */
-            }
-        }
-
-        /* Left Column */
-        .left-column {
-            max-width: 600px;
-        }
-        .left-column h1 {
-            font-size: 2.2em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            line-height: 1.2;
-            font-family: 'Courier New', Courier, monospace;
-        }
         .highlight {
             color: #d4a373;
             background-color: #333;
             padding: 2px 6px;
         }
-        .subheader {
-            font-size: 1em;
-            color: #b0b0b0;
-            margin: 20px 0;
-            line-height: 1.6;
-        }
+
         .button {
             display: inline-block;
             padding: 12px 25px;
@@ -96,8 +65,53 @@
         .stars {
             margin-left: 10px;
             color: #ffd60a;
-            font-weight: bold;
+
         }
+
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            
+        }
+          
+
+        @media (min-width: 768px) {
+        
+
+        /* Main Content */
+        .main {
+            display: flex;
+            flex-direction: column; /* Stacks columns on smaller screens */
+            gap: 40px;
+            margin-top: 20px;
+            flex-direction: row; /* Revert to row layout on larger screens */
+        }
+        
+        .left-column, .right-column {
+                width: 48%; /* Adjusts columns to fit side by side */
+            }
+
+        /* Left Column */
+        .left-column {
+            max-width: 600px;
+        }
+        .left-column h1 {
+            font-size: 2.2em;
+            
+            margin-bottom: 15px;
+            line-height: 1.2;
+            font-weight: bold;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        
+        .subheader {
+            font-size: 1em;
+            color: #b0b0b0;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+          font-weight: bold;
 
         /* Right Column */
         .right-column {
@@ -159,16 +173,6 @@
             margin: 0 auto;
         }
         
-        @media (min-width: 600px) {
-            .features {
-                grid-template-columns: 1fr 1fr; /* Two columns on medium screens */
-            }
-        }
-        @media (min-width: 900px) {
-            .features {
-                grid-template-columns: repeat(3, 1fr); /* Three columns on larger screens */
-            }
-        }
         .feature-item {
             background-color: #333;
             padding: 20px;
@@ -189,13 +193,155 @@
             list-style: none; /* Remove default list styling */
             padding: 0;
         }
+
+        }
+
+        /* General Mobile Styles */
+        @media (max-width: 768px) {
+            body {
+                font-size: 14px; /* Smaller base font size */
+                padding: 10px; /* Reduced padding for smaller screens */
+            }
+
+            .main {
+                flex-direction: column;
+                gap: 20px;
+                margin-top: 15px;
+            }
+
+            .left-column, .right-column {
+                width: 100%; /* Stack columns on mobile */
+            }
+
+            .left-column h1 {
+                font-size: 1.8em; /* Smaller heading size */
+                margin-bottom: 10px;
+                font-weight: bold;
+                font-family: 'Courier New', Courier, monospace;
+            }
+
+            .highlight {
+                font-size: 0.9em;
+                padding: 2px 4px;
+            }
+
+            .subheader {
+                font-size: 0.9em;
+                margin: 15px 0;
+            }
+
+            .button {
+                font-size: 1em;
+                padding: 10px 20px;
+                margin-top: 15px;
+            }
+
+            .discount {
+                font-size: 0.9em;
+                margin-top: 10px;
+            }
+
+            .avatars img {
+                width: 30px;
+                height: 30px;
+            }
+
+            .right-column {
+                padding: 20px;
+                max-width: 100%;
+            }
+
+            .video-item img {
+                width: 100%;
+                height: auto;
+                object-fit: contain;
+            }
+
+            .legal-section {
+                padding: 15px;
+            }
+
+            .legal-section h2 {
+                font-size: 1.4em;
+                margin-bottom: 10px;
+            }
+
+            .legal-section p {
+                font-size: 0.9em;
+            }
+
+            .why-cheesecv {
+                padding: 30px;
+                margin-top: 40px;
+            }
+
+            .why-cheesecv h2 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            .features {
+                grid-template-columns: 1fr; /* Single column on mobile */
+                gap: 15px;
+            }
+
+            .feature-item {
+                padding: 15px;
+            }
+
+            .feature-item h3 {
+                font-size: 1em;
+            }
+
+            .feature-item p {
+                font-size: 0.9em;
+            }
+
+            #work-experience,
+            #tailored-resumes,
+            #cover-letters {
+                padding: 30px;
+            }
+
+            #work-experience h2,
+            #tailored-resumes h2,
+            #cover-letters h2 {
+                font-size: 1.5em;
+                margin-bottom: 15px;
+            }
+
+            #work-experience p,
+            #tailored-resumes p,
+            #cover-letters p {
+                font-size: 0.9em;
+            }
+
+            .button {
+                font-size: 0.9em;
+                padding: 8px 16px;
+            }
+
+            /* Section-specific adjustments for images */
+            #work-experience img,
+            #tailored-resumes img,
+            #cover-letters img {
+                width: 100%;
+                height: auto;
+            }
+
+            .interviews-by img {
+                width: 100%;
+                height: auto;
+                margin-top: 20px;
+            }
+        }
+
+
     </style>
 </head>
 <body>
 
 <div> 
-
-   
 
     <section id="main">
         <!-- Main Content -->
@@ -220,10 +366,52 @@
             </div>
         </div>
 
-        <div class="interviews-by">
-            <!-- <img src="{% static 'img/interviews-by.jpeg' %}" alt="interviews-by.jpeg" style="width: 100%; height: auto;"> -->
-            <img src="{% static 'img/D861DC30-268C-46DC-8AB5-24805709194F.png' %}" alt="interviews-by.png" style="width: 100%; height: auto;">
-        </div>
+        <div class="interviews-by" style="
+        overflow-x: auto; 
+        white-space: nowrap; 
+        display: flex; 
+        justify-content: center; 
+        align-items: center; 
+        margin-top: 20px; 
+        scroll-behavior: smooth;
+    ">
+        <img src="{% static 'img/D861DC30-268C-46DC-8AB5-24805709194F.png' %}" 
+            alt="interviews-by.png" 
+            style="
+                width: 100000%; /* Make the image larger than its container */
+                max-width: none; /* Prevent max-width from limiting image size */
+                height: 100px;
+                object-fit: contain;
+                @media (min-width: 768px) { 
+                    width: 100%; /* Reset to full width on larger screens */
+                    overflow: hidden;
+                }
+            ">
+    </div>
+
+    <script>
+        // Auto-scroll functionality for the div with bidirectional scrolling
+        document.addEventListener('DOMContentLoaded', function () {
+            const container = document.querySelector('.interviews-by');
+            let scrollAmount = 1; // Speed of scrolling (positive for right, negative for left)
+    
+            function scrollImage() {
+                if (container) {
+                    container.scrollLeft += scrollAmount;
+    
+                    // Reverse direction if we reach the end or the beginning
+                    if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
+                        scrollAmount = -1; // Change direction to left
+                    } else if (container.scrollLeft <= 0) {
+                        scrollAmount = 1; // Change direction to right
+                    }
+                }
+            }
+    
+            setInterval(scrollImage, 10); // Adjust interval time for smoother or faster scrolling
+        });
+    </script>
+    
 
 
         <!-- Why CheeseCV Section -->
@@ -267,10 +455,11 @@
                     <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">
                         With CheeseCV, you don’t need to stress over perfect resume bullet points. Simply describe your work experience or project details in a conversational way—like you’re texting a friend.
                     </p>
+
                     <p style="font-size: 1.1em; line-height: 1.6; color: #b0b0b0;">
                         Many struggle with the XYZ format, where they need to explain <i>what they did</i> and the <i>impact it had</i> on the business. CheeseCV’s AI model transforms your input into polished, impactful bullets that effectively highlight your contributions.
                     </p>
-                    <a href="#" class="button" style="margin-top: 20px;">⚡ Start Building Your Experience</a>
+                    <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
                 </div>
 
                 <!-- Right Column for GIF with Layered Styling -->
@@ -304,7 +493,7 @@
                         
                     </p>
                     <p style="color: #d4a373; font-size: 1em; font-style: italic;">Maximize your chances by focusing on what matters: landing the right role, faster.</p>
-                    <a href="#" class="button" style="margin-top: 20px;">⚡ Start Building Tailored Resumes</a>
+                    <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
                 </div>
 
             </div>
@@ -323,7 +512,7 @@
                         Our AI-driven system generates role-specific cover letters tailored to help you stand out, without spending hours crafting each one.
                     </p>
                     <p style="color: #d4a373; font-size: 1em; font-style: italic;">Fast-track your job applications with impactful cover letters that impress.</p>
-                    <a href="#" class="button" style="margin-top: 20px;">⚡ Generate Your Cover Letter</a>
+                    <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
                 </div>
 
                 <!-- Right Column for GIF with Layered Styling -->
@@ -358,7 +547,7 @@
                         <li>💼 ATS-friendly with a score of 95+ to pass screenings</li>
                         <li>⚡ Quick, easy, and fully customizable</li>
                     </ul>
-                    <a href="#" class="button" style="margin-top: 20px;">⚡ Start Building Your Resume</a>
+                    <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
                 </div>
 
             </div>
@@ -376,7 +565,7 @@
                         With CheeseCV, you can easily convert your resume details into a professional website, optimized for your job search.
                     </p>
                     <p style="color: #d4a373; font-size: 1em; font-style: italic;">Elevate your online presence and make a lasting impression with just a few clicks.</p>
-                    <a href="#" class="button" style="margin-top: 20px;">⚡ Build Your Website</a>
+                    <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
                 </div>
 
                 <!-- Right Column for GIF with Layered Styling -->
@@ -390,7 +579,7 @@
         </section>
 
         <!-- Testimonial Section -->
-        <section id="testimonials" style="margin-top: 60px; background-color: #292929; padding: 60px; border-radius: 12px;">
+        <section id="testimonials" style="margin-top: 60px; background-color: #292929; padding: 60px; border-radius: 12px; justify-content: center;">
             <div style="text-align: center; margin-bottom: 40px;">
                 <h2 style="color: #ffd60a; font-size: 2.2em; font-weight: bold; margin-bottom: 10px;">What Our Users Say</h2>
                 <p style="color: #e0e0e0; font-size: 1.1em; line-height: 1.6; max-width: 700px; margin: 0 auto;">
@@ -467,7 +656,7 @@
 
 
 <!-- Pricing Section -->
-<section id="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1100px; margin: auto;">
+<section id="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1100px; margin: auto; ">
     <h2 style="text-align: center; font-size: 2.5em; color: #ffd60a; margin-bottom: 40px; font-family: 'Poppins', sans-serif;">Pricing</h2>
     <p style="text-align: center; color: #a9a9a9; font-size: 1.1em; margin-bottom: 30px;">All resumes are optimized for Applicant Tracking Systems (ATS)</p>
 
