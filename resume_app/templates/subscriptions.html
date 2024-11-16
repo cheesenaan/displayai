@@ -1,303 +1,192 @@
 {% extends 'index.html' %}
+{% load static %}
+
+
+{% block header_links %}
+        <a href="{% url 'confirmation' account_id=account.id %}">  Build Page </a>
+        <a href="{% url 'account' account_id=account.id %}">  Account </a>
+{% endblock %}
+
+
 {% block content %}
 
-<br>  <br> 
-
-<header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex justify-content-between">
-
-        <div class="logo">
-            <h1><a href="/">display.ai</a></h1>
-        </div>
-
-        <nav id="navbar-form" class="navbar">
-            <ul>
-                <li><a class="nav-link scrollto active" href="/">Home</a></li>
-                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'confirmation' account_id=account.id %}"> Build </a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Mobile navigation toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('mobile-nav-toggle')) {
-                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
-                e.target.classList.toggle('bi-list');
-                e.target.classList.toggle('bi-x');
-            }
-        });
-
-        // Mobile nav dropdowns activate
-        document.addEventListener('click', function (e) {
-            var navbar = document.querySelector('#navbar-form');
-            if (navbar.classList.contains('navbar-mobile')) {
-                var dropdownLink = e.target.closest('.navbar .dropdown > a');
-                if (dropdownLink) {
-                    e.preventDefault();
-                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
-                }
-            }
-        }, true);
-    });
-
-
-    </script>
-
-</header>
 
 
 <style>
 
-.cancel-subscription-button {
-  background-color: green;
+    /* General Page Styles */
+body {
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    font-family: 'Arial', sans-serif;
+    line-height: 1.6;
+    margin: 20px;
 }
 
-.cancel-subscription-button:hover {
-  background-color: orange; /* Change this to the desired hover color */
+/* Headers */
+h1 {
+    color: #00acc1;
+    border-bottom: 2px solid #00acc1;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
 }
 
-
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f4f4;
-        margin: auto;
-        padding: 60px 0 0 0; /* Add top padding to create space */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: auto;
-    }
-
-    .cancel-button {
-  background-color: red;
+/* Links styled as buttons */
+a.reload_resume_and_website-button button {
+    background-color: #1f8ac0;
+    color: #ffffff;
+    border: none;
+    padding: 10px 20px;
+    margin: 5px;
+    cursor: pointer;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+    text-align: center;
+    font-size: 16px;
 }
 
-.cancel-button:hover {
-  background-color: orange;
+a.reload_resume_and_website-button button:hover {
+    background-color: #156f91;
 }
-    
-    
-    .content {
-        text-align: center;
-    }
-    
-    h1, h2 {
-        color: #333;
-    }
-    
-    p {
-        color: #666;
-    }
-    
-    /* Header Styles */
-    .header {
-        float: right;
-        width: 50%;
-    }
-    
-    /* Pricing Card Styles */
-    .pricing-cards {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 10px;
-    }
-    
-    .card {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 250px;
-        text-align: center;
-        transition: transform 0.3s;
-    }
-    
-    .card:hover {
-        transform: scale(1.05);
-    }
-    
-    h2 {
-        color: #4285f4;
-    }
-    
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    
-    li {
-        margin-bottom: 8px;
-        color: #666;
-    }
-    
-    .price {
-        font-size: 24px;
-        color: #333;
-        margin: 15px 0;
-        font-weight: bold;
-    }
-    
-    /* Button Styles */
-    .get-now-button {
-        background-color: #4285f4;
-        color: #fff;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
-    
-    .get-now-button:hover {
-        background-color: #0066cc;
-    }
-    
-    /* Media Query for Responsive Design */
-    @media (max-width: 768px) {
-        /* Adjust styles for smaller screens if needed */
-    }
 
-    
-    .reload_resume_and_website-button, button {
-        background-color: #3498db; /* Attractive blue color */
-        color: white;
-        border: none;
-        padding: 3px; /* Slightly increased padding for a consistent size */
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-    
-    .reload_resume_and_website-button:hover, button:hover {
-        background-color: orange; /* Darker shade on hover */
-    }
-    
-    
-    .resume-container {
-        float: right;
-        width: 50%;
-    }
-    
-    @media (max-width: 768px) {
-        /* Adjust styles for smaller screens if needed */
-        .resume-container {
-            display: none;
-        }
-    
-    }
-    .user-info-table {
-        width: auto;
-        border-collapse: collapse;
-        margin-bottom: 20px; /* Optional: Adjust spacing between tables */
-    }
-    
-    .user-info-table td {
-        padding: 8px;
-        border: 1px solid #ddd;
-        text-align: left;
-    }
-    
-    .user-info-table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    
-    .user-info-table tr:hover {
-        background-color: #ddd;
-    }
-    
-    .user-info-table b {
-        color: #0066cc; /* Optional: Change the color of the bold text */
-    }
-    
-    
+a.reload_resume_and_website-button {
+    text-decoration: none;
+}
+
+/* Tables */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 20px 0;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+table th, table td {
+    padding: 15px;
+    text-align: left;
+}
+
+table th {
+    background-color: #2b2b2b;
+    color: #ffa726;
+    font-weight: bold;
+}
+
+table td {
+    border-bottom: 1px solid #2a2a2a;
+}
+
+/* Highlight even rows */
+table tr:nth-child(even) {
+    background-color: #292929;
+}
+
+/* No Border for Last Row */
+table tr:last-child td {
+    border-bottom: none;
+}
+
+/* Button Styles */
+button {
+    background-color: #d32f2f;
+    color: #ffffff;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #b71c1c;
+}
+
+/* Cancel button for already canceled subscriptions */
+button.cancel-button {
+    background-color: #555;
+    color: #9e9e9e;
+    cursor: not-allowed;
+}
+
+button.cancel-button:hover {
+    background-color: #555; /* No hover effect for disabled button */
+}
+
+/* Messages */
+.messages {
+    list-style-type: none;
+    padding: 0;
+}
+
+.messages li {
+    background-color: #1e88e5;
+    color: #ffffff;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+}
+
+/* Success message */
+.messages .success {
+    background-color: #43a047;
+}
+
+/* Error message */
+.messages .error {
+    background-color: #e53935;
+}
+
+/* Confirm Subscription Script */
+.confirm-button {
+    background-color: #0288d1;
+    color: #ffffff;
+    padding: 8px 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.confirm-button:hover {
+    background-color: #0277bd;
+}
+
+/* Paragraphs */
+p {
+    margin: 15px 0;
+}
+
+/* Inputs */
+input[type="hidden"] {
+    display: none;
+}
+
+/* Form Styles */
+form {
+    display: inline;
+}
+
+/* Scrollbar */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+::-webkit-scrollbar-track {
+    background: #121212;
+}
+
+::-webkit-scrollbar-thumb {
+    background: #424242;
+    border-radius: 5px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: #616161;
+}
+
 </style>
-    
-
-<style>
-    .pause-button {
-            background-color: #4CAF50; /* Green */
-            border: none;
-            color: white;
-            padding: 8px 16px;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 12px;
-            margin: 4px 2px;
-            cursor: pointer;
-            border-radius: 4px;
-        }
-    body {
-        font-family: Arial, sans-serif;
-        margin: 20px;
-    }
-
-    h1 {
-        color: #333;
-    }
-
-    table {
-        width: 100%;
-        border-collapse: collapse;
-        margin-top: 20px;
-    }
-
-    th, td {
-        border: 1px solid #ddd;
-        padding: 10px;
-        text-align: left;
-    }
-
-    th {
-        background-color: #f2f2f2;
-    }
-
-    tr:hover {
-        background-color: #f5f5f5;
-    }
-
-    p {
-        color: #555;
-    }
-</style>
-
-
-<style>
-    .messages li {
-      margin: 5px 0;
-      padding: 10px;
-      border-radius: 5px;
-    }
-  
-    .messages li.success {
-      color: #155724;
-      background-color: #d4edda;
-      border-color: #c3e6cb;
-      font-weight: bold;
-    }
-  
-    .messages li.error {
-      color: #721c24;
-      background-color: #f8d7da;
-      border-color: #f5c6cb;
-      font-weight: bold;
-    }
-  </style>
-
 
 <h1>{{user_profile.first_name}}, here are your subscription details </h1>
     <br> <br> 
@@ -372,7 +261,8 @@
 
 
     <h1> Subscription Information </h1>
-    <p> These are monthly subscriptions and you will be charged every month until cancelled </p>
+    <p> Subscription pricing plans coming soon  </p>
+    <!-- <p> These are monthly subscriptions and you will be charged every month until cancelled </p>
 
 
     {% if messages %}
@@ -392,13 +282,13 @@
             <th>Start Date</th>
             <th>End Date</th>
             <th>Status</th>
-            <!-- <th>Cancel Status</th> -->
-            <!-- <th>Cancel Status Text</th> -->
+            <th>Cancel Status</th>
+            <th>Cancel Status Text</th>
             <th>Subscription ID</th>
             <th>Email</th>
-            <!-- <th>Customer ID</th> -->
-            <!-- <th>Price ID</th> -->
-            <th>Cancel</th> <!-- New column for the button -->
+            <th>Customer ID</th>
+            <th>Price ID</th>
+            <th>Cancel</th>
         </tr>
 
         {% for payment_instance in payment_instances %}
@@ -410,12 +300,12 @@
                 <td>{{ payment_instance.start_date }}</td>
                 <td>{{ payment_instance.end_date }}</td>
                 <td>{{ payment_instance.subscription_status }}</td>
-                <!-- <td>{{ payment_instance.subscription_cancel_status }}</td> -->
-                <!-- <td>{{ payment_instance.subscription_cancel_status_text }}</td> -->
+                <td>{{ payment_instance.subscription_cancel_status }}</td>
+                <td>{{ payment_instance.subscription_cancel_status_text }}</td>
                 <td>{{ payment_instance.subscription_id }}</td>
                 <td>{{ payment_instance.customer_email }}</td>
-                <!-- <td>{{ payment_instance.customer_id }}</td> -->
-                <!-- <td>{{ payment_instance.price_id }}</td> -->
+                <td>{{ payment_instance.customer_id }}</td>
+                <td>{{ payment_instance.price_id }}</td>
                 <td>
                     <form id="pauseForm{{ payment_instance.subscription_id }}" action="{% url 'cancel_subscription' account_id=account.id subscription_id=payment_instance.subscription_id %}" method="post">
                         {% csrf_token %}
@@ -466,7 +356,7 @@
             If you pause now, you will no longer be charged and your subscription will remain active until the end of the month. 
             Click the "cancel subscription" button for more information.
         </p>
-    {% endif %}
+    {% endif %} -->
     
 
 <br><br>

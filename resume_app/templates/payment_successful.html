@@ -1,565 +1,201 @@
 
 
 {% extends 'index.html' %}
+{% load static %}
+
+
+{% block header_links %}
+    <a href="{% url 'confirmation' account_id=account.id %}">  Build Page </a>
+        <a href="{% url 'account' account_id=account.id %}">  Account </a>
+        <a href="{% url 'subscriptions' account_id=account.id %}">  Orders </a>
+
+{% endblock %}
+
+
 {% block content %}
 
-<br> <br> <br> <br> <br> <br> <br> <br> <br> 
-
-<header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex justify-content-between">
-
-        <div class="logo">
-            <h1><a href="/">display.ai</a></h1>
-        </div>
-
-        <nav id="navbar-form" class="navbar">
-            <ul>
-                <li><a class="nav-link scrollto active" href="/">Home</a></li>
-                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
-
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Mobile navigation toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('mobile-nav-toggle')) {
-                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
-                e.target.classList.toggle('bi-list');
-                e.target.classList.toggle('bi-x');
-            }
-        });
-
-        // Mobile nav dropdowns activate
-        document.addEventListener('click', function (e) {
-            var navbar = document.querySelector('#navbar-form');
-            if (navbar.classList.contains('navbar-mobile')) {
-                var dropdownLink = e.target.closest('.navbar .dropdown > a');
-                if (dropdownLink) {
-                    e.preventDefault();
-                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
-                }
-            }
-        }, true);
-    });
-
-
-    </script>
-
-</header>
-
 
 <style>
+
+/* Dark Theme for Cheesecv Payment Successful Page */
+
+/* General body styles */
+body {
+    background-color: #121212;
+    color: #e0e0e0;
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 0;
+}
+
+/* Header */
+h1 {
+    color: #f4f4f4;
+    text-align: center;
+    font-size: 2em;
+    margin-top: 40px;
+}
+
+/* Table Styling */
+.user-info-table {
+    width: 60%;
+    margin: 30px auto;
+    border-collapse: collapse;
+    background-color: #1e1e1e;
+    border-radius: 8px;
+}
+
+.user-info-table td {
+    padding: 12px;
+    border-bottom: 1px solid #333;
+}
+
+.user-info-table tr:nth-child(even) {
+    background-color: #2c2c2c;
+}
+
+.user-info-table td:first-child {
+    color: #b0b0b0;
+}
+
+.user-info-table td:last-child {
+    color: #fff;
+}
+
+/* Button Styling */
+button {
+    background-color: #6200ea;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #3700b3;
+}
+
+.get-now-button {
+    display: inline-block;
+    background-color: #03dac5;
+    padding: 12px 18px;
+    border-radius: 4px;
+    color: #121212;
+    font-weight: bold;
+    transition: background-color 0.3s ease;
+    text-decoration: none;
+}
+
+.get-now-button:hover {
+    background-color: #018786;
+}
+
+/* Loading Modal */
+#loadingModal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    color: #fff;
+    z-index: 9999;
+    text-align: center;
+    padding-top: 20%;
+}
 
 #loadingOverlay {
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-        backdrop-filter: blur(5px); /* Add a blur effect to the background */
-        z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
-        display: none;
-    }
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 9998;
+}
 
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f4f4;
-        margin: auto;
-        padding: 60px 0 0 0; /* Add top padding to create space */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: auto;
-    }
-    
-    
-    .content {
-        text-align: center;
-    }
-    
-    h1, h2 {
-        color: #333;
-    }
-    
-    p {
-        color: #666;
-    }
-    
-    /* Header Styles */
-    .header {
-        float: right;
-        width: 50%;
-    }
-    
-    /* Pricing Card Styles */
-    .pricing-cards {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: 10px;
-    }
-    
-    .card {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 250px;
-        text-align: center;
-        transition: transform 0.3s;
-    }
-    
-    .card:hover {
-        transform: scale(1.05);
-    }
-    
-    h2 {
-        color: #4285f4;
-    }
-    
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    
-    li {
-        margin-bottom: 8px;
-        color: #666;
-    }
-    
-    .price {
-        font-size: 24px;
-        color: #333;
-        margin: 15px 0;
-        font-weight: bold;
-    }
-    
-    /* Button Styles */
-    .get-now-button {
-        background-color: #4285f4;
-        color: #fff;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
-    
-    .get-now-button:hover {
-        background-color: #0066cc;
-    }
-    
-    /* Media Query for Responsive Design */
-    @media (max-width: 768px) {
-        /* Adjust styles for smaller screens if needed */
-    }
-    
-    .reload_resume_and_website-button, button {
-        background-color: #3498db; /* Attractive blue color */
-        color: white;
-        border: none;
-        padding: 3px; /* Slightly increased padding for a consistent size */
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-    
-    .reload_resume_and_website-button:hover, button:hover {
-        background-color: orange; /* Darker shade on hover */
-    }
-    
-    
-    .resume-container {
-        float: right;
-        width: 50%;
-    }
-    
-    @media (max-width: 768px) {
-        /* Adjust styles for smaller screens if needed */
-        .resume-container {
-            display: none;
-        }
-    
-    }
-    .user-info-table {
-        width: auto;
-        border-collapse: collapse;
-        margin-bottom: 20px; /* Optional: Adjust spacing between tables */
-    }
-    
-    .user-info-table td {
-        padding: 8px;
-        border: 1px solid #ddd;
-        text-align: left;
-    }
-    
-    .user-info-table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    
-    .user-info-table tr:hover {
-        background-color: #ddd;
-    }
-    
-    .user-info-table b {
-        color: #0066cc; /* Optional: Change the color of the bold text */
-    }
-    
-    
-</style>
+/* Pricing Cards */
+.pricing-cards {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin-top: 40px;
+}
 
-<style>
+.card {
+    background-color: #333;
+    margin: 15px;
+    padding: 20px;
+    border-radius: 8px;
+    width: 300px;
+    text-align: center;
+    transition: transform 0.3s ease;
+}
 
-    body {
-        font-family: 'Arial', sans-serif;
-        background-color: #f4f4f4;
-        margin: auto;
-        padding: 60px 0 0 0; /* Add top padding to create space */
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        height: auto;
-    }
-    
-    
-    .content {
-        text-align: center;
-    }
-    
-    h1, h2 {
-        color: #333;
-    }
-    
-    p {
-        color: #666;
-    }
-    
-    /* Header Styles */
-    .header {
-        float: right;
-        width: 50%;
-    }
-    
-    /* Pricing Card Styles */
-    .pricing-cards {
-        display: flex;
-        justify-content: center;
-        flex-wrap: wrap;
-        margin-top: auto;
-    }
-    
-    .card {
-        background-color: #fff;
-        border: 1px solid #ddd;
-        border-radius: 10px;
-        padding: 20px;
-        margin: 20px;
-        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-        width: 250px;
-        text-align: center;
-        transition: transform 0.3s;
-    }
-    
-    .card:hover {
-        transform: scale(1.05);
-    }
-    
-    h2 {
-        color: #4285f4;
-    }
-    
-    ul {
-        list-style: none;
-        padding: 0;
-    }
-    
-    li {
-        margin-bottom: 8px;
-        color: #666;
-    }
-    
-    .price {
-        font-size: 24px;
-        color: #333;
-        margin: 15px 0;
-        font-weight: bold;
-    }
-    
-    /* Button Styles */
-    .get-now-button {
-        background-color: #4285f4;
-        color: #fff;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
-    
-    .get-now-button:hover {
-        background-color: #0066cc;
-    }
-    
-    /* Media Query for Responsive Design */
-    @media (max-width: 768px) {
-        /* Adjust styles for smaller screens if needed */
-    }
-    
-    .reload_resume_and_website-button, button {
-        background-color: #3498db; /* Attractive blue color */
-        color: white;
-        border: none;
-        padding: 3px; /* Slightly increased padding for a consistent size */
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-    }
-    
-    .reload_resume_and_website-button:hover, button:hover {
-        background-color: orange; /* Darker shade on hover */
-    }
-    
-    
-    .resume-container {
-        float: right;
-        width: 50%;
-    }
-    
-    
-    @media (max-width: 768px) {
-        /* Adjust styles for smaller screens if needed */
-        .resume-container {
-            display: none;
-        }
-    
-    }
-    .user-info-table {
-        width: auto;
-        border-collapse: collapse;
-        margin-bottom: 20px; /* Optional: Adjust spacing between tables */
-    }
-    
-    .user-info-table td {
-        padding: 8px;
-        border: 1px solid #ddd;
-        text-align: left;
-    }
-    
-    .user-info-table tr:nth-child(even) {
-        background-color: #f2f2f2;
-    }
-    
-    .user-info-table tr:hover {
-        background-color: #ddd;
-    }
-    
-    .user-info-table b {
-        color: #0066cc; /* Optional: Change the color of the bold text */
-    
-    }
-    
-    
-    
-    .action-section {
-        text-align: left;
-        margin-bottom: 10px; /* Adjust as needed */
-    }
-    
-    .action-section p {
-        margin-bottom: 5px;
-    }
-        body {
-            font-family: 'Arial', sans-serif;
-            background-color: #f4f4f4;
-            margin: 0;
-            padding: 60px 0; /* Add top padding to create space */
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .content {
-            text-align: center;
-        }
-        
-        h1, h2, p {
-            margin: 0;
-        }
-        
-        h1, h2 {
-            color: #333;
-        }
-        
-        p {
-            color: #666;
-            margin-bottom: 10px;
-        }
-        
-        /* Header Styles */
-        .header {
-            width: 50%;
-        }
-        
-        /* Pricing Card Styles */
-        .pricing-cards {
-            display: flex;
-            justify-content: center;
-            flex-wrap: wrap;
-            margin-top: auto;
-        }
-        
-        .card {
-            background-color: #fff;
-            border: 1px solid #ddd;
-            border-radius: 10px;
-            padding: 20px;
-            margin: 20px;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            width: 250px;
-            text-align: center;
-            transition: transform 0.3s;
-        }
-        
-        .card:hover {
-            transform: scale(1.05);
-        }
-        
-        h2 {
-            color: #4285f4;
-            margin-bottom: 10px;
-        }
-        
-        ul {
-            list-style: none;
-            padding: 0;
-        }
-        
-        li {
-            margin-bottom: 8px;
-            color: #666;
-        }
-        
-        .price {
-            font-size: 24px;
-            color: #333;
-            margin: 15px 0;
-            font-weight: bold;
-        }
-        
-        /* Button Styles */
-        .reload_resume_and_website-button, button {
-            background-color: #3498db;
-            color: white;
-            padding: 8px;
-            border: none;
-            text-align: center;
-            text-decoration: none;
-            display: inline-block;
-            font-size: 16px;
-            margin: 5px;
-            cursor: pointer;
-            border-radius: 5px;
-        }
-        
-        .reload_resume_and_website-button:hover, button:hover {
-            background-color: orange;
-        }
-        
-        /* Modal Styles */
-        .modal-body {
-            padding: 20px;
-        }
-        
-        .modal-title {
-            margin: 0;
-        }
-        
-        
-        .messages li {
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-        
-        .messages li.success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            font-weight: bold;
-        }
-        
-        .messages li.error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            font-weight: bold;
-        }
-    
-    
-        /* Style for the modal */
-        #loadingModal {
-            display: none;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            background-color: #fff; /* White background */
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-            text-align: center;
-            animation: fadeIn 0.5s ease-in-out;
-            z-index: 1000; /* Ensure the modal appears above the rest of the content */
-        }
-    
-        /* Animation for the modal */
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-    
-        /* Style for the background overlay */
-        #loadingOverlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-            backdrop-filter: blur(5px); /* Add a blur effect to the background */
-            z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
-            display: none;
-        }
-        
+.card:hover {
+    transform: scale(1.05);
+}
+
+.card h2 {
+    color: #fff;
+    margin-bottom: 10px;
+}
+
+.card ul {
+    list-style: none;
+    padding: 0;
+}
+
+.card li {
+    color: #bbb;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.card .price {
+    color: #ff4081;
+    font-size: 20px;
+    margin: 20px 0;
+}
+
+.card button {
+    background-color: #6200ea;
+    padding: 12px 18px;
+    border-radius: 4px;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.card button:hover {
+    background-color: #3700b3;
+}
+
+/* Footer */
+footer {
+    background-color: #121212;
+    color: #fff;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+}
+
+
     </style>
-    
 
 <h1>{{user_profile.first_name}}, thank you for your Payment</h1>
     <br> <br> 
+
+
+    <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" style="display: flex; justify-content: center; align-items: center; width: 100%; height: 100%; text-align: center;" onclick="showLoadingModal()">
+        <button type="button"> Build Now ! </button>
+    </a>
 
     <table class="user-info-table">
         <tr>
@@ -580,9 +216,8 @@
         </tr>
     </table>
    
-    <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" onclick="showLoadingModal()">
-        <button type="button">Re-Build with same data</button>
-    </a>
+   
+    
     
     <div id="loadingModal">
         <p id="loadingText"><b>Loading...</b></p>
@@ -660,9 +295,9 @@
         }
     </script>
 
-    <a href="{% url 'subscriptions' account_id=account.id %}" class="reload_resume_and_website-button">
+    <!-- <a href="{% url 'subscriptions' account_id=account.id %}" class="reload_resume_and_website-button">
         <button type="button">  Account subscriptions </button>
-    </a>
+    </a> -->
 
 
 {% endblock %}
@@ -760,3 +395,4 @@
         </div>
 
     </form>
+

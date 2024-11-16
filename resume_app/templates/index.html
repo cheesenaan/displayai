@@ -1,73 +1,228 @@
 {% load static %}
 
 <!DOCTYPE html>
-<html>
-     <!-- ======= CP ======= -->
- <head>
-  <meta charset="utf-8">
-  <meta content="width=device-width, initial-scale=1.0" name="viewport">
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="CheeseCV - Generate Resumes and Websites with AI">
+    <meta name="keywords" content="resume builder, AI, SaaS, CheeseCV, website builder">
+    <meta name="author" content="CheeseCV">
 
-  <meta content="" name="description">
-  <meta content="" name="keywords">
+    <title>CheeseCV</title>
 
-  <!-- Favicons -->
-  <link href="/static/img/favicon.png" rel="icon">
-  <link href="/static/img/apple-touch-icon.png" rel="apple-touch-icon">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700|Raleway:300,400,500,600,700|Poppins:300,400,500,600,700" rel="stylesheet">
+    <style>
+        /* General Styles */
+        body {
+            padding: 0 10%;
+            margin: 0;
+            background-color: #121212;
+            color: #ffffff;
+            font-family: 'Poppins', sans-serif;
+        }
 
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
 
-  <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i|Raleway:300,300i,400,400i,500,500i,600,600i,700,700i|Poppins:300,300i,400,400i,500,500i,600,600i,700,700i" rel="stylesheet">
+        html {
+            scroll-behavior: smooth;
+        }
 
-  <!-- Vendor CSS Files -->
-  <link href="/static/vendor/aos/aos.css" rel="stylesheet">
-  <link href="/static/vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
-  <link href="/static/vendor/bootstrap-icons/bootstrap-icons.css" rel="stylesheet">
-  <link href="/static/vendor/boxicons/css/boxicons.min.css" rel="stylesheet">
-  <link href="/static/vendor/glightbox/css/glightbox.min.css" rel="stylesheet">
-  <link href="/static/vendor/swiper/swiper-bundle.min.css" rel="stylesheet">
+        /* Header Styles */
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 0;
+            border-bottom: 1px solid #333;
+        }
 
-  <!-- Template Main CSS File -->
-  <link href="/static/css/style.css" rel="stylesheet">
+        .header-logo {
+            font-size: 1.8em;
+            font-weight: bold;
+            color: #ffd60a;
+        }
 
+        .header-nav {
+            display: flex;
+            align-items: center;
+        }
 
+        .header-nav a {
+            color: #ffffff;
+            margin: 0 15px;
+            text-decoration: none;
+            font-size: 1.1em;
+        }
 
-  <!-- =======================================================
-  * Template Name: Maxim - v4.9.1
-  * Template URL: https://bootstrapmade.com/maxim-free-onepage-bootstrap-theme/
-  * Author: BootstrapMade.com
-  * License: https://bootstrapmade.com/license/
-  ======================================================== -->
-</head>  <!-- ======= End style stuff ======= -->
+        .header-nav a:hover {
+            color: #ffd60a;
+        }
 
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
 
-      <header id="header" class="fixed-top d-flex align-items-center">
-        <div class="container d-flex justify-content-between">
-    
-          <div class="logo">
-            <h1><a href="/">display.ai</a></h1>
-          </div>
-        
-          <nav id="navbar" class="navbar">
-            <ul>
-              <li><a class="nav-link scrollto active" href="/">Home</a></li>
-              <li><a class="nav-link scrollto active" href="">Demo</a></li>
-              <li><a class="nav-link scrollto active" href="">Pricing</a></li>
-              <li><a class="nav-link scrollto active" href="">About Us</a></li>
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle">
-            </i>
-           
-          </nav>
-          
+        .hamburger span {
+            height: 3px;
+            width: 25px;
+            background: #ffd60a;
+            margin: 4px 0;
+        }
+
+        .mobile-nav {
+            display: none;
+            flex-direction: column;
+            background-color: #1a1a1a;
+            position: absolute;
+            top: 70px;
+            right: 10%;
+            width: 80%;
+            border-radius: 8px;
+            z-index: 1000;
+        }
+
+        .mobile-nav a {
+            padding: 15px;
+            border-bottom: 1px solid #333;
+            text-align: center;
+        }
+
+        .mobile-nav a:hover {
+            background-color: #333;
+        }
+
+        /* Footer Styles */
+        footer {
+            background-color: #1a1a1a;
+            padding: 60px 20px;
+            color: #e0e0e0;
+            font-size: 1em;
+        }
+
+        footer h3,
+        footer h4 {
+            color: #ffd60a;
+        }
+
+        footer a {
+            color: #e0e0e0;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            color: #ffd60a;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            body {
+                padding: 0 5%;
+            }
+
+            .header {
+                flex-direction: row;
+                justify-content: space-between;
+            }
+
+            .header-nav {
+                display: none; /* Hide desktop nav */
+            }
+
+            .hamburger {
+                display: flex;
+            }
+
+            .mobile-nav {
+                display: none;
+            }
+
+            .mobile-nav.show {
+                display: flex;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <section id="header">
+        <!-- Header -->
+        <div class="header">
+            <div class="header-logo">⚡ CheeseCV</div>
+            <div class="header-nav">
+                {% block header_links %}
+                <a href="#">Home</a>
+                <a href="#">Pricing</a>
+                <a href="#">Features</a>
+                <a href="#">Contact</a>
+                {% endblock %}
+            </div>
+            <div class="hamburger" onclick="toggleMenu()">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
-      </header>
+        <div class="mobile-nav" id="mobileNav">
+            <a href="#">Home</a>
+            <a href="#">Pricing</a>
+            <a href="#">Features</a>
+            <a href="#">Contact</a>
+        </div>
+    </section>
 
-    <body>
-        <main class="container">
-          {% block content %}
+    <main class="container">
+        {% block content %}
+        <!-- Content will be injected here -->
+        {% endblock %}
+    </main>
 
+    <!-- Page Footer -->
+    <footer>
+        <div style="border-top: 2px solid #ffffff; width: 100%; margin: 0 auto 40px; opacity: 0.2;"></div>
 
-          {% endblock %}
-        </main>
-    </body>
+        <div style="max-width: 1200px; margin: 0 auto; display: flex; flex-wrap: wrap; justify-content: space-between; gap: 40px; text-align: left;">
+            <!-- Company Info -->
+            <div style="flex: 1 1 250px; min-width: 220px;">
+                <h3>CheeseCV</h3>
+                <p>
+                    CheeseCV helps you build professional resumes, cover letters, and personal websites in just minutes.
+                    Our AI ensures that your applications are ATS-friendly and optimized for success.
+                </p>
+            </div>
+
+            <!-- Quick Links -->
+            <div style="flex: 1 1 180px; min-width: 150px;">
+                <h4>Quick Links</h4>
+                <ul style="list-style-type: none; padding: 0; line-height: 1.8;">
+                    <li><a href="#">Home</a></li>
+                    <li><a href="#">Pricing</a></li>
+                    <li><a href="#">Features</a></li>
+                    <li><a href="#">Testimonials</a></li>
+                    <li><a href="#">Contact Us</a></li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Footer Bottom -->
+        <div style="text-align: center; margin-top: 40px; color: #b0b0b0; font-size: 0.9em;">
+            <p>&copy; 2024 CheeseCV. All rights reserved.</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript for Mobile Menu -->
+    <script>
+        function toggleMenu() {
+            var mobileNav = document.getElementById('mobileNav');
+            mobileNav.classList.toggle('show');
+        }
+    </script>
+</body>
 </html>

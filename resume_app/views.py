@@ -587,14 +587,15 @@ def confirmation(request, account_id):
                     'quantity': 1,
                 },
             ],
-            mode=request.POST.get('mode'),  
+            # mode=request.POST.get('mode'),  
+            mode = "payment",
             # customer_creation='always',
             success_url=settings.REDIRECT_DOMAIN + 'payment_successful?session_id={CHECKOUT_SESSION_ID}',
             cancel_url=settings.REDIRECT_DOMAIN + 'payment_cancelled',
             metadata={
                 'account_id': account_id,  # Include the account_id as metadata
                 'price_dictionary_value' : request.POST.get('selected_plan'),
-                'mode': request.POST.get('mode'),
+                'mode': "payment",
             },
         )
         print(checkout_session)
@@ -757,6 +758,9 @@ def payment_successful(request):
                 subscription_id=session.id
             )
 
+            print("payment_instance is ", payment_instance)
+            print("created is ", created)
+
             if created:
                 payment_instance.save()
                 account.tier = price_dictionary_value
@@ -770,12 +774,10 @@ def payment_successful(request):
                 payment_instance.product_price = amount
                 payment_instance.product_name = price_dictionary_value + " one time plan"
                 payment_instance.save()
-
-
-            account.user_payment = payment_instance
-            account.save()
-            user_plan.save()
-            userprofile.save()
+                account.user_payment = payment_instance
+                account.save()
+                user_plan.save()
+                userprofile.save()
 
             context = {
                 'account': account,
@@ -786,7 +788,7 @@ def payment_successful(request):
 
             payment_instance = Payment.objects.get(account=account, subscription_id=session.id)
 
-            if payment_instance:
+            if created:
                 subject = 'DisplayAI Order Confirmation - ' + str(account.tier)
                 from_email = settings.EMAIL_HOST_USER
                 recipient_list = [account.email]

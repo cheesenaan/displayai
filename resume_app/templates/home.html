@@ -1,1526 +1,624 @@
-
 {% extends 'index.html' %}
+{% load static %}
+
+
+{% block header_links %}
+        <a href="{% url 'login' %}"> Build Now </a>
+        <a href="#pricing"> Pricing </a>
+        <a href="#work-experience"> About us </a>
+
+{% endblock %}
+
 
 {% block content %}
 
-{% load static %}
 
-<style>
-body {
-            margin-top: 20px; /* Reduced top margin */
-            font-family: Arial, sans-serif; /* Font family for better readability */
-            /* background-color: whitesmoke; */
-            background-image: url('{% static "img/white_pattern.png" %}');
-
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>CheeseCV</title>
+    <style>
+        /* General Styles */
+        body {
+            background-color: #1a1a1a;
+            color: #ffffff;
+            font-family: 'Arial', sans-serif;
+            
         }
 
-        #landed_section {
-            font-size: 1.2em;
+        /* Main Content */
+        .main {
+            display: flex;
+            flex-direction: column; /* Stacks columns on smaller screens */
+            gap: 40px;
+            margin-top: 20px;
+        }
+        
+        @media (min-width: 768px) {
+            .main {
+                flex-direction: row; /* Revert to row layout on larger screens */
+            }
+            .left-column, .right-column {
+                width: 48%; /* Adjusts columns to fit side by side */
+            }
+        }
+
+        /* Left Column */
+        .left-column {
+            max-width: 600px;
+        }
+        .left-column h1 {
+            font-size: 2.2em;
             font-weight: bold;
-            text-align: center;
-            color: #333;
-            border-radius: 20px;
-            position: relative; /* Add position relative to make the ::before pseudo-element work */
+            margin-bottom: 15px;
+            line-height: 1.2;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .highlight {
+            color: #d4a373;
+            background-color: #333;
+            padding: 2px 6px;
+        }
+        .subheader {
+            font-size: 1em;
+            color: #b0b0b0;
+            margin: 20px 0;
+            line-height: 1.6;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 25px;
+            margin-top: 25px;
+            font-size: 1.2em;
+            color: #000;
+            background-color: #e6c10b;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+        }
+        .discount {
+            color: #488601;
+            margin-top: 15px;
+            font-size: 1em;
+            font-family: 'Courier New', Courier, monospace;
+        }
+        .avatars {
+            margin-top: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .avatars img {
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            margin-right: 5px;
+        }
+        .stars {
+            margin-left: 10px;
+            color: #ffd60a;
+            font-weight: bold;
         }
 
-</style>
+        /* Right Column */
+        .right-column {
+            /* background-color: #1c1c1c; */
+            padding: 25px;
+            border-radius: 10px;
+            /* border: 1px solid #333; */
+            max-width: 500px;
+            flex: 1; /* Ensures it takes available space */
+        }
+        .video-item img {
+            width: 100%;
+            height: auto; /* Maintains aspect ratio */
+            object-fit: contain;
+        }
 
-<style>
+        /* Footer */
+        .interviews-by {
+            color: #999;
+        }
+        
 
-  @media (min-width: 768px) {
+        /* Legal Section */
+        .legal-section {
+            margin-top: 50px;
+            background-color: #1c1c1c;
+            padding: 20px;
+            border-radius: 10px;
+        }
+        .legal-section h2 {
+            font-size: 1.6em;
+            color: #ffd60a;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        .legal-section p {
+            color: #b0b0b0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
 
+        /* Why CheeseCV Section */
+        .why-cheesecv {
+            background-color: #1c1c1c;
+            padding: 40px;
+            border-radius: 10px;
+            margin-top: 50px;
+        }
+        .why-cheesecv h2 {
+            font-size: 1.8em;
+            color: #ffd60a;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        .features {
+            display: grid;
+            grid-template-columns: 1fr; /* Single column on small screens */
+            gap: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        @media (min-width: 600px) {
+            .features {
+                grid-template-columns: 1fr 1fr; /* Two columns on medium screens */
+            }
+        }
+        @media (min-width: 900px) {
+            .features {
+                grid-template-columns: repeat(3, 1fr); /* Three columns on larger screens */
+            }
+        }
+        .feature-item {
+            background-color: #333;
+            padding: 20px;
+            border-radius: 8px;
+        }
+        .feature-item h3 {
+            color: #d4a373;
+            font-size: 1.2em;
+            margin-bottom: 10px;
+        }
+        .feature-item p {
+            color: #b0b0b0;
+            font-size: 1em;
+            line-height: 1.6;
+        }
 
-              #google_doc_section {
-                  /* background-color: white; */
-                  margin: 0px;
-                  height: 950px;
-                  position: relative;
-                  border-radius: 20px;
-              }
+        ul {
+            list-style: none; /* Remove default list styling */
+            padding: 0;
+        }
+    </style>
+</head>
+<body>
 
-             
-              .resume-container {
-                  float: right;
-                  width: 100%;
-              }
+<div> 
 
-              #resumeIframe {
-                  height: 1250px;
-                  transform: scale(0.6);
-                  transform-origin: 0 0;
-                  width: 170%;
-                  border-radius: 40px;
-              }
-              
+   
 
-              #pricing {
-                  padding: 50px 0;
-                  text-align: center;
-              }
-
-              .pricing h1 {
-              color: #0066cc;
-              }
-
-
-              /* Pricing cards */
-              .pricing-cards {
-                  display: flex;
-                  flex-wrap: wrap;
-                  justify-content: center;
-              }
-
-              .card {
-                  flex: 0 0 calc(25% - 20px); /* Adjust the width of each card */
-                  background-color: #f9f9f9;
-                  border-radius: 10px;
-                  margin: 10px;
-                  padding: 20px;
-                  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                  text-align: left;
-              }
-
-              .card h2 {
-              color: #0066cc;
-              font-size: 24px;
-              margin-bottom: 10px;
-              }
-
-              .card ul {
-                  list-style-type: none;
-                  padding: 0;
-                  margin-bottom: 20px;
-              }
-
-              .card ul li {
-                  margin-bottom: 5px;
-                  font-size: small;
-              }
-
-              .card .price {
-              font-size: 20px;
-              margin-bottom: 20px;
-              }
-  }
-
-
-  @media (max-width: 768px) {
-      .pricing-cards {
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: center;
-
-
-      #google_doc_section {
-          /* background-color: white; */
-          margin: 0px;
-          position: relative;
-          border-radius: 20px;
-      }
-
-
-  }
-
-  .card {
-      flex: 0 0 90%; /* Each card takes up the full width */
-      background-color: #f9f9f9;
-      border-radius: 10px;
-      margin: 10px;
-      padding: 20px;
-      box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-      text-align: left;
-  }
-
-  .card h2 {
-      color: #0066cc;
-      font-size: 20px; /* Decrease font size for smaller screens */
-      margin-bottom: 10px;
-  }
-
-  .card ul {
-      list-style-type: none;
-      padding: 0;
-      margin-bottom: 15px; /* Decrease margin for better spacing */
-  }
-
-  .card ul li {
-      margin-bottom: 5px;
-      font-size: small;
-  }
-
-  .card .price {
-      font-size: 18px; /* Decrease font size for smaller screens */
-      margin-bottom: 15px; /* Decrease margin for better spacing */
-  }
-
-  }
-
-
-</style>
-
-<style>
-  
-  .icon {
-    position: absolute;
-    bottom: 200px;
-    left: 50%;
-    transform: translateX(-50%);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 40px; /* Adjust height as needed */
-    width: 50px; /* Adjust width as needed */
-    border-radius: 20px; /* Rounded edges */
-    background-color: #4CAF50; /* Green background color */
-    color: #fff; /* White icon color */
-    font-size: 24px; /* Adjust icon size as needed */
-    box-shadow: 0px 4px 6px rgba(0, 0, 0, 0.1); /* Add shadow */
-    transition: background-color 0.3s ease; /* Smooth color transition */
-}
-
-.icon:hover {
-    background-color: #388E3C; /* Darker green on hover */
-}
-
-
-/* ======= About Section ======= */
-
-#footer, footer-top {
-  /* transform: scale(1.12);  */
-}
-.about {
-  /* background-image: url('static/img/3.png');  */
-  background-position: center;  
-  padding: 70px 0;
-  text-align: center;
-  transform: scale(0.9); 
-}
-
-.about {
-  margin-top: -5%;
-}
-
-/* Mobile styles */
-@media only screen and (max-width: 768px) {
-  .about {
-    margin-top: -35%;
-  }
-}
-
-
-.about h5 {
-  font-size: 24px;
-  font-weight: bold;
-  text-align: center;
-  margin-bottom: 30px;
-}
-
-.about a {
-  text-decoration: none;
-}
-
-.about button {
-  background-color: #007bff; /* Add a primary color for buttons */
-  color: #fff; /* Text color for buttons */
-  padding: 10px 20px;
-  margin: 10px;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s ease; /* Add a smooth transition effect */
-}
-
-.about button:hover {
-  background-color: #0056b3; /* Change color on hover */
-}
-
-.about .container {
-  max-width: 1200px; /* Set maximum width for better responsiveness */
-  margin: 0 auto; /* Center the container */
-}
-
-.about .row {
-  margin-top: 30px;
-}
-
-.about .icon-box {
-  background-color: #fff;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
-  margin-bottom: 30px;
-  transition: transform 0.3s ease; /* Add a smooth transition effect */
-}
-
-.about .icon-box:hover {
-  transform: translateY(-5px); /* Add a slight hover effect */
-}
-
-.about i {
-  font-size: 36px;
-  color: #007bff;
-}
-
-.about h4 {
-  font-size: 24px;
-  font-weight: bold;
-  margin-bottom: 15px;
-}
-
-.about p {
-  font-size: 16px;
-  color: #6c757d;
-}
-
-
-</style>
-
-
-    <head>
-      <title> Home </title>
-    </head>
-
-    <body>
-
-      <!-- ======= Main Section ======= -->
-      <!-- <section id="hero" class="d-flex flex-column justify-content-center align-items-center">
-        <div class="container text-center text-md-left" data-aos="fade-up">
-            <h1> DisplayAI </h1>
-            <p>Build resume & website in 30 seconds</p>
-            <a href="{% url 'login'%}" class="btn-get-started scrollto">BUILD </a>
-            <br> <br>
+    <section id="main">
+        <!-- Main Content -->
+        <div class="main">
+            <!-- Left Column -->
+            <div class="left-column">
+                <h1>Build resume and website <br> <span class="highlight">in minutes not weeks</span></h1> <br>
+                <p> 1. Create account / login </p>
+                <p> 2. Fill in form </p>
+                <p> 3. View Google Doc resume </p>
+                <p> 4. View your website </p>
+                <a href="{% url 'login' %}" class="button">⚡ Build Now </a>
+                <p class="discount">Powered by Google Docs</p>
+                <div class="avatars"></div>
+            </div>
+        
+            <!-- Right Column -->
+            <div class="right-column">
+                <div class="video-item">
+                    <img id="resume-video" src="{% static 'gif-version-5.gif' %}" alt="GIF preview of resume">
+                </div>
+            </div>
         </div>
 
-        <div class="container custom-container">
-
-          <style>
-            .custom-container {
-              padding: 20px 0;
-              text-align: center; 
-            }
-          
-            .custom-icon-box {
-              padding: 10px;
-              text-align: center;
-              border-radius: 8px;
-              width: 205px;
-              height: 115px; 
-              margin-bottom: 10px;
-              display: inline-block; 
-              margin-right: 0px;
-              margin-left: 0px; 
-            }
-          
-            .custom-icon-box i {
-              font-size: 30px;
-            }
-          
-            .custom-icon-box h3 {
-              font-size: 12px;
-              margin-top: 8px;
-            }
-          
-            .custom-icon-box p {
-              margin-top: 8px;
-              font-size: 12px;
-            }
-
-            @media only screen and (max-width: 768px) {
-              #nonMobileHome {
-                display: none;
-              }
-            }
-
-            @media only screen and (min-width: 768px) {
-              #mobileHome {
-                display: none;
-              }
-            }
-            
-          </style>
-          
-          <div id="nonMobileHome">
-            <div class="row justify-content-center">
-            
-              <div class="col-lg-3 col-md-4">
-                <div class="icon-box custom-icon-box">
-                  <i class="bi bi-link-45deg"></i>
-                  <h3><a href="#" style="color: black;"> <b> Website + QR Code </b></a></h3>
-                  <p>www.displayai/your_name</p>
-                </div>
-              </div>
-          
-              <div class="col-lg-3 col-md-4">
-                <div class="icon-box custom-icon-box">
-                  <i class="bi bi-file-earmark-text"></i>
-                  <h3><a href="#" style="color: black"> <b> Google Doc Resume Bullets </b> </a></h3>
-                  <p>  Model generates ATS bullets</p>
-                </div>
-              </div>
-          
-              <div class="col-lg-3 col-md-4">
-                <div class="icon-box custom-icon-box">
-                  <i class="bi bi-file-earmark-person"></i>
-                  <h3><a href="#" style="color: black"> <b> Tailored Resume / Cover Letter </b></a></h3>
-                  <p>customized for job description</p>
-                </div>
-              </div>
-
-            
-          
-            </div>
-          </div>
-          
-          <div id="mobileHome">
-            <div class="row justify-content-center">
-              <div class="col-10">
-                <div class="icon-box custom-icon-box">
-                  <h3><a href="#" style="color: white;"> <b> Website + QR Code </b></a></h3>
-          
-                  <h3><a href="#" style="color: white;"> <b> Google Doc Resume Bullets </b> </a></h3>
-          
-                  <h3><a href="#" style="color: white;"> <b> Tailored Resume / Cover Letter </b></a></h3>
-                </div>
-              </div>
-            </div>
-          </div>
-
-
-
+        <div class="interviews-by">
+            <!-- <img src="{% static 'img/interviews-by.jpeg' %}" alt="interviews-by.jpeg" style="width: 100%; height: auto;"> -->
+            <img src="{% static 'img/D861DC30-268C-46DC-8AB5-24805709194F.png' %}" alt="interviews-by.png" style="width: 100%; height: auto;">
         </div>
-       
-      </section> 
-
-      <main id="main">
-
-        <!-- ======= About Section ======= -->
-        
-        
-        <section id="about" class="about">
-          <h3 style="font-size: 50px; font-weight: bold;"> DisplayAI </h3>
-          <div class="container">
-            <h5> Fill in a form then we build you Google Doc resume & website in 30 seconds with unlimited rebuilds! </h5>
 
 
-            <!-- <button style="background-color: white; color: black; border: 2px solid black; padding: 10px 20px; font-size: 14px; cursor: pointer; margin: 10px;" 
-            onmouseover="this.style.backgroundColor='black'; this.style.color='white';" 
-            onmouseout="this.style.backgroundColor='white'; this.style.color='black';">
-                AI Bullet Generation
-            </button>
-
-            <button style="background-color: white; color: black; border: 2px solid black; padding: 10px 20px; font-size: 14px; cursor: pointer; margin: 10px;" 
-                    onmouseover="this.style.backgroundColor='black'; this.style.color='white';" 
-                    onmouseout="this.style.backgroundColor='white'; this.style.color='black';">
-                    Job Description Tailored Cover Letter / Resume
-            </button>
-
-            <button style="background-color: white; color: black; border: 2px solid black; padding: 10px 20px; font-size: 14px; cursor: pointer; margin: 10px;" 
-                    onmouseover="this.style.backgroundColor='black'; this.style.color='white';" 
-                    onmouseout="this.style.backgroundColor='white'; this.style.color='black';">
-                www.displayai/your_name
-            </button> -->
-
-            <br>
-            <button class="circle-button" style="background-color: white; color: black; border: 2px solid red; padding: 10px 20px; font-size: 20px; cursor: pointer; margin: 10px;" 
-                onmouseover="this.style.backgroundColor='black'; this.style.color='white';" 
-                onmouseout="this.style.backgroundColor='white'; this.style.color='black';">
-            <a href="{% url 'login' %}">BUILD</a>
-            </button>
-            <br>
-
-            <br><br>
-            <div>   
-                <p style="font-size: xx-small; margin-bottom: -0.5%;">LANDED INTERVIEWS AT</p>
-                <div class="company-logos">
-                    <img src="{% static 'img/landed/ford.png' %}" alt="Ford Motor" style="width: 70px; height: auto;">
-                    <img src="{% static 'img/landed/verizon.png' %}" alt="Verizon" style="width: 70px; height: auto;">
-                    <img src="{% static 'img/landed/meta.png' %}" alt="Meta" style="width: 70px; height: auto;">
-                    <img src="{% static 'img/landed/apple.png' %}" alt="apple" style="width:25px; height: auto;">
-                    <img src="{% static 'img/landed/signify.png' %}" alt="Signify" style="width: 70px; height: auto;">
-                    <img src="{% static 'img/landed/deloitte.png' %}" alt="Deloitte" style="width: 110px; height: auto;">
-                    <img src="{% static 'img/landed/colgate.png' %}" alt="Colgate" style="width: 70px; height: auto;">
-                    <img src="{% static 'img/landed/tiktok.png' %}" alt="TikTok" style="width: 70px; height: auto;">
-                    <img src="{% static 'img/landed/snowflake.png' %}" alt="Snowflake" style="width: 100px; height: auto;">
-                    <img src="{% static 'img/landed/accenture.png' %}" alt="Accenture" style="width: auto; height: 25px;">
-                    <img src="{% static 'img/landed/cisco.png' %}" alt="cisco" style="width:auto; height: 30px;">
-                    <!-- <img src="{% static 'img/landed/Johnson_and_Johnson.svg' %}" alt="Johnson_and_Johnson" style="width:auto; height: 25px;"> -->
-                    <!-- <img src="{% static 'img/landed/amazon.png' %}" alt="Amazon" style="width: 70px; height: auto;"> -->
-                    <!-- <img src="{% static 'img/landed/pepsico.png' %}" alt="pepsico" style="width:auto; height: 40px;">   -->
-                    <!-- <img src="{% static 'img/landed/Boeing.png' %}" alt="Boeing" style="width: 130px; height: auto;"> -->
-                    <!-- <img src="{% static 'img/landed/spectrum.png' %}" alt="spectrum" style="width:auto; height: 25px;"> -->
-        
+        <!-- Why CheeseCV Section -->
+        <!-- <div class="why-cheesecv">
+            <h2>Why CheeseCV?</h2>
+            <div class="features">
+                <div class="feature-item">
+                    <h3>ATS Optimization</h3>
+                    <p>Our models generate high-scoring bullets and adhere to a specific template, ensuring a 95+/100 ATS score.</p>
                 </div>
-        
-                <style>
-                
-                    .company-logos img {
-                        margin-right: 25px; /* Space between logos */
-                    }
-
-                </style>
-            </div>
-
-           
-
-            <style>
-
-
-            @media (min-width: 768px) {
-              .video-container {
-                  display: flex;
-                  justify-content: center;
-                  align-items: flex-start;
-              }
-              .video-item {
-                  text-align: center;
-                  margin: 10px;
-              }
-              video {
-                  width: 600px;
-                  height: 400px;
-              }
-
-              .video-item p {
-                margin-bottom: -4%;
-            }
-            }
-              
-            @media (max-width: 768px) {
-              .video-container {
-                display: flex;
-                justify-content: center;
-                align-items: flex-start;
-                flex-wrap: wrap;
-              }
-              .video-item {
-                  text-align: center;
-                  margin: 10px;
-              }
-              video {
-                  width: 100%;
-                  height: auto;
-              }
-
-              .video-item p {
-                margin-bottom: 0;
-            }
-
-            }
-          </style>
-
-          <!-- <div class="video-container">
-            <div class="video-item">
-                <p style="font-size: xx-small;">RESUME</p>
-                <video id="resume-video" controls autoplay muted>
-                    <source src="static/resume_gif.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div class="video-item">
-                <p style="font-size: xx-small;">WEBSITE</p>
-                <video id="website-video" controls autoplay muted>
-                    <source src="static/website_gif.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-          </div> -->
-
-
-          <!-- <div class="video-container">
-            <div class="video-item">
-                <p style="font-size: xx-small;">RESUME</p>
-                <video id="resume-video" controls muted>
-                    <source src="static/resume_gif.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
-            </div>
-            <div class="video-item">
-                <p style="font-size: xx-small;">WEBSITE</p>
-                <video id="website-video" controls muted>
-                    <source src="static/website_gif.mp4" type="video/mp4">
-                    Your browser does not support the video tag.
-                </video>
+                <div class="feature-item">
+                    <h3>Google Docs</h3>
+                    <p>DisplayAI resumes are built on Google Docs in under 30 seconds.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Tailored Cover Letter</h3>
+                    <p>Build a job description-specific cover letter in under 30 seconds.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>DisplayAI Model</h3>
+                    <p>Our model leverages AI and data science to write resumes and cover letters in under 30 seconds to get you hired.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Website with QR Code</h3>
+                    <p>Your website will be hosted at displayai/your_name, complete with a QR code for easy sharing.</p>
+                </div>
+                <div class="feature-item">
+                    <h3>Tailored Resume</h3>
+                    <p>Build a job description-specific resume in under 30 seconds.</p>
+                </div>
             </div>
         </div> -->
-        
 
-          
-          <script>
-            document.getElementById('resume-video').addEventListener('ended', function() {
-                this.currentTime = 0;
-                this.play();
-            });
-
-            document.getElementById('website-video').addEventListener('ended', function() {
-                this.currentTime = 0;
-                this.play();
-            });
-          </script>
-
-            <div class="row">
-
-              <div class="col-xl-6 col-lg-7" data-aos="fade-right">
-                <div class="icon-box" data-aos="fade-up">
-                  <i class="bx bx-receipt"></i>
-                  <h4> ATS optimization </h4>
-                  <p> Our models generate high-scoring bullets and adhere to a specific template, ensuring a 95+/100 ATS score </p>
-                </div>
-
-                <div class="icon-box" data-aos="fade-up" data-aos-delay="100">
-                  <i class="bx bx-cube-alt"></i>
-                  <h4> Google Docs </h4>
-                  <p> DisplayAI resumes are built on google docs in under 30 seconds </p>
-                </div>
-
-                <div class="icon-box" data-aos="fade-up">
-                  <i class="bx bx-cube-alt"></i>
-                  <h4> Tailored Cover letter </h4>
-                  <p> Build job description cover letter in under 30 seconds </p>
-                </div>
-
-              </div>
-            
-              <div class="col-xl-6 col-lg-5 pt-5 pt-lg-0">
-
-                  <div class="icon-box" data-aos="fade-up">
-                    <i class="bx bx-receipt"></i>
-                    <h4> DisplayAI Model </h4>
-                    <p> Our model leverages AI and data science to write resumes and cover letters in under 30 seconds to get you hired</p>
-                  </div>
-
-                  <div class="icon-box" data-aos="fade-up">
-                    <i class="bx bx-cube-alt"></i>
-                    <h4> Webiste with QR Code </h4>
-                    <p> Your webiste will be displayai/your_name </p>
-                  </div>
-
-                  <div class="icon-box" data-aos="fade-up">
-                    <i class="bx bx-receipt"></i>
-                    <h4> Tailored Resume </h4>
-                    <p> Build job description tailored resume in under 30 seconds </p>
-                  </div>
-
-              </div>
-            </div>
-
-          </div>
-        </section>
-
-        <!-- ======= Demo Section ======= -->
-      <!-- <section id="demo" class="demo">
-        <div class="container">
-          <h1>Demo</h1>
-          <style>
-            .embed-responsive {
-              position: relative;
-              width: 100%;
-              height: 0;
-              padding-bottom: 56.25%; 
-              overflow: hidden;
-            }
-          
-            .embed-responsive iframe {
-              position: absolute;
-              width: 100%;
-              height: 100%;
-              top: 0;
-              left: 0;
-            }
-          </style>
-          
-          <div class="embed-responsive embed-responsive-16by9">
-            <iframe class="embed-responsive-item" src="https://www.youtube.com/embed/F-2NzXRxs7Y" allowfullscreen></iframe>
-              <h5> COMING SOON </h5>
-          </div>
-          
-        </div>
-      </section> -->
-
-      <!-- ======= Steps Section ======= -->
-      <!-- <section id="steps" class="steps section-bg">
-        <div class="container">
-          <div class="services-header">
-            <h3>Our Services</h3>
-            <div class="buttons-container">
-              <button class="service-button"><a href="{% url 'login'%}" class="btn-get-started scrollto">BUILD</a></button>
-              <button class="service-button"><a href="{% url 'login'%}" class="btn-get-started scrollto">DEMO</a></button>
-            </div>
-          </div>
-
-
-          <div class="row no-gutters">
-
-            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in">
-              <span></span>
-              <h4>Create a Powerful Professional Presence</h4>
-              <p> Build a  personal website & resume in 30 seconds</p>
-            </div>
-
-            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="200">
-              <span>Resume</span>
-              <h4>AI-Generated Bullets</h4>
-              <p>Our DisplayAI model automatically generates and selects the best resume bullet points for you. Receive a Google Doc and a personalized website in just 30 seconds.</p>
-            </div>
-
-            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="200">
-              <span>Website</span>
-              <h4>Automated Website Creation</h4>
-              <p>As your resume is being built, our model simultaneously creates a personalized website for you.</p>
-            </div>
-
-            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="300">
-              <span>Rebuild</span>
-              <h4>Enhanced Resume and Website</h4>
-              <p> Rebuild your resume & website and DisplayAI's model generates better bullets </p>
-            </div>
-
-            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="400">
-              <span>Tailored Resume</span>
-              <h4>Customized for Job Descriptions</h4>
-              <p>Create a personalized resume tailored to match specific job descriptions in just 30 seconds.</p>
-            </div>
-
-            <div class="col-lg-4 col-md-6 content-item" data-aos="fade-in" data-aos-delay="500">
-              <span>Tailored Cover Letter</span>
-              <h4>Crafted for Job Descriptions</h4>
-              <p>Craft a targeted cover letter customized to align with job descriptions in just 30 seconds.</p>
-            </div>
-
-          </div>
-
-        </div>
-      </section> -->
-
-
-       <!-- ======= Testimonials Section ======= -->
-       <!-- <section id="testimonials" class="testimonials">
-        <div class="container">
-
-          <div class="section-title" data-aos="fade-up">
-            <h2>Testimonials</h2>
-          </div>
-
-          <div class="testimonials-slider swiper" data-aos="fade-up" data-aos-delay="100">
-            <div class="swiper-wrapper">
-
-              <div class="swiper-slide">
-                <div class="testimonial-item">
-                  <p>
-                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                      This service helped me get a software engineer internship at <b> Ford Motor </b>
-                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                  </p>
-                  <img src="static/img/testimonials/testimonials-1.jpg" class="testimonial-img" alt="">
-                  <h3>Sulemaan Farooq</h3>
-                  <h4> Ford Motor Company </h4>
-                </div>
-              </div>
-
-              <div class="swiper-slide">
-                <div class="testimonial-item">
-                  <p>
-                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                      This service helped me get a data analyst internship at <b> Deloitte </b>
-                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                  </p>
-                  <img src="static/img/testimonials/testimonials-2.jpg" class="testimonial-img" alt="">
-                  <h3>TBT</h3>
-                  <h4> Deloitte </h4>
-                </div>
-              </div>
-
-              <div class="swiper-slide">
-                <div class="testimonial-item">
-                  <p>
-                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                      This service helped me get a data analyst internship at <b> Signify </b>
-                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                  </p>
-                  <img src="static/img/testimonials/testimonials-3.jpg" class="testimonial-img" alt="">
-                  <h3>TBT</h3>
-                  <h4> Signify </h4>
-                </div>
-              </div>
-
-              <div class="swiper-slide">
-                <div class="testimonial-item">
-                  <p>
-                    <i class="bx bxs-quote-alt-left quote-icon-left"></i>
-                      This service helped me get a software engineer internship at <b> DataDog </b>
-                    <i class="bx bxs-quote-alt-right quote-icon-right"></i>
-                  </p>
-                  <img src="static/img/testimonials/testimonials-4.jpg" class="testimonial-img" alt="">
-                  <h3>TBT</h3>
-                  <h4> DataDog </h4>
-                </div>
-              </div>
-
-
-
-            </div>
-            <div class="swiper-pagination"></div>
-          </div>
-
-        </div>
-      </section> -->
-
-        <!-- pricing -->
-      <div>
-        <section id="pricing">
-            <h1>Pricing</h1>
-
-            <!-- <div class="services-banner">
-                <p style="color: white;">Our services: personal website, resume, tailored resume given job description, tailored cover letter given job description</p>
-            </div> -->
-
-            <p>    
-              All resumes are optimized for Applicant Tracking Systems (ATS)
-            </p>
-            
-
-            <form method="post" ">
-                {% csrf_token %}
-
-                <style>
-
-                    @media only screen and (min-width: 768px) {
-
-                            .payment-mode-container {
-                                display: flex;
-                                justify-content: center; /* Center content horizontally */
-                                align-items: center; /* Center content vertically */
-                                height: 8vh; /* Set full viewport height */
-                                margin: 0; /* Remove default margin */
-                            }
-                        
-                            .payment-mode-box {
-                                background-color: olivedrab; /* Light gray background */
-                                border-radius: 5px; /* Rounded corners */
-                                padding: 10px; /* Add some padding */
-                                margin-bottom: 10px; /* Add some space below */
-                                width: 40%;
-                            }
-                        
-                            .payment-mode-box label {
-                                font-weight: bold; /* Make label text bold */
-                                margin-right: 10px; /* Add some space between label and select */
-                            }
-                        
-                            .payment-mode-box select {
-                                padding: 5px; /* Add some padding to select */
-                                border: 1px solid #ccc; /* Light border */
-                                border-radius: 3px; /* Rounded corners */
-                            }
-
-                    }
-
-
-                    @media only screen and (max-width: 768px) {
-
-                        .payment-mode-container {
-                            display: flex;
-                            justify-content: center; /* Center content horizontally */
-                            align-items: center; /* Center content vertically */
-                            height: auto; /* Reset height */
-                            margin: 0; /* Remove default margin */
-                            padding: 10px; /* Add some padding */
-                        }
-
-                        .payment-mode-box {
-                            background-color: olivedrab; /* Light gray background */
-                            border-radius: 5px; /* Rounded corners */
-                            padding: 10px; /* Add some padding */
-                            margin-bottom: 10px; /* Add some space below */
-                            width: 100%; /* Full width */
-                        }
-
-                        .payment-mode-box label {
-                            font-weight: bold; /* Make label text bold */
-                            margin-right: 10px; /* Add some space between label and select */
-                            display: block; /* Display block for better spacing */
-                            margin-bottom: 5px; /* Add some space below label */
-                        }
-
-                        .payment-mode-box select {
-                            padding: 5px; /* Add some padding to select */
-                            border: 1px solid #ccc; /* Light border */
-                            border-radius: 3px; /* Rounded corners */
-                            width: calc(100% - 20px); /* Take up most of the width with some padding */
-                        }
-
-
-                    }
-
-
-                </style>
+        <!-- CheeseCV Work Experience Section -->
+        <section id="work-experience" style="margin-top: 60px; background-color: #1c1c1c; padding: 50px; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
                 
-                <div class="payment-mode-container">
-                    <div class="payment-mode-box">
-                        <label for="mode">Select Plan Mode:</label>
-                        <select id="mode" name="mode" onchange="togglePricing()">
-                            <option value="payment">One-time Plan</option>
-                            <!-- <option value="payment">Subscription Plan is coming soon</option> -->
-                            <!-- <option value="subscription">Subscription Plan</option> -->
-                        </select>
-                    </div>
-                </div>
-                
-                <script>
-                    function togglePricing() {
-                        var mode = document.getElementById("mode").value;
-                        var subscriptionPricing = document.getElementById("subscription-pricing");
-                        var onetimePricing = document.getElementById("onetime-pricing");
-                
-                        if (mode === "subscription") {
-                            subscriptionPricing.style.display = "";
-                            onetimePricing.style.display = "none";
-                        } else {
-                            subscriptionPricing.style.display = "none";
-                            onetimePricing.style.display = "";
-                        }
-                    }
-                
-                    // Call togglePricing function initially to set default state
-                    togglePricing();
-                </script>
-
-                <style>
-                    .subscription-info {
-                        background-color: #0050a5; /* Light gray background */
-                        padding: 10px;
-                        border-radius: 5px;
-                        width: 100%;
-                        color: white;
-                    }
-
-                    .subscription-info p {
-                        margin: 0; /* Remove default paragraph margin */
-                    }
-                </style>
-
-                <div id="subscription-pricing" style="display: none;"> 
-                    <div class="subscription-info">
-                        <p>These are monthly subscriptions. Cancel anytime. Unused builds will be added to the next month.</p>
-                    </div>
-                    <div class="pricing-cards">
-
-                        <!-- free -->
-                        <div class="card">
-                            <h2>Free</h2>
-                            <b> <p  style="color: brown;">$0.00 </p> </b>
-                            <ul>
-                                <li>&#10003; 2 builds <a href="#what_are_builds">What are builds ?</a> </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 day)</span></li>
-                                <li>&#9888; Generated bullets for  </li>
-                                <li>&emsp;  only 1 experience or project </li>
-                            </ul>
-                            
-                            <button class="get-now-button" name="selected_plan">
-                                {% if account.tier == 'free' %}
-                                    Current
-                                {% else %}
-                                    Free version expired 
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- basic -->
-                        <div class="card">
-                            <h2>Basic</h2>
-                            <b><p style="color: brown;">$9.99 / month</p></b>
-                        
-                            <ul>
-                                <li>&#10003; 20 builds</li>
-                                <li>&#10003; Tailored resume</li>
-                                <li>&#10003; Tailored cover letter</li>
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(6 months)</span></li>
-                                <li>&#10003; All bullets AI generated</li>
-                                <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
-                            </ul>
-                        
-                            <button class="get-now-button" name="selected_plan" value="basic_sub">
-                                {% if account.tier == 'basic' %}
-                                Current
-                                {% else %}
-                                Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- economy -->
-                        <div class="card">
-                            <h2>Economy</h2>
-                            <b> <p  style="color: brown;">$19.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 50 builds  </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 year)</span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="economy_sub">
-                                {% if account.tier == 'economy' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- business -->
-                        <div class="card" style="position: relative;">
-                            <div class="recommended-banner">Recommended</div> <!-- Added recommended banner -->
-                            <h2>Business</h2>
-                            <b> <p  style="color: brown;">$39.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 100 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="business_sub">
-                                {% if account.tier == 'business' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <style>
-                        .recommended-banner {
-                            position: absolute;
-                            top: -10px;
-                            left: -10px;
-                            background-color: #ff5722; /* Orange color */
-                            color: white;
-                            padding: 5px 10px;
-                            font-size: 14px;
-                            border-radius: 5px;
-                            }
-                        </style>
-                        
-                        <!-- first class -->
-                        <div class="card">
-                            <h2>First Class</h2>
-                            <b> <p  style="color: brown;">$59.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 200 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="first_class_sub">
-                                {% if account.tier == 'first_class' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- pilot -->
-                        <div class="card">
-                            <h2>Pilot</h2>
-                            <b> <p  style="color: brown;">$99.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 400 builds  </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot_sub">
-                                {% if account.tier == 'pilot' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- pilot 2 -->
-                        <div class="card">
-                            <h2>Pilot 2</h2>
-                            <b> <p  style="color: brown;">$199.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 1000 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                                
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot2_sub">
-                                {% if account.tier == 'pilot' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- custom -->
-                        <div class="card">
-                            <h2>Custom</h2>
-                            <b> <p  style="color: brown;">$custom / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; custom builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="custom">
-                                Contact Us
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div id="onetime-pricing"> 
-                    <div class="subscription-info">
-                        <p>These are one-time payment plans. Plan ends when builds run out. Website remains active depending on plan. </p>
-                    </div> <br>
-                    <div class="pricing-cards">
-                        <!-- free -->
-                        <div class="card">
-                            <h2>Free</h2>
-                            <b> <p  style="color: brown;">$0.00 </p> </b>
-                            <ul>
-                                <li>&#10003; 2 builds <a href="#what_are_builds">What are builds ?</a> </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 day)</span></li>
-                                <li>&#9888; Generated bullets for  </li>
-                                <li>&emsp;  only 1 experience or project </li>
-                            </ul>
-                            
-                            <button class="get-now-button" name="selected_plan">
-                                {% if account.tier == 'free' %}
-                                    Current
-                                {% else %}
-                                    Free version expired 
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- basic -->
-                        <div class="card">
-                            <h2>Basic</h2>
-                            <b><p style="color: brown;">$9.99</p></b>
-                        
-                            <ul>
-                                <li>&#10003; 20 builds</li>
-                                <li>&#10003; Tailored resume</li>
-                                <li>&#10003; Tailored cover letter</li>
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(6 months)</span></li>
-                                <li>&#10003; All bullets AI generated</li>
-                                <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
-                            </ul>
-                        
-                            <button class="get-now-button" name="selected_plan" value="basic">
-                                {% if account.tier == 'basic' %}
-                                Current
-                                {% else %}
-                                Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- economy -->
-                        <div class="card">
-                            <h2>Economy</h2>
-                            <b> <p  style="color: brown;">$19.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 50 builds  </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 year)</span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="economy">
-                                {% if account.tier == 'economy' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- business -->
-                        <div class="card" style="position: relative;">
-                            <div class="recommended-banner">Recommended</div> <!-- Added recommended banner -->
-                            <h2>Business</h2>
-                            <b> <p  style="color: brown;">$39.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 100 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="business">
-                                {% if account.tier == 'business' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <style>
-                            @media only screen and (min-width: 768px) {
-
-                                .recommended-banner {
-                                    position: absolute;
-                                    top: -10px;
-                                    left: -10px;
-                                    background-color: #ff5722; /* Orange color */
-                                    color: white;
-                                    padding: 5px 10px;
-                                    font-size: 14px;
-                                    border-radius: 5px;
-                                    }
-                            }
-
-                            @media only screen and (max-width: 768px) {
-
-                                .recommended-banner {
-                                    position: relative; /* Change position to relative */
-                                    top: 0; /* Remove top positioning */
-                                    left: 0; /* Remove left positioning */
-                                    margin-bottom: 10px; /* Add margin for space */
-                                    background-color: #ff5722; /* Orange color */
-                                    color: white;
-                                    padding: 5px 10px;
-                                    font-size: 12px; /* Decrease font size for smaller screens */
-                                    border-radius: 5px;
-                                    width: 40%;
-                                }
-
-                            }
-
-                        </style>
-                        
-                        <!-- first class -->
-                        <div class="card">
-                            <h2>First Class</h2>
-                            <b> <p  style="color: brown;">$59.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 200 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="first_class">
-                                {% if account.tier == 'first_class' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- pilot -->
-                        <div class="card">
-                            <h2>Pilot</h2>
-                            <b> <p  style="color: brown;">$99.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 400 builds  </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot">
-                                {% if account.tier == 'pilot' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- pilot 2 -->
-                        <div class="card">
-                            <h2>Pilot 2</h2>
-                            <b> <p  style="color: brown;">$199.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 1000 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                                
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot2">
-                                {% if account.tier == 'pilot' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- custom -->
-                        <div class="card">
-                            <h2>Custom</h2>
-                            <b> <p  style="color: brown;">$custom </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; custom builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="custom">
-                                Contact Us
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
-            </form>
-
-            <div id="what_are_builds">
-                <div class="card">
-                    <h2>What are builds</h2>
-                    <ul> Each build includes three customizable options: </ul>
-                    <ul>
-                        <li> - Create a resume using your user profile</li>
-                        <li> - Create a tailored resume based on a job description</li>
-                        <li> - Create a tailored cover letter based on a job description</li>
-                    </ul>
-                <ul> Whichever option you choose, you'll receive an updated personal website </ul>
-                </div>
-            </div>
-
-        </section>
-      </div>
-
-        <!-- ======= F.A.Q Section ======= -->
-        <section id="faq" class="faq section-bg">
-          <div class="container">
-
-            <div class="section-title" data-aos="fade-up">
-              <h2>F.A.Q</h2>
-              <p> Here are some frequently asked questions </p>
-            </div>
-
-            <div class="faq-list">
-
-              <ul>
-                <li data-aos="fade-up">
-                  <i class="bx bx-help-circle icon-help"></i> <a data-bs-toggle="collapse" class="collapse" data-bs-target="#faq-list-1"> What do we do <i class="bx bx-chevron-down icon-show"></i><i class="bx bx-chevron-up icon-close"></i></a>
-                  <div id="faq-list-1" class="collapse show" data-bs-parent=".faq-list">
-                    <p>
-                      we leverage artifical intelligence and data science to write you the resume needed to get you internships at Fortune 500 companies
+                <!-- Left Column for Text Content -->
+                <div style="flex: 1 1 50%; min-width: 280px;">
+                    <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;">Effortless Resume Bullets</h2>
+                    <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">
+                        With CheeseCV, you don’t need to stress over perfect resume bullet points. Simply describe your work experience or project details in a conversational way—like you’re texting a friend.
                     </p>
-                  </div>
-                </li>
-
-              </ul>
-
-
-            </div>
-
-          </div>
-        </section>
-
-        <!-- ======= Contact Section ======= -->
-        <section id="contact" class="contact">
-          <div class="container">
-
-            <div class="section-title" data-aos="fade-up">
-              <h2>Contact</h2>
-              <p> Please reach out to us</p>
-            </div>
-
-            <div class="row no-gutters justify-content-center" data-aos="fade-up">
-
-              <div class="col-lg-5 d-flex align-items-stretch">
-                <div class="info">
-                  <div class="address">
-                    <i class="bi bi-geo-alt"></i>
-                    <h4>Location:</h4>
-                    <p> Edison, NJ, 08817 </p>
-                  </div>
-
-                  <div class="email mt-4">
-                    <i class="bi bi-envelope"></i>
-                    <h4>Email:</h4>
-                    <p>shf46@rutgers.edu</p>
-                  </div>
-
-                  <div class="phone mt-4">
-                    <i class="bi bi-phone"></i>
-                    <h4>Call:</h4>
-                    <p>+1 9174565697</p>
-                  </div>
-
+                    <p style="font-size: 1.1em; line-height: 1.6; color: #b0b0b0;">
+                        Many struggle with the XYZ format, where they need to explain <i>what they did</i> and the <i>impact it had</i> on the business. CheeseCV’s AI model transforms your input into polished, impactful bullets that effectively highlight your contributions.
+                    </p>
+                    <a href="#" class="button" style="margin-top: 20px;">⚡ Start Building Your Experience</a>
                 </div>
 
-              </div>
-
-              <div class="col-lg-5 d-flex align-items-stretch">
-                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4254.49141131519!2d-74.44999768758201!3d40.500844550394916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c3c65518be06bf%3A0x51b42066917aaf48!2sRutgers%E2%80%93New%20Brunswick!5e1!3m2!1sen!2sus!4v1690555818221!5m2!1sen!2sus" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-                <!-- <iframe style="border:0; width: 100%; height: 270px;" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4254.49141131519!2d-74.44999768758201!3d40.500844550394916!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89c3c65518be06bf%3A0x51b42066917aaf48!2sRutgers%E2%80%93New%20Brunswick!5e1!3m2!1sen!2sus!4v1690555818221!5m2!1sen!2sus" frameborder="0" allowfullscreen></iframe> -->
-              </div>
+                <!-- Right Column for GIF with Layered Styling -->
+                <div style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
+                    <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
+                        <img src="{% static 'gif-experience-bullets.gif' %}" alt="GIF of filling work experience and bullet results" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
+                    </div>
+                </div>
 
             </div>
-
-            <!-- <div class="row mt-5 justify-content-center" data-aos="fade-up">
-              <div class="col-lg-10">
-                <form action="forms/contact.php" method="post" role="form" class="php-email-form">
-                  <div class="row">
-                    <div class="col-md-6 form-group">
-                      <input type="text" name="name" class="form-control" id="name" placeholder="Your Name" required>
-                    </div>
-                    <div class="col-md-6 form-group mt-3 mt-md-0">
-                      <input type="email" class="form-control" name="email" id="email" placeholder="Your Email" required>
-                    </div>
-                  </div>
-                  <div class="form-group mt-3">
-                    <input type="text" class="form-control" name="subject" id="subject" placeholder="Subject" required>
-                  </div>
-                  <div class="form-group mt-3">
-                    <textarea class="form-control" name="message" rows="5" placeholder="Message" required></textarea>
-                  </div>
-                  <div class="my-3">
-                    <div class="loading">Loading</div>
-                    <div class="error-message"></div>
-                    <div class="sent-message">Your message has been sent. Thank you!</div>
-                  </div>
-                  <div class="text-center"><button type="submit">Send Message</button></div>
-                </form>
-              </div>
-
-            </div> -->
-
-          </div>
         </section>
 
-      </main>
 
-      <!-- ======= Footer ======= -->
-      <footer id="footer">
-        <div class="footer-top">
-          <div class="container">
-            <div class="row">
 
-              <div class="col-lg-3 col-md-6">
-                <div class="footer-info">
-                  <h3>Maxim</h3>
-                  <p>
-                    Edison, NJ <br>
-                    <strong>Phone:</strong> +1 9174565697 <br>
-                    <strong>Email:</strong> shf46@rutgers.edu <br>
-                  </p>
-                  <div class="social-links mt-3">
-                    <a href="#" class="twitter"><i class="bx bxl-twitter"></i></a>
-                    <a href="#" class="facebook"><i class="bx bxl-facebook"></i></a>
-                    <a href="#" class="instagram"><i class="bx bxl-instagram"></i></a>
-                    <a href="#" class="google-plus"><i class="bx bxl-skype"></i></a>
-                    <a href="#" class="linkedin"><i class="bx bxl-linkedin"></i></a>
-                  </div>
+        <!-- Tailored Resumes Section -->
+        <section id="tailored-resumes" style="margin-top: 60px; background-color: #2a2a2a; padding: 50px; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
+                
+                <!-- Left Side for GIF with Layered Styling -->
+                <div style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
+                    <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
+                        <img src="{% static 'gif-tailored-resume.gif' %}" alt="GIF of tailored resume feature" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
+                    </div>
                 </div>
-              </div>
 
-              <div class="col-lg-2 col-md-6 footer-links">
-                <h4>Useful Links</h4>
-                <ul>
-                  <li><i class="bx bx-chevron-right"></i> <a href="#">Home</a></li>
-                </ul>
-              </div>
-
-              <div class="col-lg-3 col-md-6 footer-links">
-                <h4>Our Services</h4>
-                <ul>
-                  <li><i class="bx bx-chevron-right"></i> <a href="#"> AI - personal website creator </a></li>
-                  <li><i class="bx bx-chevron-right"></i> <a href="#"> AI - resume </a></li>
-                  <li><i class="bx bx-chevron-right"></i> <a href="#"> AI - cover letter </a></li>
-                  <li><i class="bx bx-chevron-right"></i> <a href="#"> AI - Image generator </a></li>
-                </ul>
-              </div>
-
-              <div class="col-lg-4 col-md-6 footer-newsletter">
-                <h4>Our Newsletter</h4>
-                <p>Tamen quem nulla quae legam multos aute sint culpa legam noster magna</p>
-                <form action="" method="post">
-                  <input type="email" name="email"><input type="submit" value="Subscribe">
-                </form>
-
-              </div>
+                <!-- Right Side for Text Content -->
+                <div style="flex: 1 1 50%; min-width: 280px;">
+                    <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;"> Thousands of tailored resumes <br> <span class="highlight">in minutes not weeks</span> </h2>
+                    <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px;">
+                        Research shows that tailored resumes can dramatically increase your chances of getting noticed and securing interviews.
+                        
+                    </p>
+                    <p style="color: #d4a373; font-size: 1em; font-style: italic;">Maximize your chances by focusing on what matters: landing the right role, faster.</p>
+                    <a href="#" class="button" style="margin-top: 20px;">⚡ Start Building Tailored Resumes</a>
+                </div>
 
             </div>
-          </div>
+        </section>
+
+
+        <!-- Cover Letters Section -->
+        <section id="cover-letters" style="margin-top: 60px; background-color: #1c1c1c; padding: 50px; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
+                
+                <!-- Left Column for Text Content -->
+                <div style="flex: 1 1 50%; min-width: 280px;">
+                    <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;">Cover Letters in Minutes, Not Hours</h2>
+                    <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px;">
+                        Make every job application count with personalized cover letters that match each job’s requirements in seconds.
+                        Our AI-driven system generates role-specific cover letters tailored to help you stand out, without spending hours crafting each one.
+                    </p>
+                    <p style="color: #d4a373; font-size: 1em; font-style: italic;">Fast-track your job applications with impactful cover letters that impress.</p>
+                    <a href="#" class="button" style="margin-top: 20px;">⚡ Generate Your Cover Letter</a>
+                </div>
+
+                <!-- Right Column for GIF with Layered Styling -->
+                <div style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
+                    <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
+                        <img src="{% static 'gif-cover-letter.gif' %}" alt="GIF of cover letter feature" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Google Doc Resume Section -->
+        <section id="google-doc-resume" style="margin-top: 60px; background-color: #222222; padding: 50px; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
+                
+                <!-- Left Column for GIF with Layered Styling -->
+                <div style="position: relative; flex: 1 1 45%; min-width: 280px; text-align: center;">
+                    <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
+                        <img src="{% static 'gif-google-doc-resume.gif' %}" alt="GIF of Google Doc resume" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
+                    </div>
+                </div>
+
+                <!-- Right Column for Text Content -->
+                <div style="flex: 1 1 50%; min-width: 280px;">
+                    <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;">Perfect Google Doc Resume in Minutes</h2>
+                    <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">
+                        Just fill in a simple form, and our system instantly generates a professional Google Doc resume tailored to get you interviews.
+                    </p>
+                    <ul style="list-style-type: none; padding: 0; color: #b0b0b0; font-size: 1.1em; line-height: 1.6;">
+                        <li>📄 Template optimized for interview success</li>
+                        <li>💼 ATS-friendly with a score of 95+ to pass screenings</li>
+                        <li>⚡ Quick, easy, and fully customizable</li>
+                    </ul>
+                    <a href="#" class="button" style="margin-top: 20px;">⚡ Start Building Your Resume</a>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Personal Website Section -->
+        <section id="personal-website" style="margin-top: 60px; background-color: #1c1c1c; padding: 50px; border-radius: 12px;">
+            <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
+                
+                <!-- Left Column for Text Content -->
+                <div style="flex: 1 1 50%; min-width: 280px;">
+                    <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;">Your Personal Website in Minutes</h2>
+                    <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px;">
+                        Stand out with a personalized website that showcases your experience, skills, and achievements—all created in minutes. 
+                        With CheeseCV, you can easily convert your resume details into a professional website, optimized for your job search.
+                    </p>
+                    <p style="color: #d4a373; font-size: 1em; font-style: italic;">Elevate your online presence and make a lasting impression with just a few clicks.</p>
+                    <a href="#" class="button" style="margin-top: 20px;">⚡ Build Your Website</a>
+                </div>
+
+                <!-- Right Column for GIF with Layered Styling -->
+                <div style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
+                    <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
+                        <img src="{% static 'gif-personal-website.gif' %}" alt="GIF of personal website creation feature" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- Testimonial Section -->
+        <section id="testimonials" style="margin-top: 60px; background-color: #292929; padding: 60px; border-radius: 12px;">
+            <div style="text-align: center; margin-bottom: 40px;">
+                <h2 style="color: #ffd60a; font-size: 2.2em; font-weight: bold; margin-bottom: 10px;">What Our Users Say</h2>
+                <p style="color: #e0e0e0; font-size: 1.1em; line-height: 1.6; max-width: 700px; margin: 0 auto;">
+                    Real stories from people who have transformed their job search with CheeseCV. Hear how our tools helped them land interviews faster and stand out to recruiters.
+                </p>
+            </div>
+            
+            <div style="display: flex; flex-wrap: wrap; gap: 30px; justify-content: center;">
+                
+                <!-- Testimonial Card 1 -->
+                <div style="flex: 1 1 300px; background-color: #1c1c1c; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="{% static 'img/user1.jpg' %}" alt="User 1 photo" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+                        <div>
+                            <h3 style="color: #ffd60a; font-size: 1.2em; margin: 0;">Alex J.</h3>
+                            <p style="color: #b0b0b0; font-size: 0.9em; margin: 0;">Software Developer</p>
+                        </div>
+                    </div>
+                    <p style="color: #e0e0e0; font-size: 1em; line-height: 1.6;">
+                        “CheeseCV completely changed the way I approach job applications. The tailored resume and cover letter features helped me get noticed by top companies within days!”
+                    </p>
+                </div>
+
+                <!-- Testimonial Card 2 -->
+                <div style="flex: 1 1 300px; background-color: #1c1c1c; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="{% static 'img/user2.jpg' %}" alt="User 2 photo" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+                        <div>
+                            <h3 style="color: #ffd60a; font-size: 1.2em; margin: 0;">Samantha L.</h3>
+                            <p style="color: #b0b0b0; font-size: 0.9em; margin: 0;">Marketing Specialist</p>
+                        </div>
+                    </div>
+                    <p style="color: #e0e0e0; font-size: 1em; line-height: 1.6;">
+                        “I was able to create a professional resume in minutes. The ATS optimization feature got me past the filters and straight to interviews!”
+                    </p>
+                </div>
+
+                <!-- Testimonial Card 3 -->
+                <div style="flex: 1 1 300px; background-color: #1c1c1c; padding: 25px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);">
+                    <div style="display: flex; align-items: center; margin-bottom: 15px;">
+                        <img src="{% static 'img/user3.jpg' %}" alt="User 3 photo" style="width: 50px; height: 50px; border-radius: 50%; margin-right: 15px;">
+                        <div>
+                            <h3 style="color: #ffd60a; font-size: 1.2em; margin: 0;">Chris D.</h3>
+                            <p style="color: #b0b0b0; font-size: 0.9em; margin: 0;">Data Scientist</p>
+                        </div>
+                    </div>
+                    <p style="color: #e0e0e0; font-size: 1em; line-height: 1.6;">
+                        “Writing resume bullets used to take hours, but with CheeseCV, I just type my experience casually, and it generates the perfect impact-focused bullet points.”
+                    </p>
+                </div>
+
+            </div>
+        </section>
+
+
+
+
+<!-- Final Call to Action Section -->
+<section id="final-cta" style="background-color: #ffd60a; padding: 60px 20px; text-align: center; color: #1a1a1a; border-radius: 12px; margin: 60px auto 0; max-width: 1200px;">
+
+    <h2 style="font-size: 2.5em; font-weight: bold; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
+        Ready to Stand Out?
+    </h2>
+
+    <p style="font-size: 1.2em; line-height: 1.6; color: #333; margin-bottom: 30px; max-width: 700px; margin: 0 auto;">
+        Don’t wait to make a great impression! With CheeseCV, your professional resume, tailored cover letter, and personal website are just a few clicks away. Join thousands of users and take the next step toward your career goals.
+    </p>
+
+    <a href="#" class="button" style="display: inline-block; background-color: #1a1a1a; color: #ffd60a; padding: 15px 30px; border-radius: 8px; font-size: 1.1em; font-weight: bold; text-transform: uppercase; text-decoration: none; transition: background-color 0.3s;">
+        🚀 Build Now
+    </a>
+
+</section>
+
+
+<!-- Pricing Section -->
+<section id="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1200px; margin: auto;">
+    <h2 style="text-align: center; font-size: 2.5em; color: #ffd60a; margin-bottom: 40px; font-family: 'Poppins', sans-serif;">Pricing</h2>
+    <p style="text-align: center; color: #a9a9a9; font-size: 1.1em; margin-bottom: 30px;">All resumes are optimized for Applicant Tracking Systems (ATS)</p>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 15px;">
+        
+        <!-- Pricing Card Template -->
+        <!-- Free Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Free</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$0.00</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 2 builds <span style="color: #ffd60a;">What are builds?</span></li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>⚠ Personal website (1 day)</li>
+                <li>⚠ Bullets for 1 experience/project</li>
+                <li style="color: #ff6347; margin-top: 8px;">Free version expired</li>
+            </ul>
         </div>
 
-        <div class="container">
-          <div class="copyright">
-            &copy; Copyright <strong><span>Maxim</span></strong>. All Rights Reserved
-          </div>
-          <div class="credits">
-            <!-- All the links in the footer should remain intact. -->
-            <!-- You can delete the links only if you purchased the pro version. -->
-            <!-- Licensing information: https://bootstrapmade.com/license/ -->
-            <!-- Purchase the pro version with working PHP/AJAX contact form: https://bootstrapmade.com/maxim-free-onepage-bootstrap-theme/ -->
-            Designed by <a href="https://bootstrapmade.com/">BootstrapMade</a>
-          </div>
+        <!-- Basic Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Basic</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$9.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 20 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>⚠ Personal website (6 months)</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
         </div>
-      </footer>
 
-      <a href="#" class="back-to-top d-flex align-items-center justify-content-center"><i class="bi bi-arrow-up-short"></i></a>
-      
+        <!-- Economy Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Economy</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$19.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 50 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>⚠ Personal website (1 year)</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+        </div>
 
-      <!-- Vendor JS Files -->
-      <script src="static/vendor/aos/aos.js"></script>
-      <script src="static/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-      <script src="static/vendor/glightbox/js/glightbox.min.js"></script>
-      <script src="static/vendor/isotope-layout/isotope.pkgd.min.js"></script>
-      <script src="static/vendor/swiper/swiper-bundle.min.js"></script>
-      <script src="static/vendor/php-email-form/validate.js"></script>
+        <!-- Business Plan (Recommended) -->
+        <div style="position: relative; flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <!-- Ribbon for Recommended -->
+            <div style="position: absolute; top: -10px; left: -10px; background-color: #e73131; color: #1c1c1c; font-weight: bold; padding: 4px 30px; font-size: 0.8em; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
+                Recommended
+            </div>
 
-      <!-- Template Main JS File -->
-      <script src="static/js/main.js"></script>
-      
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Business</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$39.99</p>
+            
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 100 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+        </div>
 
-    </body>
 
- 
+        <!-- First Class Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">First Class</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$59.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 200 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+        </div>
+        
+        <!-- Pilot Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$99.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 400 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+        </div>
+        
+        <!-- Pilot 2 Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot 2</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$199.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 1000 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+        </div>
+        
+        <!-- Custom Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Custom</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$custom</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ Custom builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Contact Us</a>
+        </div>
+        
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+       
+    </section>
+
+</div>
+
+</body>
+
+</html>
 
 {% endblock %}

@@ -1,140 +1,57 @@
 {% extends 'index.html' %}
-{% block content %}
 {% load static %}
-<br><br><br><br><br><br><br>
+
+
+{% block header_links %}
+        <a href="{% url 'home' %}"> Home </a>
+        <a href="{% url 'home' %}#work-experience">About us</a>
+
+{% endblock %}
+
+
+{% block content %}
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
 <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
 
 
-<header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex justify-content-between">
 
-        <div class="logo">
-            <h1><a href="/">display.ai</a></h1>
-        </div>
-
-        <nav id="navbar-form" class="navbar">
-            <ul>
-                <li><a class="nav-link scrollto active" href="/">Home</a></li>
-                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Mobile navigation toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('mobile-nav-toggle')) {
-                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
-                e.target.classList.toggle('bi-list');
-                e.target.classList.toggle('bi-x');
-            }
-        });
-
-        // Mobile nav dropdowns activate
-        document.addEventListener('click', function (e) {
-            var navbar = document.querySelector('#navbar-form');
-            if (navbar.classList.contains('navbar-mobile')) {
-                var dropdownLink = e.target.closest('.navbar .dropdown > a');
-                if (dropdownLink) {
-                    e.preventDefault();
-                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
-                }
-            }
-        }, true);
-    });
-
-
-    </script>
-
-</header>
 
 
 <style>
 
-.account_education-current {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.account_education-current {
-    width: 50px;
-    height: 50px;
-    cursor: pointer;
-    background-color: #fff;
-    border: 1px solid #ccc;
-    border-radius: 10px;
-    
-}
-
-
-
-    #dataForm table {
-        width: 100%;
-        border-collapse: none;
+    /* Container Styling */
+    .beginning {
+        margin: 10% auto;
+        background-color: #fff3c2; /* Warm, cheese-like background */
+        padding: 20px;
+        border-radius: 12px;
+        box-shadow: 0 0 15px rgba(0, 0, 0, 0.15);
+        max-width: 700px;
     }
 
-    #dataForm td {
-        padding: 10px;
-        border: 0px;
-    }
-
-    #dataForm .form-row td {
-        text-align: left;
-    }
-
-    #dataForm td:first-child,
-    #dataForm td:nth-child(2) {
-        width: 10px; /* Set equal width for both columns */
-    }
-
-    #dataForm input, #dataForm select {
-        width: 100%;
-        padding: 8px;
-        box-sizing: border-box;
-        margin-bottom: 5px;
-    }
-
-    #dataForm br {
-        clear: both;
-    }
-
-
-
+    /* Body and Font */
     body {
+        background-color: #1a1a1a; /* Light yellow for the page background */
         font-family: 'Arial', sans-serif;
-        background-color: #f4f4f4;
         color: #333;
-        margin: 0;
-        padding: 0;
-        background-image: url('{% static "img/0 copy.jpg" %}');
-                        background-size: cover;
-                        background-position: center;
     }
 
     form {
         max-width: 800px;
         margin: 0 auto;
-        background-color: #fff;
+        background-color: #fffbe6; /* Soft, cheese-colored form background */
         padding: 30px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        /* background-color: rgba(255, 255, 255, 0.8); */
-
+        border-radius: 10px;
+        box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
     }
 
     h1, h3 {
-        color: black;
-        font-weight: bold;  /* Add bold font for consistency */
+        color: #4a3f2d; /* Darker brown for heading contrast */
+        font-weight: bold;
     }
 
+    /* Table Styling */
     table {
         width: 100%;
         border-collapse: collapse;
@@ -142,97 +59,179 @@
     }
 
     th, td {
-        border: 1px solid #ddd;
+        border: 1px solid #e0c591;
         padding: 12px;
         text-align: left;
-        font-weight: bold;  /* Add bold font for consistency */
+        color: #4a3f2d;
     }
 
-    /* th {
-        background-color: #3498db;
-        color: #fff;
-    } */
-
-    #work_form, #projects_form {
-        margin-bottom: 20px;
+    /* Form Input Fields */
+    #dataForm input,
+    #dataForm select,
+    .form-container input,
+    .form-container select,
+    .form-container textarea,
+    input, 
+    textarea {
+        width: 100%;
+        padding: 10px;
+        box-sizing: border-box;
+        margin-bottom: 10px;
+        background-color: #fffdf1;
+        border: 1px solid #e0c591;
+        border-radius: 5px;
     }
 
+    /* Button Styling */
     button {
-        background-color: #3498db;
-        color: #fff;
+        background-color: #ffc107; /* Cheese yellow button color */
+        color: #4a3f2d;
         padding: 10px 20px;
         border: none;
-        border-radius: 4px;
+        border-radius: 5px;
         cursor: pointer;
-        margin-top: 10px; /* Add margin to the top of the buttons */
-        font-weight: bold;  /* Add bold font for consistency */
+        font-weight: bold;
+        transition: background-color 0.3s;
     }
 
     button:hover {
-        background-color: #2a80b9;
+        background-color: #e0a800; /* Darker shade on hover */
     }
 
     #add-work-form, #add-project-form {
         display: block;
         margin-bottom: 10px;
-        background-color: #2ecc71;
-        padding: 10px; /* Add padding to the buttons for better visibility */
-        font-weight: bold;  /* Add bold font for consistency */
+        background-color: #00ff8c;
+        padding: 10px;
+        color: #4a3f2d;
+        font-weight: bold;
+        border-radius: 5px;
     }
 
     #add-work-form:hover, #add-project-form:hover {
-        background-color: #29b765;
+        background-color: #e0a800;
     }
 
-    input, textarea {
-        width: 100%;
-        padding: 10px; /* Adjust padding for better appearance */
-        box-sizing: border-box;
-        margin-bottom: 10px; /* Add margin to the bottom of the input fields */
-    }
-
-    .form-container input,
-    .form-container select,
-    .form-container textarea {
-        width: 100%; /* Make the form fields take the full width of the column */
-        box-sizing: border-box;
-        margin-bottom: 10px;
-        padding: 10px;
+    /* Labels and Headings */
+    label {
+        display: block;
+        margin-bottom: 8px;
+        color: #4a3f2d; /* Darker text color for labels */
+        font-weight: bold;
+        text-align: left;
     }
 
     #work_experience_question, #project_experience_question {
-    text-align: center;
-    font-size: 18px;
-    margin-bottom: 20px;
+        text-align: center;
+        font-size: 18px;
+        color: #4a3f2d;
+        margin-bottom: 20px;
     }
 
+    
+
+    /* Options Styling */
     #work_experience_options, #project_experience_options {
         display: flex;
         justify-content: center;
         align-items: center;
     }
 
-    #work_experience_options, #project_experience_options label {
+    #work_experience_options label, 
+    #project_experience_options label {
         margin: 0 10px;
         font-size: 16px;
+        color: #4a3f2d;
     }
 
-    #work_experience_options, #project_experience_options input {
+    #work_experience_options input, 
+    #project_experience_options input {
         margin-right: 5px;
     }
 
-    .beginning {
-         margin: 10% auto;
-        background-color: rgba(255, 255, 255, 0.8); /* Semi-transparent white background */
-        padding: 20px;
-        border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        max-width: 650px; /* Limit the maximum width for better readability */
+    /* Highlighted Elements */
+    .account_education-current {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        width: 50px;
+        height: 50px;
+        cursor: pointer;
+        background-color: #fffdf1;
+        border: 1px solid #e0c591;
+        border-radius: 10px;
+    }
 
-        }
+    .account_education-current:hover {
+        background-color: #ffe8b8;
+    }
+
+    .delete-work-button, .delete-project-button {
+        background-color: #dc3545;
+    }
+
+    #project_experience_question {
+        text-align: center;
+        font-size: 18px;
+        color: #4a3f2d;
+        margin-bottom: 20px;
+    }
+
+    /* Options Styling */
+    #project_experience_options {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    #project_experience_options label {
+        margin: 0 10px;
+        font-size: 16px;
+        color: #4a3f2d;
+    }
+
+    #project_experience_options input {
+        margin-right: 5px;
+    }
+
+    table {
+    border: 2px solid #e0c591; /* Outer border with the same style as the education border */
+    border-radius: 10px; /* Rounded corners for the table */
+    border-collapse: collapse; /* Ensure borders collapse into a single line */
+}
+
+th, td {
+    border: none; /* Remove inner borders */
+    padding: 10px; /* Add padding to cells */
+}
+
+tbody tr {
+    border-bottom: 1px solid transparent; /* Optional: add spacing between rows */
+}
+
+#user_profile_question {
+    display: flex; /* Use flex to align items horizontally */
+    justify-content: center; /* Center the radio buttons */
+    align-items: center; /* Align items vertically centered */
+    gap: 40px; /* Add space between the radio buttons */
+}
+
+#user_profile_question label {
+    font-size: 16px;
+    color: #4a3f2d;
+    font-weight: bold;
+}
+
+#user_profile_question input {
+    margin-right: 5px;
+}
+
+
+
 
 
 </style>
+
 
         <div class = "beginning">
 
@@ -1140,7 +1139,7 @@
 
                             <tr>
                                 <td colspan="2">
-                                    <button type="button" class="delete-project-button" data-project-form-delete-id="projects_container-{{ forloop.counter0 }}">Delete Work Experience</button>
+                                    <button type="button" class="delete-project-button" data-project-form-delete-id="projects_container-{{ forloop.counter0 }}">Delete Project</button>
                                 </td>
                             </tr>
                     </tbody>
@@ -1449,6 +1448,7 @@
         {% if account.user_profile is None %}
         <button type="submit"">CREATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
         {% else %}
+        <br>  <br>  <br> 
         <button type="submit"">UPDATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
         {% endif %}
 

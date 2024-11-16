@@ -1,120 +1,82 @@
 {% extends 'index.html' %}
+{% load static %}
+
+
+{% block header_links %}
+        <a href="{% url 'confirmation' account_id=account.id %}">  Build Page </a>
+        <a href="{% url 'subscriptions' account_id=account.id %}">  Orders </a>
+
+{% endblock %}
+
+
 {% block content %}
 
-<br> <br> <br> <br> <br> 
-
-<header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex justify-content-between">
-
-        <div class="logo">
-            <h1><a href="/">display.ai</a></h1>
-        </div>
-
-        <nav id="navbar-form" class="navbar">
-            <ul>
-                <li><a class="nav-link scrollto active" href="/">Home</a></li>
-                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'confirmation' account_id=account.id %}"> Build </a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
-
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Mobile navigation toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('mobile-nav-toggle')) {
-                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
-                e.target.classList.toggle('bi-list');
-                e.target.classList.toggle('bi-x');
-            }
-        });
-
-        // Mobile nav dropdowns activate
-        document.addEventListener('click', function (e) {
-            var navbar = document.querySelector('#navbar-form');
-            if (navbar.classList.contains('navbar-mobile')) {
-                var dropdownLink = e.target.closest('.navbar .dropdown > a');
-                if (dropdownLink) {
-                    e.preventDefault();
-                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
-                }
-            }
-        }, true);
-    });
-
-
-    </script>
-
-</header>
 
 <style>
 
+    /* Error and success messages */
     .error-message {
         color: white;
-        background-color: #ff3333;  /* Red background color */
-        border: 1px solid #cc0000;  /* Darker red border color */
-        padding: 10px;  /* Adjust the padding as needed */
-        border-radius: 5px;  /* Rounded corners */
-        font-weight: bold;  /* Bold text */
+        background-color: #e74c3c;  /* Red background */
+        border: 1px solid #c0392b;  /* Darker red border */
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: bold;
         width: auto;
     }
 
     .success-message {
-    color: white;
-    background-color: green;  /* Green background color */
-    border: 1px solid green;  /* Darker green border color */
-    padding: 10px;  /* Adjust the padding as needed */
-    border-radius: 5px;  /* Rounded corners */
-    font-weight: bold;  /* Bold text */
-    width: auto;
+        color: white;
+        background-color: #27ae60;  /* Green background */
+        border: 1px solid #2ecc71;  /* Darker green border */
+        padding: 10px;
+        border-radius: 5px;
+        font-weight: bold;
+        width: auto;
     }
 
-</style>
-
-<style>
-
+    /* Global styles for dark theme */
     body {
         font-family: 'Arial', sans-serif;
-        background-color: #f2f2f2; /* Light gray background */
+        background-color: #1e1e1e; /* Dark background */
+        color: #e0e0e0; /* Light text color */
         margin: 0;
         padding: 0;
     }
 
-    h1 {
-        color: #333333; /* Dark gray text color */
+    h1, h2 {
+        color: #f1f1f1; /* Light heading color */
     }
 
+    /* Form styling */
     form {
-        margin-left: 0; /* Adjusted margin for better spacing */
-        background-color: #fff;
+        background-color: #333333; /* Dark background for forms */
+        color: #e0e0e0;
         padding: 20px;
         border-radius: 8px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
     }
 
     label {
         display: block;
         margin: 10px 0 5px;
-        color: #333333;
+        color: #e0e0e0;
     }
 
     input {
         width: 100%;
         padding: 10px;
         margin-bottom: 10px;
-        border: 1px solid #cccccc; /* Light gray border */
+        border: 1px solid #555; /* Dark border */
         border-radius: 4px;
+        background-color: #444; /* Dark background for inputs */
+        color: #e0e0e0;
         box-sizing: border-box;
     }
 
     button {
-        background-color: #007bff; /* Blue button color */
-        color: #ffffff;
+        background-color: #ffd60a; /* Blue button color */
+        color: white;
         padding: 10px 15px;
         border: none;
         border-radius: 4px;
@@ -122,41 +84,41 @@
     }
 
     button:hover {
-        background-color: #0056b3; /* Darker blue on hover */
+        background-color: #6200ea; /* Darker blue on hover */
     }
 
-</style>
+    /* Table styling */
+    .user-info-table {
+        width: auto;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+    }
 
-<style>
+    .user-info-table td {
+        padding: 8px;
+        border: 1px solid #555; /* Darker border */
+        text-align: left;
+        color: #e0e0e0;
+    }
 
-.user-info-table {
-    width: auto;
-    border-collapse: collapse;
-    margin-bottom: 20px; /* Optional: Adjust spacing between tables */
-}
+    .user-info-table tr:nth-child(even) {
+        background-color: #444; /* Dark rows */
+    }
 
-.user-info-table td {
-    padding: 8px;
-    border: 1px solid #ddd;
-    text-align: left;
-}
+    .user-info-table tr:hover {
+        background-color: #555; /* Highlight row on hover */
+    }
 
-.user-info-table tr:nth-child(even) {
-    background-color: #f2f2f2;
-}
+    .user-info-table b {
+        color: #3498db; /* Blue color for bold text */
+    }
 
-.user-info-table tr:hover {
-    background-color: #ddd;
-}
-
-.user-info-table b {
-    color: #0066cc; /* Optional: Change the color of the bold text */
-}
-.reload_resume_and_website-button, button {
-        background-color: #3498db; /* Attractive blue color */
+    /* Button for rebuilding resume and website */
+    .reload_resume_and_website-button, button {
+        background-color: #6200ea; /* Blue button */
         color: white;
         border: none;
-        padding: 3px; /* Slightly increased padding for a consistent size */
+        padding: 8px 16px;
         text-align: center;
         text-decoration: none;
         display: inline-block;
@@ -165,13 +127,22 @@
         cursor: pointer;
         border-radius: 5px;
     }
-    
+
     .reload_resume_and_website-button:hover, button:hover {
-        background-color: orange; /* Darker shade on hover */
+        background-color: #f39c12; /* Yellow/orange hover color */
     }
 
+    /* Additional styling for links */
+    a {
+        color: #3498db; /* Blue color for links */
+    }
+
+    a:hover {
+        color: #f39c12; /* Yellow on hover */
+    }
 
 </style>
+
 
 <div>
 
@@ -417,16 +388,5 @@
 
 
 
-#custom-body {
-            font-family: 'Arial', sans-serif;
-            background-color: pink;
-            padding: 60px 0 0 0;
-            zoom: 75%;
-            margin-left: -500px;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: auto;
-        }
 
        

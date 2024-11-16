@@ -1,420 +1,50 @@
 {% extends 'index.html' %}
-{% block content %}
 {% load static %}
 
 
-<header id="header" class="fixed-top d-flex align-items-center">
-    <div class="container d-flex justify-content-between">
-        <title> Build Page</title>
+{% block header_links %}
+        <a href="{% url 'account' account_id=account.id %}">  Account </a>
+        <a href="{% url 'subscriptions' account_id=account.id %}">  Orders </a>
+        <a href="#pricing"> Pricing </a>
 
-        <div class="logo">
-            <h1><a href="/">display.ai</a></h1>
-        </div>
-
-        <nav id="navbar-form" class="navbar">
-            <ul>
-                <li><a class="nav-link scrollto active" href="/">Home</a></li>
-                <li><a class="nav-link scrollto active" href="/">Demo</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'account' account_id=account.id %}">Account details</a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'subscriptions' account_id=account.id %}"> Subscriptions </a></li>
-                <li><a class="nav-link scrollto active" href="{% url 'logout' account_id=account.id %}"> Log Out </a></li>
-
-            </ul>
-            <i class="bi bi-list mobile-nav-toggle"></i>
-        </nav>
-    </div>
-
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-        // Mobile navigation toggle
-        document.addEventListener('click', function (e) {
-            if (e.target.classList.contains('mobile-nav-toggle')) {
-                document.querySelector('#navbar-form').classList.toggle('navbar-mobile');
-                e.target.classList.toggle('bi-list');
-                e.target.classList.toggle('bi-x');
-            }
-        });
-
-        // Mobile nav dropdowns activate
-        document.addEventListener('click', function (e) {
-            var navbar = document.querySelector('#navbar-form');
-            if (navbar.classList.contains('navbar-mobile')) {
-                var dropdownLink = e.target.closest('.navbar .dropdown > a');
-                if (dropdownLink) {
-                    e.preventDefault();
-                    dropdownLink.nextElementSibling.classList.toggle('dropdown-active');
-                }
-            }
-        }, true);
-    });
+{% endblock %}
 
 
-    </script>
+{% block content %}
 
-</header>
+<html>
 
 <style>
+.button1 {
+    display: inline-block;
+    padding: 10px 20px;
+    color: #fff;
+    background-color: #6200ea;
+    border: none;
+    border-radius: 5px;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
 
-        body {
-            margin-top: 20px; /* Reduced top margin */
-            font-family: Arial, sans-serif; /* Font family for better readability */
-            /* background-color: whitesmoke; */
-            background-image: url('{% static "img/white_pattern.png" %}');
-        }
+.button1:hover {
+    background-color: #ffd60a;
+    color: #1a1a1a;
+}
 
-        #welcome {
-            text-align: center;
-            height: 160px;
-            border-radius: 20px;
-            /* background-image: url('{% static "img/1.jpg" %}'); */
-        }
-
-        #landed_section {
-            font-size: 1.2em;
-            font-weight: bold;
-            text-align: center;
-            color: #333;
-            border-radius: 20px;
-            position: relative; /* Add position relative to make the ::before pseudo-element work */
-        }
-
-        #landed_section::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            /* background-image: url('{% static "img/job_application.webp" %}'); */
-            background-size: cover;
-            border-radius: 20px;
-            z-index: -1;
-            filter: brightness(40%);
-        }
-
-        #website_and_resume_section {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            border-radius: 20px;
-            position: relative; /* Add position relative to make the ::before pseudo-element work */
-        }
+.button1:active {
+    background-color: #ffd60a;
+}
 
 </style>
 
-<style>
 
-    @media (min-width: 768px) {
-
-
-                #google_doc_section {
-                    /* background-color: white; */
-                    margin: 0px;
-                    height: 950px;
-                    position: relative;
-                    border-radius: 20px;
-                }
-
-               
-                .resume-container {
-                    float: right;
-                    width: 100%;
-                }
-
-                #resumeIframe {
-                    height: 1250px;
-                    transform: scale(0.6);
-                    transform-origin: 0 0;
-                    width: 170%;
-                    border-radius: 40px;
-                }
-                
-
-                #pricing {
-                    padding: 50px 0;
-                    text-align: center;
-                }
-
-                .pricing h1 {
-                color: #0066cc;
-                }
+<section id="landed_section" style="text-align: center;">
+    <h2>{{user_profile.first_name}}'s Build Page</h2>
+    <a href="{% url 'account' account_id=account.id %}" class="button1">All Resume Links</a>
 
 
-                /* Pricing cards */
-                .pricing-cards {
-                    display: flex;
-                    flex-wrap: wrap;
-                    justify-content: center;
-                }
-
-                .card {
-                    flex: 0 0 calc(25% - 20px); /* Adjust the width of each card */
-                    background-color: #f9f9f9;
-                    border-radius: 10px;
-                    margin: 10px;
-                    padding: 20px;
-                    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-                    text-align: left;
-                }
-
-                .card h2 {
-                color: #0066cc;
-                font-size: 24px;
-                margin-bottom: 10px;
-                }
-
-                .card ul {
-                    list-style-type: none;
-                    padding: 0;
-                    margin-bottom: 20px;
-                }
-
-                .card ul li {
-                    margin-bottom: 5px;
-                    font-size: small;
-                }
-
-                .card .price {
-                font-size: 20px;
-                margin-bottom: 20px;
-                }
-    }
-
-
-    @media (max-width: 768px) {
-        .pricing-cards {
-        display: flex;
-        flex-wrap: wrap;
-        justify-content: center;
-
-
-        #google_doc_section {
-            /* background-color: white; */
-            margin: 0px;
-            position: relative;
-            border-radius: 20px;
-        }
-
-
-    }
-
-    .card {
-        flex: 0 0 90%; /* Each card takes up the full width */
-        background-color: #f9f9f9;
-        border-radius: 10px;
-        margin: 10px;
-        padding: 20px;
-        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        text-align: left;
-    }
-
-    .card h2 {
-        color: #0066cc;
-        font-size: 20px; /* Decrease font size for smaller screens */
-        margin-bottom: 10px;
-    }
-
-    .card ul {
-        list-style-type: none;
-        padding: 0;
-        margin-bottom: 15px; /* Decrease margin for better spacing */
-    }
-
-    .card ul li {
-        margin-bottom: 5px;
-        font-size: small;
-    }
-
-    .card .price {
-        font-size: 18px; /* Decrease font size for smaller screens */
-        margin-bottom: 15px; /* Decrease margin for better spacing */
-    }
-
-    }
-
-
-</style>
-
-<!-- for all devices -->
-    <style>
-
-               
-
-    /* Button Styles */
-    .get-now-button {
-        background-color: #4285f4;
-        color: #fff;
-        padding: 12px 20px;
-        border: none;
-        border-radius: 5px;
-        cursor: pointer;
-        font-size: 16px;
-        transition: background-color 0.3s;
-    }
-
-    .get-now-button:hover {
-        background-color: #0066cc;
-    }
-
-    .reload_resume_and_website-button, button {
-        
-
-        background-color: #3498db; /* Attractive blue color */
-        color: white;
-        border: none;
-        padding: 8px; /* Slightly increased padding for a consistent size */
-        text-align: center;
-        text-decoration: none;
-        display: inline-block;
-        font-size: 16px;
-        margin: 5px;
-        cursor: pointer;
-        border-radius: 5px;
-        position: relative; /* Add relative positioning for pseudo-elements */
-    }
-
-    .reload_resume_and_website-button:hover,
-    button:hover {
-        background-color: #f9bb75; /* Color resembling cheese */
-    }
-
-    .reload_resume_and_website-button:hover::before,
-    button:hover::before {
-        content: ''; /* Create pseudo-element for animation */
-        position: absolute;
-        top: 50%; /* Initial position - center vertically */
-        left: 50%; /* Initial position - center horizontally */
-        width: 25px; /* Width of cheese slice */
-        height: 25px; /* Height of cheese slice */
-        background-color: #fda949; /* Color resembling cheese */
-        transform: rotate(45deg); /* Rotate the pseudo-element */
-        animation: cheeseAnimation 1.5s ease-in-out infinite; /* Apply animation */
-        border-radius: 5px; /* Round corners */
-        clip-path: polygon(
-            10% 0%,
-            90% 0%,
-            100% 20%,
-            100% 80%,
-            90% 100%,
-            10% 100%,
-            0% 80%,
-            0% 20%
-        ); /* Clip path to create square cheese slice with holes */
-    }
-
-    /* Keyframes for cheese animation */
-    @keyframes cheeseAnimation {
-        0% {
-            transform: translate(-50%, -50%) rotate(45deg); /* Initial position */
-            opacity: 1; /* Fully visible */
-        }
-        50% {
-            transform: translate(calc(-50% + 15px), calc(-50% - 50px)) rotate(45deg); /* Mid-air position */
-            opacity: 0.5; /* Semi-transparent */
-        }
-        100% {
-            transform: translate(calc(-50% + 30px), calc(-50% - 100px)) rotate(45deg); /* Final position */
-            opacity: 0; /* Fully transparent */
-        }
-    }
-
-        .content {
-            text-align: center;
-        }
-
-
-        /* Modal Styles */
-        .modal-body {
-            padding: 20px;
-        }
-
-        .modal-title {
-            margin: 0;
-        }
-
-
-        .messages li {
-            margin: 5px 0;
-            padding: 10px;
-            border-radius: 5px;
-        }
-
-        .messages li.success {
-            color: #155724;
-            background-color: #d4edda;
-            border-color: #c3e6cb;
-            font-weight: bold;
-            width: 50%;
-        }
-
-        .messages li.error {
-            color: #721c24;
-            background-color: #f8d7da;
-            border-color: #f5c6cb;
-            font-weight: bold;
-            width: 50%;
-        }
-
-
-        
-
-</style>
-
-<body>
-
-    <section id="landed_section">
-
-        <h2 style="text-align: center;">{{user_profile.first_name}}'s build page  </h2>
-        <a href="{% url 'account' account_id=account.id %}" class="reload_resume_and_website-button"> Your Account </a> <br> <br>
-        <p style="font-size: xx-small;">LANDED INTERVIEWS AT</p>
-        <div class="company-logos">
-            <img src="{% static 'img/landed/ford.png' %}" alt="Ford Motor" style="width: 80px; height: auto;">
-            <img src="{% static 'img/landed/verizon.png' %}" alt="Verizon" style="width: 80px; height: auto;">
-            <img src="{% static 'img/landed/meta.png' %}" alt="Meta" style="width: 80px; height: auto;">
-            <img src="{% static 'img/landed/apple.png' %}" alt="apple" style="width:25px; height: auto;">
-            <img src="{% static 'img/landed/signify.png' %}" alt="Signify" style="width: 80px; height: auto;">
-            <img src="{% static 'img/landed/deloitte.png' %}" alt="Deloitte" style="width: 110px; height: auto;">
-            <img src="{% static 'img/landed/colgate.png' %}" alt="Colgate" style="width: 80px; height: auto;">
-            <img src="{% static 'img/landed/tiktok.png' %}" alt="TikTok" style="width: 80px; height: auto;">
-            <img src="{% static 'img/landed/snowflake.png' %}" alt="Snowflake" style="width: 100px; height: auto;">
-            <img src="{% static 'img/landed/accenture.png' %}" alt="Accenture" style="width: auto; height: 25px;">
-            <img src="{% static 'img/landed/cisco.png' %}" alt="cisco" style="width:auto; height: 30px;">
-            <!-- <img src="{% static 'img/landed/Johnson_and_Johnson.svg' %}" alt="Johnson_and_Johnson" style="width:auto; height: 25px;"> -->
-            <!-- <img src="{% static 'img/landed/amazon.png' %}" alt="Amazon" style="width: 80px; height: auto;"> -->
-            <!-- <img src="{% static 'img/landed/pepsico.png' %}" alt="pepsico" style="width:auto; height: 40px;">   -->
-            <!-- <img src="{% static 'img/landed/Boeing.png' %}" alt="Boeing" style="width: 130px; height: auto;"> -->
-            <!-- <img src="{% static 'img/landed/spectrum.png' %}" alt="spectrum" style="width:auto; height: 25px;"> -->
-
-        </div>
-
-        <style>
-            /* #landed_section {
-                overflow: hidden; 
-                position: relative; 
-            }
-        
-            .company-logos {
-                position: absolute; 
-                display: flex; 
-                animation: moveAcross 20s linear infinite;
-            }  */
-        
-            .company-logos img {
-                margin-right: 25px; /* Space between logos */
-            }
-        
-            /* @keyframes moveAcross {
-                0% {
-                    transform: translateX(0); 
-                }
-                100% {
-                    transform: translateX(calc(-100% - 30px)); 
-                }
-            } */
-        </style>
-
-    </section>
-    
     <div> 
         {% if remaining < 0 %}
                 <h1>{{user_profile.first_name}}, {{ account.tier }} version limit reached, you must upgrade your <a href="#pricing"> plan </a> </h1>
@@ -468,1238 +98,1357 @@
 
     </div>
 
-    <section id="website_and_resume_section">
-        <style>
-            @media only screen and (min-width: 768px) {
-            .row {
-                display: flex;
-                justify-content: space-between;
-                max-width: 1000px; /* Adjust as needed */
-                width: 100%; /* Ensure the row takes full width */
-                margin-top: -4%;
-            }
+</section>
 
-            .column {
-                flex: 1;
-                margin: 0 10px; /* Add margin for spacing */
-                max-width: calc(33.33% - 20px); /* Adjust as needed */
-            }
 
-            .column:last-child {
-                margin-right: 0; /* Remove right margin for the last column */
-            }
-        }
+<!-- Container for User Info and Website Sections -->
+<div class="info-website-container">
+    <!-- User Info Table Column -->
+    <div class="column user-info-table">
+        <table>
+            <tr>
+                <td>Your Tier:</td>
+                <td>{{account.tier}}</td>
+            </tr>
+            <tr>
+                <td>Total Created on {{account.tier}}:</td>
+                <td>{{user_plan.forms_filled_on_current_plan}}</td>
+            </tr>
+            <tr>
+                <td>Total Tailored Resumes:</td>
+                <td>{{user_plan.total_tailored_resumes}}</td>
+            </tr>
+            <tr>
+                <td>Total Cover Letters:</td>
+                <td>{{user_plan.total_cover_letters}}</td>
+            </tr>
+            <tr>
+                <td>Total Created on all tiers:</td>
+                <td>{{user_plan.total_forms_filled}}</td>
+            </tr>
+            <tr>
+                <td><b>Builds Remaining:</b></td>
+                <td><b>{{remaining}}</b></td>
+            </tr>
+        </table>
+    </div>
 
-        @media only screen and (max-width: 768px) {
-            #website_and_resume_section {
-                text-align: center;
-            }
+    <!-- Website Column -->
+    <div class="column website">
+        <h3>Website</h3>
+        <p>
+            <a href="/{{account.name}}" target="_blank">
+                <b>🌐 cheesenaan.app/{{account.name}}</b>
+            </a>
+        </p>
+        <img src="data:image/png;base64,{{qr_code_image}}" alt="QR Code" class="qr-code">
+    </div>
 
-            .user-info-table {
-                margin-top: 2%;
-                margin-left: 23%;
-            }
-
-        }
-
-        </style>
+    <!-- Website Column -->
+    <div class="column website">
+    <a href="#build_options_resume_section" style="text-decoration: none;">
+        <h3>Resume</h3>
+        <span class="arrow">&#8595;</span>
+    </a>
+    </div>
     
-        <div class="row">
-
-            <div class="column" id="resume">
-                <h3>Resume</h3>
-                <p><b><a href="#google_doc_section">PREVIEW RESUME</a></b></p>
-            </div>
-           
-
-            <div class="column" id="website">
-                <h3>Website</h3>
-                <p>
-                    <a id="link" href="/{{account.name}}" target="_blank"><b> cheesenaan.app/{{account.name}}</b></a>
-                </p>
-                <img src="data:image/png;base64,{{ qr_code_image }}" alt="QR Code" style="max-width: 50%; height: 120px; margin-top: -10px;">
-            </div>
-
-            <div class="column user-info-table">
-                <style>
-
-                    .user-info-table {
-                        border-collapse: collapse;
-                        width: 100%; /* Ensure the table fills its container */
-                    }
-
-                    .user-info-table table, .user-info-table td {
-                        border: 1px solid #ccc; /* Light gray border */
-                        font-size: small;
-                    }
-
-                    .user-info-table td {
-                        padding: 6px; /* Increase padding for better spacing */
-                    }
-
-                    .user-info-table b {
-                        font-weight: bold; /* Make bold text more prominent */
-                    }
-
-                   
-                </style>
-
-                <table>
-                    <tr>
-                        <td>Your Tier:</td>
-                        <td>{{account.tier}}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Created on {{account.tier}}:</td>
-                        <td>{{user_plan.forms_filled_on_current_plan}}</td>
-                    </tr>
-                    <tr>
-                        <td>Total Tailored Resumes:</td>
-                        <td>{{user_plan.total_tailored_resumes}} </td>
-                    </tr>
-                    <tr>
-                        <td>Total Cover Letters:</td>
-                        <td>{{user_plan.total_cover_letters}} </td>
-                    </tr>
-                    <tr>
-                        <td>Total Created on all tiers:</td>
-                        <td>{{user_plan.total_forms_filled}} </td>
-                    </tr>
-                    <tr>
-                        <td><b>Builds Remaining:</b></td>
-                        <td><b>{{remaining}}</b></td>
-                    </tr>
-                </table>
-            </div>
-    
-            
-
-        </div>
-    </section>
-
     <style>
-        @media only screen and (min-width: 768px) {
-            #google_doc_section {
-                display: flex;
-                flex-wrap: wrap;
-            }
-            #google_doc_section_left {
-                flex: 1;
-                padding: 0px;
-                text-align: center;
-                width: 100%;
-            }
-            #google_doc_section_right {
-                flex: 1;
-                padding: 0px;
-                margin-left: -25px;
-            }
-        }
-
-        @media only screen and (max-width: 768px) {
-            #google_doc_section {
-                flex-direction: column; /* Stack items vertically */
-                height: 1100px;
-            }
-            #google_doc_section_left, #google_doc_section_right {
-                width: 100%; /* Take up full width */
-                flex: none; /* Reset flex property */
-                text-align: center;
-            }
-            
-        }
-
+        .arrow {
+    font-size: 100px; /* Size of the arrow */
+    color: white; /* Color of the arrow */
+    margin-top: 8px;
+}
     </style>
 
-    <section id="google_doc_section" >
-        <div id="google_doc_section_left">
+</div>
 
-            <div id="features" style="margin-top: 25%;">
 
-                <h3>Displayai Features </h3>
+<!-- New Build Options and Resume Section -->
+<section id="build_options_resume_section">
+    <div class="row">
+        <!-- Rebuild Options Column (Left) -->
 
-                <!-- Re-Build with same data feature -->
-                <div id="re-build-same-data" style="margin-top: 5%;">
+        <div class="left-section" style="margin-top: 150px;"> 
+            <div class="column rebuild-options">
+                <h3>Rebuild Options</h3>
+                <div class="button-group">
+                    
+                    <!-- re build with the same dta -->
+                    <div id="re-build-same-data">
+                        {% if remaining > 0 %}
+                            <button class="left-button" onclick="handleRebuildRequest()">
+                                Re-Build with same data
+                            </button>
+                    
+                            <!-- Loading Modal -->
+                            <div id="loadingModal">
+                                <div class="loading-spinner"></div>
+                                <p id="loadingText"><b>Loading...</b></p>
+                            </div>
+                            <div id="loadingOverlay"></div>
+                    
+                            <script>
+                                function showLoadingModal() {
+                                    // Show the loading modal and overlay
+                                    document.getElementById("loadingModal").style.display = "flex";
+                                    document.getElementById("loadingOverlay").style.display = "block";
+                    
+                                    // Array of loading messages
+                                    const loadingMessages = [
+                                        "{{account.name}}, welcome to displayai!",
+                                        "Requesting displayai AI & data science model...",
+                                        "Connecting to cloud environment & creating resume Google Doc...",
+                                        "Adding data to personal website & resume...",
+                                        "Artificial Intelligence to generate bullets...",
+                                        "Finalizing resume details...",
+                                        "Ensuring optimal formatting...",
+                                        "Saving resume to cloud...",
+                                        "Your personal website is ready!",
+                                        "All set! Finalizing...",
+                                    ];
+                    
+                                    let index = 0;
+                    
+                                    function displayLoadingMessages() {
+                                        document.getElementById("loadingText").innerHTML = `<b>${loadingMessages[index]}</b>`;
+                                        index = (index + 1) % loadingMessages.length;
+                                        setTimeout(displayLoadingMessages, 1700);
+                                    }
+                    
+                                    // Start displaying messages
+                                    displayLoadingMessages();
+                                }
+                    
+                                async function handleRebuildRequest() {
+                                    // Show the loading modal
+                                    showLoadingModal();
+                    
+                                    try {
+                                        // Make an API call using fetch
+                                        const response = await fetch("{% url 'reload_resume_and_website' account_id=account.id %}", {
+                                            method: 'GET', // Use 'POST' if your endpoint requires it
+                                            headers: {
+                                                'Content-Type': 'application/json',
+                                                'X-Requested-With': 'XMLHttpRequest', // Ensures it's recognized as an AJAX request
+                                            },
+                                        });
+                    
+                                        // Check if the response is successful
+                                        if (response.ok) {
+                                            console.log('API call successful');
+                                            window.location.reload(); // Reload the page to show updated content
+                                        } else {
+                                            console.error('API call failed');
+                                            alert('There was an issue with your request. Please try again.');
+                                        }
+                                    } catch (error) {
+                                        console.error('Error:', error);
+                                        alert('An error occurred. Please try again later.');
+                                    } finally {
+                                        // Hide the loading modal after the request is complete
+                                        document.getElementById("loadingModal").style.display = "none";
+                                        document.getElementById("loadingOverlay").style.display = "none";
+                                    }
+                                }
+                            </script>
+                    
+                        {% else %}
+                            <button class="left-button" onclick="edit_data_redirect_pricing()">Re-Build with same data</button>
+                        {% endif %}
+                    </div>
 
-                    {% if remaining > 0 %}
+                    <style>
 
-                        <!-- <p>Our model might need multiple builds for perfect bullets</p> -->
+                        /* Loading Modal Styles */
+                        #loadingModal {
+                            display: none;
+                            position: fixed;
+                            top: 50%;
+                            left: 50%;
+                            transform: translate(-50%, -50%);
+                            background-color: rgba(0, 0, 0, 0.9);
+                            border-radius: 10px;
+                            padding: 20px;
+                            z-index: 1001;
+                            text-align: center;
+                            color: #ffd60a;
+                            flex-direction: column;
+                            align-items: center;
+                        }
 
-                        <a href="{% url 'reload_resume_and_website' account_id=account.id %}" class="reload_resume_and_website-button" onclick="showLoadingModal()">
-                            Re-Build with same data
+                        #loadingOverlay {
+                            display: none;
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0, 0, 0, 0.5);
+                            z-index: 1000;
+                        }
+
+                        /* Spinner Styles */
+                        .loading-spinner {
+                            border: 5px solid rgba(255, 255, 255, 0.3);
+                            border-top: 5px solid #ffd60a;
+                            border-radius: 50%;
+                            width: 50px;
+                            height: 50px;
+                            animation: spin 1s linear infinite;
+                            margin-bottom: 15px;
+                        }
+
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+
+                    </style>
+                    
+                    <!-- edit data and rebuild -->
+                    <div id="edit-data-and-rebuild">
+                        <!-- <p>Want to edit your data ? </p> -->
+                        {% if remaining > 0 %}
+                        <a href="{{ redirect_domain }}{{ account.id }}/form" class="left-button">
+                            Edit data & Re-Build
                         </a>
+                        {% else %}
+                        <button class="left-button" onclick="edit_data_redirect_pricing()">Edit data & Re-Build </button>
+    
+                        <script>
+                            function edit_data_redirect_pricing() {
+                                alert("Your verison has ended, please upgrade plan");
+                                var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
+                                var redirectDomain = "{{ redirect_domain }}";
+                                var confirmationUrl = redirectDomain + '' + accountId + '/confirmation#pricing';
+                                window.location.href = confirmationUrl;
+    
+                            }
+                        </script>
+                        {% endif %}
+                    </div>
 
-                        <div id="loadingModal">
-                            <p id="loadingText"><b>Loading...</b></p>
+                    <style>
+                        #edit-data-and-rebuild {
+                                text-align: center;
+                            }
+
+                            .left-button {
+                                display: inline-block;
+                                padding: 12px 10px;
+                                font-size: 16px;
+                                font-weight: bold;
+                                text-align: center;
+                                color: #1c1c1c;
+                                background-color: #ffc107; /* Primary button color */
+                                border: none;
+                                border-radius: 8px;
+                                text-decoration: none;
+                                cursor: pointer;
+                                transition: background-color 0.3s ease, transform 0.2s ease;
+                            }
+
+                            .left-button:hover {
+                                background-color: #ee4d29; /* Darker shade on hover */
+                                transform: translateY(-2px); /* Slight lift on hover */
+                            }
+
+                            .left-button:active {
+                                background-color: #ee4d29; /* Even darker shade on click */
+                                transform: translateY(0); /* Remove lift effect on click */
+                            }
+
+                            .left-button[disabled],
+                            .left-button[disabled]:hover {
+                                background-color: #b5b5b5; /* Disabled state color */
+                                cursor: not-allowed;
+                                transform: none; /* No hover effect when disabled */
+                            }
+
+                    </style>
+                    
+                   <!-- Job Description Modal -->
+                    <div>
+                        <!-- Job Description Rebuild Section -->
+                        <div id="jobDescription-rebuild" class="rebuild-options">
+                            {% if remaining > 0 %}
+                            <!-- Button to Open Job Description Modal -->
+                            <button class="left-button" onclick="openJobDescriptionModal()">
+                                Build job description tailored resume
+                            </button>
+                            {% else %}
+                            <!-- Redirect to Pricing if Plan Expired -->
+                            <button class="left-button" onclick="redirectToPricing()">
+                                Build job description tailored resume
+                            </button>
+                            {% endif %}
                         </div>
 
-                        <div id="loadingOverlay"></div>
+                        <!-- Job Description Modal -->
+                        <div id="jobDescriptionModal" class="custom-fullscreen-modal" style="display: none;">
+                            <div class="modal-content">
+                                <div class="modal-left">
+                                    <h3>Tailored Resume Builder</h3>
+                                    <label for="jobDescriptionInput" class="form-label">Input Job Description:</label>
+                                    <textarea id="jobDescriptionInput" class="form-control" placeholder="Paste your job description here..."></textarea>
+                                    <div class="modal-buttons">
+                                        <button class="btn" onclick="submitJobDescription()">Build tailored resume</button>
+                                        <button class="btn btn-secondary" onclick="closeJobDescriptionModal()">Close</button>
+                                    </div>
+                                </div>
+                                <div class="modal-right">
+                                    <img id="coverLetterGif" src="{% static 'images/marketing.gif' %}" alt="GIF coming soon">
+                                </div>
+                            </div>
+                        </div>
 
-                        <style>
-                            /* Style for the modal */
-                            #loadingModal {
-                                display: none;
-                                position: fixed;
-                                top: 50%;
-                                left: 50%;
-                                transform: translate(-50%, -50%);
-                                background-color: #f9bb75; /* White background */
-                                padding: 30px;
-                                border-radius: 10px;
-                                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-                                text-align: center;
-                                z-index: 1000; /* Ensure the modal appears above the rest of the content */
+                        <!-- Loading Indicator -->
+                        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                            <div class="loading-spinner"></div>
+                            <p>Building your tailored resume...</p>
+                        </div>
+
+                        <script>
+                            function redirectToPricing() {
+                                alert("Your version has ended, please upgrade your plan.");
+                                const accountId = "{{ account.id }}";
+                                const redirectDomain = "{{ redirect_domain }}";
+                                const confirmationUrl = `${redirectDomain}${accountId}/confirmation#pricing`;
+                                window.location.href = confirmationUrl;
                             }
-                        
-                            /* Style for the background overlay */
-                            #loadingOverlay {
+
+                            function openJobDescriptionModal() {
+                                document.getElementById('jobDescriptionModal').style.display = 'flex';
+                            }
+
+                            function closeJobDescriptionModal() {
+                                document.getElementById('jobDescriptionModal').style.display = 'none';
+                            }
+
+                            async function submitJobDescription() {
+                                const jobDescription = document.getElementById('jobDescriptionInput').value.trim();
+
+                                if (!jobDescription) {
+                                    alert("Please enter a job description.");
+                                    return;
+                                }
+
+                                closeJobDescriptionModal();
+                                showLoading();
+
+                                try {
+                                    const response = await fetch("{% url 'reload_resume_and_website_with_job_description' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription), {
+                                        method: 'GET',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-Requested-With': 'XMLHttpRequest'
+                                        }
+                                    });
+
+                                    if (response.ok) {
+                                        console.log('API call successful');
+                                        window.location.reload();
+                                    } else {
+                                        console.error('API call failed');
+                                        alert('There was an issue with your request. Please try again.');
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    alert('An error occurred. Please try again later.');
+                                } finally {
+                                    hideLoading();
+                                }
+                            }
+
+                            function showLoading() {
+                                document.getElementById('loadingOverlay').style.display = 'flex';
+                            }
+
+                            function hideLoading() {
+                                document.getElementById('loadingOverlay').style.display = 'none';
+                            }
+                        </script>
+
+                        <!-- Additional Styles -->
+                        <style>
+                            /* General Styles */
+                            html {
+                                scroll-behavior: smooth;
+                            }
+
+                            body {
+                                background-color: #1a1a1a;
+                                color: #c9d1d9;
+                                font-family: 'Arial', sans-serif;
+                                margin: 0;
+                                padding: 0;
+                                line-height: 1.6;
+                            }
+
+                            /* Button Styles */
+                            .btn {
+                                display: inline-block;
+                                background-color: #ffd60a;
+                                color: #ffffff;
+                                padding: 10px 20px;
+                                border-radius: 5px;
+                                text-decoration: none;
+                                margin: 8px 0;
+                                transition: background-color 0.3s ease, transform 0.2s ease;
+                                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                            }
+
+                            .btn:hover {
+                                background-color: #2ea043;
+                                transform: translateY(-2px);
+                            }
+
+                            /* Fullscreen Modal Styles */
+                            .custom-fullscreen-modal {
                                 position: fixed;
                                 top: 0;
                                 left: 0;
                                 width: 100%;
                                 height: 100%;
-                                background: rgba(0, 0, 0, 0.5); /* Semi-transparent black background */
-                                backdrop-filter: blur(5px); /* Add a blur effect to the background */
-                                z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
-                                display: none;
+                                background-color: rgba(0, 0, 0, 0.8);
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                                z-index: 9999;
                             }
-                            
-                        </style>
-                        
-                        <script>
 
-                                function showLoadingModal() {
-                                    // Show the loading modal and overlay
-                                    console.log("Showing loading modal");
-                                    document.getElementById("loadingModal").style.display = "block";
-                                    document.getElementById("loadingOverlay").style.display = "block";
+                            .modal-content {
+                                background-color: #1c1c1c;
+                                display: flex;
+                                flex-direction: row;
+                                width: 70%;
+                                height: 70%;
+                                border-radius: 10px;
+                                overflow: hidden;
+                                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                            }
 
-                                    // Array of loading messages
-                                    var loadingMessages = [
-                                        "{{account.name}}, welcome to displayai ! ",
-                                        "Requesting displayai AI & data science model  ...",
-                                        "Connecting to cloud environment & creating resume google doc ...",
-                                        "Adding data to personal website & resume",
-                                        "Artificial Intelligence to generate bullets...",
-                                        "Prompt engineering ...",
-                                        "Data Science model to select the optimal bullets ...",
-                                        "Natural Language Processing to make resume ATS friendly...",
-                                        "Model to ensure resume bullets are short, concise ...",
-                                        "Artificial Intelligence to ensure bullets quantification ...",
-                                        "Cleaning bullet data and pushing to profile environment  ...",
-                                        "Personal website ready ! ",
-                                        "Editing google doc permissions ... ",
-                                        "Ensuring account security ... ",
-                                        "Formatting work experiences",
-                                        "Formatting projects",
-                                        "Formatting dates",
-                                        "Saving resume to cloud environment",
-                                        "Saving resume to profile",
-                                        "Updating your account information",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Checking for errors ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Model is running slow due to traffic please be patient ... ",
-                                        "Your internet connection is slowing model please be patient ... ",
-                                        "Ensuring account security ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                        "Your internet is too slow please try again ... ",
-                                    ];
+                            /* Modal Left Section (Form) */
+                            .modal-left {
+                                flex: 1;
+                                padding: 20px;
+                                display: flex;
+                                flex-direction: column;
+                                justify-content: center;
+                            }
 
-                                    // Function to display loading messages in a loop
-                                    function displayLoadingMessages(index) {
-                                        // Set the loading text
-                                        console.log("index " + index);
-                                        console.log("Displaying loading message: " + document.getElementById("loadingText").innerHTML);
-                                        document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+                            .form-label {
+                                font-weight: bold;
+                                margin-bottom: 10px;
+                            }
 
-                                        // Increment index or reset to 0 if at the end
-                                        index = (index + 1) % loadingMessages.length;
+                            .form-control {
+                                width: 100%;
+                                height: 250px;
+                                border-radius: 8px;
+                                background-color: #2d2d2d;
+                                color: #ffffff;
+                                border: none;
+                                padding: 10px;
+                                margin-bottom: 20px;
+                            }
 
-                                        // Set a timeout for the next message
-                                        setTimeout(function () {
-                                            displayLoadingMessages(index);
-                                        }, 1700); // Adjust the time delay between messages (in milliseconds)
-                                    }
+                            /* Modal Right Section (GIF) */
+                            .modal-right {
+                                flex: 1;
+                                background-color: #1a1a1a;
+                                display: flex;
+                                align-items: center;
+                                justify-content: center;
+                            }
 
-                                    // Start the loop
-                                    console.log("starting displayLoadingMessages");
-                                    displayLoadingMessages(0);
+                            .marketing-gif {
+                                max-width: 100%;
+                                max-height: 100%;
+                                border-radius: 10px;
+                            }
 
-                                    // You can add additional logic or AJAX requests if needed here
+                            /* Loading Overlay */
+                            .loading-overlay {
+                                position: fixed;
+                                top: 0;
+                                left: 0;
+                                width: 100%;
+                                height: 100%;
+                                background-color: rgba(255, 215, 10, 0.7); /* Cheese yellow */
+                                display: flex;
+                                flex-direction: column;
+                                align-items: center;
+                                justify-content: center;
+                                z-index: 9999;
+                                color: #1a1a1a;
+                                font-family: 'Arial', sans-serif;
+                                font-size: 20px;
+                                border-radius: 10px;
+                            }
+
+                            .loading-spinner {
+                                border: 4px solid #f3f3f3;
+                                border-top: 4px solid #ffd60a;
+                                border-radius: 50%;
+                                width: 50px;
+                                height: 50px;
+                                animation: spin 1s linear infinite;
+                            }
+
+                            @keyframes spin {
+                                0% { transform: rotate(0deg); }
+                                100% { transform: rotate(360deg); }
+                            }
+
+                            /* Responsive Styles */
+                            @media (max-width: 992px) {
+                                .modal-content {
+                                    flex-direction: column;
+                                    height: 80%;
                                 }
 
+                                .modal-left,
+                                .modal-right {
+                                    height: 50%;
+                                }
+                            }
+                        </style>
+                    </div>
 
-                        </script>
+                   <!-- cover letter feature -->
+                   <div>
 
-                    {% else %}
-                        <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Re-Build with same data </button>
-                    {% endif %}
-                </div>
+                    <!-- Cover Letter Feature -->
+                    <div>
+                        <!-- Cover Letter Rebuild Section -->
+                        <div id="coverLetter-rebuild" class="rebuild-options">
+                            {% if remaining > 0 %}
+                                <!-- Button to Open Cover Letter Modal -->
+                                <button class="left-button" onclick="openCoverLetterModal()">
+                                    Build Cover Letter for a Job Description
+                                </button>
+                            {% else %}
+                                <!-- Redirect to Pricing if Plan Expired -->
+                                <button class="left-button" onclick="redirectToPricing()">
+                                    Build Cover Letter for a Job Description
+                                </button>
+                            {% endif %}
+                        </div>
 
-                <!-- Edit data & Re-Build feature -->
-                <div id="edit-data-and-rebuild" style="margin-top: 5%;">
-                    <!-- <p>Want to edit your data ? </p> -->
-                    {% if remaining > 0 %}
-                    <a href="{{ redirect_domain }}{{ account.id }}/form" class="reload_resume_and_website-button">
-                        Edit data & Re-Build
-                    </a>
-                    {% else %}
-                    <button class="reload_resume_and_website-button" onclick="edit_data_redirect_pricing()">Edit data & Re-Build </button>
+                        <!-- Cover Letter Modal -->
+                        <div id="coverLetterModal" class="custom-fullscreen-modal" style="display: none;">
+                            <div class="modal-content">
+                                <div class="modal-left">
+                                    <h3>Tailored Cover Letter Builder</h3>
+                                    <label for="coverLetterDescriptionInput" class="form-label">Input Job Description:</label>
+                                    <textarea id="coverLetterDescriptionInput" class="form-control" placeholder="Paste your job description here..."></textarea>
+                                    <div class="modal-buttons">
+                                        <button class="btn" onclick="submitCoverLetter()">Build Cover Letter</button>
+                                        <button class="btn btn-secondary" onclick="closeCoverLetterModal()">Close</button>
+                                    </div>
+                                </div>
+                                <div class="modal-right">
+                                    <img id="coverLetterGif" src="{% static 'images/marketing.gif' %}" alt="GIF coming soon">
+                                </div>
+                            </div>
+                        </div>
 
-                    <script>
-                        function edit_data_redirect_pricing() {
-                            alert("Your verison has ended, please upgrade plan");
-                            var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
-                            var redirectDomain = "{{ redirect_domain }}";
-                            var confirmationUrl = redirectDomain + '' + accountId + '/confirmation#pricing';
-                            window.location.href = confirmationUrl;
+                        <!-- Loading Indicator -->
+                        <div id="loadingOverlay" class="loading-overlay" style="display: none;">
+                            <div class="loading-spinner"></div>
+                            <p>Building your tailored cover letter...</p>
+                        </div>
 
-                        }
-                    </script>
-                    {% endif %}
-                </div>
-
-                <!-- job description feature -->
-                <div id="jobDescription-rebuild" style="margin-top: 5%;">
-
-                    <!-- <p> Tailored resumes increase response chances by 70% </p> -->
-
-                    {% if remaining > 0 %}
-                    <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#jobDescriptionModal">
-
-                    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-                    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>
-                    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-                        
-                        Build job description tailored resume
-                    </a>
-                    {% else %}
                         <script>
                             function redirectToPricing() {
-                                alert("Your verison has ended, please upgrade plan");
-                            var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
-                            var redirectDomain = "{{ redirect_domain }}";
-                            var confirmationUrl = redirectDomain + '' + accountId + '/confirmation#pricing';
-                            window.location.href = confirmationUrl;
+                                alert("Your version has ended, please upgrade your plan.");
+                                const accountId = "{{ account.id }}";
+                                const redirectDomain = "{{ redirect_domain }}";
+                                const confirmationUrl = `${redirectDomain}${accountId}/confirmation#pricing`;
+                                window.location.href = confirmationUrl;
+                            }
+
+                            function openCoverLetterModal() {
+                                document.getElementById('coverLetterModal').style.display = 'flex';
+                            }
+
+                            function closeCoverLetterModal() {
+                                document.getElementById('coverLetterModal').style.display = 'none';
+                            }
+
+                            async function submitCoverLetter() {
+                                const jobDescription = document.getElementById('coverLetterDescriptionInput').value.trim();
+
+                                if (!jobDescription) {
+                                    alert("Please enter a job description.");
+                                    return;
+                                }
+
+                                closeCoverLetterModal();
+                                showLoading();
+
+                                try {
+                                    const response = await fetch("{% url 'build_cover_letter' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription), {
+                                        method: 'GET',
+                                        headers: {
+                                            'Content-Type': 'application/json',
+                                            'X-Requested-With': 'XMLHttpRequest'
+                                        }
+                                    });
+
+                                    if (response.ok) {
+                                        console.log('API call successful');
+                                        window.location.reload();
+                                    } else {
+                                        console.error('API call failed');
+                                        alert('There was an issue with your request. Please try again.');
+                                    }
+                                } catch (error) {
+                                    console.error('Error:', error);
+                                    alert('An error occurred. Please try again later.');
+                                } finally {
+                                    hideLoading();
+                                }
+                            }
+
+                            function showLoading() {
+                                document.getElementById('loadingOverlay').style.display = 'flex';
+                            }
+
+                            function hideLoading() {
+                                document.getElementById('loadingOverlay').style.display = 'none';
                             }
                         </script>
 
-                        <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build job description tailored resume </button>
-                    {% endif %}
+                        <!-- Additional Styles -->
+                        <style>
+                        /* General Styles */
+                        html {
+                            scroll-behavior: smooth;
+                        }
 
-                    <!-- Modal -->
-                    <div class="modal fade" id="jobDescriptionModal" tabindex="-1" role="dialog" aria-labelledby="jobDescriptionModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="jobDescriptionModalLabel">  </h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <label for="jobDescriptionInput">Input Job Description and we will build you a <b> tailored resume </b> </label>
-                                    <textarea class="form-control" id="jobDescriptionInput" style="height: 500px;"></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" onclick="submitJobDescription()">Build tailored resume</button>
-                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                        body {
+                            background-color: #1a1a1a;
+                            color: #c9d1d9;
+                            font-family: 'Arial', sans-serif;
+                            margin: 0;
+                            padding: 0;
+                            line-height: 1.6;
+                        }
 
-                    <div id="loadingModal">
-                        <p id="loadingText"><b>Loading...</b></p>
-                    </div>
+                        /* Button Styles */
+                        .btn {
+                            display: inline-block;
+                            background-color: #ffd60a;
+                            color: #ffffff;
+                            padding: 10px 20px;
+                            border-radius: 5px;
+                            text-decoration: none;
+                            margin: 8px 0;
+                            transition: background-color 0.3s ease, transform 0.2s ease;
+                            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+                        }
 
-                    <div id="loadingOverlay"></div>
+                        .btn:hover {
+                            background-color: #2ea043;
+                            transform: translateY(-2px);
+                        }
 
-                    <script>
-                        function submitJobDescription() {
-                            var jobDescription = document.getElementById('jobDescriptionInput').value;
-                            // Call the API with the entered job description
-                            window.location.href = "{% url 'reload_resume_and_website_with_job_description' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
+                        /* Fullscreen Modal Styles */
+                        .custom-fullscreen-modal {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0, 0, 0, 0.8);
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 9999;
+                        }
 
-                            // Show the loading modal and overlay
-                            // document.getElementById("jobDescriptionModal").style.display = "none";
-                            document.querySelector('.btn-secondary').click();
-                            document.getElementById("loadingModal").style.display = "block";
-                            document.getElementById("loadingOverlay").style.display = "block";
+                        .modal-content {
+                            background-color: #1c1c1c;
+                            display: flex;
+                            flex-direction: row;
+                            width: 70%;
+                            height: 70%;
+                            border-radius: 10px;
+                            overflow: hidden;
+                            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+                        }
 
-                            // Array of loading messages
-                            var loadingMessages = [
-                                "{{account.name}}, welcome to displayai tailored resume  ! ",
-                                "Analyzing job description key words  ...",
-                                "Requesting displayai AI & data science model  ...",
-                                "Connecting to cloud environment & creating resume google doc ...",
-                                "Adding data to personal website & resume",
-                                "Artificial Intelligence to generate bullets...",
-                                "Prompt engineering ...",
-                                "Data Science model to select the optimal bullets ...",
-                                "Natural Language Processing to make resume ATS friendly...",
-                                "Model to ensure resume bullets are short, concise ...",
-                                "Artificial Intelligence to ensure bullets quantification ...",
-                                "Cleaning bullet data and pushing to profile environment  ...",
-                                "Personal website ready ! ",
-                                "Editing google doc permissions ... ",
-                                "Ensuring account security ... ",
-                                "Formatting work experiences",
-                                "Formatting projects",
-                                "Formatting dates",
-                                "Saving resume to cloud environment",
-                                "Saving resume to profile",
-                                "Updating your account information",
-                                "Model is running slow due to traffic please be patient ... ",
-                                "Your internet connection is slowing model please be patient ... ",
-                                "Checking for errors ... ",
-                                "Ensuring account security ... ",
-                                "Model is running slow due to traffic please be patient ... ",
-                                "Your internet connection is slowing model please be patient ... ",
-                                "Ensuring account security ... ",
-                                "Model is running slow due to traffic please be patient ... ",
-                                "Your internet connection is slowing model please be patient ... ",
-                                "Ensuring account security ... ",
-                                "Model is running slow due to traffic please be patient ... ",
-                                "Your internet connection is slowing model please be patient ... ",
-                                "Ensuring account security ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                            ];
+                        /* Modal Left Section (Form) */
+                        .modal-left {
+                            flex: 1;
+                            padding: 20px;
+                            display: flex;
+                            flex-direction: column;
+                            justify-content: center;
+                        }
 
-                            // Function to display loading messages in a loop
-                            function displayLoadingMessages(index) {
-                                // Set the loading text
-                                document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
+                        .form-label {
+                            font-weight: bold;
+                            margin-bottom: 10px;
+                        }
 
-                                // Increment index or reset to 0 if at the end
-                                index = (index + 1) % loadingMessages.length;
+                        .form-control {
+                            width: 100%;
+                            height: 250px;
+                            border-radius: 8px;
+                            background-color: #2d2d2d;
+                            color: #ffffff;
+                            border: none;
+                            padding: 10px;
+                            margin-bottom: 20px;
+                        }
 
-                                // Set a timeout for the next message
-                                setTimeout(function () {
-                                    displayLoadingMessages(index);
-                                }, 1700); // Adjust the time delay between messages (in milliseconds)
+                        /* Modal Right Section (GIF) */
+                        .modal-right {
+                            flex: 1;
+                            background-color: #1a1a1a;
+                            display: flex;
+                            align-items: center;
+                            justify-content: center;
+                        }
+
+                        .marketing-gif {
+                            max-width: 100%;
+                            max-height: 100%;
+                            border-radius: 10px;
+                        }
+
+                        /* Loading Overlay */
+                        .loading-overlay {
+                            position: fixed;
+                            top: 0;
+                            left: 0;
+                            width: 100%;
+                            height: 100%;
+                            background-color: rgba(0, 0, 0, 0.7);
+                            display: flex;
+                            flex-direction: column;
+                            align-items: center;
+                            justify-content: center;
+                            z-index: 9999;
+                        }
+
+                        .loading-spinner {
+                            border: 4px solid #f3f3f3;
+                            border-top: 4px solid #ffd60a;
+                            border-radius: 50%;
+                            width: 40px;
+                            height: 40px;
+                            animation: spin 1s linear infinite;
+                        }
+
+                        @keyframes spin {
+                            0% { transform: rotate(0deg); }
+                            100% { transform: rotate(360deg); }
+                        }
+
+                        /* Responsive Styles */
+                        @media (max-width: 992px) {
+                            .modal-content {
+                                flex-direction: column;
+                                height: 80%;
                             }
 
-                            // Start the loop
-                            displayLoadingMessages(0);
-
-                            // You can add additional logic or AJAX requests if needed here
-                        }
-                    </script>
-
-                </div>
-
-                <!-- cover letter feature -->
-                <div id="coverLetter-rebuild" style="margin-top: 5%;">
-                    <!-- <p>78% of recruiters & hiring managers want a cover letter</p> -->
-
-                    {% if remaining > 0%}
-                    <a href="#" class="reload_resume_and_website-button" data-toggle="modal" data-target="#coverLetterModal">
-                        Build Cover Letter for a job description
-                    </a>
-                    {% else %}
-
-                    <button class="reload_resume_and_website-button" onclick="redirectToPricing()">Build Cover Letter for a job description</button>
-
-                    <script>
-                        function redirectToPricing() {
-                            alert("Your verison has ended, please upgrade plan");
-                            var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
-                            var redirectDomain = "{{ redirect_domain }}";
-                            var confirmationUrl = redirectDomain + '' + accountId + '/confirmation#pricing';
-                            window.location.href = confirmationUrl;
-                        }
-                    </script>
-
-
-                    {% endif %}
-
-                    <!-- Cover Letter Modal -->
-                    <div class="modal fade" id="coverLetterModal" tabindex="-1" role="dialog" aria-labelledby="coverLetterModalLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <h5 class="modal-title" id="coverLetterModalLabel"></h5>
-                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                        <span aria-hidden="true">&times;</span>
-                                    </button>
-                                </div>
-                                <div class="modal-body">
-                                    <label for="coverLetterDescriptionInput">Input Job Description and we will build you a tailored <b> cover letter </b> </label>
-                                    <textarea class="form-control" id="coverLetterDescriptionInput" style="height: 500px;"></textarea>
-                                </div>
-                                <div class="modal-footer">
-                                    <button type="button" class="btn btn-primary" onclick="submitCoverLetter()">Build Cover Letter</button>
-                                    <button type="button" class="btn btn-secondary-cover-letter" data-dismiss="modal">Close</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div id="loadingModal">
-                        <p id="loadingText"><b>Loading...</b></p>
-                    </div>
-
-                    <div id="loadingOverlay"></div>
-
-                    <script>
-                        function submitCoverLetter() {
-                            var jobDescription = document.getElementById('coverLetterDescriptionInput').value;
-                            // Call the API with the entered job description
-                            window.location.href = "{% url 'build_cover_letter' account_id=account.id %}?JOB_DESCRIPTION=" + encodeURIComponent(jobDescription);
-
-                            // Show the loading modal and overlay
-                            // document.getElementById("coverLetterModal").style.display = "none";
-                            document.querySelector('.btn-secondary-cover-letter').click();
-                            document.getElementById("loadingModal").style.display = "block";
-                            document.getElementById("loadingOverlay").style.display = "block";
-
-                            // Array of loading messages
-                            var loadingMessages = [
-                                "{{account.name}}, welcome to displayai cover letter  ! ",
-                                "Analyzing key words from job description ",
-                                "Connecting to cloud environment & creating resume google doc ...",
-                                "Requesting displayai AI & data science model  ...",
-                                "Artificial Intelligence to write cover letter ...",
-                                "Prompt engineering ...",
-                                "Data Science model to select best letter ...",
-                                "Natural Language Processing to make ATS friendly...",
-                                "Model to ensure sentences are short, concise ...",
-                                "Cleaning data and pushing to profile environment  ...",
-                                "Editing google doc permissions ... ",
-                                "Ensuring account security ... ",
-                                "Saving cover letter to cloud environment",
-                                "Saving cover letter to profile",
-                                "Updating your account information",
-                                "Model is running slow due to traffic please be patient ... ",
-                                "Your internet connection is slowing model please be patient ... ",
-                                "Checking for errors ... ",
-                                "Ensuring account security ... ",
-                                "Model is running slow due to traffic please be patient ... ",
-                                "Your internet connection is slowing model please be patient ... ",
-                                "Ensuring account security ... ",
-                                "Model is running slow due to traffic please be patient ... ",
-                                "Your internet connection is slowing model please be patient ... ",
-                                "Ensuring account security ... ",
-                                "Model is running slow due to traffic please be patient ... ",
-                                "Your internet connection is slowing model please be patient ... ",
-                                "Ensuring account security ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                                "Your internet is too slow please try again ... ",
-                            ];
-
-                            // Function to display loading messages in a loop
-                            function displayLoadingMessages(index) {
-                                // Set the loading text
-                                document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
-
-                                // Increment index or reset to 0 if at the end
-                                index = (index + 1) % loadingMessages.length;
-
-                                // Set a timeout for the next message
-                                setTimeout(function () {
-                                    displayLoadingMessages(index);
-                                }, 1700); // Adjust the time delay between messages (in milliseconds)
+                            .modal-left,
+                            .modal-right {
+                                height: 50%;
                             }
-
-                            // Start the loop
-                            displayLoadingMessages(0);
-
                         }
-                    </script>
+                        </style>
+
+                    </div>
+
+
+
+                   </div>
 
                 </div>
+            
 
             </div>
 
+            <div class="gap" style="height: 30px;"></div>
+           
+            <div class="column website">
+                <div class="video-item" style="width: 200px;">
+                    <img id="resume-video" src="{% static 'folder/hello.gif' %}" alt="GIF coming soon">
+                </div>
+            </div>
+
+            <div class="gap" style="height: 30px;"></div>
+        
+            <a href="#pricing" style="text-decoration: none;">
+                <div class="column website">
+                    <h3 style="color: #ff6347; margin-top: 20px;">Upgrade your plan</h3>
+                </div>
+            </a>
+            
+        
+            <style>
+                /* Flexbox Container */
+                .info-website-container {
+                    display: flex;
+                    justify-content: space-between;
+                    gap: 20px;
+                    padding: 40px;
+                    border-radius: 8px;
+                    margin-bottom: 40px;
+                }
+        
+                /* Columns */
+                .column {
+                    flex: 1;
+                }
+        
+                /* User Info Table */
+                .user-info-table table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin-bottom: 20px;
+                    color: #ffffff; /* Set all text in the table to white */
+                }
+        
+                .user-info-table td {
+                    padding: 8px;
+                    border-bottom: 1px solid #444; /* Darker border for better visibility */
+                }
+        
+                .user-info-table td:first-child {
+                    font-weight: bold;
+                    color: #ffffff; /* Ensure first column text is also white */
+                }
+        
+                /* Website Section */
+                .website {
+                    text-align: center;
+                    color: #ffffff; /* Ensure text in the website section is white */
+                }
+        
+                .website a {
+                    color: #00bfff; /* Light blue color for links */
+                    text-decoration: none;
+                }
+        
+                .website a:hover {
+                    text-decoration: underline;
+                }
+        
+                .qr-code {
+                    margin-top: 10px;
+                    max-width: 150px;
+                    height: auto;
+                }
+        
+                /* Adjust GIF to be responsive */
+                #resume-video {
+                    width: 100%; /* Make the image take up full width of its container */
+                    max-width: 300px; /* Optional: max width to prevent the image from getting too large */
+                    height: auto; /* Maintain aspect ratio */
+                    border-radius: 10px; /* Optional: add rounded corners */
+                }
+            </style>
         </div>
-    
-        <div id="google_doc_section_right">
-            <!-- embed google docs  -->
-            <div>
+
+        <div class="right-section">
+            <!-- Resume Column (Right) -->
+            <div class="resume-container">
+                <!-- Dynamic Google Doc Link Heading -->
+                <h3 id="googleDocLink">
+                    <a href="#" target="_blank" id="googleDocAnchor">Link to Google Doc</a>
+                </h3>
+        
                 <script>
+                    // Function to update the iframe and the Google Doc link
                     function updateResumeIframe(select) {
                         var selectedLink = select.value;
-                        document.querySelectorAll('.tab-pane').forEach(function(tab, index) {
-                            tab.classList.remove('show', 'active');
-                            if (tab.querySelector('iframe').dataset.src === selectedLink) {
-                                tab.classList.add('show', 'active');
-                                tab.querySelector('iframe').src = selectedLink; // Set the iframe source directly
-                            }
-                        });
+                        var iframe = document.getElementById('resumeIframe');
+                        var googleDocAnchor = document.getElementById('googleDocAnchor');
+        
+                        // Update the iframe source and the link in the heading
+                        iframe.src = selectedLink;
+                        googleDocAnchor.href = selectedLink;
                     }
         
-                    window.onload = function() {
+                    window.onload = function () {
                         var lastLink = '{{ account.get_resume_links|last }}';
-                        document.querySelectorAll('.tab-pane').forEach(function(tab) {
-                            tab.classList.remove('show', 'active');
-                        });
-                        var lastTab = document.querySelector('.tab-pane:last-child');
-                        lastTab.classList.add('show', 'active');
-                        document.querySelector('.tab-pane:last-child iframe').src = lastLink;
+                        var iframe = document.getElementById('resumeIframe');
+                        var googleDocAnchor = document.getElementById('googleDocAnchor');
+        
+                        // Load the latest resume by default
+                        iframe.src = lastLink;
+                        googleDocAnchor.href = lastLink;
                     };
                 </script>
         
-                <div class="resume-container">
-                    <script> let resume_counter = 0; </script>
+                <script>
+                    // Check if the user is on a mobile device
+                    if (/Mobi|Android/i.test(navigator.userAgent)) {
+                        // Display message for mobile users
+                        document.write(
+                            '<b><p>Build at least 4 times for optimal bullets. <br> <span style="color: red;">Shrunk on mobile, view on PC</span></p></b> <br>'
+                        );
+                    } else {
+                        // Display message for non-mobile users
+                        document.write('<h5>Build at least 4 times for optimal bullets <br></h5>');
+                    }
+                </script>
         
-                    <br>
-                    {% if account.resume_links %}
-                    {% if account.get_resume_links %}
-                    <select id="resumeDropdown" onchange="updateResumeIframe(this)">
-                        {% for link in account.get_resume_links %}
-                        <option value="{{ link }}" {% if forloop.last %}selected{% endif %}>{{ 'Resume ' }}{{ forloop.counter }}</option>
-                        {% endfor %}
-                    </select>
-                    {% endif %}
+                <!-- Dropdown for Resume Selection -->
+                {% if account.get_resume_links %}
+                <select id="resumeDropdown" onchange="updateResumeIframe(this)">
+                    {% for link in account.get_resume_links %}
+                    <option value="{{ link }}" {% if forloop.last %}selected{% endif %}>
+                        {{ 'Resume ' }}{{ forloop.counter }}
+                    </option>
+                    {% endfor %}
+                </select>
+                {% else %}
+                <p>No resume links available.</p>
+                {% endif %}
         
-                    <script>
-                        // Check if the user is on a mobile device
-                        if (/Mobi|Android/i.test(navigator.userAgent)) {
-                            // Display message for mobile users
-                            document.write('<b"><p>Build at least 4 times for optimal bullets. <br>  <span style="color: red;">Shrunk on mobile, view on PC</span></p></b>');
-                        } else {
-                            // Display message for non-mobile users
-                            document.write('<h5"> <br> <br> Build at least 4 times for optimal bullets </h5> ');
-                        }
-                    </script>
-        
-                    <p><a href="{% url 'account' account_id=account.id %}" target="_blank"><b>All resume links</b></a></p>
-        
-                    <div class="tab-content">
-                        {% for link in account.get_resume_links %}
-                        <style>
-                            /* For computers */
-                            @media only screen and (min-width: 768px) and (min-height: 1024px) {}
-                            /* For iPads */
-                            @media only screen and (max-width: 1024px) and (max-height: 1366px) {
-                                #resumeIframe {
-                                    transform: scale(0.7);
-                                    height: 1000px;
-                                    width: 200%;
-                                    margin-left: -50px;
-                                }
-                            }
-                            /* For mobile devices */
-                            @media only screen and (max-width: 767px) {
-                                #resumeIframe {
-                                    max-width: 700px;
-                                    transform: scale(0.5);
-                                    transform-origin: 0 0;
-                                    margin-left: 20px;
-                                    
-                                }
-                            }
-                        </style>
-        
-                        <div class="tab-pane fade {% if forloop.last %}show active{% endif %}" id="resume{{ forloop.counter }}">
-                            <iframe id="resumeIframe" data-src="{{ link }}"></iframe>
-                        </div>
-        
-                        {% endfor %}
-                    </div>
-                    {% else %}
-                    <p>No resume links available.</p>
-                    {% endif %}
+                <!-- Embed Resume Iframe -->
+                <div class="resume-embed">
+                    <iframe id="resumeIframe" class="resumeIframe" allowfullscreen></iframe>
                 </div>
             </div>
         </div>
-    </section>
+        
+        <style>
+            /* Style for loading screen */
+            .loading-message {
+                position: absolute;
+                top: 50%;
+                left: 50%;
+                transform: translate(-50%, -50%);
+                background-color: #ffd60a;
+                color: white;
+                font-size: 1.5rem;
+                padding: 20px;
+                border-radius: 5px;
+                display: none; /* Hidden by default */
+                z-index: 10; /* Ensures the loading message is on top of the iframe */
+            }
+        
+            /* Make sure the iframe is positioned correctly */
+            .resume-embed {
+                position: relative; /* This makes the loading message position relative to the iframe container */
+            }
+        
+            /* Optional: Add a loading animation if you want */
+            .loading-message p {
+                margin: 0;
+                animation: fadeIn 2s infinite;
+            }
+        
+            @keyframes fadeIn {
+                0% { opacity: 0; }
+                50% { opacity: 1; }
+                100% { opacity: 0; }
+            }
+        </style>
 
-     <!-- pricing -->
-     <div>
-        <section id="pricing">
-            <h1>Pricing</h1>
+</section>
 
-            <!-- <div class="services-banner">
-                <p style="color: white;">Our services: personal website, resume, tailored resume given job description, tailored cover letter given job description</p>
-            </div> -->
+<div class="interviews-by" style="margin-top: -400px;">
+    <img src="{% static 'img/D861DC30-268C-46DC-8AB5-24805709194F.png' %}" alt="interviews-by.png" style="width: 100%; height: auto;">
+</div>
 
-            <p>    
-              All resumes are optimized for Applicant Tracking Systems (ATS)
-            </p>
+<!-- Pricing Section -->
+
+<form method="post" action="{% url 'confirmation' account_id=account.id %}">
+{% csrf_token %}
+<section id="pricing" name="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1000px; margin: auto;">
+    <h2 style="text-align: center; font-size: 2.5em; color: #ffd60a; margin-bottom: 40px; font-family: 'Poppins', sans-serif;">Pricing</h2>
+    <p style="text-align: center; color: #a9a9a9; font-size: 1.1em; margin-bottom: 30px;">All resumes are optimized for Applicant Tracking Systems (ATS)</p>
+
+    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 15px;">
+        
+        <!-- Pricing Card Template -->
+        <!-- Free Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 350px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Free</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$0.00</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 2 builds <span style="color: #ffd60a;">What are builds?</span></li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>⚠ Personal website (1 day)</li>
+                <li>⚠ Bullets for 1 experience/project</li>
+                <li style="color: #ff6347; margin-top: 8px;">
+                    {% if account.tier == 'free' %}
+                                    Current
+                                {% else %}
+                                    Free version expired 
+                                {% endif %}
+                </li>
+            </ul>
+        </div>
+
+        <!-- Basic Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Basic</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$9.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 20 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>⚠ Personal website (6 months)</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
             
+            <button class="button" name="selected_plan" value="basic" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">
+                {% if account.tier == 'basic' %}
+                Current
+                {% else %}
+                Buy Now
+                {% endif %}
+            </button>
 
-            <form method="post" action="{% url 'confirmation' account_id=account.id %}">
-                {% csrf_token %}
+        </div>
 
-                <style>
+        <!-- Economy Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Economy</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$19.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 50 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>⚠ Personal website (1 year)</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
 
-                    @media only screen and (min-width: 768px) {
+            <button class="button" name="selected_plan" value="economy" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">
+                {% if account.tier == 'economy' %}
+                Current
+                {% else %}
+                Buy Now
+                {% endif %}
+            </button>
 
-                            .payment-mode-container {
-                                display: flex;
-                                justify-content: center; /* Center content horizontally */
-                                align-items: center; /* Center content vertically */
-                                height: 8vh; /* Set full viewport height */
-                                margin: 0; /* Remove default margin */
-                            }
-                        
-                            .payment-mode-box {
-                                background-color: olivedrab; /* Light gray background */
-                                border-radius: 5px; /* Rounded corners */
-                                padding: 10px; /* Add some padding */
-                                margin-bottom: 10px; /* Add some space below */
-                                width: 40%;
-                            }
-                        
-                            .payment-mode-box label {
-                                font-weight: bold; /* Make label text bold */
-                                margin-right: 10px; /* Add some space between label and select */
-                            }
-                        
-                            .payment-mode-box select {
-                                padding: 5px; /* Add some padding to select */
-                                border: 1px solid #ccc; /* Light border */
-                                border-radius: 3px; /* Rounded corners */
-                            }
+        </div>
 
-                    }
-
-
-                    @media only screen and (max-width: 768px) {
-
-                        .payment-mode-container {
-                            display: flex;
-                            justify-content: center; /* Center content horizontally */
-                            align-items: center; /* Center content vertically */
-                            height: auto; /* Reset height */
-                            margin: 0; /* Remove default margin */
-                            padding: 10px; /* Add some padding */
-                        }
-
-                        .payment-mode-box {
-                            background-color: olivedrab; /* Light gray background */
-                            border-radius: 5px; /* Rounded corners */
-                            padding: 10px; /* Add some padding */
-                            margin-bottom: 10px; /* Add some space below */
-                            width: 100%; /* Full width */
-                        }
-
-                        .payment-mode-box label {
-                            font-weight: bold; /* Make label text bold */
-                            margin-right: 10px; /* Add some space between label and select */
-                            display: block; /* Display block for better spacing */
-                            margin-bottom: 5px; /* Add some space below label */
-                        }
-
-                        .payment-mode-box select {
-                            padding: 5px; /* Add some padding to select */
-                            border: 1px solid #ccc; /* Light border */
-                            border-radius: 3px; /* Rounded corners */
-                            width: calc(100% - 20px); /* Take up most of the width with some padding */
-                        }
-
-
-                    }
-
-
-                </style>
-                
-                <div class="payment-mode-container">
-                    <div class="payment-mode-box">
-                        <label for="mode">Select Plan Mode:</label>
-                        <select id="mode" name="mode" onchange="togglePricing()">
-                            <option value="payment">One-time Plan</option>
-                            <!-- <option value="payment">Subscription Plan is coming soon</option> -->
-                            <!-- <option value="subscription">Subscription Plan</option> -->
-                        </select>
-                    </div>
-                </div>
-                
-                <script>
-                    function togglePricing() {
-                        var mode = document.getElementById("mode").value;
-                        var subscriptionPricing = document.getElementById("subscription-pricing");
-                        var onetimePricing = document.getElementById("onetime-pricing");
-                
-                        if (mode === "subscription") {
-                            subscriptionPricing.style.display = "";
-                            onetimePricing.style.display = "none";
-                        } else {
-                            subscriptionPricing.style.display = "none";
-                            onetimePricing.style.display = "";
-                        }
-                    }
-                
-                    // Call togglePricing function initially to set default state
-                    togglePricing();
-                </script>
-
-                <style>
-                    .subscription-info {
-                        background-color: #0050a5; /* Light gray background */
-                        padding: 10px;
-                        border-radius: 5px;
-                        width: 100%;
-                        color: white;
-                    }
-
-                    .subscription-info p {
-                        margin: 0; /* Remove default paragraph margin */
-                    }
-                </style>
-
-                <div id="subscription-pricing" style="display: none;"> 
-                    <div class="subscription-info">
-                        <p>These are monthly subscriptions. Cancel anytime. Unused builds will be added to the next month.</p>
-                    </div>
-                    <div class="pricing-cards">
-
-                        <!-- free -->
-                        <div class="card">
-                            <h2>Free</h2>
-                            <b> <p  style="color: brown;">$0.00 </p> </b>
-                            <ul>
-                                <li>&#10003; 2 builds <a href="#what_are_builds">What are builds ?</a> </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 day)</span></li>
-                                <li>&#9888; Generated bullets for  </li>
-                                <li>&emsp;  only 1 experience or project </li>
-                            </ul>
-                            
-                            <button class="get-now-button" name="selected_plan">
-                                {% if account.tier == 'free' %}
-                                    Current
-                                {% else %}
-                                    Free version expired 
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- basic -->
-                        <div class="card">
-                            <h2>Basic</h2>
-                            <b><p style="color: brown;">$9.99 / month</p></b>
-                        
-                            <ul>
-                                <li>&#10003; 20 builds</li>
-                                <li>&#10003; Tailored resume</li>
-                                <li>&#10003; Tailored cover letter</li>
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(6 months)</span></li>
-                                <li>&#10003; All bullets AI generated</li>
-                                <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
-                            </ul>
-                        
-                            <button class="get-now-button" name="selected_plan" value="basic_sub">
-                                {% if account.tier == 'basic' %}
-                                Current
-                                {% else %}
-                                Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- economy -->
-                        <div class="card">
-                            <h2>Economy</h2>
-                            <b> <p  style="color: brown;">$19.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 50 builds  </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 year)</span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="economy_sub">
-                                {% if account.tier == 'economy' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- business -->
-                        <div class="card" style="position: relative;">
-                            <div class="recommended-banner">Recommended</div> <!-- Added recommended banner -->
-                            <h2>Business</h2>
-                            <b> <p  style="color: brown;">$39.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 100 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="business_sub">
-                                {% if account.tier == 'business' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <style>
-                        .recommended-banner {
-                            position: absolute;
-                            top: -10px;
-                            left: -10px;
-                            background-color: #ff5722; /* Orange color */
-                            color: white;
-                            padding: 5px 10px;
-                            font-size: 14px;
-                            border-radius: 5px;
-                            }
-                        </style>
-                        
-                        <!-- first class -->
-                        <div class="card">
-                            <h2>First Class</h2>
-                            <b> <p  style="color: brown;">$59.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 200 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="first_class_sub">
-                                {% if account.tier == 'first_class' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- pilot -->
-                        <div class="card">
-                            <h2>Pilot</h2>
-                            <b> <p  style="color: brown;">$99.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 400 builds  </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot_sub">
-                                {% if account.tier == 'pilot' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- pilot 2 -->
-                        <div class="card">
-                            <h2>Pilot 2</h2>
-                            <b> <p  style="color: brown;">$199.99 / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 1000 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                                
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot2_sub">
-                                {% if account.tier == 'pilot' %}
-                                    Current
-                                {% else %}
-                                    Coming Soon
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- custom -->
-                        <div class="card">
-                            <h2>Custom</h2>
-                            <b> <p  style="color: brown;">$custom / month </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; custom builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="custom">
-                                Contact Us
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
-                <div id="onetime-pricing"> 
-                    <div class="subscription-info">
-                        <p>These are one-time payment plans. Plan ends when builds run out. Website remains active depending on plan. </p>
-                    </div> <br>
-                    <div class="pricing-cards">
-                        <!-- free -->
-                        <div class="card">
-                            <h2>Free</h2>
-                            <b> <p  style="color: brown;">$0.00 </p> </b>
-                            <ul>
-                                <li>&#10003; 2 builds <a href="#what_are_builds">What are builds ?</a> </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 day)</span></li>
-                                <li>&#9888; Generated bullets for  </li>
-                                <li>&emsp;  only 1 experience or project </li>
-                            </ul>
-                            
-                            <button class="get-now-button" name="selected_plan">
-                                {% if account.tier == 'free' %}
-                                    Current
-                                {% else %}
-                                    Free version expired 
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- basic -->
-                        <div class="card">
-                            <h2>Basic</h2>
-                            <b><p style="color: brown;">$9.99</p></b>
-                        
-                            <ul>
-                                <li>&#10003; 20 builds</li>
-                                <li>&#10003; Tailored resume</li>
-                                <li>&#10003; Tailored cover letter</li>
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(6 months)</span></li>
-                                <li>&#10003; All bullets AI generated</li>
-                                <li>&emsp;<a href="#what_are_builds">What are builds ?</a></li>
-                            </ul>
-                        
-                            <button class="get-now-button" name="selected_plan" value="basic">
-                                {% if account.tier == 'basic' %}
-                                Current
-                                {% else %}
-                                Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- economy -->
-                        <div class="card">
-                            <h2>Economy</h2>
-                            <b> <p  style="color: brown;">$19.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 50 builds  </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#9888; Personal website <span style="background-color: yellow;">(1 year)</span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="economy">
-                                {% if account.tier == 'economy' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- business -->
-                        <div class="card" style="position: relative;">
-                            <div class="recommended-banner">Recommended</div> <!-- Added recommended banner -->
-                            <h2>Business</h2>
-                            <b> <p  style="color: brown;">$39.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 100 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="business">
-                                {% if account.tier == 'business' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <style>
-                             @media only screen and (min-width: 768px) {
-
-                                .recommended-banner {
-                                    position: absolute;
-                                    top: -10px;
-                                    left: -10px;
-                                    background-color: #ff5722; /* Orange color */
-                                    color: white;
-                                    padding: 5px 10px;
-                                    font-size: 14px;
-                                    border-radius: 5px;
-                                    }
-                             }
-
-                             @media only screen and (max-width: 768px) {
-
-                                .recommended-banner {
-                                    position: relative; /* Change position to relative */
-                                    top: 0; /* Remove top positioning */
-                                    left: 0; /* Remove left positioning */
-                                    margin-bottom: 10px; /* Add margin for space */
-                                    background-color: #ff5722; /* Orange color */
-                                    color: white;
-                                    padding: 5px 10px;
-                                    font-size: 12px; /* Decrease font size for smaller screens */
-                                    border-radius: 5px;
-                                    width: 40%;
-                                }
-
-                             }
-
-                        </style>
-                        
-                        <!-- first class -->
-                        <div class="card">
-                            <h2>First Class</h2>
-                            <b> <p  style="color: brown;">$59.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 200 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="first_class">
-                                {% if account.tier == 'first_class' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-                        
-                        <!-- pilot -->
-                        <div class="card">
-                            <h2>Pilot</h2>
-                            <b> <p  style="color: brown;">$99.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 400 builds  </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot">
-                                {% if account.tier == 'pilot' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- pilot 2 -->
-                        <div class="card">
-                            <h2>Pilot 2</h2>
-                            <b> <p  style="color: brown;">$199.99 </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; 1000 builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                                
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="pilot2">
-                                {% if account.tier == 'pilot' %}
-                                    Current
-                                {% else %}
-                                    Buy Now
-                                {% endif %}
-                            </button>
-                        </div>
-
-                        <!-- custom -->
-                        <div class="card">
-                            <h2>Custom</h2>
-                            <b> <p  style="color: brown;">$custom </p> </b>
-                            
-                            <ul>
-                                <li>&#10003; custom builds </li>
-                                <li>&#10003; Tailored resume  </li>
-                                <li>&#10003; Tailored cover letter  </li>
-                                <li>&#10003; Personal website <span style="background-color: yellow;"> forever </span></li>
-                                <li>&#10003; All bullets AI generated  </li>
-                                <li>&emsp;  <a href="#what_are_builds">What are builds ?</a> </li>
-                            </ul>
-                            <button class="get-now-button" name="selected_plan" value="custom">
-                                Contact Us
-                            </button>
-                        </div>
-
-                    </div>
-                </div>
-
-            </form>
-
-            <div id="what_are_builds">
-                <div class="card">
-                    <h2>What are builds</h2>
-                    <ul> Each build includes three customizable options: </ul>
-                    <ul>
-                        <li> - Create a resume using your user profile</li>
-                        <li> - Create a tailored resume based on a job description</li>
-                        <li> - Create a tailored cover letter based on a job description</li>
-                    </ul>
-                <ul> Whichever option you choose, you'll receive an updated personal website </ul>
-                </div>
+        <!-- Business Plan (Recommended) -->
+        <div style="position: relative; flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <!-- Ribbon for Recommended -->
+            <div style="position: absolute; top: -10px; left: -10px; background-color: #e73131; color: #1c1c1c; font-weight: bold; padding: 4px 30px; font-size: 0.8em; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
+                Recommended
             </div>
 
-        </section>
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Business</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$39.99</p>
+            
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 100 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+
+
+            <button class="button" name="selected_plan" value="business" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">
+                {% if account.tier == 'business' %}
+                Current
+                {% else %}
+                Buy Now
+                {% endif %}
+            </button>
+
+        </div>
+
+
+        <!-- First Class Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">First Class</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$59.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 200 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+
+            <button class="button" name="selected_plan" value="first_class" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">
+                {% if account.tier == 'first_class' %}
+                Current
+                {% else %}
+                Buy Now
+                {% endif %}
+            </button>
+
+        </div>
+        
+        <!-- Pilot Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$99.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 400 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+
+            <button class="button" name="selected_plan" value="pilot" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">
+                {% if account.tier == 'pilot' %}
+                Current
+                {% else %}
+                Buy Now
+                {% endif %}
+            </button>
+
+        </div>
+        
+        <!-- Pilot 2 Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot 2</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$199.99</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ 1000 builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+
+            <button class="button" name="selected_plan" value="pilot2" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">
+                {% if account.tier == 'pilot2' %}
+                Current
+                {% else %}
+                Buy Now
+                {% endif %}
+            </button>
+
+        </div>
+        
+        <!-- Custom Plan -->
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Custom</h3>
+            <p style="font-size: 1.2em; font-weight: bold;">$custom</p>
+            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                <li>✓ Custom builds</li>
+                <li>✓ Tailored resume</li>
+                <li>✓ Tailored cover letter</li>
+                <li>✓ Personal website forever</li>
+                <li>✓ All bullets AI generated</li>
+            </ul>
+            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Contact Us</a>
+        </div>
+        
     </div>
+</section>
+</form>
 
 
-</body>
+<script>
+    function edit_data_redirect_pricing() {
+        alert("Your verison has ended, please upgrade plan");
+        var accountId = "{{ account.id }}"; // Make sure account.id is properly rendered
+        var redirectDomain = "{{ redirect_domain }}";
+        var confirmationUrl = redirectDomain + '' + accountId + '/confirmation#pricing';
+        window.location.href = confirmationUrl;
 
+    }
+</script>
+
+<style>
+
+html {
+    scroll-behavior: smooth;
+}
+
+    .right-section, .left-section {
+        width: 47%;
+    }
+
+    body {
+    background-color: #1a1a1a;
+    color: #c9d1d9;
+    font-family: 'Arial', sans-serif;
+    margin: 0;
+    padding: 0;
+    line-height: 1.6;
+}
+
+h2, h3 {
+    color: #ffd60a;
+    margin-bottom: 10px;
+}
+
+a {
+    color: #ffd60a;
+    text-decoration: none;
+}
+
+
+
+/* Button Styles */
+.btn {
+    display: inline-block;
+    background-color: #238636;
+    color: #ffffff;
+    padding: 10px 20px;
+    border-radius: 5px;
+    text-decoration: none;
+    margin: 8px 0;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.btn:hover {
+    background-color: #2ea043;
+    transform: translateY(-2px);
+}
+
+.button:hover {
+    background-color: #721c24;
+    transform: translateY(-2px);
+}
+
+/* Container and Row Styles */
+.row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 30px;
+    justify-content: space-between;
+    max-width: auto;
+    padding: 0 15px;
+}
+
+/* Column Styles */
+.column {
+    background-color: #1c1c1c;
+    padding: 20px;
+    border-radius: 10px;
+    flex: 1;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+}
+
+
+
+/* Rebuild Options Section */
+.rebuild-options {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+/* Button Group Styles */
+.button-group {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    align-items: center;
+}
+
+
+/* QR Code Styles */
+.qr-code {
+    margin-top: 20px;
+    width: 120px;
+    height: auto;
+    border-radius: 8px;
+    transition: transform 0.2s ease;
+}
+
+.qr-code:hover {
+    transform: scale(1.05);
+}
+
+/* Responsive Styles */
+@media (max-width: 992px) {
+    .row {
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .column {
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .google-doc-embed iframe {
+        height: 400px;
+    }
+
+    .btn {
+        width: 100%;
+        max-width: 250px;
+    }
+}
+
+/* Additional Styling for Interactive Elements */
+#landed_section {
+    background-color: #1a1a1a;
+    padding: 20px;
+    margin-bottom: 40px;
+}
+
+#landed_section h2 {
+    margin-bottom: 20px;
+}
+
+.account-link {
+    margin-top: 10px;
+}
+
+h3 {
+    font-weight: bold;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+}
+
+.column.website {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.website p {
+    margin-top: 10px;
+}
+
+.column.resume {
+    padding-top: 0;
+}
+
+
+/* Styles for the embedded resume iframe */
+#resumeIframe {
+    transform: scale(0.6);
+    transform-origin: 0 0;
+    width: 170%;
+    border-radius: 40px;
+    height: 1250px;
+}
+
+/* For mobile devices */
+@media only screen and (max-width: 767px) {
+    #resumeIframe {
+        max-width: 700px;
+        transform: scale(0.5);
+        transform-origin: 0 0;
+        margin-left: 20px;
+        
+    }
+}
+
+</style>
+
+
+</html>
 
 {% endblock %}
-
-
