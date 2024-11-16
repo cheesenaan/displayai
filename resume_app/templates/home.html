@@ -343,6 +343,8 @@
 
 <div> 
 
+   
+
     <section id="main">
         <!-- Main Content -->
         <div class="main">
@@ -366,52 +368,10 @@
             </div>
         </div>
 
-        <div class="interviews-by" style="
-        overflow-x: auto; 
-        white-space: nowrap; 
-        display: flex; 
-        justify-content: center; 
-        align-items: center; 
-        margin-top: 20px; 
-        scroll-behavior: smooth;
-    ">
-        <img src="{% static 'img/D861DC30-268C-46DC-8AB5-24805709194F.png' %}" 
-            alt="interviews-by.png" 
-            style="
-                width: 100000%; /* Make the image larger than its container */
-                max-width: none; /* Prevent max-width from limiting image size */
-                height: 100px;
-                object-fit: contain;
-                @media (min-width: 768px) { 
-                    width: 100%; /* Reset to full width on larger screens */
-                    overflow: hidden;
-                }
-            ">
-    </div>
-
-    <script>
-        // Auto-scroll functionality for the div with bidirectional scrolling
-        document.addEventListener('DOMContentLoaded', function () {
-            const container = document.querySelector('.interviews-by');
-            let scrollAmount = 1; // Speed of scrolling (positive for right, negative for left)
-    
-            function scrollImage() {
-                if (container) {
-                    container.scrollLeft += scrollAmount;
-    
-                    // Reverse direction if we reach the end or the beginning
-                    if (container.scrollLeft >= container.scrollWidth - container.clientWidth) {
-                        scrollAmount = -1; // Change direction to left
-                    } else if (container.scrollLeft <= 0) {
-                        scrollAmount = 1; // Change direction to right
-                    }
-                }
-            }
-    
-            setInterval(scrollImage, 10); // Adjust interval time for smoother or faster scrolling
-        });
-    </script>
-    
+        <div class="interviews-by">
+            <!-- <img src="{% static 'img/interviews-by.jpeg' %}" alt="interviews-by.jpeg" style="width: 100%; height: auto;"> -->
+            <img src="{% static 'img/D861DC30-268C-46DC-8AB5-24805709194F.png' %}" alt="interviews-by.png" style="width: 100%; height: auto;">
+        </div>
 
 
         <!-- Why CheeseCV Section -->
@@ -455,7 +415,6 @@
                     <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 20px;">
                         With CheeseCV, you don’t need to stress over perfect resume bullet points. Simply describe your work experience or project details in a conversational way—like you’re texting a friend.
                     </p>
-
                     <p style="font-size: 1.1em; line-height: 1.6; color: #b0b0b0;">
                         Many struggle with the XYZ format, where they need to explain <i>what they did</i> and the <i>impact it had</i> on the business. CheeseCV’s AI model transforms your input into polished, impactful bullets that effectively highlight your contributions.
                     </p>
@@ -579,7 +538,7 @@
         </section>
 
         <!-- Testimonial Section -->
-        <section id="testimonials" style="margin-top: 60px; background-color: #292929; padding: 60px; border-radius: 12px; justify-content: center;">
+        <section id="testimonials" style="margin-top: 60px; background-color: #292929; padding: 60px; border-radius: 12px;">
             <div style="text-align: center; margin-bottom: 40px;">
                 <h2 style="color: #ffd60a; font-size: 2.2em; font-weight: bold; margin-bottom: 10px;">What Our Users Say</h2>
                 <p style="color: #e0e0e0; font-size: 1.1em; line-height: 1.6; max-width: 700px; margin: 0 auto;">
@@ -656,7 +615,7 @@
 
 
 <!-- Pricing Section -->
-<section id="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1100px; margin: auto; ">
+<section id="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1100px; margin: auto;">
     <h2 style="text-align: center; font-size: 2.5em; color: #ffd60a; margin-bottom: 40px; font-family: 'Poppins', sans-serif;">Pricing</h2>
     <p style="text-align: center; color: #a9a9a9; font-size: 1.1em; margin-bottom: 30px;">All resumes are optimized for Applicant Tracking Systems (ATS)</p>
 
