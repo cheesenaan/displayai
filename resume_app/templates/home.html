@@ -438,29 +438,45 @@
 
 
         <!-- Tailored Resumes Section -->
-        <section id="tailored-resumes" style="margin-top: 60px; background-color: #2a2a2a; padding: 50px; border-radius: 12px;">
-            <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
-                
-                <!-- Left Side for GIF with Layered Styling -->
-                <div style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
-                    <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
-                        <img src="{% static 'gif-tailored-resume.gif' %}" alt="GIF of tailored resume feature" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
-                    </div>
-                </div>
+<section id="tailored-resumes" style="margin-top: 60px; background-color: #2a2a2a; padding: 50px; border-radius: 12px;">
+    <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap; flex-direction: row;">
 
-                <!-- Right Side for Text Content -->
-                <div style="flex: 1 1 50%; min-width: 280px;">
-                    <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;"> Thousands of tailored resumes <br> <span class="highlight">in minutes not weeks</span> </h2>
-                    <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px;">
-                        Research shows that tailored resumes can dramatically increase your chances of getting noticed and securing interviews.
-                        
-                    </p>
-                    <p style="color: #d4a373; font-size: 1em; font-style: italic;">Maximize your chances by focusing on what matters: landing the right role, faster.</p>
-                    <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
-                </div>
-
+        <!-- Left Side for GIF with Layered Styling -->
+        <div class="gif-container" style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
+            <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
+                <img src="{% static 'gif-tailored-resume.gif' %}" alt="GIF of tailored resume feature" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
             </div>
-        </section>
+        </div>
+
+        <!-- Right Side for Text Content -->
+        <div style="flex: 1 1 50%; min-width: 280px;">
+            <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;"> Thousands of tailored resumes <br> <span class="highlight">in minutes not weeks</span> </h2>
+            <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px;">
+                Research shows that tailored resumes can dramatically increase your chances of getting noticed and securing interviews.
+            </p>
+            <p style="color: #d4a373; font-size: 1em; font-style: italic;">Maximize your chances by focusing on what matters: landing the right role, faster.</p>
+            <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
+        </div>
+
+    </div>
+</section>
+
+<style>
+    @media (max-width: 768px) {
+        #tailored-resumes .gif-container {
+            order: 2; /* Moves the GIF to the bottom */
+            flex: 1 1 100%; /* Makes the GIF take full width */
+        }
+        #tailored-resumes > div {
+            flex-direction: column; /* Stacks the content vertically on smaller screens */
+            align-items: center; /* Centers the content */
+        }
+        #tailored-resumes .gif-container img {
+            width: 80%; /* Adjust image size on smaller screens */
+        }
+    }
+</style>
+
 
 
         <!-- Cover Letters Section -->
@@ -488,12 +504,12 @@
             </div>
         </section>
 
-        <!-- Google Doc Resume Section -->
+       <!-- Google Doc Resume Section -->
         <section id="google-doc-resume" style="margin-top: 60px; background-color: #222222; padding: 50px; border-radius: 12px;">
-            <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap;">
-                
+            <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap; flex-direction: row;">
+
                 <!-- Left Column for GIF with Layered Styling -->
-                <div style="position: relative; flex: 1 1 45%; min-width: 280px; text-align: center;">
+                <div class="gif-container" style="position: relative; flex: 1 1 45%; min-width: 280px; text-align: center;">
                     <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
                         <img src="{% static 'gif-google-doc-resume.gif' %}" alt="GIF of Google Doc resume" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
                     </div>
@@ -515,6 +531,23 @@
 
             </div>
         </section>
+
+        <style>
+            @media (max-width: 768px) {
+                #google-doc-resume .gif-container {
+                    order: 2; /* Moves the GIF to the bottom */
+                    flex: 1 1 100%; /* Makes the GIF take full width */
+                }
+                #google-doc-resume > div {
+                    flex-direction: column; /* Stacks the content vertically on smaller screens */
+                    align-items: center; /* Centers the content */
+                }
+                #google-doc-resume .gif-container img {
+                    width: 80%; /* Adjust image size on smaller screens */
+                }
+            }
+        </style>
+
 
         <!-- Personal Website Section -->
         <section id="personal-website" style="margin-top: 60px; background-color: #1c1c1c; padding: 50px; border-radius: 12px;">
