@@ -6,7 +6,7 @@
         <a href="{% url 'home' %}"> Home </a>
         <a href="{% url 'login' %}"> Build Now </a>
         <a href="{% url 'home' %}#work-experience">About us</a>
-        <a href="{% url 'home' %}#pricing">About us</a>
+        <a href="{% url 'home' %}#pricing">Pricing</a>
 
 {% endblock %}
 
@@ -44,231 +44,182 @@
             }
         }
 
-        /* Left Column */
-        .left-column {
-            max-width: 600px;
-        }
-        .left-column h1 {
-            font-size: 2.2em;
-            font-weight: bold;
-            margin-bottom: 15px;
-            line-height: 1.2;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .highlight {
-            color: #d4a373;
-            background-color: #333;
-            padding: 2px 6px;
-        }
-        .subheader {
-            font-size: 1em;
-            color: #b0b0b0;
-            margin: 20px 0;
-            line-height: 1.6;
-        }
-        .button {
-            display: inline-block;
-            padding: 12px 25px;
-            margin-top: 25px;
-            font-size: 1.2em;
-            color: #000;
-            background-color: #e6c10b;
-            border-radius: 5px;
-            text-decoration: none;
-            font-weight: bold;
-        }
-        .discount {
-            color: #488601;
-            margin-top: 15px;
-            font-size: 1em;
-            font-family: 'Courier New', Courier, monospace;
-        }
-        .avatars {
-            margin-top: 15px;
-            display: flex;
-            align-items: center;
-        }
-        .avatars img {
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            margin-right: 5px;
-        }
-        .stars {
-            margin-left: 10px;
+        h2 {
             color: #ffd60a;
-            font-weight: bold;
         }
 
-        /* Right Column */
-        .right-column {
-            /* background-color: #1c1c1c; */
-            padding: 25px;
-            border-radius: 10px;
-            /* border: 1px solid #333; */
-            max-width: 500px;
-            flex: 1; /* Ensures it takes available space */
-        }
-        .video-item img {
-            width: 100%;
-            height: auto; /* Maintains aspect ratio */
-            object-fit: contain;
-        }
-
-        /* Footer */
-        .interviews-by {
-            color: #999;
-        }
-        
-
-        /* Legal Section */
-        .legal-section {
-            margin-top: 50px;
-            background-color: #1c1c1c;
-            padding: 20px;
-            border-radius: 10px;
-        }
-        .legal-section h2 {
-            font-size: 1.6em;
-            color: #ffd60a;
-            margin-bottom: 15px;
-            text-align: center;
-        }
-        .legal-section p {
-            color: #b0b0b0;
-            font-size: 1em;
-            line-height: 1.6;
-        }
-
-        /* Why CheeseCV Section */
-        .why-cheesecv {
-            background-color: #1c1c1c;
-            padding: 40px;
-            border-radius: 10px;
-            margin-top: 50px;
-        }
-        .why-cheesecv h2 {
-            font-size: 1.8em;
-            color: #ffd60a;
-            margin-bottom: 20px;
-            text-align: center;
-        }
-        .features {
-            display: grid;
-            grid-template-columns: 1fr; /* Single column on small screens */
-            gap: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        @media (min-width: 600px) {
-            .features {
-                grid-template-columns: 1fr 1fr; /* Two columns on medium screens */
-            }
-        }
-        @media (min-width: 900px) {
-            .features {
-                grid-template-columns: repeat(3, 1fr); /* Three columns on larger screens */
-            }
-        }
-        .feature-item {
-            background-color: #333;
-            padding: 20px;
-            border-radius: 8px;
-        }
-        .feature-item h3 {
-            color: #d4a373;
-            font-size: 1.2em;
-            margin-bottom: 10px;
-        }
-        .feature-item p {
-            color: #b0b0b0;
-            font-size: 1em;
-            line-height: 1.6;
-        }
-
-        ul {
-            list-style: none; /* Remove default list styling */
-            padding: 0;
-        }
+       
     </style>
 </head>
 <body>
 
+    <div id="terms-conditions">
+        <h2>Terms and Conditions for CheeseCV</h2>
+        <p><strong>Effective Date:</strong> [Nov 16 2024]</p>
+    
+        <p>By accessing or using the services provided by CheeseCV ("we", "us", or "our"), you agree to be bound by the following terms and conditions ("Terms"). Please read them carefully before using our platform. If you do not agree with these Terms, you should not use our services.</p>
+    
+        <h3>1. Acceptance of Terms</h3>
+        <p>By using CheeseCV, you agree to these Terms and any updates or amendments made to them. We reserve the right to modify or update these Terms at any time without notice, and you are responsible for reviewing them regularly. Continued use of the platform after such changes will be deemed acceptance of the updated Terms.</p>
+    
+        <h3>2. User Account</h3>
+        <p>To use certain features of CheeseCV, you must create an account. You are responsible for providing accurate and current information, maintaining the confidentiality of your account details, and all activities that occur under your account. If you suspect unauthorized access to your account, you must immediately notify us.</p>
+    
+        <h3>3. Subscription and Payment</h3>
+        <p>CheeseCV offers a one-time payment system via Stripe. We do not offer subscription-based payments or refunds. Payment for services must be made in full at the time of purchase, and once processed, payments are non-refundable. All payments for services are processed through Stripe, a third-party payment processor.</p>
+    
+        <h3>4. Use of the Service</h3>
+        <p>CheeseCV provides tools and resources to help you create resumes and other professional documents. However, we do not guarantee that you will secure a job or an interview by using our services. Users are advised to use the platform at their own discretion and caution.</p>
+    
+        <h3>5. Limitation of Guarantee</h3>
+        <p>We do not guarantee the quality or success of any resume generated using our platform. While we strive to provide high-quality results, we cannot guarantee that the outcome will meet your specific expectations or lead to employment opportunities. However, we do offer a revision process: you are entitled to request up to four rebuilds of your resume to improve its quality.</p>
+    
+        <h3>6. Use of OpenAI API and Custom Model</h3>
+        <p>CheeseCV utilizes OpenAI's API and a custom model to generate resume content and other documents. While we endeavor to provide helpful and accurate results, we do not assume responsibility for any harmful or inappropriate outputs generated by these models. Users are advised to review all content carefully before use and proceed with caution.</p>
+    
+        <h3>7. Software Bugs and Errors</h3>
+        <p>CheeseCV is a complex software platform, and as with any software, there may be occasional bugs, errors, or crashes. While we strive to minimize such occurrences, we cannot guarantee that the platform will function without interruption or that all features will work as intended at all times. You acknowledge and agree that in the event of a crash, error, or bug in the software, it may temporarily prevent you from accessing or using the app, and you agree to use the service with this understanding.</p>
+    
+        <h3>8. Termination and Account Deletion</h3>
+        <p>We reserve the right to suspend, terminate, or delete your account at our sole discretion and at any time, without notice, for any reason, including but not limited to violations of these Terms, illegal activities, or misuse of the platform. In the event of account termination, you will lose access to any data or content associated with your account, and we are not obligated to provide any compensation for this loss.</p>
+    
+        <h3>9. User Responsibilities</h3>
+        <p>As a user of CheeseCV, you agree to:</p>
+        <ul>
+            <li>Provide accurate information when using the platform.</li>
+            <li>Not use the platform for any unlawful purpose or in any way that could damage, disable, or impair the services.</li>
+            <li>Not interfere with or disrupt the platform, servers, or networks connected to CheeseCV.</li>
+            <li>Comply with all applicable laws and regulations related to your use of the platform.</li>
+        </ul>
+    
+        <h3>10. Intellectual Property</h3>
+        <p>All content, design, software, and trademarks associated with CheeseCV are the property of CheeseCV and are protected by intellectual property laws. You may not use, reproduce, or distribute any part of the platform without prior written permission from CheeseCV.</p>
+    
+        <h3>11. Privacy and Data Protection</h3>
+        <p>Your use of CheeseCV is also governed by our Privacy Policy</a>. By using our services, you consent to the collection, use, and storage of your information as described in the Privacy Policy.</p>
+    
+        <h3>12. Limitation of Liability</h3>
+        <p>CheeseCV makes no warranties or representations regarding the accuracy, reliability, or availability of the platform. To the extent permitted by law, CheeseCV shall not be liable for any direct, indirect, incidental, or consequential damages arising from your use of the platform.</p>
+    
+        <h3>13. Indemnification</h3>
+        <p>You agree to indemnify and hold harmless CheeseCV and its affiliates from any claims, damages, losses, or expenses arising from your use of the platform, violation of these Terms, or infringement of any third-party rights.</p>
+    
+        <h3>14. Governing Law</h3>
+        <p>These Terms shall be governed by and construed in accordance with the laws of [Insert Country/State], without regard to its conflict of law principles. Any disputes arising under these Terms shall be resolved in the courts located in [Insert City/State].</p>
+    
+        <h3>15. Third-Party Services</h3>
+        <p>CheeseCV may contain links to third-party websites or services. We are not responsible for the content, privacy policies, or practices of third-party services. You access such third-party websites at your own risk.</p>
+    
+        <h3>16. Force Majeure</h3>
+        <p>CheeseCV shall not be liable for any failure or delay in performance under these Terms due to causes beyond our reasonable control, including but not limited to acts of God, war, terrorism, government action, or technical failures.</p>
+    
+        <h3>17. Severability</h3>
+        <p>If any provision of these Terms is found to be invalid or unenforceable, the remaining provisions will remain in full force and effect.</p>
+    
+        <h3>18. Entire Agreement</h3>
+        <p>These Terms constitute the entire agreement between you and CheeseCV regarding the use of the platform and supersede any prior agreements or understandings.</p>
+    
+        <h3>19. Contact Us</h3>
+        <p>If you have any questions or concerns about these Terms, please contact us at:</p>
+        <p>Email: <a href="mailto:sulemaanfarooq2003@gmail.com">sulemaanfarooq2003@gmail.com</a><br>
+           Address: NJ, USA</p>
+    </div>
+    
+    
 
+    <div id="privacy-policy">
+        <h2>Privacy Policy</h2>
+        <p><strong>Effective Date:</strong> [Nov 16 2024]</p>
+    
+        <p>CheeseCV ("we", "us", or "our") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, disclose, and safeguard your information when you visit our website or use our services. Please read this policy carefully.</p>
+    
+        <h3>1. Information We Collect</h3>
+        <ul>
+            <li><strong>Personal Information</strong>: When you create an account, we collect your name, email address, phone number, etc.</li>
+            <li><strong>Payment Information</strong>: If you subscribe to a paid plan, we collect payment details via a third-party processor (e.g., Stripe).</li>
+            <li><strong>Usage Data</strong>: We may collect data about how you interact with CheeseCV through cookies and analytics tools.</li>
+        </ul>
+    
+        <h3>2. How We Use Your Information</h3>
+        <ul>
+            <li>Provide and maintain our services.</li>
+            <li>Process payments and manage subscriptions.</li>
+            <li>Improve and personalize your experience.</li>
+            <li>Communicate with you about your account or promotional offers.</li>
+            <li>Comply with legal obligations and protect our rights.</li>
+        </ul>
+    
+        <h3>3. Information Sharing</h3>
+        <p>We may share your information with:</p>
+        <ul>
+            <li><strong>Service Providers</strong> like GitHub for version control or PythonAnywhere for hosting.</li>
+            <li><strong>Legal Compliance</strong> if required by law or to protect our legal rights.</li>
+        </ul>
+    
+        <h3>4. Security of Your Information</h3>
+        <p>We take reasonable measures to protect your data but cannot guarantee absolute security due to the inherent risks of online communication.</p>
+    
+        <h3>5. Your Rights</h3>
+        <ul>
+            <li>Access and update your personal information.</li>
+            <li>Request deletion of your account.</li>
+            <li>Opt-out of marketing communications.</li>
+        </ul>
+    
+        <h3>6. Cookies</h3>
+        <p>We use cookies for functionality, analytics, and security. You can control cookies through your browser settings.</p>
+    
+        <h3>7. Third-Party Links</h3>
+        <p>We are not responsible for the privacy practices of third-party sites. Please review their policies before sharing personal information.</p>
+    
+        <h3>8. Changes to This Privacy Policy</h3>
+        <p>We may update this policy, with updates posted on this page. The "Effective Date" will reflect the latest change.</p>
+    
+        <h3>9. Contact Us</h3>
+        <p>If you have any questions, contact us at [Insert Contact Email].</p>
+    </div>
+    
 
+    <div id="cookie-policy">
+        <h2>Cookie Policy</h2>
+        <p><strong>Last Updated:</strong> November 15, 2024</p>
+    
+        <p>This Cookie Policy explains how we use cookies and similar technologies on CheeseCV. By using our services, you consent to the use of cookies as described here.</p>
+    
+        <h3>1. What Are Cookies?</h3>
+        <p>Cookies are small files stored on your device that help us track interactions with our website, remembering your preferences and improving your experience.</p>
+    
+        <h3>2. Why We Use Cookies</h3>
+        <ul>
+            <li>To ensure proper functionality (e.g., user sessions and secure login).</li>
+            <li>To enhance user experience (e.g., remembering your preferences).</li>
+            <li>For security purposes to protect your account.</li>
+            <li>For analytics and performance to understand how users interact with the site.</li>
+        </ul>
+    
+        <h3>3. Types of Cookies We Use</h3>
+        <ul>
+            <li><strong>Essential Cookies</strong>: Necessary for website functionality (e.g., login sessions).</li>
+            <li><strong>Functional Cookies</strong>: Remember user preferences (e.g., account settings).</li>
+            <li><strong>Analytical Cookies</strong>: Collect anonymous data to improve our website (e.g., Google Analytics).</li>
+            <li><strong>Marketing Cookies</strong>: Used for personalized advertisements.</li>
+        </ul>
+    
+        <h3>4. Third-Party Cookies</h3>
+        <p>We use cookies from third parties like Stripe for payment processing and social media platforms for sharing content.</p>
+    
+        <h3>5. Managing Cookies</h3>
+        <p>You can manage or delete cookies via your browser settings. Disabling essential cookies may affect site functionality.</p>
+    
+        <h3>6. Cookie Duration</h3>
+        <p>Cookies may be session-based (temporary) or persistent (lasting until deleted or expiry).</p>
+    
+        <h3>7. Changes to This Cookie Policy</h3>
+        <p>We may update this Cookie Policy as needed. Updates will be posted on this page with the new effective date.</p>
+    
+        <h3>8. Contact Us</h3>
+        <p>For questions or concerns, contact us at <a href="mailto:sulemaanfarooq2003@gmail.com">sulemaanfarooq2003@gmail.com</a>.</p>
+    </div>
+    
 
-<div id="Cookie Policy"> 
----
-
-## **CheeseCV Cookie Policy**
-
-### **Last Updated: November 15, 2024**
-
-Welcome to CheeseCV! This Cookie Policy explains how we use cookies and similar technologies on our website and SaaS platform. By using our services, you agree to the use of cookies as described in this policy.
-
-### **1. What Are Cookies?**
-Cookies are small text files stored on your device (computer, smartphone, tablet) when you visit a website. They help us understand how you interact with our site, remember your preferences, and improve your overall experience.
-
-### **2. Why We Use Cookies**
-We use cookies for various reasons, including to:
-- **Ensure Proper Functionality**: Some cookies are essential for the functionality of our website, such as managing user sessions and enabling secure login.
-- **Improve User Experience**: Cookies help us remember your preferences (e.g., theme selection, form data) to enhance your experience.
-- **Security**: To protect your account from unauthorized access and ensure the security of your data.
-- **Analytics and Performance**: To analyze how users interact with our site, helping us optimize our services.
-
-### **3. Types of Cookies We Use**
-
-#### **a. Essential Cookies**
-These cookies are necessary for the website to function correctly and cannot be switched off in our systems. They are typically set in response to your actions, such as logging in or filling out forms.
-- **Examples**:
-  - `sessionid`: Maintains your login session across pages.
-  - `csrftoken`: Protects against Cross-Site Request Forgery (CSRF) attacks.
-
-#### **b. Functional Cookies**
-These cookies allow us to remember your preferences and settings, such as account details or theme selections.
-- **Examples**:
-  - `account_id`: Used to identify your account when accessing personalized features like `/account/`, `/form/`, or `/subscriptions/`.
-
-#### **c. Analytical Cookies**
-These cookies help us understand how our users interact with the site by collecting anonymous data on page visits, clicks, and other user behaviors. This helps us improve our website's functionality and user experience.
-- **Examples**:
-  - We may use third-party analytics tools like Google Analytics, which set cookies to track user activity.
-
-#### **d. Marketing and Advertising Cookies**
-We may use these cookies to deliver personalized content and advertisements that are relevant to your interests. These are primarily used if you interact with our promotional offers or landing pages.
-- **Examples**:
-  - `utm_campaign`, `utm_source`: Track the source of your visit if you came through a marketing campaign.
-
-### **4. Third-Party Cookies**
-Our website may include cookies set by third-party services, such as payment processors (e.g., Stripe) when managing subscriptions, or social media platforms for sharing content.
-- **Examples**:
-  - Stripe cookies for managing payments like `/payment_successful` and `/payment_cancelled`.
-  - Social media buttons may set cookies for platforms like Facebook, LinkedIn, or Twitter.
-
-### **5. Managing and Deleting Cookies**
-You have the right to accept or decline cookies. Most web browsers automatically accept cookies, but you can modify your browser settings to decline cookies if you prefer. Please note that disabling essential cookies may affect the functionality of our site.
-- **Browser Settings**: 
-  - [Chrome](https://support.google.com/chrome/answer/95647)
-  - [Firefox](https://support.mozilla.org/en-US/kb/enable-and-disable-cookies-website-preferences)
-  - [Safari](https://support.apple.com/guide/safari/manage-cookies-and-website-data-sfri11471/mac)
-  - [Edge](https://support.microsoft.com/en-us/microsoft-edge/delete-cookies-in-microsoft-edge-63947406-40ac-c3b8-57b9-2a946a29ae09)
-
-### **6. Cookie Duration**
-The cookies we use can be categorized as either session cookies or persistent cookies:
-- **Session Cookies**: These cookies are temporary and expire once you close your browser.
-- **Persistent Cookies**: These cookies remain on your device for a specified period or until manually deleted.
-
-### **7. Changes to This Cookie Policy**
-We may update this Cookie Policy from time to time to reflect changes in our practices or for other operational, legal, or regulatory reasons. The updated policy will be posted on this page with the new effective date.
-
-### **8. Contact Us**
-If you have any questions or concerns about our Cookie Policy, please contact us at:
-- **Email**: support@cheesecv.com
-- **Address**: CheeseCV, 123 AI Street, Tech City, TX, USA
-
-By using our site, you agree to the use of cookies in accordance with this policy.
-
----
-
-</div>
+{% endblock %}

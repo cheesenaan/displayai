@@ -1591,5 +1591,5 @@ def stripe_webhook(request):
 
 
 def terms_of_service(request):
+    print("inside terms_of_service")
     return render(request, 'terms_of_service.html')
-

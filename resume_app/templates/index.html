@@ -202,13 +202,23 @@
             <div style="flex: 1 1 180px; min-width: 150px;">
                 <h4>Quick Links</h4>
                 <ul style="list-style-type: none; padding: 0; line-height: 1.8;">
-                    <li><a href="#">Home</a></li>
-                    <li><a href="#">Pricing</a></li>
-                    <li><a href="#">Features</a></li>
-                    <li><a href="#">Testimonials</a></li>
-                    <li><a href="#">Contact Us</a></li>
+                    <a href="{% url 'home' %}">Home</a> <br>
+                    <a href="{% url 'home' %}#work-experience">About us</a> <br>
+                    <a href="{% url 'login' %}"> Build Now </a>
+                    <a href="{% url 'home' %}#pricing">Pricing</a>
                 </ul>
             </div>
+
+            <div style="flex: 1 1 180px; min-width: 150px;">
+                <h4>Legal</h4>
+                <ul style="list-style-type: none; padding: 0; line-height: 1.8;">
+                    <a href="{% url 'terms_of_service' %}">Terms and conditions</a>  <br>
+                    <a href="{% url 'terms_of_service' %}">Privacy Policy</a>  <br>
+                    <a href="{% url 'terms_of_service' %}">Cookie Policy</a>  <br>
+                </ul>
+            </div>
+            
+
         </div>
 
         <!-- Footer Bottom -->

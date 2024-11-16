@@ -21,6 +21,7 @@ from django.contrib.auth.views import LoginView
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
+    path('terms-of-service/', terms_of_service, name='terms_of_service'),
     path('login/', login, name='login'),
     path('forgot_password/', forgot_password, name='forgot_password'),
     path('<int:account_id>/logout/', logout, name='logout'),
@@ -41,9 +42,9 @@ urlpatterns = [
     path('form/CheckUrlNameView/', CheckUrlNameView.as_view(), name='CheckUrlNameView'),
     path('login/CheckAccountNameView/', CheckAccountNameView.as_view(), name='CheckAccountNameView'),
     path('login/CheckAccountEmailView/', CheckAccountEmailView.as_view(), name='CheckAccountEmailView'),
-    path('terms-of-service/', terms_of_service, name='terms_of_service'),
-
+    # Correct URL pattern for terms of service
 ]
+
 
 
     # path('stripe_webhook/', stripe_webhook, name='stripe_webhook'),
