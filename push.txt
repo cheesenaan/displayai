@@ -5,6 +5,3 @@ git commit -m 'changed css'
 git remote add origin https://github.com/cheesenaan/displayai.git
 git push -u origin main
 
-delete profile pictures except 0.jpg
-security of apis
-google credentials .json change path
