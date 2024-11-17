@@ -1494,131 +1494,112 @@ tbody tr {
 
     
         {% if account.user_profile is None %}
-        <button type="submit"">CREATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
+        <button type="submit"">CREATE USER PROFILE & BUILD 🚀 </button>
         {% else %}
         <br>  <br>  <br> 
-        <button type="submit"">UPDATE USER PROFILE AND BUILD WEBSITE AND RESUME</button>
+        <button type="submit"">UPDATE USER PROFILE & BUILD 🚀 </button>
         {% endif %}
 
-        <style>
-            /* Style for the modal */
-            #loadingModal {
-                display: none;
-                position: fixed;
-                top: 50%;
-                left: 50%;
-                transform: translate(-50%, -50%);
-                background-color: #f9bb75; /* White background */
-                padding: 30px;
-                border-radius: 10px;
-                box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
-                text-align: center;
-                animation: fadeIn 0.5s ease-in-out;
-                -webkit-animation: fadeIn 0.5s ease-in-out; /* Safari */
-                z-index: 1000; /* Ensure the modal appears above the rest of the content */
-            }
-        
-            /* Animation for the modal */
-            @keyframes fadeIn {
-                from {
-                    opacity: 0;
-                }
-                to {
-                    opacity: 1;
-                }
-            }
-        
-            /* Style for the background overlay */
-            #loadingOverlay {
-                position: fixed;
-                top: 0;
-                left: 0;
-                width: 100%;
-                height: 100%;
-                background: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity as needed */
-                backdrop-filter: blur(3px); /* Add a blur effect to the background */
-                -webkit-backdrop-filter: blur(3px); /* Safari */
-                z-index: 999; /* Ensure the overlay is behind the modal but above the rest of the content */
-                display: none;
-            }
-        </style>
-        
-        
-        <div id="loadingModal">
-            <p id="loadingText"><b>Loading...</b></p>
+        <!-- Loading Modal -->
+        <div id="loadingModal" style="display: none;">
+        <div class="loading-spinner"></div>
+        <p id="loadingText"><b>Loading...</b></p>
         </div>
-        
-        <div id="loadingOverlay"></div>
-        
-        <script>
-            function showLoadingModal() {
-                // Show the loading modal and overlay
-                document.getElementById("loadingModal").style.display = "block";
-                document.getElementById("loadingOverlay").style.display = "block";
-        
-                // Array of loading messages
-                var loadingMessages = [
-                    "{{account.name}}, welcome to CheeseCV ! ",
-                    "Requesting CheeseCV AI & data science model  ...",
-                    "Connecting to cloud environment & creating resume google doc ...",
-                    "Adding data to personal website & resume",
-                    "Artificial Intelligence to generate bullets...",
-                    "Prompt engineering ...",
-                    "Data Science model to select the optimal bullets ...",
-                    "Natural Language Processing to make resume ATS friendly...",
-                    "Model to ensure resume bullets are short, concise ...",
-                    "Artificial Intelligence to ensure bullets quantification ...",
-                    "Cleaning bullet data and pushing to profile environment  ...",
-                    "Personal website ready ! ",
-                    "Editing google doc permissions ... ",
-                    "Ensuring account security ... ",
-                    "Formatting work experiences",
-                    "Formatting projects",
-                    "Formatting dates",
-                    "Saving resume to cloud environment",
-                    "Saving resume to profile",
-                    "Updating your account information",
-                    "Model is running slow due to traffic please be patient ... ",
-                    "Your internet connection is slowing model please be patient ... ",
-                    "Checking for errors ... ",
-                    "Ensuring account security ... ",
-                    "Model is running slow due to traffic please be patient ... ",
-                    "Your internet connection is slowing model please be patient ... ",
-                    "Ensuring account security ... ",
-                    "Model is running slow due to traffic please be patient ... ",
-                    "Your internet connection is slowing model please be patient ... ",
-                    "Ensuring account security ... ",
-                    "Model is running slow due to traffic please be patient ... ",
-                    "Your internet connection is slowing model please be patient ... ",
-                    "Ensuring account security ... ",
-                    "Your internet is too slow please try again ... ",
-                    "Your internet is too slow please try again ... ",
-                    "Your internet is too slow please try again ... ",
-                    "Your internet is too slow please try again ... ",
-                    "Your internet is too slow please try again ... ",
-                    "Your internet is too slow please try again ... ",
-                ];
-        
-                // Function to display loading messages in a loop
-                function displayLoadingMessages(index) {
-                    // Set the loading text
-                    document.getElementById("loadingText").innerHTML = "<b>" + loadingMessages[index] + "</b>";
-        
-                    // Increment index or reset to 0 if at the end
-                    index = (index + 1) % loadingMessages.length;
-        
-                    // Set a timeout for the next message
-                    setTimeout(function () {
-                        displayLoadingMessages(index);
-                    }, 1700); // Adjust the time delay between messages (in milliseconds)
-                }
-        
-                // Start the loop
-                displayLoadingMessages(0);
-        
-                // You can add additional logic or AJAX requests if needed here
+        <div id="loadingOverlay" style="display: none;"></div>
+
+        <style>
+        /* Style for the modal */
+        #loadingModal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #f9bb75; /* White background */
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            animation: fadeIn 0.5s ease-in-out;
+            z-index: 1000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* Animation for the modal */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
             }
+            to {
+                opacity: 1;
+            }
+        }
+
+        /* Style for the background overlay */
+        #loadingOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5); /* Adjust the color and opacity */
+            backdrop-filter: blur(3px); /* Add a blur effect */
+            z-index: 999;
+            display: none;
+        }
+
+        /* Style for the loading spinner */
+        .loading-spinner {
+            border: 4px solid rgba(255, 255, 255, 0.3); /* Light gray border */
+            border-top: 4px solid #f9bb75; /* Orange color for the spinner */
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+        }
+
+        /* Spinner animation */
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        </style>
+
+        <script>
+        function showLoadingModal() {
+            // Show the loading modal and overlay
+            document.getElementById("loadingModal").style.display = "flex";
+            document.getElementById("loadingOverlay").style.display = "block";
+
+            // Array of loading messages
+            const loadingMessages = [
+                "{{account.name}}, welcome to CheeseCV!",
+                "Requesting CheeseCV AI & data science model...",
+                "Connecting to cloud environment & creating resume Google Doc...",
+                "Adding data to personal website & resume...",
+                "Artificial Intelligence to generate bullets...",
+                "Finalizing resume details...",
+                "Ensuring optimal formatting...",
+                "Saving resume to cloud...",
+                "Your personal website is ready!",
+                "All set! Finalizing...",
+            ];
+
+            let index = 0;
+
+            function displayLoadingMessages() {
+                document.getElementById("loadingText").innerHTML = `<b>${loadingMessages[index]}</b>`;
+                index = (index + 1) % loadingMessages.length;
+                setTimeout(displayLoadingMessages, 1700);
+            }
+
+            // Start displaying messages
+            displayLoadingMessages();
+        }
         </script>
+
 
     <br>  <br>  <br>  <br>
 </form>
