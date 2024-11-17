@@ -11,6 +11,14 @@
 {% endblock %}
 
 
+{% block header_links_nav %}
+    <a href="{% url 'confirmation' account_id=account.id %}">  Build Page </a>
+        <a href="{% url 'account' account_id=account.id %}">  Account </a>
+        <a href="{% url 'subscriptions' account_id=account.id %}">  Orders </a>
+
+{% endblock %}
+
+
 {% block content %}
 
 <br>  <br> 

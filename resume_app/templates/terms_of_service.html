@@ -11,6 +11,16 @@
 {% endblock %}
 
 
+{% block header_links_nav %}
+        <a href="{% url 'home' %}"> Home </a>
+        <a href="{% url 'login' %}"> Build Now </a>
+        <a href="{% url 'home' %}#work-experience">About us</a>
+        <a href="{% url 'home' %}#pricing">Pricing</a>
+
+{% endblock %}
+
+
+
 {% block content %}
 
 

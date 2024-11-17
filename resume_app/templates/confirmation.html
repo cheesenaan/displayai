@@ -10,9 +10,207 @@
 {% endblock %}
 
 
+
+{% block header_links_nav %}
+        <a href="{% url 'account' account_id=account.id %}">  Account </a>
+        <a href="{% url 'subscriptions' account_id=account.id %}">  Orders </a>
+        <a href="#pricing"> Pricing </a>
+
+{% endblock %}
+
+
 {% block content %}
 
-<html>
+
+
+<style>
+
+    html {
+        scroll-behavior: smooth;
+    }
+
+    @media (min-width: 768px) {
+        .right-section, .left-section {
+            width: 47%;
+        }
+    }
+        
+    
+        body {
+        background-color: #1a1a1a;
+        color: #c9d1d9;
+        font-family: 'Arial', sans-serif;
+        line-height: 1.6;
+    }
+    
+    h2, h3 {
+        color: #ffd60a;
+        margin-bottom: 10px;
+    }
+    
+    a {
+        color: #ffd60a;
+        text-decoration: none;
+    }
+    
+    
+    
+    /* Button Styles */
+    .btn {
+        display: inline-block;
+        background-color: #238636;
+        color: #ffffff;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+        margin: 8px 0;
+        transition: background-color 0.3s ease, transform 0.2s ease;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    }
+    
+    .btn:hover {
+        background-color: #2ea043;
+        transform: translateY(-2px);
+    }
+    
+    .button:hover {
+        background-color: #721c24;
+        transform: translateY(-2px);
+    }
+    
+    /* Container and Row Styles */
+    .row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 30px;
+        justify-content: space-between;
+        max-width: auto;
+        padding: 0 15px;
+    }
+    
+    /* Column Styles */
+    .column {
+        background-color: #1c1c1c;
+        padding: 20px;
+        border-radius: 10px;
+        flex: 1;
+        text-align: center;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+    }
+    
+    
+    
+    /* Rebuild Options Section */
+    .rebuild-options {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+    
+    /* Button Group Styles */
+    .button-group {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        align-items: center;
+    }
+    
+    
+    /* QR Code Styles */
+    .qr-code {
+        margin-top: 20px;
+        width: 120px;
+        height: auto;
+        border-radius: 8px;
+        transition: transform 0.2s ease;
+    }
+    
+    .qr-code:hover {
+        transform: scale(1.05);
+    }
+    
+    /* Responsive Styles */
+    @media (max-width: 992px) {
+        .row {
+            flex-direction: column;
+            gap: 20px;
+        }
+    
+        .column {
+            padding: 20px;
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .google-doc-embed iframe {
+            height: 400px;
+        }
+    
+        .btn {
+            width: 100%;
+            max-width: 250px;
+        }
+    }
+    
+    /* Additional Styling for Interactive Elements */
+    #landed_section {
+        background-color: #1a1a1a;
+        padding: 20px;
+        margin-bottom: 40px;
+    }
+    
+    #landed_section h2 {
+        margin-bottom: 20px;
+    }
+    
+    .account-link {
+        margin-top: 10px;
+    }
+    
+    h3 {
+        font-weight: bold;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+    
+    .column.website {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+    }
+    
+    .website p {
+        margin-top: 10px;
+    }
+    
+    .column.resume {
+        padding-top: 0;
+    }
+    
+    
+    /* Styles for the embedded resume iframe */
+    #resumeIframe {
+        transform: scale(0.6);
+        transform-origin: 0 0;
+        width: 170%;
+        border-radius: 40px;
+        height: 1250px;
+    }
+    
+    /* For mobile devices */
+    @media only screen and (max-width: 767px) {
+        #resumeIframe {
+            max-width: 700px;
+            transform: scale(0.5);
+            transform-origin: 0 0;
+            margin-left: 20px;
+            
+        }
+    }
+    
+    </style>
+
 
 <style>
 .button1 {
@@ -39,6 +237,139 @@
 
 
 </style>
+
+
+
+<style>
+    /* Flexbox Container */
+    .info-website-container {
+        display: flex;
+        justify-content: space-between;
+        gap: 20px;
+        padding: 40px;
+        border-radius: 8px;
+        margin-bottom: 40px;
+    }
+
+    /* Columns */
+    .column {
+        flex: 1;
+    }
+
+    /* User Info Table */
+    .user-info-table table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: 20px;
+        color: #ffffff; /* Set all text in the table to white */
+    }
+
+    .user-info-table td {
+        padding: 8px;
+        border-bottom: 1px solid #444; /* Darker border for better visibility */
+    }
+
+    .user-info-table td:first-child {
+        font-weight: bold;
+        color: #ffffff; /* Ensure first column text is also white */
+    }
+
+    /* Website Section */
+    .website {
+        text-align: center;
+        color: #ffffff; /* Ensure text in the website section is white */
+    }
+
+    .website a {
+        color: #00bfff; /* Light blue color for links */
+        text-decoration: none;
+    }
+
+    .website a:hover {
+        text-decoration: underline;
+    }
+
+    .qr-code {
+        margin-top: 10px;
+        max-width: 150px;
+        height: auto;
+    }
+
+    /* Adjust GIF to be responsive */
+    #resume-video {
+        width: 100%; /* Make the image take up full width of its container */
+        max-width: 300px; /* Optional: max width to prevent the image from getting too large */
+        height: auto; /* Maintain aspect ratio */
+        border-radius: 10px; /* Optional: add rounded corners */
+    }
+
+    /* Media Queries for Smaller Screens */
+    @media (max-width: 768px) {
+
+        body, html {
+            max-width: 100%;
+        }
+
+        .info-website-container {
+            flex-direction: column; /* Stack the columns vertically */
+            padding: 0px; /* Reduce padding for smaller screens */
+            max-width: 100%;
+        }
+
+        .column {
+            flex: none; /* Allow the columns to stack and not stretch */
+            width: 100%; /* Ensure columns take up full width */
+            margin-bottom: 20px; /* Add margin between stacked columns */
+        }
+
+        .arrow {
+            font-size: 60px; /* Reduce arrow size for smaller screens */
+            margin-top: 5px; /* Adjust margin for smaller screens */
+        }
+
+        .qr-code {
+            max-width: 120px; /* Reduce QR code size on smaller screens */
+        }
+
+        .user-info-table td {
+            font-size: 14px; /* Reduce font size for smaller screens */
+            padding: 6px; /* Adjust padding for readability */
+        }
+
+        .user-info-table td:first-child {
+            font-size: 16px; /* Slightly larger font for labels */
+        }
+
+        .website a {
+            font-size: 18px; /* Adjust link font size */
+        }
+    }
+
+    @media (max-width: 480px) {
+        .arrow {
+            font-size: 50px; /* Further reduce arrow size for very small screens */
+        }
+
+        .user-info-table td {
+            font-size: 12px; /* Make text smaller for very small screens */
+            padding: 4px; /* Further reduce padding */
+        }
+
+        .user-info-table td:first-child {
+            font-size: 14px; /* Ensure the first column text is still readable */
+        }
+
+        .qr-code {
+            max-width: 100px; /* Further reduce QR code size */
+        }
+
+        .website a {
+            font-size: 16px; /* Make text slightly smaller */
+        }
+    }
+</style>
+
+<html>
 
 
 <section id="main">
@@ -107,6 +438,28 @@
 <!-- Container for User Info and Website Sections -->
 <div class="info-website-container">
     <!-- User Info Table Column -->
+    
+
+    <!-- Website Column -->
+    <div class="column website">
+        <h3>Website</h3>
+        <p>
+            <a href="/{{account.name}}" target="_blank">
+                <b>🌐 cheesecv.com/{{account.name}}</b>
+            </a>
+        </p>
+        <img src="data:image/png;base64,{{qr_code_image}}" alt="QR Code" class="qr-code">
+    </div>
+
+    <!-- Website Column -->
+    <div class="column website">
+    <a href="#build_options_resume_section" style="text-decoration: none;">
+        <h3>Resume</h3>
+        <span class="arrow">&#8595;</span>
+
+    </a>
+    </div>
+
     <div class="column user-info-table">
         <table>
             <tr>
@@ -134,25 +487,6 @@
                 <td><b>{{remaining}}</b></td>
             </tr>
         </table>
-    </div>
-
-    <!-- Website Column -->
-    <div class="column website">
-        <h3>Website</h3>
-        <p>
-            <a href="/{{account.name}}" target="_blank">
-                <b>🌐 cheesecv.com/{{account.name}}</b>
-            </a>
-        </p>
-        <img src="data:image/png;base64,{{qr_code_image}}" alt="QR Code" class="qr-code">
-    </div>
-
-    <!-- Website Column -->
-    <div class="column website">
-    <a href="#build_options_resume_section" style="text-decoration: none;">
-        <h3>Resume</h3>
-        <span class="arrow">&#8595;</span>
-    </a>
     </div>
     
     <style>
@@ -897,69 +1231,7 @@
             </a>
             
         
-            <style>
-                /* Flexbox Container */
-                .info-website-container {
-                    display: flex;
-                    justify-content: space-between;
-                    gap: 20px;
-                    padding: 40px;
-                    border-radius: 8px;
-                    margin-bottom: 40px;
-                }
-        
-                /* Columns */
-                .column {
-                    flex: 1;
-                }
-        
-                /* User Info Table */
-                .user-info-table table {
-                    width: 100%;
-                    border-collapse: collapse;
-                    margin-bottom: 20px;
-                    color: #ffffff; /* Set all text in the table to white */
-                }
-        
-                .user-info-table td {
-                    padding: 8px;
-                    border-bottom: 1px solid #444; /* Darker border for better visibility */
-                }
-        
-                .user-info-table td:first-child {
-                    font-weight: bold;
-                    color: #ffffff; /* Ensure first column text is also white */
-                }
-        
-                /* Website Section */
-                .website {
-                    text-align: center;
-                    color: #ffffff; /* Ensure text in the website section is white */
-                }
-        
-                .website a {
-                    color: #00bfff; /* Light blue color for links */
-                    text-decoration: none;
-                }
-        
-                .website a:hover {
-                    text-decoration: underline;
-                }
-        
-                .qr-code {
-                    margin-top: 10px;
-                    max-width: 150px;
-                    height: auto;
-                }
-        
-                /* Adjust GIF to be responsive */
-                #resume-video {
-                    width: 100%; /* Make the image take up full width of its container */
-                    max-width: 300px; /* Optional: max width to prevent the image from getting too large */
-                    height: auto; /* Maintain aspect ratio */
-                    border-radius: 10px; /* Optional: add rounded corners */
-                }
-            </style>
+            
         </div>
 
         <div class="right-section">
@@ -1085,7 +1357,7 @@
         </div>
 
         <!-- Basic Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 350px;">
             <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Basic</h3>
             <p style="font-size: 1.2em; font-weight: bold;">$9.99</p>
             <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
@@ -1107,7 +1379,7 @@
         </div>
 
         <!-- Economy Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 350px;">
             <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Economy</h3>
             <p style="font-size: 1.2em; font-weight: bold;">$19.99</p>
             <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
@@ -1129,7 +1401,7 @@
         </div>
 
         <!-- Business Plan (Recommended) -->
-        <div style="position: relative; flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+        <div style="position: relative; flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 350px;">
             <!-- Ribbon for Recommended -->
             <div style="position: absolute; top: -10px; left: -10px; background-color: #e73131; color: #1c1c1c; font-weight: bold; padding: 4px 30px; font-size: 0.8em; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
                 Recommended
@@ -1159,7 +1431,7 @@
 
 
         <!-- First Class Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 350px;">
             <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">First Class</h3>
             <p style="font-size: 1.2em; font-weight: bold;">$59.99</p>
             <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
@@ -1181,7 +1453,7 @@
         </div>
         
         <!-- Pilot Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 350px;">
             <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot</h3>
             <p style="font-size: 1.2em; font-weight: bold;">$99.99</p>
             <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
@@ -1203,7 +1475,7 @@
         </div>
         
         <!-- Pilot 2 Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 350px;">
             <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot 2</h3>
             <p style="font-size: 1.2em; font-weight: bold;">$199.99</p>
             <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
@@ -1225,7 +1497,7 @@
         </div>
         
         <!-- Custom Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 250px;">
+        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 350px;">
             <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Custom</h3>
             <p style="font-size: 1.2em; font-weight: bold;">$custom</p>
             <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
@@ -1254,190 +1526,7 @@
     }
 </script>
 
-<style>
 
-html {
-    scroll-behavior: smooth;
-}
-
-    .right-section, .left-section {
-        width: 47%;
-    }
-
-    body {
-    background-color: #1a1a1a;
-    color: #c9d1d9;
-    font-family: 'Arial', sans-serif;
-    line-height: 1.6;
-}
-
-h2, h3 {
-    color: #ffd60a;
-    margin-bottom: 10px;
-}
-
-a {
-    color: #ffd60a;
-    text-decoration: none;
-}
-
-
-
-/* Button Styles */
-.btn {
-    display: inline-block;
-    background-color: #238636;
-    color: #ffffff;
-    padding: 10px 20px;
-    border-radius: 5px;
-    text-decoration: none;
-    margin: 8px 0;
-    transition: background-color 0.3s ease, transform 0.2s ease;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.btn:hover {
-    background-color: #2ea043;
-    transform: translateY(-2px);
-}
-
-.button:hover {
-    background-color: #721c24;
-    transform: translateY(-2px);
-}
-
-/* Container and Row Styles */
-.row {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 30px;
-    justify-content: space-between;
-    max-width: auto;
-    padding: 0 15px;
-}
-
-/* Column Styles */
-.column {
-    background-color: #1c1c1c;
-    padding: 20px;
-    border-radius: 10px;
-    flex: 1;
-    text-align: center;
-    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
-    transition: transform 0.3s ease;
-}
-
-
-
-/* Rebuild Options Section */
-.rebuild-options {
-    display: flex;
-    flex-direction: column;
-    gap: 20px;
-}
-
-/* Button Group Styles */
-.button-group {
-    display: flex;
-    flex-direction: column;
-    gap: 15px;
-    align-items: center;
-}
-
-
-/* QR Code Styles */
-.qr-code {
-    margin-top: 20px;
-    width: 120px;
-    height: auto;
-    border-radius: 8px;
-    transition: transform 0.2s ease;
-}
-
-.qr-code:hover {
-    transform: scale(1.05);
-}
-
-/* Responsive Styles */
-@media (max-width: 992px) {
-    .row {
-        flex-direction: column;
-        gap: 20px;
-    }
-
-    .column {
-        padding: 20px;
-    }
-}
-
-@media (max-width: 768px) {
-    .google-doc-embed iframe {
-        height: 400px;
-    }
-
-    .btn {
-        width: 100%;
-        max-width: 250px;
-    }
-}
-
-/* Additional Styling for Interactive Elements */
-#landed_section {
-    background-color: #1a1a1a;
-    padding: 20px;
-    margin-bottom: 40px;
-}
-
-#landed_section h2 {
-    margin-bottom: 20px;
-}
-
-.account-link {
-    margin-top: 10px;
-}
-
-h3 {
-    font-weight: bold;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-.column.website {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-}
-
-.website p {
-    margin-top: 10px;
-}
-
-.column.resume {
-    padding-top: 0;
-}
-
-
-/* Styles for the embedded resume iframe */
-#resumeIframe {
-    transform: scale(0.6);
-    transform-origin: 0 0;
-    width: 170%;
-    border-radius: 40px;
-    height: 1250px;
-}
-
-/* For mobile devices */
-@media only screen and (max-width: 767px) {
-    #resumeIframe {
-        max-width: 700px;
-        transform: scale(0.5);
-        transform-origin: 0 0;
-        margin-left: 20px;
-        
-    }
-}
-
-</style>
 
 </section>
 
