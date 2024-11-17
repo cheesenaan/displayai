@@ -38,9 +38,11 @@ from django.contrib.auth.models import User
 from django.contrib.auth import authenticate
 from django.contrib.auth import login as auth_login
 from django.contrib.auth import logout as auth_logout
+from decouple import config
 
 
-prices_dict = {
+
+prices_dict_test = {
             'basic': 'price_1PGLwPBFOKaICuMNcQUiUkL8',
             'economy': 'price_1PGLxXBFOKaICuMNTWFFLW2Q',
             'business': 'price_1PGLylBFOKaICuMNAW5DbjE5',
@@ -48,6 +50,25 @@ prices_dict = {
             'pilot': 'price_1PGM0lBFOKaICuMNLBT2PnVA',
             'pilot2': 'price_1PGM1VBFOKaICuMNuGNqILRd'
 }
+
+prices_dict_live = {
+            'basic': 'prod_RETKXxCm6fDA6d',
+            'economy': 'prod_RETKkDIFDl80Dn',
+            'business': 'prod_RETKC5iUFUDmuy',
+            'first_class': 'prod_RETKl8TiE4o65o',
+            'pilot': 'prod_RETKqBNlUSqtbq',
+            'pilot2': 'prod_RETK9ddl2v4BmB'
+}
+MODE = config('MODE')
+prices_dict = ''
+if MODE == 'test':
+    print("stripe is in test mode")
+    prices_dict = prices_dict_test
+else:
+    print("stripe is in live mode")
+    prices_dict = prices_dict_live
+
+
 
 action_words_list = ["Streamlined", "Leveraged", "Developed", "Engineered", "Deployed", "Incorporated", 
               "Accelerated", "Devised", "Evaluated", "Invented", "Integrated", "Orchestrated", 
