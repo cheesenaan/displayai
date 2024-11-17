@@ -30,6 +30,16 @@
             color: #3700B3;
         }
 
+        #landing,  #experience, .resume-section {
+            @media (min-width: 768px) {
+                height: 100vh;
+            }
+
+            @media (max: 768px) {
+                height: 150vh;
+            }
+        }
+
         /* Landing Section (Full Page) */
         #landing {
             height: 100vh;
@@ -455,17 +465,39 @@
                 <a href="mailto:{{ user_profile.email }}">{{ user_profile.email }}</a>
             </div>
 
-            
+                <!-- Font Awesome -->
+                <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" rel="stylesheet">
 
-            <div class="social-icons">
-                <a href="{{ user_profile.resume_link }}" target="_blank"><i class="fa-solid fa-file-pdf"></i></a>
-                <a href="{{ user_profile.linkedin_link }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
-                <a href="{{ user_profile.github_link }}" target="_blank"><i class="fab fa-github"></i></a>
-                <a href="{{ user_profile.twitter_link }}" target="_blank"><i class="fab fa-twitter"></i></a>
-                <a href="{{ user_profile.instagram_link }}" target="_blank"><i class="fab fa-instagram"></i></a>
-            </div>
+                <div class="social-icons">
+                    <a href="{{ user_profile.resume_link }}" target="_blank"><i class="fas fa-file-pdf"></i></a>
+                    <a href="{{ user_profile.linkedin_link }}" target="_blank"><i class="fab fa-linkedin-in"></i></a>
+                    <a href="{{ user_profile.github_link }}" target="_blank"><i class="fab fa-github"></i></a>
+                    <!-- <a href="{{ user_profile.twitter_link }}" target="_blank"><i class="fab fa-twitter"></i></a>
+                    <a href="{{ user_profile.instagram_link }}" target="_blank"><i class="fab fa-instagram"></i></a> -->
+                </div>
 
-            <button class="show-more" onclick="document.getElementById('experience').scrollIntoView()">Show More</button>
+                <style>
+                    .social-icons a {
+                        font-size: 2rem;  /* Adjust size */
+                        margin: 0 15px;   /* Adjust spacing */
+                        color: #BB86FC;
+                        transition: color 0.3s ease;
+                    }
+
+                    .social-icons a:hover {
+                        color: #03DAC5;
+                        transform: scale(1.2);
+                    }
+
+                </style>
+
+                
+
+                <button class="show-more" onclick="document.getElementById('experience').scrollIntoView()">
+                    <i class="fas fa-arrow-down"></i>
+                </button>
+
+
         </div>
     </section>
 
