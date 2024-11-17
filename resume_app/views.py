@@ -91,11 +91,8 @@ from django.conf import settings
 
 def login(request):
 
-    # Check if the user is already logged in
-    if request.user.is_authenticated:
-        # Redirect to the 'form' page if the user is logged in
-        account = Account.objects.get(user=request.user)
-        return redirect('form', account.id)
+    
+
 
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
@@ -200,9 +197,16 @@ def login(request):
                     return render(request, 'login.html', context)
 
     else:
-        login_form = LoginForm()
-        context = {'login_form': login_form}
-        return render(request, 'login.html', context)
+        try:
+        # Attempt to get the Account instance
+            account = Account.objects.get(user=request.user)
+            return redirect('form', account.id)
+        except Exception:
+            # Catch any exception and redirect to the login page
+            login_form = LoginForm()
+            context = {'login_form': login_form}
+            return render(request, 'login.html', context)
+
 
 @login_required
 def logout(request, account_id):
