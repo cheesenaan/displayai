@@ -71,7 +71,7 @@ from django.conf import settings
 def login(request):
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
-        user_name = request.POST['name']
+        user_name = request.POST['name'].lower()
         user_email = request.POST['email']
         user_password = request.POST['password']
 
@@ -1547,11 +1547,14 @@ class CheckUrlNameView(View):
         }
         return JsonResponse(data)
 
+
 class CheckAccountNameView(View):
     def get(self, request, *args, **kwargs):
-        name = request.GET.get('name', None)
-        data = {'is_taken': User.objects.filter(username=name).exists()}
+        name = request.GET.get('name', '').lower()  # Convert input to lowercase
+        # Check if the account name exists in lowercase
+        data = {'is_taken': Account.objects.filter(name__iexact=name).exists()}
         return JsonResponse(data)
+
 
 class CheckAccountEmailView(View):
     def get(self, request, *args, **kwargs):

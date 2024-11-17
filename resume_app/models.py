@@ -21,8 +21,8 @@ def validate_unique_url_name(value):
     if existing_profiles.exists():
         raise ValidationError('This URL name is already taken. Please choose a different one.')
 
-from django.contrib.auth.models import User 
-
+from django.db import models
+from django.contrib.auth.models import User
 from django.contrib.auth.hashers import make_password
 
 class Account(models.Model):
@@ -37,13 +37,19 @@ class Account(models.Model):
     user_plan = models.ForeignKey('Plan', on_delete=models.SET_NULL, null=True, related_name='user_plan')
     user_payment = models.ForeignKey('Payment', on_delete=models.SET_NULL, null=True, related_name='user_payment')
     resume_links = models.CharField(max_length=100000, blank=True, null=True, help_text="Separate links with commas")
-    unique_words = models.CharField(max_length=10000000, blank=True, null=True, help_text="Separate actions words with commas")
+    unique_words = models.CharField(max_length=10000000, blank=True, null=True, help_text="Separate action words with commas")
     reset_password_code = models.CharField(max_length=255, null=True)
     is_active = models.BooleanField(default=True)
 
     def save(self, *args, **kwargs):
+        # Convert the name to lowercase
+        if self.name:
+            self.name = self.name.lower()
+        
+        # Hash the password before saving
         if self.password:
-            self.password = make_password(self.password)  # Hash the password before saving
+            self.password = make_password(self.password)
+        
         super(Account, self).save(*args, **kwargs)
 
     def get_resume_links(self):
@@ -68,7 +74,6 @@ class Account(models.Model):
     def check_password(self, raw_password):
         from django.contrib.auth.hashers import check_password
         return check_password(raw_password, self.password)  # Use check_password to verify a raw password
-
 
 class OverwriteStorage(FileSystemStorage):
     def get_available_name(self, name, max_length=None):

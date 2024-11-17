@@ -297,30 +297,30 @@
 
     {{ login_form.as_p }}
 
-    <span id="nameValidation" style="display: none;""></span>
+    <span id="nameValidation" style="display: none;"></span>
     <script>
         $(document).ready(function () {
             // Add an event listener to the name input field
             $('#id_name').on('input', function () {
-                var name = $(this).val();
+                var name = $(this).val().toLowerCase(); // Convert to lowercase
     
                 // Send an AJAX request to check if the name is taken
                 if ($('#selected_action').val() === 'create_account') {
                     $.ajax({
-                        url: '/login/CheckAccountNameView/',  // Fix the URL here
+                        url: '/login/CheckAccountNameView/',  // Ensure this URL is correct
                         type: 'GET',
                         data: { 'name': name },
                         success: function (data) {
                             // Remove existing validation message
                             $('#nameValidation').remove();
-        
+    
                             // Append the validation message based on the availability
                             if (data.is_taken) {
                                 // Display a red alert bubble if the name is taken
-                                $('#id_name').after('<div <span id="nameValidation" class="alert alert-danger" role="alert"> PLEASE TRY ANOTHER NAME</span> </div>');
+                                $('#id_name').after('<div id="nameValidation" class="alert alert-danger" role="alert">PLEASE TRY ANOTHER NAME</div>');
                             } else {
                                 // Display a green alert bubble if the name is available
-                                $('#id_name').after('<div <span id="nameValidation" class="alert alert-success" role="alert">NAME available</span> </div>');
+                                $('#id_name').after('<div id="nameValidation" class="alert alert-success" role="alert">NAME available</div>');
                             }
                         }
                     });
@@ -328,6 +328,7 @@
             });
         });
     </script>
+    
 
 
     <!-- Include jQuery if not already included -->
