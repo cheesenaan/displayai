@@ -298,18 +298,29 @@ def edit_account_name(request, account_id):
     password = request.POST.get('password')
     name = request.POST.get('name')
 
-    if name != account.name and password == account.password:
-        account.name = name
-        account.save()
-        messages.success(request, "name has been changed to " + name)
-    else:
-        if password != account.password:
-            messages.error(request, "incorrect password")
-        if name == account.name:
-            messages.error(request, "already registered with name : " + name)
+    # Check if the password is correct using hash comparison
+    if not check_password(password, account.password):  # Hash comparison
+        messages.error(request, "Incorrect password")
+        return redirect('account', account_id)  # Return early if password is incorrect
 
+    # Check if the name already exists (excluding the current account)
+    if Account.objects.filter(name=name).exclude(id=account_id).exists():
+        messages.error(request, f"An account with the name '{name}' already exists.")
+    else:
+        # Proceed with name change if password is correct and name is not the same
+        if name != account.name:
+            account.name = name
+            account.save()
+            messages.success(request, f"Name has been changed to {name}")
+        else:
+            messages.error(request, f"Already registered with name: {name}")
     
     return redirect('account', account_id)
+
+from django.contrib import messages
+from django.contrib.auth.hashers import check_password
+from django.shortcuts import redirect
+from .models import Account
 
 @login_required
 def edit_account_email(request, account_id):
@@ -318,17 +329,25 @@ def edit_account_email(request, account_id):
     password = request.POST.get('password')
     email = request.POST.get('email')
 
-    if email != account.email and password == account.password:
-        account.email = email
-        account.save()
-        messages.success(request, "email has been changed to " + email)
+    # Check if the password is correct using hash comparison
+    if not check_password(password, account.password):  # Hash comparison
+        messages.error(request, "Incorrect password")
+        return redirect('account', account_id)  # Return early if password is incorrect
+
+    # Check if the email already exists (excluding the current account)
+    if Account.objects.filter(email=email).exclude(id=account_id).exists():
+        messages.error(request, f"An account with the email '{email}' already exists.")
     else:
-        if password != account.password:
-            messages.error(request, "incorrect password")
-        if email == account.email:
-            messages.error(request, "already registered with email : " + email)
+        # Proceed with email change if password is correct and email is not the same
+        if email != account.email:
+            account.email = email
+            account.save()
+            messages.success(request, f"Email has been changed to {email}")
+        else:
+            messages.error(request, f"Already registered with email: {email}")
     
     return redirect('account', account_id)
+
 
 @login_required
 def form(request , account_id):

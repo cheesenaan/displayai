@@ -143,9 +143,18 @@ DEBUG = config('DEBUG', default=False, cast=bool)
 
 # Read other settings from the .env file
 SERVICE_ACCOUNT_FILE = config('SERVICE_ACCOUNT_FILE')
-STRIPE_API_KEY = config('STRIPE_API_KEY')
 OPENAI_API_KEY = config('OPENAI_API_KEY')
 REDIRECT_DOMAIN = config('REDIRECT_DOMAIN')
+
+
+# Get the current mode (test or live)
+MODE = config('MODE')
+
+# Conditionally set STRIPE_API_KEY based on the MODE
+if MODE == 'test':
+    STRIPE_API_KEY = config('STRIPE_API_KEY_TEST')
+else:
+    STRIPE_API_KEY = config('STRIPE_API_KEY_LIVE')
 
 
 
