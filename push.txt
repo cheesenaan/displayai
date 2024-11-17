@@ -1,7 +1,7 @@
 push code from vscode django to github repo
 git init
 git add .
-git commit -m 'ensuring account names are lowercase'
+git commit -m 'adding mobile nav links to login page'
 git remote add origin https://github.com/cheesenaan/displayai.git
 git push -u origin main
 
