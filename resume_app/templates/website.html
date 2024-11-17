@@ -30,15 +30,16 @@
             color: #3700B3;
         }
 
-        #landing,  #experience, .resume-section {
-            @media (min-width: 768px) {
-                height: 100vh;
+        #landing, #experience, .resume-section {
+                @media (min-width: 768px) {
+                    height: 100vh;
+                }
+
+                @media (max-width: 768px) {
+                    height: 120vh;  /* Adjusted height for mobile */
+                }
             }
 
-            @media (max-width: 768px) {
-                height: 100vh;
-            }
-        }
 
         /* Landing Section (Full Page) */
         #landing {
