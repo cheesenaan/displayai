@@ -24,8 +24,6 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self';">
-
     <title>CheeseCV</title>
     <style>
         /* General Styles */
@@ -471,9 +469,13 @@
                 </div>
 
                 <!-- Right Column for GIF with Layered Styling -->
-                <div style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
-                    <iframe src="https://www.cheesecv.com/example" width="100%" height="500" style="border: none; border-radius: 10px;"></iframe>
-                </div>
+               <!-- Embed External Content Section -->
+               <section id="embed-section" style="padding: 20px; text-align: center;">
+                <h2>Embedded Content</h2>
+                <iframe src="https://www.google.com" width="100%" height="600" style="border: none; border-radius: 10px;"></iframe>
+            </section>
+            
+
                 
                 
 
