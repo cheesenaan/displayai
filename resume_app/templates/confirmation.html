@@ -446,7 +446,26 @@
     <div class="column website">
     <a href="#build_options_resume_section" style="text-decoration: none;">
         <h3>Resume</h3>
-        <span class="arrow">&#8595;</span>
+        
+
+        <script>
+            // Define a variable to hold the HTML content
+            let content0 = '';
+    
+            // Check if the user is on a mobile device
+            if (/Mobi|Android/i.test(navigator.userAgent)) {
+                // Message for mobile users
+                content0 = '<b style="color: white;">Build at least 4 times for optimal bullets.<br>' +
+                          '<span style="color: red;">Shrunk on mobile, view on PC</span></b>' +
+                          '<h3 id="googleDocLink" style="display: inline;"><a href="#" target="_blank" id="googleDocAnchor">Link to Google Doc</a></h3>';
+            } else {
+                // Message for non-mobile users
+                content0 = '<span class="arrow">&#8595;</span>';
+            }
+    
+            // Insert the content into the div
+            document.write(content0);
+        </script>
 
     </a>
     </div>
@@ -498,29 +517,29 @@
 
         <div class="left-section"> 
 
-            <div class="gap" style="height: 30px;"></div>
-            <div class="column website">
+           
+
                 <script>
                     // Define a variable to hold the HTML content
                     let content = '';
             
                     // Check if the user is on a mobile device
                     if (/Mobi|Android/i.test(navigator.userAgent)) {
-                        // Message for mobile users
-                        content = '<b>Build at least 4 times for optimal bullets.<br>' +
-                                  '<span style="color: red;">Shrunk on mobile, view on PC</span></b>';
+
                     } else {
                         // Message for non-mobile users
-                        content = '<span style="font-weight: bold;">Build at least 4 times for optimal bullets</span>';
+                        content = ' <div class="gap" style="height: 30px;"></div>' +
+                        '<div class="column website">' +
+                        '<span style="font-weight: bold;">Build at least 4 times for optimal bullets</span>' + 
+                        '<h3 id="googleDocLink" style="display: inline;"><a href="#" target="_blank" id="googleDocAnchor">Link to Google Doc</a></h3>' + 
+                        '</div>';
+
                     }
-            
-                    // Add the Google Doc link without any line breaks
-                    content += '<h3 id="googleDocLink" style="display: inline;"><a href="#" target="_blank" id="googleDocAnchor">Link to Google Doc</a></h3>';
             
                     // Insert the content into the div
                     document.write(content);
                 </script>
-            </div>
+            
             
             <div class="gap" style="height: 30px;"></div>
 
