@@ -9,6 +9,13 @@
 {% endblock %}
 
 
+{% block header_links_nav %}
+        <a href="{% url 'home' %}"> Home </a>
+        <a href="{% url 'home' %}#work-experience">About us</a>
+
+{% endblock %}
+
+
 {% block content %}
 
 <script src="https://cdn.jsdelivr.net/npm/flatpickr"></script>
@@ -195,7 +202,7 @@
     }
 
     table {
-    border: 2px solid #e0c591; /* Outer border with the same style as the education border */
+    border: 3px solid #e0c591; /* Outer border with the same style as the education border */
     border-radius: 10px; /* Rounded corners for the table */
     border-collapse: collapse; /* Ensure borders collapse into a single line */
 }
@@ -322,315 +329,339 @@ tbody tr {
    <!-- education form -->
    <div>
 
-    <style>
-     .education-form {
-         display: grid;
-         gap: 16px;
-         margin-bottom: 24px;
-         padding: 16px;
-         border: 1px solid #ddd;
-         border-radius: 8px;
-     }
- 
-     .form-row-education {
-         display: grid;
-         grid-template-columns: 1fr 1fr;
-         gap: 16px;
-     }
- 
-     .form-row-education.three-columns {
-         grid-template-columns: 1fr 1fr 1fr;
-     }
- 
-     .form-group {
-         display: flex;
-         flex-direction: column;
-     }
- 
-    </style>
-     
-     <style>
-         /* Your existing styles */
-         .add-button, .remove-button {
-             cursor: pointer;
-             background-color: #007bff;
-             color: white;
-             border: none;
-             padding: 8px 16px;
-             margin: 4px;
-             border-radius: 4px;
-             font-size: 14px;
-         }
-         
-         .remove-button {
-             background-color: #dc3545;
-         }
-     </style>
- 
-    <script>
-        document.addEventListener("DOMContentLoaded", function() {
-            function handleEducationCheckboxChange(event) {
-                if (event.target.classList.contains('account_education-current')) {
-                    const checkbox = event.target;
+        <style>
+                .education-form {
+                display: grid;
+                gap: 16px;
+                margin-bottom: 24px;
+                padding: 16px;
+                border: 1px solid #ddd;
+                border-radius: 8px;
+                background-color: #f9f9f9; /* Optional: Background color for better visibility */
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            .form-row-education {
+                display: grid;
+                grid-template-columns: 1fr 1fr;
+                gap: 16px;
+            }
+
+            .form-row-education.three-columns {
+                grid-template-columns: 1fr 1fr 1fr;
+            }
+
+            .form-group {
+                display: flex;
+                flex-direction: column;
+            }
+
+            /* Make form responsive for smaller screens */
+            @media (max-width: 768px) {
+                .form-row-education {
+                    grid-template-columns: 1fr; /* Stack elements in a single column */
+                }
+
+                .form-row-education.three-columns {
+                    grid-template-columns: 1fr; /* Stack elements in a single column */
+                }
+            }
+
+            @media (min-width: 769px) and (max-width: 1024px) {
+                .form-row-education {
+                    grid-template-columns: 1fr 1fr; /* Two columns on tablets */
+                }
+
+                .form-row-education.three-columns {
+                    grid-template-columns: 1fr 1fr; /* Two columns on tablets */
+                }
+            }
+
+    
+        </style>
+        
+        <style>
+            /* Your existing styles */
+            .add-button, .remove-button {
+                cursor: pointer;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                padding: 8px 16px;
+                margin: 4px;
+                border-radius: 4px;
+                font-size: 14px;
+            }
+            
+            .remove-button {
+                background-color: #dc3545;
+            }
+        </style>
+    
+        <script>
+            document.addEventListener("DOMContentLoaded", function() {
+                function handleEducationCheckboxChange(event) {
+                    if (event.target.classList.contains('account_education-current')) {
+                        const checkbox = event.target;
+                        const name = checkbox.name;
+                        const formNumMatch = name.match(/account_education-(\d+)-current/);
+                        const formNum = formNumMatch ? formNumMatch[1] : null;
+
+                        // Set the checkbox value to 'True' or 'False' based on the checked state
+                        checkbox.value = checkbox.checked ? 'True' : 'False';
+
+                        if (formNum !== null) {
+                            const endDateInput = document.querySelector(`input[name="account_education-${formNum}-end_date"]`);
+
+                            if (endDateInput) {
+                                if (checkbox.checked) {
+                                    // Store the initial value if not already stored and disable the end date input
+                                    if (!endDateInput.dataset.originalDate) {
+                                        endDateInput.dataset.originalDate = endDateInput.value;
+                                    }
+                                    endDateInput.value = "";  // Clear end date if currently studying
+                                    endDateInput.disabled = true;
+                                } else {
+                                    // Restore the stored value and enable the end date input
+                                    if (endDateInput.dataset.originalDate) {
+                                        endDateInput.value = endDateInput.dataset.originalDate;
+                                    }
+                                    endDateInput.disabled = false;
+                                }
+                            } else {
+                                console.warn(`End date input not found for form number ${formNum}`);
+                            }
+                        }
+                    }
+                }
+
+                // Add event listener to each education form checkbox
+                document.getElementById('education-forms').addEventListener('change', handleEducationCheckboxChange);
+
+                // On page load, check each checkbox and set end date state based on the checked status
+                document.querySelectorAll('.account_education-current').forEach((checkbox) => {
                     const name = checkbox.name;
                     const formNumMatch = name.match(/account_education-(\d+)-current/);
                     const formNum = formNumMatch ? formNumMatch[1] : null;
 
-                    // Set the checkbox value to 'True' or 'False' based on the checked state
-                    checkbox.value = checkbox.checked ? 'True' : 'False';
-
                     if (formNum !== null) {
-                        const endDateInput = document.querySelector(`input[name="account_education-${formNum}-end_date"]`);
 
-                        if (endDateInput) {
-                            if (checkbox.checked) {
-                                // Store the initial value if not already stored and disable the end date input
-                                if (!endDateInput.dataset.originalDate) {
-                                    endDateInput.dataset.originalDate = endDateInput.value;
-                                }
-                                endDateInput.value = "";  // Clear end date if currently studying
-                                endDateInput.disabled = true;
-                            } else {
-                                // Restore the stored value and enable the end date input
-                                if (endDateInput.dataset.originalDate) {
-                                    endDateInput.value = endDateInput.dataset.originalDate;
-                                }
-                                endDateInput.disabled = false;
-                            }
-                        } else {
-                            console.warn(`End date input not found for form number ${formNum}`);
-                        }
+                        checkbox.value = checkbox.checked ? 'True' : 'False';
+
+                        const endDateInput = document.querySelector(`input[name="account_education-${formNum}-end_date"]`);
+                        if (checkbox.checked && endDateInput) {
+                            // Store the initial value in a data attribute and disable the end date input
+                            endDateInput.dataset.originalDate = endDateInput.value;
+                            endDateInput.disabled = true;
+                            endDateInput.value = "";  // Clear end date if currently studying
+                        } 
                     }
+                });
+            });
+        </script>
+    
+        <div>
+            <div id="educationForm" method="post">
+                {% csrf_token %}
+                <h3>Education</h3>
+                {{ education_formset.management_form }}
+                <div id="education-forms">
+                    {% for education_form in education_formset %}
+                    {% csrf_token %}
+                        <div class="education-form" id="form-{{ forloop.counter0 }}">
+    
+                            <div class="form-row-education">
+                                <div class="form-group">
+                                    {{ education_form.institution.label_tag }} {{ education_form.institution }} {{educationInstance.institution}}
+                                </div>
+                                <div class="form-group">
+                                    {{ education_form.coursework.label_tag }} {{ education_form.coursework }}
+                                </div>
+                            </div>
+                            <div class="form-row-education three-columns">
+                                <div class="form-group">
+                                    {{ education_form.major.label_tag }} {{ education_form.major }}
+                                </div>
+                                <div class="form-group">
+                                    {{ education_form.minor.label_tag }} {{ education_form.minor }}
+                                </div>
+                                <div class="form-group">
+                                    {{ education_form.degree_type.label_tag }} {{ education_form.degree_type }}
+                                </div>
+                            </div>
+                            <div class="form-row-education three-columns">
+                                <div class="form-group">
+                                    {{ education_form.city.label_tag }} {{ education_form.city }}
+                                </div>
+                                <div class="form-group">
+                                    {{ education_form.country.label_tag }} {{ education_form.country }}
+                                </div>
+                                <div class="form-group">
+                                    {{ education_form.GPA.label_tag }} {{ education_form.GPA }}
+                                </div>
+                            </div>
+                            <div class="form-row-education three-columns">
+                                <div class="form-group">
+                                    {{ education_form.start_date.label_tag }} {{ education_form.start_date }}
+                                </div>
+                                <div class="form-group">
+                                    {{ education_form.end_date.label_tag }} {{ education_form.end_date }}
+                                </div>
+                                <div class="form-group">
+                                    {{ education_form.current.label_tag }}
+                                    <input type="checkbox" name="account_education-{{ forloop.counter0 }}-current" class="account_education-current" {% if education_form.current.value %}checked{% endif %}> 
+                                </div>
+                            </div>
+                            <!-- <div class="form-row-education">
+                                <div class="form-group">
+                                    <button type="button" class="remove-button" data-form-id="form-${{ forloop.counter0 }}">Remove</button>
+                                </div>
+                            </div> -->
+                            {% if education_form.instance.pk %}
+                            <br> 
+                                <!-- <div class="form-row-education">
+                                    <div class="form-group">
+                                        {{ education_form.DELETE.label_tag }} {{ education_form.DELETE }}
+                                    </div>
+                                </div> -->
+                                <div class="form-group">
+                                    <button type="button" class="remove-button" data-form-id="form-${{ forloop.counter0 }}">Remove</button>
+                                </div>
+    
+                            {% endif %}
+                        </div>
+                    {% endfor %}
+                </div>
+                <button type="button" class="add-button" id="add-education-form">Add Education</button>
+            </div>
+        </div>
+    
+        <script>
+            document.addEventListener('DOMContentLoaded', function () {
+        let formIndex = {{ education_formset.total_form_count|add:"-1" }};
+        const formContainer = document.getElementById('education-forms');
+        let totalEdulFormsField = document.querySelector("input[name='account_education-TOTAL_FORMS']");
+        let total_edu_form_helper = totalEdulFormsField.value;
+    
+        const degreeChoices = [
+            'Bachelor of Science',
+            'Bachelor of Art',
+            'Master of Arts',
+            'Master of Science',
+            'Master of Business Administration',
+            'Associate of Arts',
+            'Associate of Science',
+            'Associate of Business Administration',
+            'Associate of Engineering',
+            'Associate of Nursing'
+        ];
+    
+        document.getElementById('add-education-form').addEventListener('click', function () {
+            if (total_edu_form_helper >= 3) {
+                alert("You have reached the maximum number of education entries allowed which is 3");
+                return; // Exit the function if the limit is reached
+            }
+    
+            formIndex++;
+            const degreeOptions = degreeChoices.map(choice => `<option value="${choice}">${choice}</option>`).join('');
+            const formHtml = `
+                <div class="education-form" id="form-${formIndex}">
+                    <b><h5>New Education</h5></b>
+                    <input type="hidden" name="account_education-${formIndex}-id" id="id_account_education-${formIndex}-id">
+                    <input type="hidden" name="account_education-${formIndex}-DELETE" id="id_account_education-${formIndex}-DELETE">
+                    
+                    <div class="form-row-education">
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-institution">Institution:</label>
+                            <input type="text" name="account_education-${formIndex}-institution" id="id_account_education-${formIndex}-institution">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-coursework">Coursework:</label>
+                            <input type="text" name="account_education-${formIndex}-coursework" id="id_account_education-${formIndex}-coursework">
+                        </div>
+                    </div>
+    
+                    <div class="form-row-education three-columns">
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-major">Major:</label>
+                            <input type="text" name="account_education-${formIndex}-major" id="id_account_education-${formIndex}-major">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-minor">Minor:</label>
+                            <input type="text" name="account_education-${formIndex}-minor" id="id_account_education-${formIndex}-minor">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-degree_type">Degree type:</label>
+                            <select name="account_education-${formIndex}-degree_type" id="id_account_education-${formIndex}-degree_type">
+                                ${degreeOptions}
+                            </select>
+                        </div>
+                    </div>
+    
+                    <div class="form-row-education three-columns">
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-city">City:</label>
+                            <input type="text" name="account_education-${formIndex}-city" id="id_account_education-${formIndex}-city">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-country">Country:</label>
+                            <input type="text" name="account_education-${formIndex}-country" id="id_account_education-${formIndex}-country">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-GPA">GPA:</label>
+                            <input type="text" name="account_education-${formIndex}-GPA" id="id_account_education-${formIndex}-GPA">
+                        </div>
+                    </div>
+    
+                    <div class="form-row-education three-columns">
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-start_date">Start date:</label>
+                            <input type="date" name="account_education-${formIndex}-start_date" id="id_account_education-${formIndex}-start_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-end_date">End date:</label>
+                            <input type="date" name="account_education-${formIndex}-end_date" id="id_account_education-${formIndex}-end_date">
+                        </div>
+                        <div class="form-group">
+                            <label for="id_account_education-${formIndex}-current">Current:</label>
+                            <input type="checkbox" name="account_education-${formIndex}-current" class="account_education-current">
+                        </div>
+                    </div>
+                    <div class="form-row-education">
+                        <div class="form-group">
+                            <button type="button" class="remove-button" data-form-id="form-${formIndex}">Remove</button>
+                        </div>
+                    </div>
+                </div>
+            `;
+            formContainer.insertAdjacentHTML('beforeend', formHtml);
+    
+            totalEdulFormsField.value++;
+            total_edu_form_helper++;
+            console.log(`totalEdulFormsField.value after add: ${totalEdulFormsField.value}`);
+        });
+    
+        formContainer.addEventListener('click', function (event) {
+            if (event.target.classList.contains('remove-button')) {
+                const formId = event.target.getAttribute('data-form-id').replace(/\$/g, ''); // Remove any '$' characters
+                const formElement = document.getElementById(formId);
+                console.log("formId is : ", formId)
+                console.log("formElement is : ", formElement)
+                if (formElement) {
+                    total_edu_form_helper--;
+                    formElement.remove();
+                    console.log(`Form with ID ${formId} removed`);
+                    // totalEdulFormsField.value--; // Decrement total forms count
+                } else {
+                    console.warn(`Form element with ID ${formId} not found.`);
                 }
             }
-
-            // Add event listener to each education form checkbox
-            document.getElementById('education-forms').addEventListener('change', handleEducationCheckboxChange);
-
-            // On page load, check each checkbox and set end date state based on the checked status
-            document.querySelectorAll('.account_education-current').forEach((checkbox) => {
-                const name = checkbox.name;
-                const formNumMatch = name.match(/account_education-(\d+)-current/);
-                const formNum = formNumMatch ? formNumMatch[1] : null;
-
-                if (formNum !== null) {
-
-                    checkbox.value = checkbox.checked ? 'True' : 'False';
-
-                    const endDateInput = document.querySelector(`input[name="account_education-${formNum}-end_date"]`);
-                    if (checkbox.checked && endDateInput) {
-                        // Store the initial value in a data attribute and disable the end date input
-                        endDateInput.dataset.originalDate = endDateInput.value;
-                        endDateInput.disabled = true;
-                        endDateInput.value = "";  // Clear end date if currently studying
-                    } 
-                }
-            });
         });
-    </script>
-
- 
-     <div>
-         <div id="educationForm" method="post">
-             {% csrf_token %}
-             <h3>Education</h3>
-             {{ education_formset.management_form }}
-             <div id="education-forms">
-                 {% for education_form in education_formset %}
-                 {% csrf_token %}
-                     <div class="education-form" id="form-{{ forloop.counter0 }}">
- 
-                         <div class="form-row-education">
-                             <div class="form-group">
-                                 {{ education_form.institution.label_tag }} {{ education_form.institution }} {{educationInstance.institution}}
-                             </div>
-                             <div class="form-group">
-                                 {{ education_form.coursework.label_tag }} {{ education_form.coursework }}
-                             </div>
-                         </div>
-                         <div class="form-row-education three-columns">
-                             <div class="form-group">
-                                 {{ education_form.major.label_tag }} {{ education_form.major }}
-                             </div>
-                             <div class="form-group">
-                                 {{ education_form.minor.label_tag }} {{ education_form.minor }}
-                             </div>
-                             <div class="form-group">
-                                 {{ education_form.degree_type.label_tag }} {{ education_form.degree_type }}
-                             </div>
-                         </div>
-                         <div class="form-row-education three-columns">
-                             <div class="form-group">
-                                 {{ education_form.city.label_tag }} {{ education_form.city }}
-                             </div>
-                             <div class="form-group">
-                                 {{ education_form.country.label_tag }} {{ education_form.country }}
-                             </div>
-                             <div class="form-group">
-                                 {{ education_form.GPA.label_tag }} {{ education_form.GPA }}
-                             </div>
-                         </div>
-                         <div class="form-row-education three-columns">
-                             <div class="form-group">
-                                 {{ education_form.start_date.label_tag }} {{ education_form.start_date }}
-                             </div>
-                             <div class="form-group">
-                                 {{ education_form.end_date.label_tag }} {{ education_form.end_date }}
-                             </div>
-                             <div class="form-group">
-                                {{ education_form.current.label_tag }}
-                                <input type="checkbox" name="account_education-{{ forloop.counter0 }}-current" class="account_education-current" {% if education_form.current.value %}checked{% endif %}> 
-                            </div>
-                         </div>
-                         <!-- <div class="form-row-education">
-                             <div class="form-group">
-                                 <button type="button" class="remove-button" data-form-id="form-${{ forloop.counter0 }}">Remove</button>
-                             </div>
-                         </div> -->
-                         {% if education_form.instance.pk %}
-                         <br> 
-                             <!-- <div class="form-row-education">
-                                 <div class="form-group">
-                                     {{ education_form.DELETE.label_tag }} {{ education_form.DELETE }}
-                                 </div>
-                             </div> -->
-                             <div class="form-group">
-                                 <button type="button" class="remove-button" data-form-id="form-${{ forloop.counter0 }}">Remove</button>
-                             </div>
- 
-                         {% endif %}
-                     </div>
-                 {% endfor %}
-             </div>
-             <button type="button" class="add-button" id="add-education-form">Add Education</button>
-         </div>
-     </div>
- 
-     <script>
-         document.addEventListener('DOMContentLoaded', function () {
-     let formIndex = {{ education_formset.total_form_count|add:"-1" }};
-     const formContainer = document.getElementById('education-forms');
-     let totalEdulFormsField = document.querySelector("input[name='account_education-TOTAL_FORMS']");
-     let total_edu_form_helper = totalEdulFormsField.value;
- 
-     const degreeChoices = [
-         'Bachelor of Science',
-         'Bachelor of Art',
-         'Master of Arts',
-         'Master of Science',
-         'Master of Business Administration',
-         'Associate of Arts',
-         'Associate of Science',
-         'Associate of Business Administration',
-         'Associate of Engineering',
-         'Associate of Nursing'
-     ];
- 
-     document.getElementById('add-education-form').addEventListener('click', function () {
-         if (total_edu_form_helper >= 3) {
-             alert("You have reached the maximum number of education entries allowed which is 3");
-             return; // Exit the function if the limit is reached
-         }
- 
-         formIndex++;
-         const degreeOptions = degreeChoices.map(choice => `<option value="${choice}">${choice}</option>`).join('');
-         const formHtml = `
-             <div class="education-form" id="form-${formIndex}">
-                 <b><h5>New Education</h5></b>
-                 <input type="hidden" name="account_education-${formIndex}-id" id="id_account_education-${formIndex}-id">
-                 <input type="hidden" name="account_education-${formIndex}-DELETE" id="id_account_education-${formIndex}-DELETE">
-                 
-                 <div class="form-row-education">
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-institution">Institution:</label>
-                         <input type="text" name="account_education-${formIndex}-institution" id="id_account_education-${formIndex}-institution">
-                     </div>
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-coursework">Coursework:</label>
-                         <input type="text" name="account_education-${formIndex}-coursework" id="id_account_education-${formIndex}-coursework">
-                     </div>
-                 </div>
- 
-                 <div class="form-row-education three-columns">
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-major">Major:</label>
-                         <input type="text" name="account_education-${formIndex}-major" id="id_account_education-${formIndex}-major">
-                     </div>
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-minor">Minor:</label>
-                         <input type="text" name="account_education-${formIndex}-minor" id="id_account_education-${formIndex}-minor">
-                     </div>
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-degree_type">Degree type:</label>
-                         <select name="account_education-${formIndex}-degree_type" id="id_account_education-${formIndex}-degree_type">
-                             ${degreeOptions}
-                         </select>
-                     </div>
-                 </div>
- 
-                 <div class="form-row-education three-columns">
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-city">City:</label>
-                         <input type="text" name="account_education-${formIndex}-city" id="id_account_education-${formIndex}-city">
-                     </div>
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-country">Country:</label>
-                         <input type="text" name="account_education-${formIndex}-country" id="id_account_education-${formIndex}-country">
-                     </div>
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-GPA">GPA:</label>
-                         <input type="text" name="account_education-${formIndex}-GPA" id="id_account_education-${formIndex}-GPA">
-                     </div>
-                 </div>
- 
-                 <div class="form-row-education three-columns">
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-start_date">Start date:</label>
-                         <input type="date" name="account_education-${formIndex}-start_date" id="id_account_education-${formIndex}-start_date">
-                     </div>
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-end_date">End date:</label>
-                         <input type="date" name="account_education-${formIndex}-end_date" id="id_account_education-${formIndex}-end_date">
-                     </div>
-                     <div class="form-group">
-                         <label for="id_account_education-${formIndex}-current">Current:</label>
-                         <input type="checkbox" name="account_education-${formIndex}-current" class="account_education-current">
-                     </div>
-                 </div>
-                 <div class="form-row-education">
-                     <div class="form-group">
-                         <button type="button" class="remove-button" data-form-id="form-${formIndex}">Remove</button>
-                     </div>
-                 </div>
-             </div>
-         `;
-         formContainer.insertAdjacentHTML('beforeend', formHtml);
- 
-         totalEdulFormsField.value++;
-         total_edu_form_helper++;
-         console.log(`totalEdulFormsField.value after add: ${totalEdulFormsField.value}`);
-     });
- 
-     formContainer.addEventListener('click', function (event) {
-         if (event.target.classList.contains('remove-button')) {
-             const formId = event.target.getAttribute('data-form-id').replace(/\$/g, ''); // Remove any '$' characters
-             const formElement = document.getElementById(formId);
-             console.log("formId is : ", formId)
-             console.log("formElement is : ", formElement)
-             if (formElement) {
-                 total_edu_form_helper--;
-                 formElement.remove();
-                 console.log(`Form with ID ${formId} removed`);
-                 // totalEdulFormsField.value--; // Decrement total forms count
-             } else {
-                 console.warn(`Form element with ID ${formId} not found.`);
-             }
-         }
-     });
- });
- 
-     </script>
-         
+    });
+    
+        </script>
+            
     </div>
    
 
@@ -956,7 +987,10 @@ tbody tr {
 
 
     <!-- project form -->
-    <div>
+   
+   <div>
+
+
         <!-- projects form -->
         <h3>Projects</h3>
         <b><p style="color:red;">Need help with projects ? Click here </p></b>
