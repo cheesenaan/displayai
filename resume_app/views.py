@@ -90,6 +90,13 @@ from django.db import IntegrityError
 from django.conf import settings
 
 def login(request):
+
+    # Check if the user is already logged in
+    if request.user.is_authenticated:
+        # Redirect to the 'form' page if the user is logged in
+        account = Account.objects.get(user=request.user)
+        return redirect('form', account.id)
+
     if request.method == 'POST':
         login_form = LoginForm(request.POST)
         user_name = request.POST['name'].lower()

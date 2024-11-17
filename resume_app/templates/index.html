@@ -158,7 +158,22 @@
     <section id="header">
         <!-- Header -->
         <div class="header">
-            <div class="header-logo">⚡ CheeseCV</div>
+            <a href="{% url 'home' %}" class="no-decor">
+                <div class="header-logo">⚡ CheeseCV</div>
+            </a>
+            
+            <style>
+                /* Remove the default link styling */
+                .no-decor {
+                    text-decoration: none;
+                }
+                
+                /* Optional: Remove any color change on hover */
+                .no-decor:hover {
+                    color: inherit;
+                }
+            </style>
+            
             <div class="header-nav">
                 {% block header_links %}
                 {% endblock %}
