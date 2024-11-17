@@ -52,12 +52,12 @@ prices_dict_test = {
 }
 
 prices_dict_live = {
-            'basic': 'prod_RETKXxCm6fDA6d',
-            'economy': 'prod_RETKkDIFDl80Dn',
-            'business': 'prod_RETKC5iUFUDmuy',
-            'first_class': 'prod_RETKl8TiE4o65o',
-            'pilot': 'prod_RETKqBNlUSqtbq',
-            'pilot2': 'prod_RETK9ddl2v4BmB'
+            'basic': 'price_1QM0NtBFOKaICuMNuoRToKCO',
+            'economy': 'price_1QM0O1BFOKaICuMNizUZu28p',
+            'business': 'price_1QM0O5BFOKaICuMNguK9WJU8',
+            'first_class': 'price_1QM0O7BFOKaICuMNgtr9No8o',
+            'pilot': 'price_1QM0O9BFOKaICuMN0qtis2sY',
+            'pilot2': 'price_1QM0OCBFOKaICuMNkw3Hqpi7'
 }
 MODE = config('MODE')
 prices_dict = ''
