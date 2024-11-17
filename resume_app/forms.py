@@ -132,7 +132,7 @@ class UserProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        # self.fields['leadership'].help_text = '<h6 style="color: maroon; font-weight: bold;">Your website will be hosted on displayai.pythonanywhere.com/url-name/</h6> </p>'
+        # self.fields['leadership'].help_text = '<h6 style="color: maroon; font-weight: bold;">Your website will be hosted on CheeseCV.pythonanywhere.com/url-name/</h6> </p>'
         
     def clean(self):
         cleaned_data = super().clean()

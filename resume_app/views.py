@@ -147,7 +147,7 @@ def login(request):
 
                     # Send the welcome email
                     try:
-                        subject = 'Welcome to DisplayAI'
+                        subject = 'Welcome to CheeseCV'
                         from_email = settings.EMAIL_HOST_USER
                         recipient_list = [new_account.email]
 
@@ -719,7 +719,7 @@ def payment_successful(request):
             payment_instance = Payment.objects.get(account=account, subscription_id=subscription_value)
 
             if payment_instance:
-                subject = 'DisplayAI Order Confirmation - ' + str(account.tier)
+                subject = 'CheeseCV Order Confirmation - ' + str(account.tier)
                 from_email = settings.EMAIL_HOST_USER
                 recipient_list = [account.email]
 
@@ -798,7 +798,7 @@ def payment_successful(request):
             payment_instance = Payment.objects.get(account=account, subscription_id=session.id)
 
             if created:
-                subject = 'DisplayAI Order Confirmation - ' + str(account.tier)
+                subject = 'CheeseCV Order Confirmation - ' + str(account.tier)
                 from_email = settings.EMAIL_HOST_USER
                 recipient_list = [account.email]
 
@@ -884,7 +884,7 @@ def cancel_subscription(request, account_id, subscription_id):
         payment_instance.subscription_status = "cancelled"
         payment_instance.save()
 
-        # subject = 'DisplayAI' + str(account.tier) + 'Cancelled'
+        # subject = 'CheeseCV' + str(account.tier) + 'Cancelled'
         # from_email = settings.EMAIL_HOST_USER
         # recipient_list = [account.user_profile.email]
 
