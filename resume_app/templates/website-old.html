@@ -1,0 +1,432 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+
+    <head>
+        <meta charset="utf-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+        <meta name="description" content="" />
+        <meta name="author" content="" />
+        <title> {{user_profile.first_name}} {{user_profile.last_name}} </title>
+    </head>
+
+
+<style>
+
+/* Dark CheeseCV Theme */
+body {
+    background-color: #1e1e1e; /* Dark background */
+    color: #f4f4f4; /* Light text for contrast */
+    font-family: 'Roboto', Arial, sans-serif;
+}
+
+a {
+    color: #ffdd00; /* Cheese yellow links */
+    text-decoration: none;
+}
+
+a:hover {
+    text-decoration: underline;
+    color: #ffcc00;
+}
+
+h1, h2, h3 {
+    color: #ffdd00; /* Cheese yellow headings */
+}
+
+.navbar {
+    background-color: #000000; /* Deep black navbar */
+    border-bottom: 2px solid #ffdd00;
+}
+
+.navbar-brand {
+    color: #ffdd00;
+}
+
+.navbar-toggler {
+    border-color: #ffdd00;
+}
+
+.navbar-toggler-icon {
+    background-image: linear-gradient(#ffdd00, #ffdd00);
+}
+
+.navbar-nav .nav-link {
+    color: #f4f4f4;
+    font-weight: bold;
+}
+
+.navbar-nav .nav-link:hover {
+    color: #ffdd00;
+}
+
+#expiration-banner {
+    color: #1e1e1e;
+    background-color: #ffdd00;
+    font-weight: bold;
+}
+
+.resume-section {
+    padding: 3rem 2rem;
+    border-bottom: 2px solid #ffdd00;
+}
+
+.resume-section-content {
+    margin-bottom: 2rem;
+}
+
+.subheading {
+    color: #f4f4f4;
+    font-style: italic;
+}
+
+ul {
+    list-style: none;
+    padding-left: 0;
+}
+
+ul li {
+    background: #333333;
+    margin: 0.5rem 0;
+    padding: 0.5rem;
+    border-radius: 5px;
+    color: #ffdd00;
+}
+
+.social-icons a {
+    margin-right: 10px;
+    color: #ffdd00;
+    font-size: 1.5rem;
+}
+
+.social-icons a:hover {
+    color: #ffcc00;
+}
+
+.btn-primary {
+    background-color: #ffdd00;
+    color: #1e1e1e;
+    border: none;
+}
+
+.btn-primary:hover {
+    background-color: #ffcc00;
+    color: #000000;
+}
+
+hr {
+    border-color: #ffdd00;
+}
+
+.img-profile {
+    border: 2px solid #ffdd00;
+    padding: 5px;
+    background-color: #1e1e1e;
+}
+
+ul.dev-icons {
+    display: flex;
+    gap: 10px;
+}
+
+ul.dev-icons i {
+    font-size: 2rem;
+    color: #ffdd00;
+}
+
+ul.dev-icons i:hover {
+    color: #ffcc00;
+}
+
+footer {
+    background-color: #000000;
+    color: #ffdd00;
+    text-align: center;
+    padding: 1rem;
+}
+
+footer a {
+    color: #ffdd00;
+}
+
+footer a:hover {
+    color: #ffcc00;
+}
+
+
+</style>
+
+    
+    <body>
+    
+    <!-- Your existing body content -->
+
+    <body id="page-top">
+
+        {% if account.tier == "free" %}
+            <!-- Banner for free version expiration message -->
+            <div id="expiration-banner" style="background-color: yellow; text-align: center; padding: 10px; width: 100%;">
+                This website is on the free version, and it will expire in <span id="expiration-time"></span>.
+            </div>
+
+            <script>
+                // Retrieve the expiration time from local storage
+                var storedExpirationTime = localStorage.getItem('expirationTime');
+
+                // Set the expiration time if not already set
+                var expirationTime = storedExpirationTime ? new Date(storedExpirationTime) : new Date();
+                expirationTime.setHours(expirationTime.getHours() + 1);
+
+                // Update the expiration time every second
+                var timer = setInterval(function() {
+                    var now = new Date();
+                    var timeLeft = expirationTime - now;
+
+                    // Check if the time has expired
+                    if (timeLeft <= 0) {
+                        clearInterval(timer); // Stop the timer if expired
+                        document.getElementById("expiration-banner").style.display = "none";
+                        localStorage.removeItem('expirationTime'); // Remove expiration time from local storage
+                    } else {
+                        // Format and display the time remaining
+                        // var hours = Math.floor(timeLeft / (1000 * 60 * 60));
+                        var minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+                        var seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+                        
+                        var expirationTimeElement = document.getElementById("expiration-time");
+                        expirationTimeElement.innerHTML =  "<strong>" + minutes + "m " + seconds + "s</strong>";
+                    }
+                }, 1000); // Update every second
+
+                // Store the expiration time in local storage
+                localStorage.setItem('expirationTime', expirationTime);
+            </script>
+        {% endif %}
+
+        <!-- Navigation-->
+        <nav class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top" id="sideNav">
+            <a class="navbar-brand js-scroll-trigger" href="#page-top">
+                <span class="d-block d-lg-none">{{user_profile.first_name}} {{user_profile.last_name}}</span>
+                <span class="d-none d-lg-block">
+                    {% if user_profile.profile_image %}
+                        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'profile_pictures/' %}{{ account.id }}.jpg" alt="Profile Image" />
+                    {% else %}
+                        <!-- Provide a default image or alternative content if no image is uploaded -->
+                        <img class="img-fluid img-profile rounded-circle mx-auto mb-2" src="{% static 'profile_pictures/0.jpg' %}" alt="Profile Image" />
+                    {% endif %}
+
+                </span>
+                
+            </a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation"><span class="navbar-toggler-icon"></span></button>
+            <div class="collapse navbar-collapse" id="navbarResponsive">
+                <ul class="navbar-nav">
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#about">About</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#education">Education</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#experience">Experience</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#projects">Projects</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#skills">Skills</a></li>
+                    <!-- <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#awards">Awards</a></li> -->
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="#Leadership">Leadership</a></li>
+                    <li class="nav-item"><a class="nav-link js-scroll-trigger" href="{{user_profile.resume_link}}" target="_blank">Resume</a></li>
+                </ul>
+            </div>
+        </nav>
+        
+
+
+        <!-- Page Content-->
+        <div class="container-fluid p-0">
+
+            <!-- About-->
+            <section class="resume-section" id="about">
+                <div class="resume-section-content">
+                    <!-- <a href"" class="btn btn-primary mb-3">Edit</a> -->
+                    <h1 class="mb-0">
+                        {{user_profile.first_name}}
+                        <span class="text-primary">{{user_profile.last_name}}</span>
+                    </h1>
+                    <div class="subheading mb-5">
+                        {{user_profile.city}} {{user_profile.state}} · {{user_profile.phone}} ·
+                        <a href="mailto:{{user_profile.EMAIL}}">{{user_profile.email}} </a>
+                    </div>
+
+                    <!-- <span class="d-inline-block mr-3">
+                        <img class="img-fluid img-profile rounded-circle" src="{% static 'img/rutgers.jpeg' %}" alt="Rutgers University" style="width: 100px; height: 100px;" />
+                    </span>
+                     -->
+
+                     <div class="social-icons">
+                        <a class="social-icon" href="{% if user_profile.resume_link %}{{ user_profile.resume_link }}{% else %}#{% endif %}" target="{% if user_profile.resume_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fa-solid fa-file-pdf"></i>
+                        </a>
+                    
+                        <a class="social-icon" href="{% if user_profile.linkedin_link %}{{ user_profile.linkedin_link }}{% else %}#{% endif %}" target="{% if user_profile.linkedin_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fab fa-linkedin-in"></i>
+                        </a>
+                    
+                        <a class="social-icon" href="{% if user_profile.github_link %}{{ user_profile.github_link }}{% else %}#{% endif %}" target="{% if user_profile.github_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fab fa-github"></i>
+                        </a>
+                    
+                        <a class="social-icon" href="{% if user_profile.twitter_link %}{{ user_profile.twitter_link }}{% else %}#{% endif %}" target="{% if user_profile.twitter_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                    
+                        <a class="social-icon" href="{% if user_profile.instagram_link %}{{ user_profile.instagram_link }}{% else %}#{% endif %}" target="{% if user_profile.instagram_link %}_blank{% else %}_self{% endif %}">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                    
+                    
+                </div>
+            </section>
+
+            <hr class="m-0" />
+            <!-- Education -->
+            <section class="resume-section" id="education">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Education</h2>
+                    {% if education_list %}
+                        {% for education in education_list %}
+                            <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                                <div class="flex-grow-1">
+                                    <h3 class="mb-0">{{ education.institution|default_if_none:"Institution not provided" }}</h3>
+                                    {% if education.major %}
+                                        <div class="subheading mb-3">Major in {{ education.major }}</div>
+                                    {% endif %}
+                                    {% if education.GPA %}
+                                        <p>GPA: {{ education.GPA }}</p>
+                                    {% endif %}
+                                    {% if education.coursework %}
+                                        <p>Coursework: {{ education.coursework }}</p>
+                                    {% endif %}
+                                </div>
+            
+                                <div class="flex-shrink-0">
+                                    <span class="text-primary">
+                                        {% if education.city and education.country %}
+                                            {{ education.city }}, {{ education.country }} <br>
+                                        {% endif %}
+                                        {{ education.start_date|date:"F Y" }} - 
+                                        {% if education.current %}
+                                            PRESENT
+                                        {% else %}
+                                            {{ education.end_date|date:"F Y" }}
+                                        {% endif %}
+                                    </span>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        <p>No education records found.</p>  <!-- Handle case with no education records -->
+                    {% endif %}
+                </div>
+            </section>
+            
+            
+
+
+            <hr class="m-0" />
+            <!-- Experience-->
+            <section class="resume-section" id="experience">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Experience</h2>
+                    {% for work_experience in account.work_experiences.all %}
+                    <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                        <div class="flex-grow-1">
+                            <h3 class="mb-0">{{ work_experience.company_name }}</h3>
+                            <div class="subheading mb-3">{{ work_experience.job_title }}</div>
+                            <p>{{ work_experience.bullet1 }}</p>
+                            <p>{{ work_experience.bullet2 }}</p>
+                            <p>{{ work_experience.bullet3 }}</p>
+                        </div>
+                        <div class="flex-shrink-0"><span class="text-primary">{{ work_experience.start_date|date:"F Y" }} - {{ work_experience.end_date|date:"F Y" }}</span></div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </section>
+
+            <!-- Projects-->
+            <hr class="m-0" />
+            <section class="resume-section" id="projects">
+                <div class="d-flex flex-column flex-md-row justify-content-between mb-5">
+                    <div class="flex-grow-1">
+                        <h2 class="mb-5">PROJECTS</h2>
+                        {% for project in account.projects.all %}
+                        <div class="subheading mb-3">{{ project.project_name }} | ({{ project.project_skills }})</div>
+                        <p> {{ project.bullet1 }} </p>
+                        <p> {{ project.bullet2 }} </p>
+                        {% endfor %}
+                    </div>
+                </div>
+            </section>
+
+            <hr class="m-0" />
+            <!-- Skills -->
+            <section class="resume-section" id="skills">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Skills</h2>
+            
+                    <div class="subheading mb-3"> Languages</div>
+                    <ul>
+                        <li> {{user_profile.spoken_languages}}  </li>
+                    </ul>
+
+                    <div class="subheading mb-3">Programming Languages</div>
+                    <ul>
+                        <li> {{user_profile.programming_languages}}  </li>
+                    </ul>
+            
+                    <!-- Technical Tools -->
+                    <div class="subheading mb-3">Technical Tools</div>
+                    <ul>
+                        <li> {{user_profile.technical_skills}}  </li>
+                    </ul>
+            
+                    <!-- Communication Skills -->
+                    <div class="subheading mb-3">Communication Skills</div>
+                    <ul>
+                        <li>Written and Verbal Communication</li>
+                    </ul>
+            
+                    <!-- Additional Skills -->
+                    <div class="subheading mb-3">Additional Skills</div>
+                    <ul>
+                        <li>Leadership, Communication, Problem Solving,Teamwork,Cooperation, Nationwide Connections</li>
+                    </ul>
+
+                    <ul class="list-inline dev-icons">
+                        <i class="fab fa-html5"></i>
+                        <i class="fab fa-css3-alt"></i>
+                        <i class="fab fa-js-square"></i>
+                        <i class="fab fa-wordpress"></i>
+                    </ul>
+                </div>
+            </section>
+
+            <hr class="m-0" />
+            <!-- Leadership -->
+            <section class="resume-section" id="Leadership">
+                <div class="resume-section-content">
+                    <h2 class="mb-5">Leadership</h2>
+                    <p class="mb-0">
+                        {{user_profile.leadership}}
+                    </p>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- Bootstrap core JS-->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+        <!-- Core theme JS-->
+        <script src="js/scripts.js"></script>
+
+
+    </body>
+</html>
+
+
