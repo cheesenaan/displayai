@@ -13,47 +13,11 @@
 {% block content %}
 
 <style>
-
-    .alert-danger {
-    color: #ffffff;
-    background-color: #ff3333;
-    border: 1px solid #cc0000;
-    padding: 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-.alert-success {
-    color: #ffffff;
-    background-color: #4caf50;
-    border: 1px solid #388e3c;
-    padding: 10px;
-    border-radius: 5px;
-    font-weight: bold;
-    margin-top: 5px;
-}
-
-#forgot_password {
-    color: #ffd60a; /* Bright yellow to make it stand out */
-    font-size: 1em; /* Adjust font size */
-    display: block;
-    margin-top: 15px;
-    text-align: center;
-    text-decoration: underline; /* Emphasizes it's a link */
-}
-
-#forgot_password:hover {
-    color: #d4a373; /* Lighter yellow on hover */
-    text-decoration: none; /* Removes underline on hover */
-    font-weight: bold;
-}
-
-
     body {
         background-color: #1a1a1a;
         color: #ffffff;
         font-family: 'Arial', sans-serif;
+        
     }
     
     form {
@@ -64,17 +28,18 @@
         border-radius: 8px;
         box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         color: #ffffff;
+        width: 100%;
+        box-sizing: border-box;
     }
-    
+
     label {
         display: block;
         padding: 10px;
-        color: #ffffff; /* White color for the labels */
-        text-align: left; /* Aligns labels to the left */
+        color: #ffffff;
+        text-align: left;
         font-weight: bold;
     }
 
-    
     input[type="text"],
     input[type="password"],
     input[type="email"] {
@@ -87,7 +52,7 @@
         background-color: #2a2a2a;
         color: #ffffff;
     }
-    
+
     button,
     #back-form-label {
         display: inline-block;
@@ -101,49 +66,51 @@
         text-decoration: none;
         font-size: 1.2em;
         text-align: center;
+        width: 100%;
+        margin-top: 15px;
     }
-    
+
     button:hover,
     #back-form-label:hover {
         background-color: #d4a373;
     }
-    
+
     p {
         color: #b0b0b0;
         margin-top: 10px;
         line-height: 1.6;
     }
-    
+
     .dynamic-message {
         font-style: italic;
         color: #ffd60a;
     }
-    
+
     .hidden {
         display: none;
     }
-    
+
     #back-label {
         display: none;
         color: #ffd60a;
         cursor: pointer;
         font-weight: bold;
     }
-    
+
     #back-label:hover {
         color: #d4a373;
     }
-    
+
     #initial-options, #login-form {
         text-align: center;
         margin-top: auto;
         margin-bottom: auto;
     }
-    
+
     input[type="radio"] {
         display: none;
     }
-    
+
     label[for="create_account_option"],
     label[for="log_in_option"],
     label[for="back-label"] {
@@ -158,17 +125,17 @@
         width: 200px;
         text-align: center;
     }
-    
+
     label[for="create_account_option"]:hover,
     label[for="log_in_option"]:hover,
     label[for="back-label"]:hover {
         background-color: #e6c10b;
     }
-    
+
     input[type="radio"]:checked + label {
         background-color: #555;
     }
-    
+
     .error-message {
         color: white;
         background-color: #ff3333;
@@ -177,8 +144,8 @@
         border-radius: 5px;
         font-weight: bold;
     }
-    
-    .success-message {
+
+    .success-message, .alert alert-success {
         color: white;
         background-color: #4caf50;
         border: 1px solid #388e3c;
@@ -186,7 +153,7 @@
         border-radius: 5px;
         font-weight: bold;
     }
-    
+
     #loadingModal {
         display: none;
         position: fixed;
@@ -201,7 +168,7 @@
         text-align: center;
         z-index: 1000;
     }
-    
+
     #loadingOverlay {
         position: fixed;
         top: 0;
@@ -213,9 +180,99 @@
         z-index: 999;
         display: none;
     }
-    
-    </style>
-    
+
+    #forgot_password {
+        color: #ffd60a;
+        font-size: 1em;
+        display: block;
+        margin-top: 15px;
+        text-align: center;
+        text-decoration: underline;
+    }
+
+    #forgot_password:hover {
+        color: #d4a373;
+        text-decoration: none;
+        font-weight: bold;
+    }
+
+    /* Media queries for smaller screens */
+    @media (max-width: 800px) {
+
+        body {
+            margin: 0;
+        }
+
+        form {
+            width: 200%;
+            margin-left: -75px;
+        }
+
+        button, #back-form-label {
+            width: 100%;
+        }
+
+        label[for="create_account_option"],
+        label[for="log_in_option"] {
+            width: 100%;
+        }
+
+        #forgot_password {
+            font-size: 0.9em;
+            text-align: center;
+        }
+
+        #back-label {
+            font-size: 1em;
+            margin-top: 10px;
+        }
+
+        #loadingModal {
+            padding: 20px;
+            font-size: 1.2em;
+        }
+
+        #loadingText {
+            font-size: 1.5em;
+        }
+
+        /* Adjust input fields and button on small screens */
+        input[type="text"],
+        input[type="password"],
+        input[type="email"] {
+            font-size: 1em;
+            padding: 12px;
+        }
+    }
+
+    @media (max-width: 400px) {
+        form {
+            padding: 10px;
+        }
+
+        button, #back-form-label {
+            font-size: 1em;
+        }
+    }
+
+    /* Change the color of alert-danger to green */
+.alert.alert-success {
+    background-color: #4caf50;  /* Green background */
+    color: #ffffff;  /* White text */
+    border: 1px solid #388e3c;  /* Green border */
+}
+
+/* Change the color of alert-success to red */
+.alert.alert-danger {
+    background-color: #ff3333;  /* Red background */
+    color: #ffffff;  /* White text */
+    border: 1px solid #cc0000;  /* Red border */
+}
+
+
+</style>
+
+
     
 
 <section id="login-page" style="margin-top: 60px; padding: 100px; border-radius: 12px; align-items: center;">
