@@ -343,8 +343,6 @@
 
 <div> 
 
-   
-
     <section id="main">
         <!-- Main Content -->
         <div class="main">
@@ -363,7 +361,7 @@
             <!-- Right Column -->
             <div style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center; padding: 40px;">
                 <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
-                    <img src="{% static 'gif-cover-letter.gif' %}" alt="First GIF" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
+                    <img src="{% static 'landing.gif' %}" alt="First GIF" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
                 </div>
             </div>
 
@@ -462,12 +460,17 @@
                 <div style="flex: 1 1 40%; min-width: 280px;">
                     <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;">Your Personal Website <span class="highlight"> in Seconds </span></h2>
                     <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px;">
-                        <!-- Add your text content here -->
+                        Transform your online presence with CheeseCV! Your portfolio at cheesecv.com/your_name 
                     </p>
-                    <p style="color: #d4a373; font-size: 1em; font-style: italic;"> cheesecv.com/your_name </p>
-                    <a href="#" class="button" style="margin-top: 20px;"> 🚀 Build Now </a>
+                    <p style="font-size: 1.1em; margin-top: 20px;">
+                        <a href="https://www.cheesecv.com/example" target="_blank" style="color: #ffd60a; text-decoration: none; font-weight: bold;">
+                            View Example: <span class="highlight"> www.cheesecv.com/example </span>
+                        </a>
+                    </p>
+                    <!-- Link to www.cheesecv.com/example -->
+                    <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
                 </div>
-        
+                
                 <!-- Right Column for Image -->
                 <div class="website-embed" style="flex: 1 1 50%; text-align: center; padding: 40px;">
 
@@ -501,45 +504,44 @@
 
 
         <!-- Tailored Resumes Section -->
-<section id="tailored-resumes" style="margin-top: 60px; background-color: #2a2a2a; padding: 50px; border-radius: 12px;">
-    <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap; flex-direction: row;">
+    <section id="tailored-resumes" style="margin-top: 60px; background-color: #2a2a2a; padding: 50px; border-radius: 12px;">
+        <div style="display: flex; align-items: center; gap: 40px; flex-wrap: wrap; flex-direction: row;">
 
-        <!-- Left Side for GIF with Layered Styling -->
-        <div class="gif-container" style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
-            <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
-                <img src="{% static 'tailored_resume.gif' %}" alt="GIF of tailored resume feature" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
+            <!-- Left Side for GIF with Layered Styling -->
+            <div class="gif-container" style="position: relative; flex: 1 1 40%; min-width: 280px; text-align: center;">
+                <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
+                    <img src="{% static 'tailored_resume.gif' %}" alt="GIF of tailored resume feature" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
+                </div>
             </div>
+
+            <!-- Right Side for Text Content -->
+            <div style="flex: 1 1 50%; min-width: 280px;">
+                <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;"> Thousands of tailored resumes <br> <span class="highlight">in minutes not weeks</span> </h2>
+                <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px;">
+                    Research shows that tailored resumes can dramatically increase your chances of getting noticed and securing interviews.
+                </p>
+                <p style="color: #d4a373; font-size: 1em; font-style: italic;">Maximize your chances by focusing on what matters: landing the right role, faster.</p>
+                <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
+            </div>
+
         </div>
+    </section>
 
-        <!-- Right Side for Text Content -->
-        <div style="flex: 1 1 50%; min-width: 280px;">
-            <h2 style="color: #ffd60a; font-size: 2em; font-weight: bold; margin-bottom: 20px;"> Thousands of tailored resumes <br> <span class="highlight">in minutes not weeks</span> </h2>
-            <p style="font-size: 1.1em; line-height: 1.6; color: #e0e0e0; margin-bottom: 25px;">
-                Research shows that tailored resumes can dramatically increase your chances of getting noticed and securing interviews.
-            </p>
-            <p style="color: #d4a373; font-size: 1em; font-style: italic;">Maximize your chances by focusing on what matters: landing the right role, faster.</p>
-            <a href="#" class="button" style="margin-top: 20px;">  🚀 Build Now </a>
-        </div>
-
-    </div>
-</section>
-
-<style>
-    @media (max-width: 768px) {
-        #tailored-resumes .gif-container {
-            order: 2; /* Moves the GIF to the bottom */
-            flex: 1 1 100%; /* Makes the GIF take full width */
-        }
-        #tailored-resumes > div {
-            flex-direction: column; /* Stacks the content vertically on smaller screens */
-            align-items: center; /* Centers the content */
-        }
-        #tailored-resumes .gif-container img {
-            width: 80%; /* Adjust image size on smaller screens */
-        }
-    }
-</style>
-
+        <style>
+            @media (max-width: 768px) {
+                #tailored-resumes .gif-container {
+                    order: 2; /* Moves the GIF to the bottom */
+                    flex: 1 1 100%; /* Makes the GIF take full width */
+                }
+                #tailored-resumes > div {
+                    flex-direction: column; /* Stacks the content vertically on smaller screens */
+                    align-items: center; /* Centers the content */
+                }
+                #tailored-resumes .gif-container img {
+                    width: 80%; /* Adjust image size on smaller screens */
+                }
+            }
+        </style>
 
 
         <!-- Cover Letters Section -->
@@ -622,155 +624,153 @@
         </section> -->
 
 
+        <!-- Final Call to Action Section -->
+        <section id="final-cta" style="background-color: #ffd60a; padding: 60px 20px; text-align: center; color: #1a1a1a; border-radius: 12px; margin: 60px auto 0; max-width: 1200px;">
+
+            <h2 style="font-size: 2.5em; font-weight: bold; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
+                Ready to Stand Out?
+            </h2>
+
+            <p style="font-size: 1.2em; line-height: 1.6; color: #333; margin-bottom: 30px; max-width: 700px; margin: 0 auto;">
+                Don’t wait to make a great impression! With CheeseCV, your professional resume, tailored cover letter, and personal website are just a few clicks away. Join thousands of users and take the next step toward your career goals.
+            </p>
+
+            <a href="#" class="button" style="display: inline-block; background-color: #1a1a1a; color: #ffd60a; padding: 15px 30px; border-radius: 8px; font-size: 1.1em; font-weight: bold; text-transform: uppercase; text-decoration: none; transition: background-color 0.3s;">
+                🚀 Build Now
+            </a>
+
+        </section>
 
 
-<!-- Final Call to Action Section -->
-<section id="final-cta" style="background-color: #ffd60a; padding: 60px 20px; text-align: center; color: #1a1a1a; border-radius: 12px; margin: 60px auto 0; max-width: 1200px;">
+        <!-- Pricing Section -->
+        <section id="pricing" name="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1100px; margin: auto; display: flex; flex-direction: column;  align-items: center; ">
+            <h2 style="text-align: center; font-size: 2.5em; color: #ffd60a; margin-bottom: 40px; font-family: 'Poppins', sans-serif;">Pricing</h2>
+            <p style="text-align: center; color: #a9a9a9; font-size: 1.1em; margin-bottom: 30px;">All resumes are optimized for Applicant Tracking Systems (ATS)</p>
 
-    <h2 style="font-size: 2.5em; font-weight: bold; margin-bottom: 20px; font-family: 'Poppins', sans-serif;">
-        Ready to Stand Out?
-    </h2>
+            <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 15px;">
+                
+                <!-- Pricing Card Template -->
+                <!-- Free Plan -->
+                <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
+                    <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Free</h3>
+                    <p style="font-size: 1.2em; font-weight: bold;">$0.00</p>
+                    <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                        <li>✓ 2 builds <span style="color: #ffd60a;">What are builds?</span></li>
+                        <li>✓ Tailored resume</li>
+                        <li>✓ Tailored cover letter</li>
+                        <li>⚠ Personal website (1 day)</li>
+                        <li>⚠ Bullets for 1 experience/project</li>
+                        <li style="color: #ff6347; margin-top: 8px;">Free version expired</li>
+                    </ul>
+                </div>
 
-    <p style="font-size: 1.2em; line-height: 1.6; color: #333; margin-bottom: 30px; max-width: 700px; margin: 0 auto;">
-        Don’t wait to make a great impression! With CheeseCV, your professional resume, tailored cover letter, and personal website are just a few clicks away. Join thousands of users and take the next step toward your career goals.
-    </p>
+                <!-- Basic Plan -->
+                <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
+                    <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Basic</h3>
+                    <p style="font-size: 1.2em; font-weight: bold;">$9.99</p>
+                    <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                        <li>✓ 20 builds</li>
+                        <li>✓ Tailored resume</li>
+                        <li>✓ Tailored cover letter</li>
+                        <li>⚠ Personal website (6 months)</li>
+                        <li>✓ All bullets AI generated</li>
+                    </ul>
+                    <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+                </div>
 
-    <a href="#" class="button" style="display: inline-block; background-color: #1a1a1a; color: #ffd60a; padding: 15px 30px; border-radius: 8px; font-size: 1.1em; font-weight: bold; text-transform: uppercase; text-decoration: none; transition: background-color 0.3s;">
-        🚀 Build Now
-    </a>
+                <!-- Economy Plan -->
+                <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
+                    <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Economy</h3>
+                    <p style="font-size: 1.2em; font-weight: bold;">$19.99</p>
+                    <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                        <li>✓ 50 builds</li>
+                        <li>✓ Tailored resume</li>
+                        <li>✓ Tailored cover letter</li>
+                        <li>⚠ Personal website (1 year)</li>
+                        <li>✓ All bullets AI generated</li>
+                    </ul>
+                    <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+                </div>
 
-</section>
+                <!-- Business Plan (Recommended) -->
+                <div style="position: relative; flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
+                    <!-- Ribbon for Recommended -->
+                    <div style="position: absolute; top: -10px; left: -10px; background-color: #e73131; color: #1c1c1c; font-weight: bold; padding: 4px 30px; font-size: 0.8em; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
+                        Recommended
+                    </div>
+
+                    <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Business</h3>
+                    <p style="font-size: 1.2em; font-weight: bold;">$39.99</p>
+                    
+                    <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                        <li>✓ 100 builds</li>
+                        <li>✓ Tailored resume</li>
+                        <li>✓ Tailored cover letter</li>
+                        <li>✓ Personal website forever</li>
+                        <li>✓ All bullets AI generated</li>
+                    </ul>
+                    <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+                </div>
 
 
-<!-- Pricing Section -->
-<section id="pricing" name="pricing" style="background-color: #1c1c1c; padding: 0px; border-radius: 12px; color: #e0e0e0; max-width: 1100px; margin: auto; display: flex; flex-direction: column;  align-items: center; ">
-    <h2 style="text-align: center; font-size: 2.5em; color: #ffd60a; margin-bottom: 40px; font-family: 'Poppins', sans-serif;">Pricing</h2>
-    <p style="text-align: center; color: #a9a9a9; font-size: 1.1em; margin-bottom: 30px;">All resumes are optimized for Applicant Tracking Systems (ATS)</p>
-
-    <div style="display: flex; flex-wrap: wrap; justify-content: space-between; gap: 15px;">
-        
-        <!-- Pricing Card Template -->
-        <!-- Free Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
-            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Free</h3>
-            <p style="font-size: 1.2em; font-weight: bold;">$0.00</p>
-            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
-                <li>✓ 2 builds <span style="color: #ffd60a;">What are builds?</span></li>
-                <li>✓ Tailored resume</li>
-                <li>✓ Tailored cover letter</li>
-                <li>⚠ Personal website (1 day)</li>
-                <li>⚠ Bullets for 1 experience/project</li>
-                <li style="color: #ff6347; margin-top: 8px;">Free version expired</li>
-            </ul>
-        </div>
-
-        <!-- Basic Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
-            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Basic</h3>
-            <p style="font-size: 1.2em; font-weight: bold;">$9.99</p>
-            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
-                <li>✓ 20 builds</li>
-                <li>✓ Tailored resume</li>
-                <li>✓ Tailored cover letter</li>
-                <li>⚠ Personal website (6 months)</li>
-                <li>✓ All bullets AI generated</li>
-            </ul>
-            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
-        </div>
-
-        <!-- Economy Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
-            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Economy</h3>
-            <p style="font-size: 1.2em; font-weight: bold;">$19.99</p>
-            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
-                <li>✓ 50 builds</li>
-                <li>✓ Tailored resume</li>
-                <li>✓ Tailored cover letter</li>
-                <li>⚠ Personal website (1 year)</li>
-                <li>✓ All bullets AI generated</li>
-            </ul>
-            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
-        </div>
-
-        <!-- Business Plan (Recommended) -->
-        <div style="position: relative; flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
-            <!-- Ribbon for Recommended -->
-            <div style="position: absolute; top: -10px; left: -10px; background-color: #e73131; color: #1c1c1c; font-weight: bold; padding: 4px 30px; font-size: 0.8em; border-top-right-radius: 8px; border-bottom-right-radius: 8px;">
-                Recommended
+                <!-- First Class Plan -->
+                <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
+                    <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">First Class</h3>
+                    <p style="font-size: 1.2em; font-weight: bold;">$59.99</p>
+                    <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                        <li>✓ 200 builds</li>
+                        <li>✓ Tailored resume</li>
+                        <li>✓ Tailored cover letter</li>
+                        <li>✓ Personal website forever</li>
+                        <li>✓ All bullets AI generated</li>
+                    </ul>
+                    <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+                </div>
+                
+                <!-- Pilot Plan -->
+                <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
+                    <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot</h3>
+                    <p style="font-size: 1.2em; font-weight: bold;">$99.99</p>
+                    <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                        <li>✓ 400 builds</li>
+                        <li>✓ Tailored resume</li>
+                        <li>✓ Tailored cover letter</li>
+                        <li>✓ Personal website forever</li>
+                        <li>✓ All bullets AI generated</li>
+                    </ul>
+                    <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+                </div>
+                
+                <!-- Pilot 2 Plan -->
+                <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
+                    <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot 2</h3>
+                    <p style="font-size: 1.2em; font-weight: bold;">$199.99</p>
+                    <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                        <li>✓ 1000 builds</li>
+                        <li>✓ Tailored resume</li>
+                        <li>✓ Tailored cover letter</li>
+                        <li>✓ Personal website forever</li>
+                        <li>✓ All bullets AI generated</li>
+                    </ul>
+                    <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
+                </div>
+                
+                <!-- Custom Plan -->
+                <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
+                    <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Custom</h3>
+                    <p style="font-size: 1.2em; font-weight: bold;">$custom</p>
+                    <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
+                        <li>✓ Custom builds</li>
+                        <li>✓ Tailored resume</li>
+                        <li>✓ Tailored cover letter</li>
+                        <li>✓ Personal website forever</li>
+                        <li>✓ All bullets AI generated</li>
+                    </ul>
+                    <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Contact Us</a>
+                </div>
+                
             </div>
-
-            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Business</h3>
-            <p style="font-size: 1.2em; font-weight: bold;">$39.99</p>
-            
-            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
-                <li>✓ 100 builds</li>
-                <li>✓ Tailored resume</li>
-                <li>✓ Tailored cover letter</li>
-                <li>✓ Personal website forever</li>
-                <li>✓ All bullets AI generated</li>
-            </ul>
-            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
-        </div>
-
-
-        <!-- First Class Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
-            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">First Class</h3>
-            <p style="font-size: 1.2em; font-weight: bold;">$59.99</p>
-            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
-                <li>✓ 200 builds</li>
-                <li>✓ Tailored resume</li>
-                <li>✓ Tailored cover letter</li>
-                <li>✓ Personal website forever</li>
-                <li>✓ All bullets AI generated</li>
-            </ul>
-            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
-        </div>
-        
-        <!-- Pilot Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
-            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot</h3>
-            <p style="font-size: 1.2em; font-weight: bold;">$99.99</p>
-            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
-                <li>✓ 400 builds</li>
-                <li>✓ Tailored resume</li>
-                <li>✓ Tailored cover letter</li>
-                <li>✓ Personal website forever</li>
-                <li>✓ All bullets AI generated</li>
-            </ul>
-            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
-        </div>
-        
-        <!-- Pilot 2 Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
-            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Pilot 2</h3>
-            <p style="font-size: 1.2em; font-weight: bold;">$199.99</p>
-            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
-                <li>✓ 1000 builds</li>
-                <li>✓ Tailored resume</li>
-                <li>✓ Tailored cover letter</li>
-                <li>✓ Personal website forever</li>
-                <li>✓ All bullets AI generated</li>
-            </ul>
-            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Buy Now</a>
-        </div>
-        
-        <!-- Custom Plan -->
-        <div style="flex: 1 1 175px; background-color: #292929; padding: 20px; border-radius: 10px; text-align: center; max-width: 70%; margin: 0 auto;">
-            <h3 style="color: #ffd60a; font-size: 1.3em; margin-bottom: 8px;">Custom</h3>
-            <p style="font-size: 1.2em; font-weight: bold;">$custom</p>
-            <ul style="list-style-type: none; padding: 0; font-size: 0.9em; color: #b0b0b0;">
-                <li>✓ Custom builds</li>
-                <li>✓ Tailored resume</li>
-                <li>✓ Tailored cover letter</li>
-                <li>✓ Personal website forever</li>
-                <li>✓ All bullets AI generated</li>
-            </ul>
-            <a href="#" class="button" style="display: inline-block; background-color: #ffd60a; color: #1c1c1c; padding: 8px 16px; border-radius: 6px; font-weight: bold; margin-top: 8px;">Contact Us</a>
-        </div>
-        
-    </div>
-</section>
+        </section>
 
     </section>
 
