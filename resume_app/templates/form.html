@@ -23,8 +23,6 @@
 
 
 
-
-
 <style>
 
     /* Container Styling */
@@ -303,6 +301,7 @@ tbody tr {
 
 
 <form method="post" enctype="multipart/form-data" id="userProfileForm">
+    {% csrf_token %}
 
     {% if account.user_profile is not None %}
         <script>
