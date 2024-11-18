@@ -470,10 +470,27 @@
         
                 <!-- Right Column for Image -->
                 <div style="flex: 1 1 50%; max-width: 35%; text-align: center; padding: 40px;">
+
                     <div style="background-color: #ffd60a; border-radius: 10px; padding: 5px;">
                         <img src="{% static 'website.png' %}" alt="website png" style="border-radius: 8px; width: 100%; height: auto; object-fit: contain;">
                     </div>
+                
                 </div>
+                
+                <!-- Add the following CSS for responsive behavior -->
+                <style>
+                    /* For larger screens (max-width: 768px) */
+                    @media (max-width: 768px) {
+                        .responsive-img-container {
+                            max-width: 80%;
+                        }
+                    }
+                
+                    /* For smaller screens, the default max-width is 35% */
+                    .responsive-img-container {
+                        max-width: 35%;
+                    }
+                </style>
         
             </div>
         </section>
